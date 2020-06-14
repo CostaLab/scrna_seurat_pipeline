@@ -1,0 +1,46 @@
+# Kidney Analysis Pipeline
+
+## 1. Data Quality Check
+
+- [Data quality](data/data_quality.html)
+
+
+## 2.Cluster Results
+- [clusters](data/clusters.html)
+- [marker genes with different resolutions](data/clusters_DEs.html)
+
+## 3. Marker Genes & GO analysis
+ - [DE & GO ](data/dego.html)
+ - [DE-excel](data/de_{{cluster_use}}.xlsx)
+ - [GO-UP-excel](data/goup_{{cluster_use}}.xlsx)
+ - [GO-DOWN-excel](data/godown_{{cluster_use}}.xlsx)
+
+## 4. Differential Expression & GO analysis(between groups)
+ - [DE&GO](data/gv.html)
+ - DE FILES
+    {% for x, y in list_stages %}
+	- [DE {{x}}.vs.{{y}}.xlsx](data/{{x}}.vs.{{y}}.de_{{cluster_use}}.xlsx )
+    {% endfor %}
+ - GO FILES
+    {% for x, y in list_stages %}
+	- [GO UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.goup_{{cluster_use}}.xlsx)
+	- [GO DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.godown_{{cluster_use}}.xlsx)
+    {% endfor %}
+
+## 5. Differential Expression & GO analysis(between samples)
+ - [DE&GO](data/1vs1.html)
+
+ - DE FILES
+    {% for x, y in list_1v1 %}
+	- [DE {{x}}.vs.{{y}}.xlsx](data/{{x}}.vs.{{y}}.de_{{cluster_use}}.xlsx )
+    {% endfor %}
+
+ - GO FILES
+
+    {% for x, y in list_1v1 %}
+	- [GO UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.goup_{{cluster_use}}.xlsx)
+	- [GO DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.godown_{{cluster_use}}.xlsx)
+    {% endfor %}
+
+
+

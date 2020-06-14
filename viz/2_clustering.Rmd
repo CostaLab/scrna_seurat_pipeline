@@ -1,0 +1,253 @@
+---
+title: "Clustering"
+author: "Mingbo Cheng"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+params:
+    cluster: "which cluster to analysis"
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
+```
+
+
+```{r }
+library(Seurat)
+library(knitr)
+library(dplyr)
+library(ggplot2)
+library(cowplot)
+library(reshape2)
+library(urltools)
+library(clustree)
+
+DATA_DIR <- "../"
+
+savedir <- paste(DATA_DIR, "save", sep="")
+dir.create(savedir)
+
+colours <-  c("#812140", "#CB181D", "#1E810C" , "#4DAF4A", "#2171B5", "#44E6DC", "#816627", "#E3E63A") 
+
+
+cluster_use <- params$cluster
+par(mar = c(0,0,0,0))
+plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
+text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use), 
+     cex = 1.6, col = "red")
+
+
+fisher_cluster_name <- paste0("fishertest_", cluster_use)
+```
+
+### Clusters Resolution
+```{r fig.height=10, fig.width=13}
+scrna <- readRDS(file = file.path(savedir, "scrna_batchclustering.Rds"))
+clustree(scrna, prefix = "integrated_snn_res.")
+```
+
+```{r fig.height=20, fig.width=15}
+
+scrna <- readRDS(file = file.path(savedir, "scrna_batch_markergenes.Rds"))
+
+cluster.de.list <- scrna@tools$de_batch
+names(cluster.de.list) = as.character(seq(0.1, 0.8, 0.1))
+nms <- names(cluster.de.list)
+plist <- list()
+for(nm in nms){
+    
+    plist[[nm]] <- DimPlot(scrna, reduction = "INTE_UMAP", group.by =  paste0("integrated_snn_res.", nm),
+                                       label=T, label.size=8) + 
+                                     ggtitle(sprintf("resolution %s", nm))
+
+}
+
+CombinePlots(plots=plist, ncol=2)
+```
+
+
+
+### Clusters 
+
+```{r fig.width=9, fig.height=7}
+scrna <- readRDS(file=file.path(savedir,"scrna_fishertest_clusters.Rds"))
+DimPlot(scrna, reduction = "INTE_UMAP", group.by = "name")
+DimPlot(scrna, reduction = "INTE_UMAP", group.by = cluster_use, label=T, label.size=8)
+```
+
+### Clusters Statistic
+
+```{r}
+df <- scrna@tools[[fisher_cluster_name]]
+
+
+shift_trans = function(d = 0) {
+  scales::trans_new("shift", transform = function(x) x - d, inverse = function(x) x + d)
+}
+                    
+if(length(table(scrna$stage))<=2){
+    nm <- names(table(scrna$stage))[1]
+    nm2 <- names(table(scrna$stage))[2]
+    
+    aodds <- paste0("odds.ratio_", nm) 
+    p <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
+      geom_bar(stat="identity") +    
+      coord_flip() +
+      scale_y_continuous(trans = shift_trans(1)) + geom_text(data = df, 
+                  aes_string("Cluster", 1, label = sprintf("pval.adjust_%s", nm)), 
+                  position = "identity",
+                  size=4) + 
+      ggtitle(sprintf("%s vs %s (odds ratio > 0 means more %s", nm, nm2, nm))+ 
+      xlab("Cluster") +
+      ylab("odds ratio")  
+    print(p)
+    
+}else{
+    pairs <- combn(1:length(table(scrna$stage)), 2)
+    n <- length(pairs)/2
+    for (i in 1:n){
+        i1 <- pairs[1:2, i][1]
+        i2 <- pairs[1:2, i][2]
+        nm <- unique(scrna$stage)[i1]
+        nm2 <- unique(scrna$stage)[i2]
+        
+        aodds <- paste0("odds.ratio_", nm) 
+        p <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
+        geom_bar(stat="identity") +    
+        coord_flip() +
+        scale_y_continuous(trans = shift_trans(1)) + 
+        geom_text(data = df, 
+                  aes_string("Cluster", 1, label = sprintf("pval.adjust_%s", nm)), 
+                  position = "identity",
+                  size=4) + ggtitle(sprintf("%s vs %s (odds ratio > 0 means more %s", nm, nm2, nm))+ 
+                  xlab("Cluster") +
+                  ylab("odds ratio")  
+      print(p)
+    }
+}
+
+```
+
+
+### Proportion
+
+```{r fig.width=13, fig.height=7}
+name_len <- length(table(scrna@meta.data$name))
+
+cluster_propotion_before = t(prop.table(x = table(scrna@meta.data$name, scrna@meta.data[, cluster_use]), margin = 2)) 
+cluster_propotion_before = cluster_propotion_before[,1:name_len]
+cluster_propotion_before_sort = cluster_propotion_before[order(cluster_propotion_before[,1],
+                                        cluster_propotion_before[,2],decreasing=TRUE),]
+
+par(xpd=TRUE)
+par(mar = c(5,2,2,12))
+barplot(t(cluster_propotion_before_sort), col=colours, xlab="cluster", 
+        legend.text = colnames(cluster_propotion_before_sort),
+        args.legend = list(x ='right', bty='n', inset=c(-0.13,0), xpd = TRUE), 
+        names.arg = rownames(cluster_propotion_before_sort),
+        main = "Propotion of dataset")
+```
+
+
+### Amount Distribution 
+
+```{r amount_Plot, echo=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=9}
+BarPlot <- function(x, fill, xlab = NULL, ylab = "Cells", legend.title = NULL,
+    main = NULL, print.number = TRUE) {
+    counts <- as.data.frame(table(x, fill))
+    names(counts) <- c("x", "fill", "Cells")
+    p <- ggplot(data = counts, aes(x = x, y = Cells, fill = fill)) + geom_bar(stat = "identity",
+        position = position_dodge())
+    if (print.number) {
+        p <- p + geom_text(aes(label = Cells), vjust = 1.6, color = "white",
+            position = position_dodge(0.9), size = 3.5)
+    }
+    if (!is.null(xlab)) {
+        p <- p + xlab(xlab)
+    }
+    if (!is.null(ylab)) {
+        p <- p + ylab(ylab)
+    }
+    if (!is.null(legend.title)) {
+        p <- p + labs(fill = legend.title)
+    }
+    if (!is.null(main)) {
+        p <- p + ggtitle(main)
+    }
+    return(p)
+}
+#myel <- SetAllIdent(scrna, "name")
+
+gplot <- BarPlot(scrna@meta.data[, cluster_use], fill = scrna$name, xlab = "Cluster",
+                 legend.title = "Replicate", main = "Amount of samples in each cluster")
+gplot + scale_fill_manual(values= colours)
+```
+
+
+
+### Cell cycle phase 
+```{r fig.width=9, fig.height=7}
+DimPlot(scrna, reduction = "INTE_UMAP", group.by = "Phase")
+```
+
+
+
+### FeaturePlot
+```{r fig.width=9, fig.height=7}
+FeaturePlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA"), 
+                   cols = c("lightgrey", "red"),
+                   ncol = 2)
+FeaturePlot(scrna, features = c("CC.Difference", "S.Score", "G2M.Score"),
+                   cols = c("lightgrey", "red"),
+                   ncol = 2)
+```
+
+### Violin Plot 
+```{r fig.width=9, fig.height=7}
+VlnPlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA", "CC.Difference", "S.Score", "G2M.Score"),
+	 group.by = cluster_use,
+	 pt.size=0.01)
+```
+
+
+
+
+### MCA annotation
+```{r fig.width=9, fig.height=7}
+scrna <- readRDS(file=file.path(savedir, "scrna_MCAannotate.Rds"))
+p <- DimPlot(object = scrna, pt.size = 0.2, do.label = FALSE, 
+	         group.by = "MCA_annotate", label.size = 1, do.hover=TRUE,
+			 data.hover = "MCA_annotate") +
+	 theme(legend.position = "right", 
+		   legend.title = element_text(colour="blue", size=4, face="bold"),
+	       legend.text = element_text(size = 7))
+
+HoverLocator(plot = p, information = FetchData(object = scrna, vars = c("MCA_annotate", cluster_use)))
+
+
+
+```
+
+
+### External Annotation
+
+```{r fig.width=9, fig.height=7}
+scrna <- readRDS(file=file.path(savedir, "scrna_ExternalAnnotation.Rds"))
+p <- DimPlot(object = scrna, pt.size = 0.2, do.label = FALSE,
+	         group.by = "external_annotation", label.size = 1, do.hover=TRUE,
+			 data.hover = "external_annotation") +
+	 theme(legend.position = "right", 
+		   legend.title = element_text(colour="blue", size=4, face="bold"),
+	       legend.text = element_text(size = 7))
+
+HoverLocator(plot = p, information = FetchData(object = scrna, 
+					  vars = c("external_annotation", cluster_use)))
+```

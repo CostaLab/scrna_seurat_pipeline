@@ -1,0 +1,93 @@
+---
+title: "Data preprocess"
+author: "Mingbo Cheng"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
+```
+
+
+```{r }
+library(Seurat)
+library(knitr)
+library(dplyr)
+library(ggplot2)
+library(cowplot)
+library(reshape2)
+library(urltools)
+
+DATA_DIR <- "../"
+
+savedir <- paste(DATA_DIR, "save", sep="")
+dir.create(savedir)
+
+colours = c("#812140", "#CB181D", "#1E810C" , "#4DAF4A", "#2171B5", "#44E6DC", "#816627", "#E3E63A")
+```
+
+## Check the nGene, nUMI, Mito-genes and ribo-genes.
+
+```{r  fig.width=9, fig.height=7}
+scrna <- readRDS(file = file.path(savedir, "scrna_rawdata.Rds"))
+
+Idents(object = scrna)<- "name"
+VlnPlot(object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol=2,
+        cols = colours, pt.size=0)
+```
+
+
+
+## After filtered
+
+```{r  fig.width=9, fig.height=7}
+
+scrna <- readRDS(file = file.path(savedir, "scrna_filter.Rds"))
+Idents(object = scrna)<- "name"
+VlnPlot(object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo"), ncol=2,
+        cols = colours, pt.size = 0)
+```
+
+```{r fig.width=9, fig.height=18}
+## nGene<=>nFeature_RNA, nUMI<=>nCount_RNA
+p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.mt")
+p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.ribo")
+p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+CombinePlots(plots = list(p1, p2, p3), ncol=1)
+```
+
+
+
+## High variable genes
+```{r  fig.width=13, fig.height=5}
+scrna <- readRDS(file = file.path(savedir, "scrna_preprocess.Rds"))
+top10 <- head(VariableFeatures(scrna), 10)
+plot1 <- VariableFeaturePlot(scrna)
+plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+CombinePlots(plots = list(plot1, plot2))
+```
+
+
+## Cellcycle scaling
+
+### before
+
+```{r fig.width=10, fig.height=8}
+scrna <- readRDS(file = file.path(savedir, "scrna_cellcycle.Rds"))
+DimPlot(scrna, reduction="BCELLCYCLE_PCA")
+```
+
+### after 
+```{r fig.width=10, fig.height=8}
+scrna <- readRDS(file = file.path(savedir, "scrna_cycleRegressOut.Rds"))
+DimPlot(scrna, reduction="CELLCYCLED_PCA")
+```
+

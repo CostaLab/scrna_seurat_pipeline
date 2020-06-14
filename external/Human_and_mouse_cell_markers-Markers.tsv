@@ -1,0 +1,986 @@
+Human.Gene	Mouse.Gene	Gene.Type	Cell.Type	Tissue.of.Origin	Reference	Added.By	Added.Date	Comments
+MS4A1	Ms4a1	Protein Coding	B cell	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+CD14	Cd14	Protein Coding	CD14+ Monocyte	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+LYZ	Lyz2	Protein Coding	CD14+ Monocyte	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+CD8A	Cd8a	Protein Coding	CD8+ T cell	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+CST3	Cst3	Protein Coding	Dendritic cell	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+FCER1A	Fcer1a	Protein Coding	Dendritic cell	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+FCGR3A	Fcgr4	Protein Coding	FCGR3A+ Monocyte	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+MS4A7	Ms4a7	Protein Coding	FCGR3A+ Monocyte	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+IL7R	Il7r	Protein Coding	Memory CD4+ T cell	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+								
+								
+S100A4	S100a4	Protein Coding	Memory CD4+ T cell	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+CCR7	Ccr7	Protein Coding	Naive CD4+ T cell	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+IL7R	Il7r	Protein Coding	Naive CD4+ T cell	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+GNLY	NA	Protein Coding	Natural killer	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+NKG7	Nkg7	Protein Coding	Natural killer	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+PPBP	Ppbp	Protein Coding	Platelet	Blood	https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html	Monica Hannani	2020-02-11	
+ADIPOQ	Adipoq	Protein Coding	Adipocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+APOE	Apoe	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+								
+								
+CD38	Cd38	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CIDEA	Cidea	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+DLK1	Dlk1	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+FASN	Fasn	Protein Coding	Adipocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+LDLR	Ldlr	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+P2RX5	P2rx5	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+PLIN1	Plin1	Protein Coding	Adipocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+PPARG	Pparg	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+SLC36A2	Slc36a2	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+								
+SLC7A10	Slc7a10	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+TBX1	Tbx1	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+TMEM26	Tmem26	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+TNFRSF9	Tnfrsf9	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+TUSC5	Tusc5	Protein Coding	Adipocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+UCP1	Ucp1	Protein Coding	Adipocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ACTA1	Acta1	Protein Coding	Cardiomyocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ACTC1	Actc1	Protein Coding	Cardiomyocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ACTN2	Actn2	Protein Coding	Cardiomyocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ATP2A2	Atp2a2	Protein Coding	Cardiomyocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CAMK2B	Camk2b	Protein Coding	Cardiomyocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+GJA1	Gja1	Protein Coding	Cardiomyocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+HCN4	Hcn4	Protein Coding	Cardiomyocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+MYH6	Myh6	Protein Coding	Cardiomyocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+MYLK3	Mylk3	Protein Coding	Cardiomyocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+MYOM3	Myom3	Protein Coding	Cardiomyocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+NPPA	Nppa	Protein Coding	Cardiomyocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+RYR2	Ryr2	Protein Coding	Cardiomyocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Christoph Kuppe	2020-02-10	
+SCN5A	Scn5a	Protein Coding	Cardiomyocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+TBX5	Tbx5	Protein Coding	Cardiomyocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+TNNC1	Tnnc1	Protein Coding	Cardiomyocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+TNNT1	Tnnt1	Protein Coding	Cardiomyocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+TNNT2	Tnnt2	Protein Coding	Cardiomyocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+CD34	Cd34	Protein Coding	Cardiovascular progenitor cell	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ISL1	Isl1	Protein Coding	Cardiovascular progenitor cell	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+KDR	Kdr	Protein Coding	Cardiovascular progenitor cell	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+KIT	Kit	Protein Coding	Cardiovascular progenitor cell	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+LBH	Lbh	Protein Coding	Cardiovascular progenitor cell	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+PDGFRA	Pdgfra	Protein Coding	Cardiovascular progenitor cell	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+TBXT	Tbxt	Protein Coding	Cardiovascular progenitor cell	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CDH5	Cdh5	Protein Coding	Endothelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+EDNRB	Ednrb	Protein Coding	Endothelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+EGFL7	Egfl7	Protein Coding	Endothelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Christoph Kuppe	2020-02-10	
+EMCN	Emcn	Protein Coding	Endothelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Christoph Kuppe	2020-02-10	
+EPAS1	Epas1	Protein Coding	Endothelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ERG	Erg	Protein Coding	Endothelial	Heart	NA	Christoph Kuppe	2020-02-10	
+FABP4	Fabp4	Protein Coding	Endothelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+FLT1	Flt1	Protein Coding	Endothelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+PECAM1	Pecam1	Protein Coding	Endothelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Christoph Kuppe	2020-02-10	
+TIE1	Tie1	Protein Coding	Endothelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Christoph Kuppe	2020-02-10	
+VWF	Vwf	Protein Coding	Endothelial	Heart	NA	Christoph Kuppe	2020-02-10	
+EPCAM	Epcam	Protein Coding	Epithelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+MUC1	Muc1	Protein Coding	Epithelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+TNFRSF1A	Tnfrsf1a	Protein Coding	Epithelial	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+GYPA	Gypa	Protein Coding	Erythrocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+NA	Hbb-bs	Protein Coding	Erythrocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ITGA2B	Itga2b	Protein Coding	Erythrocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+TFRC	Tfrc	Protein Coding	Erythrocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CKAP4	Ckap4	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+COL15A1	Col15a1	Protein Coding	Fibroblast	Heart	NA	Christoph Kuppe	2020-02-10	
+COL1A2	Col1a2	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+COL3A1	Col3a1	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+DCN	Dcn	Protein Coding	Fibroblast	Heart	NA	Christoph Kuppe	2020-02-10	
+DDR2	Ddr2	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+FBLN2	Fbln2	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+FSTL1	Fstl1	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+GSN	Gsn	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+MEG3	Meg3	LncRNA	Fibroblast	Heart	NA	Christoph Kuppe	2020-02-10	
+MEG8	Meg8	LncRNA	Fibroblast	Heart	NA	Christoph Kuppe	2020-02-10	
+MMP2	Mmp2	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+PDGFRB	Pdgfrb	Protein Coding	Fibroblast	Heart	NA	Christoph Kuppe	2020-02-10	
+S100A4	S100a4	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+SCARA5	Scara5	Protein Coding	Fibroblast	Heart	NA	Christoph Kuppe	2020-02-10	
+SPARC	Sparc	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+THY1	Thy1	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+VIM	Vim	Protein Coding	Fibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ANPEP	Anpep	Protein Coding	Fibrocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CD86	Cd86	Protein Coding	Fibrocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+FN1	Fn1	Protein Coding	Fibrocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ICAM1	Icam1	Protein Coding	Fibrocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ITGAM	Itgam	Protein Coding	Fibrocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ITGB2	Itgb2	Protein Coding	Fibrocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+FLT4	Flt4	Protein Coding	Lymphatic endothelial cell	Heart	NA	Christoph Kuppe	2020-02-10	
+PROX1	Prox1	Protein Coding	Lymphatic endothelial cell	Heart	NA	Christoph Kuppe	2020-02-10	
+RELN	Reln	Protein Coding	Lymphatic endothelial cell	Heart	NA	Christoph Kuppe	2020-02-10	
+TBX1	Tbx1	Protein Coding	Lymphatic endothelial cell	Heart	NA	Christoph Kuppe	2020-02-10	
+CD19	Cd19	Protein Coding	Lymphocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CD2AP	Cd2ap	Protein Coding	Lymphocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CD3G	Cd3g	Protein Coding	Lymphocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CD4	Cd4	Protein Coding	Lymphocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CD8A	Cd8a	Protein Coding	Lymphocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+MS4A1	Ms4a1	Protein Coding	Lymphocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+STAT6	Stat6	Protein Coding	Lymphocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CPA3	Cpa3	Protein Coding	Mast cell	Heart	NA	Christoph Kuppe	2020-02-10	
+KIT	Kit	Protein Coding	Mast cell	Heart	NA	Christoph Kuppe	2020-02-10	
+SLC38A11	Slc38a11	Protein Coding	Mast cell	Heart	NA	Christoph Kuppe	2020-02-10	
+SLC8A3	Slc8a3	Protein Coding	Mast cell	Heart	NA	Christoph Kuppe	2020-02-10	
+ADGRE1	Adgre1	Protein Coding	Monocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CD163	Cd163	Protein Coding	Monocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+CD68	Cd68	Protein Coding	Monocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CD74	Cd74	Protein Coding	Monocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CD86	Cd86	Protein Coding	Monocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+								
+								
+HCK	Hck	Protein Coding	Monocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+								
+CD89	NA	Protein Coding	Monocyte	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+SIGLEC1	Siglec1	Protein Coding	Monocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+SLC11A1	Slc11a1	Protein Coding	Monocyte	Heart	NA	Christoph Kuppe	2020-02-10	
+ACTA2	Acta2	Protein Coding	Myofibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+AOC3	Aoc3	Protein Coding	Myofibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+								
+LRRC17	Lrrc17	Protein Coding	Myofibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+NKX2-3	Nkx2-3	Protein Coding	Myofibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+								
+VIM	Vim	Protein Coding	Myofibroblast	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ANO1	Ano1	Protein Coding	Neuronal	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+								
+GRIK3	Grik3	Protein Coding	Neuronal	Heart	NA	Christoph Kuppe	2020-02-10	
+MEG3	Meg3	LncRNA	Neuronal	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+NLGN1	Nlgn1	Protein Coding	Neuronal	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+NRXN1	Nrxn1	Protein Coding	Neuronal	Heart	NA	Christoph Kuppe	2020-02-10	
+SH3GL2	Sh3gl2	Protein Coding	Neuronal	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+SNTG1	Sntg1	Protein Coding	Neuronal	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+SOX10	Sox10	Protein Coding	Neuronal	Heart	NA	Christoph Kuppe	2020-02-10	
+SPP1	Spp1	Protein Coding	Neuronal	Heart	NA	Christoph Kuppe	2020-02-10	
+ZNF804B	Zfp804b	Protein Coding	Neuronal	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ABCC9	Abcc9	Protein Coding	Pericyte	Heart	NA	Christoph Kuppe	2020-02-10	
+COX4I2	Cox4i2	Protein Coding	Pericyte	Heart	NA	Christoph Kuppe	2020-02-10	
+EGFLAM	Egflam	Protein Coding	Pericyte	Heart	NA	Christoph Kuppe	2020-02-10	
+NOTCH3	Notch3	Protein Coding	Pericyte	Heart	NA	Christoph Kuppe	2020-02-10	
+RGS5	Rgs5	Protein Coding	Pericyte	Heart	NA	Christoph Kuppe	2020-02-10	
+ACTA2	Acta2	Protein Coding	Smooth muscle	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CALD1	Cald1	Protein Coding	Smooth muscle	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CNN1	Cnn1	Protein Coding	Smooth muscle	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+DES	Des	Protein Coding	Smooth muscle	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+MYH11	Myh11	Protein Coding	Smooth muscle	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+MYLK	Mylk	Protein Coding	Smooth muscle	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+SMTN	Smtn	Protein Coding	Smooth muscle	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+TAGLN	Tagln	Protein Coding	Smooth muscle	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CD2	Cd2	Protein Coding	T cell	Heart	NA	Christoph Kuppe	2020-02-10	
+CD247	Cd247	Protein Coding	T cell	Heart	NA	Christoph Kuppe	2020-02-10	
+ITK	Itk	Protein Coding	T cell	Heart	NA	Christoph Kuppe	2020-02-10	
+PRKCQ	Prkcq	Protein Coding	T cell	Heart	NA	Christoph Kuppe	2020-02-10	
+PTPRC	Ptprc	Protein Coding	T cell	Heart	NA	Christoph Kuppe	2020-02-10	
+ACTG2	Actg2	Protein Coding	Vascular smooth muscle cell	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+AQP1	Aqp1	Protein Coding	Vascular smooth muscle cell	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+ELN	Eln	Protein Coding	Vascular smooth muscle cell	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+LMOD1	Lmod1	Protein Coding	Vascular smooth muscle cell	Heart	NA	Christoph Kuppe	2020-02-10	
+MYH11	Myh11	Protein Coding	Vascular smooth muscle cell	Heart	NA	Christoph Kuppe	2020-02-10	
+MYLK	Mylk	Protein Coding	Vascular smooth muscle cell	Heart	NA	Christoph Kuppe	2020-02-10	
+PLN	Pln	Protein Coding	Vascular smooth muscle cell	Heart	Wolfien et al, Cells, 2020 (PMID: 32013057)	Monica Hannani	2020-02-11	
+CD19	Cd19	Protein Coding	B cell	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-05	
+CD79A	Cd79a	Protein Coding	B cell	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+FLT3	Flt3	Protein Coding	Dendritic cell	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+ZBTB7C	Zbtb36	Protein Coding	Dendritic cell	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+ITGAX	Itgax	Protein Coding	Dendritic cell	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+PECAM1	Pecam1	Protein Coding	Endothelial	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+SNCA	Snca	Protein Coding	Erythrocyte	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+GYPA	Gypa	Protein Coding	Erythrocyte	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+PTPRC	Ptprc	Protein Coding	Immune	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+NA	Ms4a6c	Protein Coding	Inflammatory macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+GNGT2	Gngt2	Protein Coding	Inflammatory macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+LGALS3	Lgals3	Protein Coding	Inflammatory macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+ADGRE1	Adgre1	Protein Coding	Inflammatory macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+F13A1	F13a1	Protein Coding	Inflammatory macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+IL1RL1	Il1rl1	Protein Coding	Innate lymphoid cell	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+GATA3	Gata3	Protein Coding	Innate lymphoid cell	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+FOLR2	Folr2	Protein Coding	M2 macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+MRC1	Mrc1	Protein Coding	M2 macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+NA	Cbr2	Protein Coding	M2 macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+PF4	Pf4	Protein Coding	M2 macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+SELENOP	Sepp1	Protein Coding	M2 macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+C1QA	C1qa	Protein Coding	M2 macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+CD14	Cd14	Protein Coding	Monocyte-macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+CEBPA	Cebpa	Protein Coding	Monocyte-macrophage	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+GZMA	Gzma	Protein Coding	Natural Killer	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+GZMB	Gzmb	Protein Coding	Natural Killer	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+NA	Klrb1c	Protein Coding	Natural Killer	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+NA	Ly6a	Protein Coding	Non-immune	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+CD34	Cd34	Protein Coding	Non-immune	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+COL3A1	Col3a1	Protein Coding	Non-immune	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+COL14A1	Col14a1	Protein Coding	Non-immune	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+TAGLN	Tagln	Protein Coding	Smooth muscle	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-16	
+CD3D	Cd3d	Protein Coding	T cell	Heart	Gu et al, Nature Genetics, 2019 (PMID: 30643249)	Monica Hannani	2020-03-05	
+IMUP	2200002D01Rik	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Abcb1a	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+AMN	Amn	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ANPEP	Anpep	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ANXA2	Anxa2	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+AOC1	Aoc1	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ARF6	Arf6	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ACY3	Aspa	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CEACAM20	Ceacam20	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Clec2h	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CNDP2	Cndp2	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CRIP1	Crip1	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CUBN	Cubn	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+DHCR24	Dhcr24	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+DPEP1	Dpep1	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ENPEP	Enpep	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+FABP6	Fabp6	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+FAM151A	Fam151a	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+FGF19	Fgf15	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+KRT20	Krt20	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MAF	Maf	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MEP1A	Mep1a	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MUC3A	Muc3	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MYH14	Myh14	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MYO15B	Myo15b	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NAALADL1	Naaladl1	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NEU1	Neu1	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NOSTRIN	Nostrin	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NUDT4	Nudt4	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+OCM	Ocm	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PHGR1	Phgr1	Protein Coding	Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Plb1		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Plec		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Pmp22		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Prss30		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Slc13a1		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Slc34a2		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Slc51a		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Slc51b		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+	Slc7a9		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tmigd1		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Vnn1		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Xpnpep1		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Xpnpep2		Enterocyte (Distal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ACE	Ace	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ACSL5	Acsl5	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Adh6a	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+ALDH1A1	Aldh1a1	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ALDOB	Aldob	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+								
+APOA4	Apoa4	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+APOC3	Apoc3	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CKB	Ckb	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CKMT1A	Ckmt1	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+COX7A1	Cox7a1	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+CREB3L3	Creb3l3	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CYB5B	Cyb5b	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CYB5R3	Cyb5r3	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Cyp2c65	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Cyp2c66	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Cyp2d26	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Cyp3a13	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Cyp3a25	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+DHRS1	Dhrs1	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+EPHX2	Ephx2	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+FABP1	Fabp1	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GDA	Gda	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GPD1	Gpd1	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GSTA1	Gsta1	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+GSTA4	Gsta4	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GSTM3	Gstm3	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Gstm6	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	H2-Q2	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+HSD17B6	Hsd17b6	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+KHK	Khk	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+LCT	Lct	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+LPGAT1	Lpgat1	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MME	Mme	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MS4A10	Ms4a10	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+MTTP	Mttp	Protein Coding	Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Ppap2a		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Prap1		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Rbp2		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Rdh7		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Reg3a		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Retsat		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Scp2		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Slc2a2		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+	Slc5a1		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Sult1b1		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Treh		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Ugdh		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Xdh		Enterocyte (Proximal)	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ANXA6	Anxa6	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+APLP1	Aplp1	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+BEX2	Bex2	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CACNA2D1	Cacna2d1	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CCK	Cck	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CELF3	Celf3	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CHGB	Chgb	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CNOT6L	Cnot6l	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CPLX2	Cplx2	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+FABP5	Fabp5	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+								
+FAM183BP	Fam183b	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+FEV	Fev	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GFRA3	Gfra3	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GNG4	Gng4	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GPX3	Gpx3	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+INSM1	Insm1	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ISL1	Isl1	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MAGED1	Maged1	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NEUROD1	Neurod1	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NEUROG3	Neurog3	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+BEX3	Ngfrap1	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NKX2-2	Nkx2-2	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+OLFM1	Olfm1	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PAX6	Pax6	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PCSK1	Pcsk1	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PCSK1N	Pcsk1n	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Prnp		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Resp18		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Riiad1		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Rimbp2		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Rph3al		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Scg3		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Scg5		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Scgn		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Slc39a2		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tac1		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tox3		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Trp53i11		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Vim	Protein Coding	Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Vwa5b2		Enteroendocrine	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+AGR2	Agr2	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ARF4	Arf4	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ATOH1	Atoh1	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	AW112010	ncRNA	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+BACE2	Bace2	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+BCAS1	Bcas1	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+C1GALT1C1	C1galt1c1	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CALR	Calr	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CAPN9	Capn9	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Ccl9	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CLCA1	Clca1	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CMPK1	Cmpk1	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CMTM7	Cmtm7	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CREB3L1	Creb3l1	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CREB3L4	Creb3l4	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CRELD2	Creld2	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+DAP	Dap	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+DDOST	Ddost	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+DNAJC10	Dnajc10	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ERGIC1	Ergic1	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ERN2	Ern2	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Fcgbp	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+FKBP11	Fkbp11	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+FOXA3	Foxa3	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GALE	Gale	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GALNT12	Galnt12	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GALNT7	Galnt7	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GCNT3	Gcnt3	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GUCA2A	Guca2a	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GUK1	Guk1	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+HGFAC	Hgfac	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+HPD	Hpd	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+KDELR2	Kdelr2	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+KDELR3	Kdelr3	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+KLF4	Klf4	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+KLK1	Klk1	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+KRTCAP2	Krtcap2	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+LRRC26	Lrrc26	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MANF	Manf	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+MUC2	Muc2	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NANS	Nans	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+FAM3D	Oit1	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+OSTC	Ostc	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PDIA3	Pdia3	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PDIA5	Pdia5	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PDIA6	Pdia6	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PLA2G10	Pla2g10	Protein Coding	Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Qsox1		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Ramp1		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Rep15		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	S100a6		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Scin		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Sdf2l1		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Sec61b		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Sep15		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Serp1		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Sh3bgrl3		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Slc12a8		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Slc50a1		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Smim14		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Smim6		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Spdef		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Spink4		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Ssr2		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Ssr4		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Stard3nl		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tff3		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tm9sf3		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tmed3		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tmed9		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tmsb10		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tnfaip8		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tpd52		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tpsg1		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tram1		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tspan13		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tsta3		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Ttc39a		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Txndc5		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Uap1		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Vimp		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Wars		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Xbp1		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Zg16		Goblet	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Ang4	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	AY761184	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Defa-rs1	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Defa17	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Defa21	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Defa22	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Defa24	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Defa26	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+DEFA3	Defa3	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Gm14851	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Gm15284	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Gm15292	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+LYZ	Lyz1	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NA	Mptx2	Protein Coding	Paneth	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ASCL2	Ascl2	Protein Coding	Stem	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+AXIN2	Axin2	Protein Coding	Stem	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GKN3P	Gkn3	Protein Coding	Stem	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+LGR5	Lgr5	Protein Coding	Stem	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+OLFM4	Olfm4	Protein Coding	Stem	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Slc12a2		Stem	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+C11orf53	1810046K07Rik	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CUSTOS	2210016L21Rik	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ACOT7	Acot7	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ADH1A	Adh1	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+AGT	Agt	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ALDH2	Aldh2	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ALOX5	Alox5	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ALOX5AP	Alox5ap	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ARPC5	Arpc5	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ASAH1	Asah1	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ATP2A3	Atp2a3	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+AVIL	Avil	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+BCL2L14	Bcl2l14	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+BMX	Bmx	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+BPGM	Bpgm	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+BUB3	Bub3	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CARD19	Card19	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MCUB	Ccdc109b	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CCDC28B	Ccdc28b	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CD24	Cd24a	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CD47	Cd47	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+COPRS	Coprs	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+CSK	Csk	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+DCLK1	Dclk1	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ETHE1	Ethe1	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+FAM221A	Fam221a	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+FFAR3	Ffar3	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+FYB1	Fyb	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GALK1	Galk1	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GGA2	Gga2	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+								
+								
+GIMAP1	Gimap1	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GNAI2	Gnai2	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GNG13	Gng13	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+GPRC5C	Gprc5c	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+HCK	Hck	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+HMX2	Hmx2	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+HPGDS	Hpgds	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+IL13RA1	Il13ra1	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ILDR1	Ildr1	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+INPP5B	Inpp5b	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+INPP5D	Inpp5d	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+INPP5J	Inpp5j	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+ITPR2	Itpr2	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+KCTD12	Kctd12	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+KRT18	Krt18	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+								
+KRT23	Krt23	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+LECT2	Lect2	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+								
+								
+LIMA1	Lima1	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+LIMD2	Limd2	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+LRMP	Lrmp	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+LTC4S	Ltc4s	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+LY6G6D	Ly6g6d	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+LY6G6F	Ly6g6f	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MATK	Matk	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MLIP	Mlip	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MOCS2	Mocs2	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+MYO1B	Myo1b	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NDUFAF3	Ndufaf3	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NEBL	Nebl	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+NT5C3A	Nt5c3	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PEA15	Pea15a	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PIK3CG	Pik3cg	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PIK3R5	Pik3r5	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PIM3	Pim3	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+PLAAT3	Pla2g16	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Pla2g4a		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Plcg2		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Pou2f3		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Ppp3ca		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Ptgs1		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Ptpn18		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Ptpn6		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Pygl		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Rac2		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Rbm38		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Reep5		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Rgs13		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+	Rgs2		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+	Sec14l1		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Sh2d7		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Siglecf		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Skap2		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Smpx		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Snrnp25		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Spib		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+SVBP	Svbp	Protein Coding	Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tmem141		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tmem176a		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tmem176b		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tmem45b		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tmem9		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+								
+	Trpm5		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tspan6		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Tuba1a		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Vav1		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Vdac3		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+	Zfp428		Tuft	Intestine	Haber et al, Nature, 2017 (PMID: 30089906)	Monica Hannani	2020-02-11	From Theis Lab, Munich
+AQP6	Aqp6	Protein Coding	A cell (intercalated)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+DMRT2	Dmrt2	Protein Coding	A cell (intercalated)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+P2RY14	P2ry14	Protein Coding	A cell (intercalated)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slc4a1		A cell (intercalated)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD19	Cd19	Protein Coding	B cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD79A	Cd79a	Protein Coding	B cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+CD79B	Cd79b	Protein Coding	B cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD22	Cd22	Protein Coding	B cell (follicular)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD38	Cd38	Protein Coding	B cell (follicular)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FCER2	Fcer2a	Protein Coding	B cell (follicular)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PAX5	Pax5	Protein Coding	B cell (follicular)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PTPRC	Ptprc	Protein Coding	B cell (follicular)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+AP1S3	Ap1s3	Protein Coding	B cell (intercalated)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+INSRR	Insrr	Protein Coding	B cell (intercalated)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+	Slc26a4		B cell (intercalated)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD38	Cd38	Protein Coding	B cell (memory)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD80	Cd80	Protein Coding	B cell (memory)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD84	Cd84	Protein Coding	B cell (memory)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD86	Cd86	Protein Coding	B cell (memory)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NT5E	Nt5e	Protein Coding	B cell (memory)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PAX5	Pax5	Protein Coding	B cell (memory)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PTPRC	Ptprc	Protein Coding	B cell (memory)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Spib		B cell (memory)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CCR3	Ccr3	Protein Coding	Basophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD33	Cd33	Protein Coding	Basophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD44	Cd44	Protein Coding	Basophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD69	Cd69	Protein Coding	Basophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+IL3RA	Il3ra	Protein Coding	Basophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ACER2	Acer2	Protein Coding	Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+AQP2	Aqp2	Protein Coding	Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+AQP3	Aqp3	Protein Coding	Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+AQP4	Aqp4	Protein Coding	Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+AVPR2	Avpr2	Protein Coding	Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FXYD4	Fxyd4	Protein Coding	Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FZD1	Fzd1	Protein Coding	Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+GATA3	Gata3	Protein Coding	Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+LGALS3	Lgals3	Protein Coding	Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Ptges		Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+	Stc1		Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tmem45b		Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tspan1		Collecting duct principal cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CALB1	Calb1	Protein Coding	Connecting tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CCL20	Ccl20	Protein Coding	Connecting tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	Defb9	Protein Coding	Connecting tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FAM89A	Fam89a	Protein Coding	Connecting tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Stap1		Connecting tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+	Trpv5		Connecting tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+ADGRE1	Adgre1	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CCL17	Ccl17	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD14	Cd14	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD207	Cd207	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	Cd209a	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD8A	Cd8a	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CX3CR1	Cx3cr1	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	H2-Ab1	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	H2-Eb1	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ITGAE	Itgae	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+ITGAM	Itgam	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ITGAX	Itgax	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+LY75	Ly75	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PDCD1LG2	Pdcd1lg2	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PTPRC	Ptprc	Protein Coding	Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Sirpa		Dendritic cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CDC42EP3	Cdc42ep3	Protein Coding	Distal convoluted tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	Clec4a3	Protein Coding	Distal convoluted tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+FETUB	Fetub	Protein Coding	Distal convoluted tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+GFRA1	Gfra1	Protein Coding	Distal convoluted tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+KCNG1	Kcng1	Protein Coding	Distal convoluted tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+MLANA	Mlana	Protein Coding	Distal convoluted tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PCOLCE	Pcolce	Protein Coding	Distal convoluted tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Plekho1		Distal convoluted tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+	Sgca		Distal convoluted tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slc12a3		Distal convoluted tubule	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ADGRL4	Adgrl4	Protein Coding	Endothelial	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+EMCN	Emcn	Protein Coding	Endothelial	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ENG	Eng	Protein Coding	Endothelial	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ETS1	Ets1	Protein Coding	Endothelial	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+KDR	Kdr	Protein Coding	Endothelial	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PECAM1	Pecam1	Protein Coding	Endothelial	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Plac8		Endothelial	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Plvap		Endothelial	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tek		Endothelial	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tspan8		Endothelial	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+CD34	Cd34	Protein Coding	Endothelial (fenestrated)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+PECAM1	Pecam1	Protein Coding	Endothelial (fenestrated)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Plvap		Endothelial (fenestrated)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD34	Cd34	Protein Coding	Endothelial (lymphatic)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PDPN	Pdpn	Protein Coding	Endothelial (lymphatic)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PECAM1	Pecam1	Protein Coding	Endothelial (lymphatic)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PROX1	Prox1	Protein Coding	Endothelial (lymphatic)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+VWF	Vwf	Protein Coding	Endothelial (lymphatic)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CCL11	Ccl11	Protein Coding	Eoisinophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CCL5	Ccl5	Protein Coding	Eoisinophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CCR3	Ccr3	Protein Coding	Eoisinophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CSF2	Csf2	Protein Coding	Eoisinophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NR2F6	Ear2	Protein Coding	Eoisinophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+EPX	Epx	Protein Coding	Eoisinophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+IL5RA	Il5ra	Protein Coding	Eoisinophil	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ALAS2	Alas2	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD36	Cd36	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD44	Cd44	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD47	Cd47	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD55	Cd55	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD59	cd59a	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+EDRF1	Edrf1	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+EPB41	Epb41	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+EPB41L2	Epb41l2	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+GYPA	Gypa	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+GYPC	Gypc	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+KEL	Kel	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+KIT	Kit	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+KLF1	Klf1	Protein Coding	Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Rhag		Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Thrb		Erythrocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+COL1A1	Col1a1	Protein Coding	Fibroblast	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NT5E	Nt5e	Protein Coding	Fibroblast	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PDGFRB	Pdgfrb	Protein Coding	Fibroblast	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+S100A4	S100a4	Protein Coding	Fibroblast	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ADRB1	Adrb1	Protein Coding	Granular cell of afferent arteriole	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+AGTR1	Agtr1a	Protein Coding	Granular cell of afferent arteriole	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Ren1		Granular cell of afferent arteriole	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	Akr1b8	Protein Coding	Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ALDH1A3	Aldh1a3	Protein Coding	Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CCL2	Ccl2	Protein Coding	Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CCL7	Ccl7	Protein Coding	Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ELF5	Elf5	Protein Coding	Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FAM20A	Fam20a	Protein Coding	Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+GPHA2	Gpha2	Protein Coding	Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Plekhb1		Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+S100A4	S100a4	Protein Coding	Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slc14a2		Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slfn2		Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tm6sf1		Inner medullary collecting duct	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+EPO	Epo	Protein Coding	Interstitial cell (cortical)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FOXD1	Foxd1	Protein Coding	Interstitial cell (cortical)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NT5E	Nt5e	Protein Coding	Interstitial cell (cortical)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Ptgs2		Interstitial cell (medullary)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ADGRE1	Adgre1	Protein Coding	Leukocyte (polymorphonuclear)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ASB2	Asb2	Protein Coding	Leukocyte (polymorphonuclear)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CSF3R	Csf3r	Protein Coding	Leukocyte (polymorphonuclear)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ITGB2	Itgb2	Protein Coding	Leukocyte (polymorphonuclear)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Pram1		Leukocyte (polymorphonuclear)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ARID5A	Arid5a	Protein Coding	Long descending limb (inner medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD40	Cd40	Protein Coding	Long descending limb (inner medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CXCL1	Cxcl1	Protein Coding	Long descending limb (inner medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ENC1	Enc1	Protein Coding	Long descending limb (inner medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FGA	Fga	Protein Coding	Long descending limb (inner medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+GEM	Gem	Protein Coding	Long descending limb (inner medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Pla2g7		Long descending limb (inner medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slc14a2		Long descending limb (inner medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Spsb1		Long descending limb (inner medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Thbs1		Long descending limb (inner medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ADAMTS5	Adamts5	Protein Coding	Long descending limb (outer medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NKAIN4	Nkain4	Protein Coding	Long descending limb (outer medulla)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ADGRE1	Adgre1	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+CD163	Cd163	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD200	Cd200	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD200R1	Cd200r1	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD68	Cd68	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CSF1R	Csf1r	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+GATA6	Gata6	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	H2-Ab1	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	H2-Eb1	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+IL4R	Il4ra	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ITGAM	Itgam	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+ITGAX	Itgax	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+LGALS3	Lgals3	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	Ly6c1	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PPARG	Pparg	Protein Coding	Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Siglecf		Macrophage	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+NOS1	Nos1	Protein Coding	Macula densa	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+OXTR	Oxtr	Protein Coding	Macula densa	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Ptgs2		Macula densa	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+FCER1A	Fcer1a	Protein Coding	Mast cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+MCEMP1	Mcemp1	Protein Coding	Mast cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+MILR1	Milr1	Protein Coding	Mast cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CXCR1	Cxcr1	Protein Coding	Megakaryocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CXCR2	Cxcr2	Protein Coding	Megakaryocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+CXCR4	Cxcr4	Protein Coding	Megakaryocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+GP5	Gp5	Protein Coding	Megakaryocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ITGA2B	Itga2b	Protein Coding	Megakaryocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+MATK	Matk	Protein Coding	Megakaryocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+PDE6B	Pde6b	Protein Coding	Megakaryocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slamf1		Megakaryocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ARID5B	Arid5b	Protein Coding	Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CCR7	Ccr7	Protein Coding	Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FN1	Fn1	Protein Coding	Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+GATA3	Gata3	Protein Coding	Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ITGA8	Itga8	Protein Coding	Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+PAWR	Pawr	Protein Coding	Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PDGFRB	Pdgfrb	Protein Coding	Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Ptn		Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Serpine2		Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tbx18		Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tek		Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+								
+THY1	Thy1	Protein Coding	Mesangial cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+ADGRE1	Adgre1	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CCR2	Ccr2	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD14	Cd14	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD44	Cd44	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CSF1R	Csf1r	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CX3CR1	Cx3cr1	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FCGR2B	Fcgr2b	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FCGR3A	Fcgr3	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ITGAL	Itgal	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ITGAM	Itgam	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	Ly6c1	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	Ly6c2	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	Ly6g	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PECAM1	Pecam1	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PTPRC	Ptprc	Protein Coding	Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Sell		Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Spn		Monocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ACTA2	Acta2	Protein Coding	Myofibroblast	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+BDNF	Bdnf	Protein Coding	Neuron (axon)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+MAP2	Map2	Protein Coding	Neuron (axon)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NEFL	Nefl	Protein Coding	Neuron (axon)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NES	Nes	Protein Coding	Neuron (axon)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NGF	Ngf	Protein Coding	Neuron (axon)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slc18a2		Neuron (axon)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Stx1a		Neuron (axon)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Vamp1		Neuron (axon)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ACTA2	Acta2	Protein Coding	Pericyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ALPL	Alpl	Protein Coding	Pericyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ANGPT2	Angpt2	Protein Coding	Pericyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CSPG4	Cspg4	Protein Coding	Pericyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+MCAM	Mcam	Protein Coding	Pericyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+MFGE8	Mfge8	Protein Coding	Pericyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+NT5E	Nt5e	Protein Coding	Pericyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tbx18		Pericyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tek		Pericyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD27	cd27	Protein Coding	Plasma cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+CD38	Cd38	Protein Coding	Plasma cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD93	Cd93	Protein Coding	Plasma cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+IRF4	Irf4	Protein Coding	Plasma cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	prdm1		Plasma cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Sdc1		Plasma cell	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD2AP	Cd2ap	Protein Coding	Podocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NPHS1	Nphs1	Protein Coding	Podocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NPHS2	Nphs2	Protein Coding	Podocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+	podxl		Podocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+								
+								
+								
+								
+	Wt1		Podocyte	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+AGXT2	Agxt2	Protein Coding	Proximal (general)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CRYL1	Cryl1	Protein Coding	Proximal (general)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CYP2E1	Cyp2e1	Protein Coding	Proximal (general)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+GLYAT	Glyat	Protein Coding	Proximal (general)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+GSTA2	Gsta2	Protein Coding	Proximal (general)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+HNF4A	Hnf4a	Protein Coding	Proximal (general)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PDZK1	Pdzk1	Protein Coding	Proximal (general)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Sod3		Proximal (general)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+								
+								
+								
+								
+								
+	Sord		Proximal (general)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Upb1		Proximal (general)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+APOE	Apoe	Protein Coding	Proximal (S1)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NME4	Nme4	Protein Coding	Proximal (S1)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slc5a2		Proximal (S1)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+								
+HAAO	Haao	Protein Coding	Proximal (S2)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+								
+HGD	Hgd	Protein Coding	Proximal (S2)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+HSD11B1	Hsd11b1	Protein Coding	Proximal (S2)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	Kap	Protein Coding	Proximal (S2)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+OSGIN1	Osgin1	Protein Coding	Proximal (S2)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+	Ppic		Proximal (S2)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Serpinf2		Proximal (S2)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slc17a3		Proximal (S2)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slc5a1		Proximal (S2)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+	Slc7a13		Proximal (S2)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+	Slco1a6		Proximal (S2)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CACNG5	Cacng5	Protein Coding	Proximal (S3)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+GC	Gc	Protein Coding	Proximal (S3)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+GNG13	Gng13	Protein Coding	Proximal (S3)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Rbp4		Proximal (S3)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+								
+								
+								
+								
+								
+	Slc22a13		Proximal (S3)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slc23a3		Proximal (S3)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tff3		Proximal (S3)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tgfbi		Proximal (S3)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+COX4I2	Cox4i2	Protein Coding	Short loop descending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CYP4B1	Cyp4b1	Protein Coding	Short loop descending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+HEY2	Hey2	Protein Coding	Short loop descending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PARVB	Parvb	Protein Coding	Short loop descending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+RGS5	Rgs5	Protein Coding	Short loop descending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Sh3rf2		Short loop descending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+								
+								
+ACTA2	Acta2	Protein Coding	Smooth muscle	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CNN1	Cnn1	Protein Coding	Smooth muscle	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+MYH11	Myh11	Protein Coding	Smooth muscle	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+SMTN	Smtn	Protein Coding	Smooth muscle	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+TAGLN	Tagln	Protein Coding	Smooth muscle	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD4	Cd4	Protein Coding	T cell (helper)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD40LG	Cd40lg	Protein Coding	T cell (helper)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+IL4R	Il4ra	Protein Coding	T cell (helper)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD4	Cd4	Protein Coding	T cell (natural killer)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD8A	Cd8a	Protein Coding	T cell (natural killer)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FCGR3A	Fcgr3	Protein Coding	T cell (natural killer)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+GZMA	Gzma	Protein Coding	T cell (natural killer)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NA	Klrb1c	Protein Coding	T cell (natural killer)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NCAM1	Ncam1	Protein Coding	T cell (natural killer)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CD4	Cd4	Protein Coding	T cell (regulatory)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+FOXP3	Foxp3	Protein Coding	T cell (regulatory)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+IL2RA	Il2ra	Protein Coding	T cell (regulatory)	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+IGF1	Igf1	Protein Coding	Thick ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+IRX2	Irx2	Protein Coding	Thick ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+KCNT1	Kcnt1	Protein Coding	Thick ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+LIPG	Lipg	Protein Coding	Thick ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+LRRC66	Lrrc66	Protein Coding	Thick ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Ppp1r1b		Thick ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Ptgs2		Thick ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Slc12a1		Thick ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Smarcd3		Thick ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Tnni1		Thick ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Umod		Thick ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+ARC	Arc	Protein Coding	Thin ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CALCRL	Calcrl	Protein Coding	Thin ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CDKN1C	Cdkn1c	Protein Coding	Thin ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+CLCNKA	Clcnka	Protein Coding	Thin ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+DRAM1	Dram1	Protein Coding	Thin ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+MIR24-2	Mir24-2	ncRNA	Thin ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NEK6	Nek6	Protein Coding	Thin ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+NRGN	Nrgn	Protein Coding	Thin ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+PCSK9	Pcsk9	Protein Coding	Thin ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Rnf182		Thin ascending limb	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Upk1a		Transitional epithelium	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Upk1b		Transitional epithelium	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Upk2		Transitional epithelium	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Upk3a		Transitional epithelium	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Upk3b		Transitional epithelium	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	

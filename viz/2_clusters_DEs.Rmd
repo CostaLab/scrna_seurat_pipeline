@@ -1,0 +1,137 @@
+---
+title: "Marker Genes DE for different resolutions"
+author: "Mingbo Cheng"
+date: "`r format(Sys.time(), '%d %B, %Y')`" 
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+
+
+
+```{r Marker_genes, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
+library(ggplot2)
+library(gridExtra)
+library(cowplot)
+library(dplyr) 
+library(stringr)
+library(digest)
+library(openxlsx)
+library(Seurat)
+library(Hmisc)
+
+DATA_DIR <- "../"
+
+
+GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
+  #de.data = cluster.de[[id]]
+  #de.data = plot_de
+  if (any(colnames(de.data) == "cluster")) {
+    top5.up <- de.data %>% group_by(cluster) %>% top_n(10, avg_logFC) %>%filter(avg_logFC > 0) %>% arrange(-avg_logFC)
+    top5.dn <- de.data %>% group_by(cluster) %>% top_n(10, -avg_logFC) %>%filter(avg_logFC < 0) %>% arrange(-avg_logFC)
+  } else {
+    top5.up <- de.data  %>% top_n(10, avg_logFC) %>%filter(avg_logFC > 0) %>% arrange(-avg_logFC)
+    top5.dn <- de.data  %>% top_n(10, -avg_logFC) %>%filter(avg_logFC < 0) %>% arrange(-avg_logFC)
+  }
+  top.up.dn <- rbind(top5.up, top5.dn)
+  top.up.dn$gene <- make.unique(top.up.dn$gene)
+  top.up.dn$type = ifelse(top.up.dn$avg_logFC > 0, "positive", "negative")
+  top.up.dn$type <- factor(top.up.dn$type, levels = c("positive", "negative"))
+  g <- ggplot(data = top.up.dn,
+              aes(x = gene, y = avg_logFC, fill = type)) +
+    geom_bar(stat="identity") +
+    scale_x_discrete(limits=rev(top.up.dn$gene)) +
+    theme(legend.position="none", axis.text=element_text(size=15)) +
+    scale_fill_manual(values = c(positive = "#E41A1C", negative = "#377EB8")) +
+    coord_flip()
+  if (!is.null(main)) {
+    g <- g + ggtitle(main)
+  } else {
+    g <- g + ggtitle("Average logFC for the top 5 up and top 5 down regulated genes")
+  }
+  if (!is.null(xlim)) {
+    # Coordinates are flipped
+    g <- g + ylim(xlim)
+  }
+  return(g)
+}
+
+savedir <- "../save/"
+
+scrna <- readRDS(file=file.path(savedir, "scrna_batch_markergenes.Rds"))
+cluster.de.list <- scrna@tools$de_batch
+
+
+```
+
+
+## Plot the top 10 DE genes in each cluster.
+
+```{r TOP10_DE,echo=FALSE, warning= FALSE, message=FALSE, fig.width=13, fig.height=20}
+
+names(cluster.de.list) <- as.character(seq(0.1, 0.8, 0.1)) ##------
+for (resolution in seq(0.1, 0.8, 0.1)){
+        cluster.de <- cluster.de.list[[as.character(resolution)]]
+        cluster.de.top10 <- lapply(cluster.de, function(x) {
+            x %>% top_n(10, avg_logFC) %>% arrange(-avg_logFC)
+        })
+
+        plots = list()
+        help_sort_func <- ifelse(all.is.numeric(names(cluster.de)), as.numeric, function(x){x})
+        for (id in sort(help_sort_func(names(cluster.de)))) {
+          id = as.character(id)
+          cluster.genes <- cluster.de.top10[[id]]
+          x.lim = max(abs(cluster.de[[id]]$avg_logFC))
+          x.lim <- c(-x.lim, x.lim)
+          plots[[id]] <- GeneBarPlot(cluster.de[[id]], xlim = x.lim, main = id)
+        }
+
+        ps <- plot_grid(plotlist=plots)
+        title <- ggdraw() + draw_label(sprintf("resolution %s", resolution), fontface='bold')
+
+        p <- plot_grid(title, ps, ncol=1, rel_heights=c(0.1, 1))
+        print(p)
+}
+
+```
+
+
+## DE genes on heatmap 
+
+```{r loopclusters, echo=FALSE, warning= FALSE, message=FALSE, fig.height=13,  fig.width=10}
+DefaultAssay(scrna) <- "RNA"
+scrna <- ScaleData(scrna,  rownames(scrna))
+
+cluster.de.list <- scrna@tools$de_batch
+names(cluster.de.list) <- as.character(seq(0.1,0.8,0.1))
+names(cluster.de.list)
+for (resolution in seq(0.1, 0.8, 0.1)){
+      #cluster.de <- cluster.de.list[[as.character(resolution)]]
+        cluster.de.top8 <- lapply(cluster.de, function(x) {
+            x %>% top_n(8, avg_logFC) %>% arrange(-avg_logFC)
+        })
+
+        cluster.de.top8_combine <- do.call(rbind, cluster.de.top8)
+        genes <- unique(cluster.de.top8_combine$gene)
+        
+        p <- DoHeatmap(object = scrna,
+                features = genes,
+                group.by = sprintf("integrated_snn_res.%.1f", resolution),
+                disp.min = -2,
+                disp.max = 2,
+                slot = "scale.data",
+                assay = "RNA",
+                raster = FALSE,
+                combine= T) + ggtitle(sprintf("resolution: %.1f", resolution)) + NoLegend() 
+        
+        print(p)
+    
+}
+
+```
+
