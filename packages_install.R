@@ -33,6 +33,14 @@ for(a_package in Bio_install_list){
     }
 }
 
+## install python module rpy2
+ret <- system("pip install rpy2")
+if (ret == 0){
+    sucess_vec <- c(sucess_vec, "PYTHON:rpy2")
+}else{
+    failed_vec <- c(failed_vec, "PYTHON:rpy2")
+}
+
 
 if(length(failed_vec) == 0){
     message("\n\n===================================================\n

@@ -27,7 +27,7 @@ AllOptions <- function(){
                     help="add a unique name for log files [default %default]",
                     metavar="character")
 
-    parser <- add_option(parser, c("--nFeatureRNAfloor"), type="character", default=1000,
+    parser <- add_option(parser, c("--nFeatureRNAfloor"), type="character", default=400,
                     help="min nFeature_RNA [default %default]",
                     metavar="number")
 
@@ -290,14 +290,17 @@ conf_main <- function(){
                stop("Exit 1")
            }
        }
+       logger.info("===============Finished===============")
 }
 
 
-dego_dump <- function(a_pair, de.list, go_ups, go_downs) {
-     file_predix <- paste0(a_pair[1], ".vs.", a_pair[2])
+dego_dump <- function(file_predix, de.list, go_ups, go_downs) {
+     #file_predix <- paste0(a_pair[1], ".vs.", a_pair[2])
 
-     
      flist <- lapply(de.list, subset, subset = p_val_adj < 0.05)
+     if(length(flist) == 0){
+        return()
+     }
      flist <-  flist[sapply(flist, function(m) nrow(m) >0)]
      WriteXLS(
          flist,
@@ -603,6 +606,9 @@ generate_scrna_integration <- function(scrna){
 
 		anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM)## THIS IS CCA DIMENSIONS 
     	scrna <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM) ## THIS IS PCA DIMENSION
+        ## keep the order of name and stage
+        scrna$name <- factor(scrna$name, levels=names(data_src))
+        scrna$stage <- factor(scrna$stage, levels=unique(stage_lst[names(data_src)]))
 	},
 	error=function(cond) {
 		logger.error(cond)
@@ -895,19 +901,18 @@ generate_scrna_dego_name <- function(scrna){
     all_de_list = list()
     all_goup_list = list()
     all_godown_list = list()
-    for(i in 1:length(lst)){
-      ident.use = lst[[i]]
+    all_de_list <- mclapply(lst, function(ident.use){
       Idents(scrna) <- "name"
       logger.info("****processing %s vs %s", ident.use[1], ident.use[2])
       used_idents <- which(scrna$name %in% ident.use)
       a_sub <- subset(scrna, cells= used_idents)
       Idents(a_sub) <- DEFUALT_CLUSTER_NAME 
       de.list <- list() 
-      for (clusters in unique(sort(a_sub@meta.data[, DEFUALT_CLUSTER_NAME]))){
+      de.list = mclapply(unique(sort(a_sub@meta.data[, DEFUALT_CLUSTER_NAME])), function(clusters){
          logger.info("processing cluster %s", as.character(clusters))
          sub_idents = which(a_sub@meta.data[, DEFUALT_CLUSTER_NAME] == clusters)
          if(length(sub_idents) == 0){
-            de.list[[(clusters)]] = list(NULL)
+            return(list(NULL))
             next
          }
          a_sub.subset <- subset(a_sub, cells = sub_idents)
@@ -919,28 +924,40 @@ generate_scrna_dego_name <- function(scrna){
           }, error=function(cond) {
              logger.warn(cond)
              cluster.inside.de <- list(NULL)
-          }) 
-         if (length(cluster.inside.de) != 0){ 
-           cluster.inside.de$gene <- rownames(cluster.inside.de)
-           de.list[[(clusters)]] = cluster.inside.de
-         }else{
-           de.list[[(clusters)]] = list(NULL)
-         }   
-      }
+          },finally={
+             if (length(cluster.inside.de) != 0){ 
+               cluster.inside.de$gene <- rownames(cluster.inside.de)
+               return(cluster.inside.de)
+             }else{
+               return(list(NULL))
+             }
+          })
+
+            
+      }, mc.cores=WORKER_NUM)
+      names(de.list) <- unique(sort(a_sub@meta.data[, DEFUALT_CLUSTER_NAME]))
       de.list <- de.list[sapply(de.list, function(x){(!is.null(x[[1]]))})]
-      nm <- paste0(lst[[i]][1], ".vs.", lst[[i]][2])
-      all_de_list[[nm]] <- de.list
+      nm <- paste0(ident.use[1], ".vs.", ident.use[2])
+      return(de.list)
+    }, mc.cores=WORKER_NUM)
+    
+    names(all_de_list) <- sapply(lst, function(x) paste0(x[1], ".vs.", x[2]) )
+  
+    foreach(nm = names(all_de_list)) %do% {
+      logger.info("****processing go up&down %s", nm)
+      de.list <- all_de_list[[nm]]
       go_ups <- get_go_up(de.list)
       all_goup_list[[nm]] <- go_ups
       go_downs <- get_go_down(de.list)
       all_godown_list[[nm]] <- go_downs
-      dego_dump(lst[[i]], de.list, go_ups, go_downs) 
+      dego_dump(nm, de.list, go_ups, go_downs)
     }
+
     store_list <- list(all_de_list, all_goup_list, all_godown_list)
     names(store_list) <- c("de", "goup", "godown")
     scrna@tools[[sprintf("dego_name_%s", DEFUALT_CLUSTER_NAME)]] <- store_list 
 
-  return(scrna)
+    return(scrna)
 }
 
 
@@ -949,55 +966,63 @@ generate_scrna_dego_stage <- function(scrna){
     all_de_list = list()
     all_goup_list = list()
     all_godown_list = list()
-    for(i in 1:length(lst)){
-       ident.use = lst[[i]]
-       Idents(scrna) <- "stage"
-       logger.info("****processing %s vs %s", ident.use[1], ident.use[2])
+    all_de_list <- mclapply(lst, function(ident.use){
+      Idents(scrna) <- "stage"
+      logger.info("****processing %s vs %s", ident.use[1], ident.use[2])
+      used_idents <- which(scrna$stage %in% ident.use)
+      a_sub <- subset(scrna, cells= used_idents)
+      Idents(a_sub) <- DEFUALT_CLUSTER_NAME
+      de.list <- list()
+      de.list = mclapply(unique(sort(a_sub@meta.data[, DEFUALT_CLUSTER_NAME])), function(clusters){
+         logger.info("processing cluster %s", as.character(clusters))
+         sub_idents = which(a_sub@meta.data[, DEFUALT_CLUSTER_NAME] == clusters)
+         if(length(sub_idents) == 0){
+            return(list(NULL))
+            next
+         }
+         a_sub.subset <- subset(a_sub, cells = sub_idents)
+         Idents(a_sub.subset) <- "stage"
 
-       used_idents <- which(scrna$stage %in% ident.use)
-       a_sub <- subset(scrna, cells= used_idents)
-       Idents(a_sub) <- DEFUALT_CLUSTER_NAME
-       de.list <- list() 
-       for (clusters in unique(sort(a_sub@meta.data[, DEFUALT_CLUSTER_NAME]))){
-          logger.info("processing cluster %s", as.character(clusters))
-          sub_idents = which(a_sub@meta.data[, DEFUALT_CLUSTER_NAME] == clusters)
-          if(length(sub_idents) == 0){
-             de.list[[(clusters)]] = list(NULL)
-             next
-          }
-          a_sub.subset <- subset(a_sub, cells = sub_idents)
-          Idents(a_sub.subset) <- "stage"
-          cluster.inside.de <- list(NULL)
-          tryCatch({
-               cluster.inside.de <- FindMarkers(a_sub.subset, ident.1= ident.use[1])
-           }, error=function(cond) {
-              logger.warn(cond)
-              cluster.inside.de <- list(NULL)
-           }) 
-          if (length(cluster.inside.de) != 0){ 
-            cluster.inside.de$gene <- rownames(cluster.inside.de)
-            de.list[[(clusters)]] = cluster.inside.de
-          }else{
-            de.list[[(clusters)]] = list(NULL)
-          }   
-     }
-     de.list <- de.list[sapply(de.list, function(x){(!is.null(x[[1]]))})]
-     nm <- paste0(lst[[i]][1], ".vs.", lst[[i]][2])
-     all_de_list[[nm]] <- de.list
-     go_ups <- get_go_up(de.list)
-     all_goup_list[[nm]] <- go_ups
-     go_downs <- get_go_down(de.list)
-     all_godown_list[[nm]] <- go_downs
-     dego_dump(lst[[i]], de.list, go_ups, go_downs) 
-   }
+         cluster.inside.de <- list(NULL)
+         tryCatch({
+              cluster.inside.de <- FindMarkers(a_sub.subset, ident.1= ident.use[1])
+          }, error=function(cond) {
+             logger.warn(cond)
+             cluster.inside.de <- list(NULL)
+          },finally={
+             if (length(cluster.inside.de) != 0){
+               cluster.inside.de$gene <- rownames(cluster.inside.de)
+               return(cluster.inside.de)
+             }else{
+               return(list(NULL))
+             }
+          })
+         
+      }, mc.cores=WORKER_NUM)
+      names(de.list) <- unique(sort(a_sub@meta.data[, DEFUALT_CLUSTER_NAME]))
+      de.list <- de.list[sapply(de.list, function(x){(!is.null(x[[1]]))})]
+      nm <- paste0(ident.use[1], ".vs.", ident.use[2])
+      return(de.list)
+    }, mc.cores=WORKER_NUM)
+
+    names(all_de_list) <- sapply(lst, function(x) paste0(x[1], ".vs.", x[2]) )
+
+    foreach(nm = names(all_de_list)) %do% {
+      logger.info("****processing go up&down %s", nm)
+      de.list <- all_de_list[[nm]]
+      go_ups <- get_go_up(de.list)
+      all_goup_list[[nm]] <- go_ups
+      go_downs <- get_go_down(de.list)
+      all_godown_list[[nm]] <- go_downs
+      dego_dump(nm, de.list, go_ups, go_downs)
+    }
+
    store_list <- list(all_de_list, all_goup_list, all_godown_list)
    names(store_list) <- c("de", "goup", "godown")
    scrna@tools[[sprintf("dego_stage_%s", DEFUALT_CLUSTER_NAME)]] <- store_list 
 
    return(scrna)
-
 }
-
 
 generate_scrna_go <- function(scrna){
     de.list <- scrna@tools[[sprintf("de_%s", DEFUALT_CLUSTER_NAME)]]
@@ -1046,6 +1071,9 @@ get_go_up <- function(de.list){
         #barplot(go,showCategory=20, drop=T, title = paste("GO analysis for LSK UP genes for cluster", id, sep = " "))
         go.up.list[[id]] = go
     }   
+    if(length(go.up.list) == 0){
+        return(list())
+    }
     go.up.list <- go.up.list[sapply(go.up.list, function(x){!is.null(x)})]
     return(go.up.list)
 }
@@ -1085,6 +1113,9 @@ get_go_down <- function(de.list){
         #barplot(go,showCategory=20, drop=T, title = paste("GO analysis for LSK Down genes for cluster", id, sep = " "))
         go.down.list[[id]] = go
     }   
+    if(length(go.down.list) == 0){
+        return(list())
+    }
     go.down.list <- go.down.list[sapply(go.down.list, function(x){!is.null(x)})]
     return(go.down.list)
 }

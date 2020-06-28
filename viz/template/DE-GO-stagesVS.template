@@ -139,6 +139,7 @@ if(length(plots) > 0){
 ```{r echo=FALSE, warning= FALSE, message=FALSE, fig.width=15, fig.height=30}
 a_vs <- "{{tX}}.vs.{{tY}}" 
 go_ups <- all_goup_list[[a_vs]]
+go_ups <- go_ups[sapply(go_ups, function(x) dim(x)[1]) > 0]
 
 ### up genes top 10
 go.plot.list = lapply(go_ups, function(x){ 
@@ -191,7 +192,7 @@ if(length(plots) > 0){
 ### down genes top 10
 a_vs <- "{{tX}}.vs.{{tY}}" 
 go_downs <- all_godown_list[[a_vs]]
-
+go_downs <-  go_downs[sapply(go_downs, function(x) dim(x)[1]) > 0]
 
 go.plot.list = lapply(go_downs, function(x){
             df = fortify(x, showCategory=Inf)

@@ -31,7 +31,7 @@ DATA_DIR <- "../"
 savedir <- paste(DATA_DIR, "save", sep="")
 dir.create(savedir)
 
-colours = c("#812140", "#CB181D", "#1E810C" , "#4DAF4A", "#2171B5", "#44E6DC", "#816627", "#E3E63A")
+colours = c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99")
 ```
 
 ## Check the nGene, nUMI, Mito-genes and ribo-genes.
@@ -40,7 +40,7 @@ colours = c("#812140", "#CB181D", "#1E810C" , "#4DAF4A", "#2171B5", "#44E6DC", "
 scrna <- readRDS(file = file.path(savedir, "scrna_rawdata.Rds"))
 
 Idents(object = scrna)<- "name"
-VlnPlot(object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol=2,
+VlnPlot(object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo"), ncol=2,
         cols = colours, pt.size=0)
 ```
 
@@ -58,9 +58,9 @@ VlnPlot(object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt",
 
 ```{r fig.width=9, fig.height=18}
 ## nGene<=>nFeature_RNA, nUMI<=>nCount_RNA
-p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.mt")
-p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.ribo")
-p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.mt", cols=colours)
+p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.ribo",cols=colours)
+p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",cols=colours)
 CombinePlots(plots = list(p1, p2, p3), ncol=1)
 ```
 

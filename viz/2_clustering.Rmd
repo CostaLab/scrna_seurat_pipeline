@@ -35,10 +35,10 @@ DATA_DIR <- "../"
 savedir <- paste(DATA_DIR, "save", sep="")
 dir.create(savedir)
 
-colours <-  c("#812140", "#CB181D", "#1E810C" , "#4DAF4A", "#2171B5", "#44E6DC", "#816627", "#E3E63A") 
-
+colours <- c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99")
 
 cluster_use <- params$cluster
+
 par(mar = c(0,0,0,0))
 plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
 text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use), 
@@ -79,7 +79,7 @@ CombinePlots(plots=plist, ncol=2)
 
 ```{r fig.width=9, fig.height=7}
 scrna <- readRDS(file=file.path(savedir,"scrna_fishertest_clusters.Rds"))
-DimPlot(scrna, reduction = "INTE_UMAP", group.by = "name")
+DimPlot(scrna, reduction = "INTE_UMAP", group.by = "name", cols=colours)
 DimPlot(scrna, reduction = "INTE_UMAP", group.by = cluster_use, label=T, label.size=8)
 ```
 
@@ -214,7 +214,7 @@ FeaturePlot(scrna, features = c("CC.Difference", "S.Score", "G2M.Score"),
 ```{r fig.width=9, fig.height=7}
 VlnPlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA", "CC.Difference", "S.Score", "G2M.Score"),
 	 group.by = cluster_use,
-	 pt.size=0.01)
+	 pt.size=0)
 ```
 
 
@@ -223,9 +223,8 @@ VlnPlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeatur
 ### MCA annotation
 ```{r fig.width=9, fig.height=7}
 scrna <- readRDS(file=file.path(savedir, "scrna_MCAannotate.Rds"))
-p <- DimPlot(object = scrna, pt.size = 0.2, do.label = FALSE, 
-	         group.by = "MCA_annotate", label.size = 1, do.hover=TRUE,
-			 data.hover = "MCA_annotate") +
+p <- DimPlot(object = scrna, pt.size = 0.2,
+	         group.by = "MCA_annotate") +
 	 theme(legend.position = "right", 
 		   legend.title = element_text(colour="blue", size=4, face="bold"),
 	       legend.text = element_text(size = 7))
@@ -241,9 +240,8 @@ HoverLocator(plot = p, information = FetchData(object = scrna, vars = c("MCA_ann
 
 ```{r fig.width=9, fig.height=7}
 scrna <- readRDS(file=file.path(savedir, "scrna_ExternalAnnotation.Rds"))
-p <- DimPlot(object = scrna, pt.size = 0.2, do.label = FALSE,
-	         group.by = "external_annotation", label.size = 1, do.hover=TRUE,
-			 data.hover = "external_annotation") +
+p <- DimPlot(object = scrna, pt.size = 0.2,
+	         group.by = "external_annotation") +
 	 theme(legend.position = "right", 
 		   legend.title = element_text(colour="blue", size=4, face="bold"),
 	       legend.text = element_text(size = 7))
