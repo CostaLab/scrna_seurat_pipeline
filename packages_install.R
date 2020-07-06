@@ -1,4 +1,4 @@
-R_install_list <- c("optparse", "futile.logger", "Seurat", "dplyr", 
+R_install_list <- c("foreign", "optparse", "futile.logger", "Seurat", "dplyr", 
                     "future.apply", "WriteXLS", "clustree", "Matrix", 
                     "data.table", "ggplot2", "Hmisc", "foreach", "doParallel")
 
@@ -48,10 +48,10 @@ if(length(failed_vec) == 0){
                Environment have satisfied the pipeline!\n
                \r===================================================\n")
     if(length(sucess_vec) !=0){
-        message("succeed in installing packages:", paste(sucess_vec))    
+        message("succeed in installing packages: ", paste(sucess_vec, collapse=" "))
     } 
 }else{
     message("\n\n===================================================\n
-              Failed to install packages", paste(failed_vec), " please check!!!!
+              Failed to install packages: ", paste(failed_vec, collapse=" "), " please check!!!!
             \r===================================================\n")
 }

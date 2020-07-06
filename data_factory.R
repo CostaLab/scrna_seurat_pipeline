@@ -784,8 +784,9 @@ generate_scrna_remove_recluster <- function(scrna){
 
 generate_scrna_MCAannotate <- function(scrna){ 
   suppressPackageStartupMessages(require(scMCA)) 
-  mca_result <- scMCA(GetAssayData(object=scrna), numbers_plot = 3)
-  pattern = paste0("(", gsub("-", "_", MCA_NAME), ")")
+  mca_result <- scMCA(GetAssayData(object=scrna, slot="counts"), numbers_plot = 3)
+  #pattern = paste0("(", gsub("-", "_", MCA_NAME), ")")
+  pattern = paste0("\\(", MCA_NAME, "\\)")
   corr=mca_result$cors_matrix[grep(pattern,rownames(mca_result$cors_matrix)),]
   if(dim(corr)[1] == 0){
     logger.error("Cannot find MCA name, please check!")
@@ -829,7 +830,10 @@ generate_scrna_ExternalAnnotation <- function(scrna){
    for(i in seq_along(genes)){
        gene <- genes[i]
        nm <- names(genes)[i]
-       types <- unlist(dfs[[ORGAN]][dfs[[ORGAN]][, sprintf("%s.Gene", SPECIES)] == gene, ]$Cell.Type)
+       idx <- which(dfs[[ORGAN]][sprintf("%s.Gene", SPECIES)] == gene)
+       types <- unlist(dfs[[ORGAN]]$Cell.Type[idx])
+       #types <- dfs[[ORGAN]][dfs[[ORGAN]][, sprintf("%s.Gene", SPECIES)] == gene, ]$Cell.Type
+
        celltypes[[nm]] <- str_c(types, collapse=",")
    }
 
