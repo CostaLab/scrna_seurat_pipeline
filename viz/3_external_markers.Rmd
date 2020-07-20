@@ -1,0 +1,104 @@
+---
+title: "external marker genes"
+author: "Mingbo Cheng"
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_document:
+    toc: yes 
+    toc_depth: 3
+  pdf_document:
+    toc: yes 
+    toc_depth: '3' 
+params:
+    cluster: "which cluster to analysis"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = F, message = F, echo = T)
+library(Seurat)
+library(stringr)
+library(dplyr)
+library(ggplot2)
+library(cowplot)
+library(glue)
+
+#pa <- data.frame("cluster"="removed_clusters", stringsAsFactors=F)
+
+pa <- params 
+
+DATA_DIR <- "../"
+savedir <- paste(DATA_DIR, "save", sep="")
+
+
+scrna <- readRDS(file = file.path(savedir, "scrna_markergenes.Rds"))
+
+len <- length(scrna@tools$parameter)
+
+
+ANNOTATION_EXTERNAL_FILE = scrna@tools$parameter[[len]]['external_file']
+ORGAN = scrna@tools$parameter[[len]]['organ']
+SPECIES = scrna@tools$parameter[[len]]['species']
+
+
+
+df <- read.csv(file=file.path(DATA_DIR, ANNOTATION_EXTERNAL_FILE), sep="\t", stringsAsFactors=F)
+df <- df[!apply(df, 1, function(x) all(x=="")), ]
+
+if(!(ORGAN %in% df$Tissue.of.Origin)){
+     stop("exit 1 no ORGAN")
+}
+
+if(!(SPECIES %in% c("Human", "Mouse"))){
+     stop("exit 1 NO SPECIES")
+}
+
+mdf= df[df$Tissue.of.Origin == ORGAN, c(glue("{SPECIES}.Gene"), "Cell.Type")]
+celltype_names <- unique(mdf$Cell.Type)
+```
+
+
+```{r}
+
+o_genes <- rownames(scrna)
+for (a_celltype in celltype_names){
+    genes <- mdf[mdf$Cell.Type==a_celltype, ]$Mouse.Gene
+    print(a_celltype)
+    genes <- intersect(genes, o_genes) 
+    if (length(genes) == 0){
+        next 
+    }
+
+for (i in seq(1, length(genes), by=4)){
+  ni = min(i+3, length(genes))
+  p1 <- FeaturePlot(object = scrna,
+            pt.size=0.01,
+            label=T,
+            label.size=2,
+            features = genes[i:ni],
+            reduction = "INTE_UMAP",
+            order = T,
+            cols = c("lightgrey", "red"),
+            ncol = 2,
+            max.cutoff = 'q95')
+  print(p1)
+}
+
+
+
+p2 <- DotPlot(object= scrna, features = genes,
+        group.by = pa$cluster) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(p2)
+
+for (i in seq(1, length(genes), by=9)){
+  ni = min(i+8, length(genes))
+  p3 <- VlnPlot(object = scrna, pt.size=0, features = genes[i:ni],
+        group.by = pa$cluster)
+  print(p3)
+}
+
+
+}
+```
+
