@@ -20,6 +20,9 @@ robjects.r['source'](os.path.join(DATADIR,"conf/config.R")) ### load config
 names = robjects.r("names(data_src)")  
 lst_1v1 = list(combinations(names, 2))
 stages = robjects.r("stage_lst")  
+project_name = robjects.r("PROJECT")
+
+
 seen = set()
 u_stages =  [x for x in stages if x not in seen and not seen.add(x)] ##remove dup
 lst_stages = list(combinations(u_stages, 2))
@@ -92,6 +95,7 @@ def generate_md_idx(out):
     t = Template(tmplt)
     st = t.render(list_1v1=lst_1v1,
                   list_stages=lst_stages,
+                  project_name=project_name[0],
                   cluster_use = cluster_use)
     
     fw = open(out, 'w')

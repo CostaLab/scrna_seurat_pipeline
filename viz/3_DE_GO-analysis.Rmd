@@ -82,6 +82,26 @@ cluster.de.top10 <- lapply(cluster.de, function(x) {
 
 ```
 
+## top10 DE heatmaps
+```{r, echo=FALSE, warning= FALSE, message=FALSE, fig.width=13, fig.height=12}
+genes <- as.vector(unlist(sapply(cluster.de.top10, function(x)x$gene)))  
+scrna <- ScaleData(scrna, rownames(scrna))
+help_sort_func <- ifelse(all.is.numeric(unique(scrna@meta.data[, cluster_use])), 
+                                          function(x) as.numeric(x)-1, 
+                                          as.character)
+scrna@meta.data[, cluster_use] <- help_sort_func(scrna@meta.data[, cluster_use]) 
+DoHeatmap(scrna, features=genes,
+        group.by = cluster_use,
+        disp.min = -2, 
+        disp.max = 2,
+        slot = "scale.data",
+        assay = "RNA",
+        raster = FALSE,
+        combine= T) + ggtitle("Marker genes for each cluster") + NoLegend()
+
+```
+
+
 
 ## Plot the top 10 DE genes in each cluster.
 
@@ -201,11 +221,13 @@ plot_grid(plotlist=plots, ncol=2)
 ## DE genes on UMAP plot
 
 ```{r loopclusters, echo=FALSE, warning= FALSE, message=FALSE, fig.height=10, fig.width=13}
-scrna <- readRDS(file.path(savedir, "scrna_clustering.Rds"))
+Idents(scrna) <- cluster_use 
 for (i in names(cluster.de) ){
   #plots = list()
  print(sprintf("Cluster %s:", i)) 
  ps<- FeaturePlot(scrna, features = cluster.de.top10[[as.character(i)]]$gene,
+                    label=T,
+                    label.size=2,
                     cols = c("lightgrey", "red"),
                     reduction = "INTE_UMAP")
  print(ps)

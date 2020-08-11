@@ -1,4 +1,4 @@
-# Kidney Analysis Pipeline
+# {{project_name}} Analysis Pipeline
 
 ## 1. Data Quality Check
 
@@ -11,6 +11,7 @@
 
 ## 3. Marker Genes & GO analysis
  - [DE & GO ](data/dego.html)
+ - [External Markers](data/external_markers.html)
  - [DE-excel](data/de_{{cluster_use}}.xlsx)
  - [GO-UP-excel](data/goup_{{cluster_use}}.xlsx)
  - [GO-DOWN-excel](data/godown_{{cluster_use}}.xlsx)

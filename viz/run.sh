@@ -2,6 +2,16 @@
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+FUNCS=(
+        QC 
+        DEs
+        Clusters
+        DEGO
+        EXT_MARKERS
+        DEGO_1v1
+        DEGO_stage 
+)
+
 
 
 #!!!!!!!!------clusters to choose-------------
@@ -25,38 +35,56 @@ cluster="seurat_clusters"
 echo -e "Use cluster slot ${RED} $cluster ${NC}"
 mkdir -p report/data
 cp -r ../charts/* report/data
-
 python code_generator.py -c $cluster
+grip --export report/index.md
 
-Rscript -e rmarkdown::render"('1_quality_report.Rmd',
+
+
+for a_func in "${FUNCS[@]}"; do
+  case $a_func in
+	QC)
+        Rscript -e rmarkdown::render"('1_quality_report.Rmd',
                  output_file=\"report/data/data_quality.html\",
                  clean=TRUE)"
-
-
-Rscript -e rmarkdown::render"('2_clusters_DEs.Rmd',
+		;;
+	DEs)
+        Rscript -e rmarkdown::render"('2_clusters_DEs.Rmd',
                  output_file=\"report/data/clusters_DEs.html\",
                  clean=TRUE)"
-
-
-Rscript -e rmarkdown::render"('2_clustering.Rmd',
+		;;
+	Clusters)
+        Rscript -e rmarkdown::render"('2_clustering.Rmd',
                  output_file=\"report/data/clusters.html\",
                  clean=TRUE,
                  params=list(cluster=\"${cluster}\"))"
-
-
-Rscript -e rmarkdown::render"('3_DE_GO-analysis.Rmd',
+		;;
+	DEGO)
+        Rscript -e rmarkdown::render"('3_DE_GO-analysis.Rmd',
                  output_file=\"report/data/dego.html\",
                  clean=TRUE,
                  params=list(cluster=\"${cluster}\"))"
+		;;
+	EXT_MARKERS)
+        Rscript -e rmarkdown::render"('3_external_markers.Rmd',
+                 output_file=\"report/data/external_markers.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
 
-Rscript -e rmarkdown::render"('DE-GO-analysis-stagesVS.Rmd',
+	DEGO_1v1)
+        Rscript -e rmarkdown::render"('DE-GO-analysis-stagesVS.Rmd',
                  output_file=\"report/data/gv.html\",
                  clean=TRUE,
                  params=list(cluster=\"${cluster}\"))"
-
-Rscript -e rmarkdown::render"('DE-GO-analysis-1v1.Rmd',
+		;;
+	DEGO_stage)
+        Rscript -e rmarkdown::render"('DE-GO-analysis-1v1.Rmd',
                  output_file=\"report/data/1vs1.html\",
                  clean=TRUE,
                  params=list(cluster=\"${cluster}\"))"
+		;;
+  esac
+
+done
 
 
