@@ -71,13 +71,13 @@ for a_func in "${FUNCS[@]}"; do
                  params=list(cluster=\"${cluster}\"))"
 		;;
 
-	DEGO_1v1)
+	DEGO_stage)
         Rscript -e rmarkdown::render"('DE-GO-analysis-stagesVS.Rmd',
                  output_file=\"report/data/gv.html\",
                  clean=TRUE,
                  params=list(cluster=\"${cluster}\"))"
 		;;
-	DEGO_stage)
+	DEGO_1v1)
         Rscript -e rmarkdown::render"('DE-GO-analysis-1v1.Rmd',
                  output_file=\"report/data/1vs1.html\",
                  clean=TRUE,
