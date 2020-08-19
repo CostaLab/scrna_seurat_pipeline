@@ -35,6 +35,7 @@ Meanwhile, **code_generator.py** can generate some R markdown files and index.md
     |-- 2_clustering.Rmd
     |-- 2_clusters_DEs.Rmd
     |-- 3_DE_GO-analysis.Rmd
+    |-- 3_external_markers.Rmd
     |-- code_generator.py
     |-- run.sh
     `-- template
@@ -65,19 +66,23 @@ MINGENES  = 50  ## when creating seuratobject
 ### -------------- Data SRC-----------------------------
 ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv" 
 
-data_src = c( 
-      I       =    "./results.200402/I/filtered_feature_bc_matrix",
-      Nd7     =    "./results.200402/Nd7/filtered_feature_bc_matrix",
-      Ad7     =    "./results.200402/Ad7/filtered_feature_bc_matrix"
+data_src = c(  
+
+     NK1_Gli1_IRI     =   "data/summed_mtx/sum_NK1_Gli1_IRI/",
+     NK2_CD45_IRI     =   "data/summed_mtx/sum_NK2_CD45_IRI/",
+     NK3_Gli1_Sham    =   "data/summed_mtx/sum_NK3_Gli1_Sham/",
+     NK4_CD45_Sham    =   "data/summed_mtx/sum_NK4_CD45_Sham/"
 )
 
 #A_MxCre B_MxCre  C_Csnk  D_Csnk 
 ##------------------ SET REPLICATE GROUP --------------
 stage_lst = c(
-        I      =   "I",
-        Nd7    =   "Nd7",
-        Ad7    =   "Ad7"
+    NK1_Gli1_IRI      = "IRI",
+    NK2_CD45_IRI      = "IRI",
+    NK3_Gli1_Sham     = "Sham", 
+    NK4_CD45_Sham     = "Sham" 
 )
+
 
 ### -------------- RUN PARAMETERS-----------------------------
 

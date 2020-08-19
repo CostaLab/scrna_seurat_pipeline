@@ -77,6 +77,7 @@ cluster.de.list <- scrna@tools$de_batch
 names(cluster.de.list) <- as.character(seq(0.1, 0.8, 0.1)) ##------
 for (resolution in seq(0.1, 0.8, 0.1)){
         cluster.de <- cluster.de.list[[as.character(resolution)]]
+        cluster.de <- cluster.de[sapply(cluster.de, function(m) nrow(m) >0)]
         cluster.de.top10 <- lapply(cluster.de, function(x) {
             x %>% top_n(10, avg_logFC) %>% arrange(-avg_logFC)
         })

@@ -1,7 +1,7 @@
 #!/usr/bin/Rscript
 
 ###Set VERSION
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -416,7 +416,7 @@ generate_scrna_rawdata <- function(scrna){
                 print(paste(i, Sys.time()))    
                 key = names(data_src)[i]
                 val = data_src[[key]]
-                data <- read_func(file.path("./", data_src[[key]]))
+                data <- read_func(file.path(data_src[[key]]))
                 scrna <- CreateSeuratObject(counts = data, min.cells = MINCELLS, min.features = MINGENES, project = PROJECT)
                 name = names(data_src)[i]
                 scrna@meta.data[, "name"] <- name  
@@ -661,16 +661,20 @@ generate_scrna_integration <- function(scrna){
     ret_code = 0
 	tryCatch(
 	{
+	      bak_tools <- scrna@tools
         data.list <- SplitObject(scrna, split.by = "name")
         data.list <- lapply(X = data.list, FUN = function(x) {
                 x <- NormalizeData(x)
                 x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)})
 
-		anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM)## THIS IS CCA DIMENSIONS 
-    	scrna <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM) ## THIS IS PCA DIMENSION
+		    anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM)## THIS IS CCA DIMENSIONS 
+    	  scrna <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM) ## THIS IS PCA DIMENSION
         ## keep the order of name and stage
         scrna$name <- factor(scrna$name, levels=names(data_src))
         scrna$stage <- factor(scrna$stage, levels=unique(stage_lst[names(data_src)]))
+        scrna@tools$parameter <- bak_tools$parameter
+        scrna@tools$execution <- bak_tools$execution
+
 	},
 	error=function(cond) {
         ret_code <<- -1
@@ -1129,9 +1133,16 @@ generate_scrna_go <- function(scrna){
 get_go_up <- function(de.list){
     suppressPackageStartupMessages(require(clusterProfiler))
     suppressPackageStartupMessages(require(org.Mm.eg.db))
+    suppressPackageStartupMessages(require(org.Hs.eg.db))
     go.up.list = list() 
     help_sort_func <- ifelse(all.is.numeric(names(de.list)), as.numeric, function(x){x})
-
+    orgdb <- switch(SPECIES, "Mouse"="org.Mm.eg.db", 
+                              "Human"="org.Hs.eg.db",
+                              "NotSupport")
+    if(orgdb == "NotSupport"){
+      logger.error("not support species for GO!!!") 
+      stop("not support species for GO!!!") 
+    }
     for (id in sort(help_sort_func(names(de.list)))) { 
         id <- as.character(id)
         genes = de.list[[id]]$gene[de.list[[id]]$avg_logFC > 0 & de.list[[id]]$p_val_adj < 0.005]
@@ -1142,7 +1153,7 @@ get_go_up <- function(de.list){
         genes.sorted = NULL
         tryCatch({
           genes.sorted <- genes[order(pvals)][1:min(100, length(genes))]
-          genes_e <- bitr(genes.sorted, fromType="SYMBOL", toType=c("ENTREZID","ENSEMBL"), OrgDb="org.Mm.eg.db");
+          genes_e <- bitr(genes.sorted, fromType="SYMBOL", toType=c("ENTREZID","ENSEMBL"), OrgDb=orgdb);
          }, error = function(cond) {
             logger.warn(cond)  
          })
@@ -1153,7 +1164,7 @@ get_go_up <- function(de.list){
              next
         }
 
-        go <- enrichGO(genes_e$ENTREZID, OrgDb = org.Mm.eg.db, ont='ALL',pAdjustMethod = 'BH',
+        go <- enrichGO(genes_e$ENTREZID, OrgDb = orgdb, ont='ALL',pAdjustMethod = 'BH',
                        pvalueCutoff = 0.05, qvalueCutoff = 0.2,keyType = 'ENTREZID', readable=TRUE)
         #barplot(go,showCategory=20, drop=T, title = paste("GO analysis for LSK UP genes for cluster", id, sep = " "))
         go.up.list[[id]] = go
@@ -1169,9 +1180,16 @@ get_go_up <- function(de.list){
 get_go_down <- function(de.list){
     suppressPackageStartupMessages(require(clusterProfiler))
     suppressPackageStartupMessages(require(org.Mm.eg.db))
+    suppressPackageStartupMessages(require(org.Hs.eg.db))
     go.down.list = list() 
     help_sort_func <- ifelse(all.is.numeric(names(de.list)), as.numeric, function(x){x})
-
+    orgdb <- switch(SPECIES, "Mouse"="org.Mm.eg.db", 
+                             "Human"="org.Hs.eg.db",
+                             "NotSupport")
+    if(orgdb == "NotSupport"){
+      logger.error("not support species for GO!!!") 
+      stop("not support species for GO!!!") 
+    }
     for (id in sort(help_sort_func(names(de.list)))) { 
         id <- as.character(id)
         genes = de.list[[id]]$gene[de.list[[id]]$avg_logFC < 0 & de.list[[id]]$p_val_adj < 0.005]
@@ -1183,7 +1201,7 @@ get_go_down <- function(de.list){
         tryCatch({
  
           genes.sorted <- genes[order(pvals)][1:min(100, length(genes))]
-          genes_e <- bitr(genes.sorted, fromType="SYMBOL", toType=c("ENTREZID","ENSEMBL"), OrgDb="org.Mm.eg.db");
+          genes_e <- bitr(genes.sorted, fromType="SYMBOL", toType=c("ENTREZID","ENSEMBL"), OrgDb=orgdb);
          }, error = function(cond) {
             logger.warn(cond)  
          })
@@ -1195,7 +1213,7 @@ get_go_down <- function(de.list){
         }
 
 
-        go <- enrichGO(genes_e$ENTREZID, OrgDb = org.Mm.eg.db, ont='ALL',pAdjustMethod = 'BH',
+        go <- enrichGO(genes_e$ENTREZID, OrgDb = orgdb, ont='ALL',pAdjustMethod = 'BH',
                        pvalueCutoff = 0.05, qvalueCutoff = 0.2,keyType = 'ENTREZID', readable=TRUE)
         #barplot(go,showCategory=20, drop=T, title = paste("GO analysis for LSK Down genes for cluster", id, sep = " "))
         go.down.list[[id]] = go

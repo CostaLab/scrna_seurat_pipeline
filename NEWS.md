@@ -14,3 +14,10 @@
  * viz run shell add option to easily choose which to run
  * viz add external markers violin dotplot and featureplot
  * viz add project name
+
+
+## version 1.0.1  --- 08.19.2020
+ * GO analysis switch in between human and mouse databases
+ * Fix source sequencing data cannot load from absolute PATH
+ * Fix bug parameter and execution lost after splitting seurat Object during Integration
+ * Fix viz when there are no marker genes in some clusters

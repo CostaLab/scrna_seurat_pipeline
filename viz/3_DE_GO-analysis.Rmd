@@ -75,6 +75,7 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
 savedir <- "../save/"
 scrna <- readRDS(file.path(savedir, "scrna_markergenes.Rds"))
 cluster.de <- scrna@tools[[de_cluster_name]]
+cluster.de <- cluster.de[sapply(cluster.de, function(m) nrow(m) >0)]
 
 cluster.de.top10 <- lapply(cluster.de, function(x) {
     x %>% top_n(10, avg_logFC) %>% arrange(-avg_logFC)
