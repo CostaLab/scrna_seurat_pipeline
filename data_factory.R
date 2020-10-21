@@ -427,8 +427,8 @@ generate_scrna_rawdata <- function(scrna){
 
 	    scrna <- merge(x = data.list[[1]], y = unlist(data.list[2:length(data.list)]),
                        merge.data = FALSE, add.cell.ids = names(data_src), project = PROJECT)
-        scrna[["percent.mt"]] <- PercentageFeatureSet(scrna, pattern = "^mt-")
-        scrna[["percent.ribo"]] <- PercentageFeatureSet(scrna, pattern = "^Rpl|^Rps")
+        scrna[["percent.mt"]] <- PercentageFeatureSet(scrna, pattern = "^mt-|^MT-")
+        scrna[["percent.ribo"]] <- PercentageFeatureSet(scrna, pattern = "^Rpl|^Rps|^RPL|^RPS")
 
 	},
 	error=function(cond) {
@@ -475,11 +475,11 @@ generate_scrna_preprocess <- function(scrna){
     ret_code = 0
     tryCatch(
     {
-         scrna[["percent.mt"]] <- PercentageFeatureSet(scrna, pattern = "^mt-")
-         scrna[["percent.ribo"]] <- PercentageFeatureSet(scrna, pattern = "^Rpl|^Rps")
+         scrna[["percent.mt"]] <- PercentageFeatureSet(scrna, pattern = "^mt-|^MT-")
+         scrna[["percent.ribo"]] <- PercentageFeatureSet(scrna, pattern = "^Rpl|^Rps|^RPL|^RPS")
          
-         mt.genes <- grep(pattern = "^mt-", x = rownames(x = scrna), value = TRUE)
-         ribo.genes <- grep("^Rpl|^Rps",  x = rownames(x = scrna), value = TRUE)
+         mt.genes <- grep(pattern = "^mt-|^MT-", x = rownames(x = scrna), value = TRUE)
+         ribo.genes <- grep("^Rpl|^Rps|^RPL|^RPS",  x = rownames(x = scrna), value = TRUE)
          
          scrna[["percent.exclude"]]  <- PercentageFeatureSet(scrna, features = c(mt.genes, ribo.genes))
          
