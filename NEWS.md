@@ -21,3 +21,23 @@
  * Fix source sequencing data cannot load from absolute PATH
  * Fix bug parameter and execution lost after splitting seurat Object during Integration
  * Fix viz when there are no marker genes in some clusters
+
+
+
+## version 1.0.2  --- 10.21.2020
+ * Fix bug special characters for sheet names failed to produce excel results
+ * Fix bug GO analysis lose some results cause by non-GO terms
+ * Fix bug mito and ribo genes cannot recognized when analyzing Human organs
+ * Change Scale mito&ribo separately
+ * Change fishertest for clusters, 1vsothers to 1vs1
+ * Change findMarkers to keep all foldchange results for volcano plots
+ * Change GO analysis to keep all p adjust value for heatmap
+ * Add pathways KEGG,Reatome,Hallmark like GO analysis
+ * Add delete mito genes permanently, Dangerous to call!!!
+ * Add single sample without integration analysis function
+ * Add genesorteR analysis
+ * Add DE&GO stage 1 versus the rest
+ * Add cluster-wise filter to keep only cells meet the mito or ribo threshold
+ * Add Volcano plots and GO heatmap
+
+

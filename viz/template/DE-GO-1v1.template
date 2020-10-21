@@ -28,7 +28,10 @@ library(stringr)
 library(digest)
 library(plotly)
 library(Seurat)
-
+library(Hmisc)
+library(EnhancedVolcano)
+library(ComplexHeatmap)
+library(glue)
 
 
 GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
@@ -134,8 +137,81 @@ if(length(plots) > 0){
 }
 ```
 
+#### {{tX}} vs {{tY}} Volcano
+
+```{r echo=FALSE, warning= FALSE, message=FALSE, fig.width=8, fig.height=8}
+a_vs <- "{{tX}}.vs.{{tY}}" 
+de.list <- all_de_list[[a_vs]]
+help_sort_func <- ifelse(all.is.numeric(names(de.list)), as.numeric, function(x){x})
+
+for (id in sort(help_sort_func(names(de.list)))) {
+  id <- as.character(id)
+  a_de <- de.list[[id]]
+  a_de$log2FC <- a_de$avg_logFC / log(2)
+  up <- nrow(a_de %>% filter(log2FC>= 1 & p_val_adj<=0.05) )
+  down <- nrow(a_de %>% filter(log2FC <= -1 & p_val_adj<=0.05))
+  p <- EnhancedVolcano(a_de,
+                       x="log2FC",
+                       y = "p_val_adj",
+                       lab=rownames(a_de),
+                       pCutoff = 0.05,
+                       pointSize = 1.0,
+                       title=glue("Volcano {id}"),
+                       subtitle=glue("up:{up} down:{down}"))
+  print(p)
+}
+```
+
+
+## GO up analysis
 
 #### {{tX}} vs {{tY}}  GO up
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=13, fig.height=20}
+a_vs <- "{{tX}}.vs.{{tY}}" 
+go_ups <- all_goup_list[[a_vs]]
+go_ups <- go_ups[sapply(go_ups, function(x) dim(x)[1]) > 0]
+go.up.list <- go_ups
+
+df.list <- lapply(names(go.up.list), function(x) go.up.list[[x]]@result)
+names(df.list) <- names(go.up.list)
+intersect_GoID <- Reduce(intersect, lapply(df.list, function(x) x$ID))
+filtered_go <- c()
+for(goid in  intersect_GoID){
+    is_sigs <- sapply(df.list, function(x)x[x$ID==goid,]$p.adjust < 0.05)
+    if(any(is_sigs) & table(is_sigs)["TRUE"] == 1){
+        filtered_go <- c(filtered_go, goid)
+    }
+}
+
+if(length(filtered_go) > 10){
+  df.list <- lapply(df.list, function(x) x %>% filter(ID %in% filtered_go) )
+  df.list <- lapply(names(df.list), function(x) df.list[[x]] %>% mutate(name=x))
+  mdf <- do.call(rbind, df.list)
+  pmdf <- mdf[, c("Description", "name", "p.adjust")]
+
+  pmtx <- reshape2::dcast(pmdf,  Description ~ name)
+
+  rownames(pmtx) <- pmtx$Description
+  pmtx$Description <- NULL
+  help_mtx <- pmtx
+  help_mtx[help_mtx >= 0.05] = 1000
+  help_mtx[help_mtx < 0.05] = 1
+  help_mtx <- help_mtx[do.call(order, help_mtx),]
+  pmtx <- -log10(pmtx)
+  pmtx[pmtx>2] = 2
+  pmtx <- pmtx[rownames(help_mtx), ]
+  col_fun <-  circlize::colorRamp2(c(0, 1, +2), c("purple", "black", "yellow"))
+  p <- Heatmap(as.matrix(pmtx),
+         name = "-log10(padjust)",
+         cluster_columns = F,
+         cluster_rows = F,
+         show_row_names=T,
+         col=col_fun)
+  draw(p, heatmap_legend_side = "left")
+}
+```
+
 ```{r echo=FALSE, warning= FALSE, message=FALSE, fig.width=15, fig.height=30}
 a_vs <- "{{tX}}.vs.{{tY}}" 
 go_ups <- all_goup_list[[a_vs]]
@@ -143,7 +219,7 @@ go_ups <- go_ups[sapply(go_ups, function(x) dim(x)[1]) > 0]
 
 ### up genes top 10
 go.plot.list = lapply(go_ups, function(x){ 
-            df = fortify(x, showCategory=Inf)
+            df = x@result
             if (is.list(df) && length(df)==0){
               log.m = as.data.frame(list())
               return(log.m)
@@ -184,9 +260,55 @@ if(length(plots) > 0){
 ```
 
 
-
-
 #### {{tX}} vs {{tY}}  GO down
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=13, fig.height=20}
+a_vs <- "{{tX}}.vs.{{tY}}" 
+a_vs <- "{{tX}}.vs.{{tY}}" 
+go_downs <- all_godown_list[[a_vs]]
+go_downs <- go_downs[sapply(go_downs, function(x) dim(x)[1]) > 0]
+
+go.down.list <- go_downs
+
+df.list <- lapply(names(go.down.list), function(x) go.down.list[[x]]@result)
+names(df.list) <- names(go.down.list)
+intersect_GoID <- Reduce(intersect, lapply(df.list, function(x) x$ID))
+filtered_go <- c()
+for(goid in  intersect_GoID){
+    is_sigs <- sapply(df.list, function(x)x[x$ID==goid,]$p.adjust < 0.05)
+    if(any(is_sigs) & table(is_sigs)["TRUE"] == 1){
+        filtered_go <- c(filtered_go, goid)
+    }
+}
+
+if(length(filtered_go) > 10){
+  df.list <- lapply(df.list, function(x) x %>% filter(ID %in% filtered_go) )
+  df.list <- lapply(names(df.list), function(x) df.list[[x]] %>% mutate(name=x))
+  mdf <- do.call(rbind, df.list)
+  pmdf <- mdf[, c("Description", "name", "p.adjust")]
+
+  pmtx <- reshape2::dcast(pmdf,  Description ~ name)
+
+  rownames(pmtx) <- pmtx$Description
+  pmtx$Description <- NULL
+  help_mtx <- pmtx
+  help_mtx[help_mtx >= 0.05] = 1000
+  help_mtx[help_mtx < 0.05] = 1
+  help_mtx <- help_mtx[do.call(order, help_mtx),]
+  pmtx <- -log10(pmtx)
+  pmtx[pmtx>2] = 2
+  pmtx <- pmtx[rownames(help_mtx), ]
+  col_fun <-  circlize::colorRamp2(c(0, 1, +2), c("purple", "black", "yellow"))
+  p <- Heatmap(as.matrix(pmtx),
+         name = "-log10(padjust)",
+         cluster_columns = F,
+         cluster_rows = F,
+         show_row_names=T,
+         col=col_fun)
+  draw(p, heatmap_legend_side = "left")
+}
+```
+
 
 ```{r echo=FALSE, warning= FALSE, message=FALSE, fig.width=15, fig.height=30}
 ### down genes top 10
@@ -195,7 +317,7 @@ go_downs <- all_godown_list[[a_vs]]
 go_downs <- go_downs[sapply(go_downs, function(x) dim(x)[1]) > 0]
 
 go.plot.list = lapply(go_downs, function(x){
-            df = fortify(x, showCategory=Inf)
+            df = x@result
             if (is.list(df) && length(df)==0){
               log.m = as.data.frame(list())
               return(log.m)
@@ -251,7 +373,7 @@ for (i in names(de.list)){
    print(sprintf("Cluster %s", i)) 
    ps<- FeaturePlot(scrna, features = cluster.de.top10[[i]]$gene, 
                     cols = c("lightgrey", "red"), 
-                    reduction = "INTE_UMAP")  
+                    reduction = "INTE_UMAP")
    print(ps)
 }
 ```
