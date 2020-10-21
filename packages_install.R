@@ -4,8 +4,7 @@ R_install_list <- c("optparse", "futile.logger", "Seurat", "dplyr",
 
 
 
-Bio_install_list <- c("scMCA", "clusterProfiler", "org.Mm.eg.db", 
-                      "clusterProfiler", "org.Mm.eg.db")
+Bio_install_list <- c("scMCA", "clusterProfiler", "org.Mm.eg.db")
 
 
 failed_vec <- c()
