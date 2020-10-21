@@ -445,6 +445,7 @@ generate_scrna_rawdata <- function(scrna){
                        merge.data = FALSE, add.cell.ids = names(data_src), project = PROJECT)
         scrna[["percent.mt"]] <- PercentageFeatureSet(scrna, pattern = "^mt-|^MT-")
         scrna[["percent.ribo"]] <- PercentageFeatureSet(scrna, pattern = "^Rpl|^Rps|^RPL|^RPS")
+	}
 
 	},
 	error=function(cond) {
