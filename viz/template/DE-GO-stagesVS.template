@@ -69,7 +69,7 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
 }
 
 #savedir <- "save/save-{{CC}}"
-savedir <- "../save/"
+savedir <- "../save"
 scrna <- readRDS(file.path(savedir, "scrna_dego_stage.Rds"))
 
 cluster_use <- params$cluster
