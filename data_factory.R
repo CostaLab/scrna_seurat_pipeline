@@ -1090,7 +1090,7 @@ generate_scrna_ExternalAnnotation <- function(scrna){
        if(length(score) == 0){ 
            return("Unknown") 
        }   
-       sdf <- df[df$Mouse.Gene %in% names(score), c(glue("{SPECIES}.Gene"), "Cell.Type")] 
+       sdf <- df[df[,glue("{SPECIES}.Gene")] %in% names(score), c(glue("{SPECIES}.Gene"), "Cell.Type")] 
        sdf$score <- score[sdf[,glue("{SPECIES}.Gene")]] 
        itype <- aggregate(sdf$score, by=list(CellType=sdf$Cell.Type), 
                           FUN=function(x){return(mean(x)*log(length(x)+1))})
