@@ -91,22 +91,36 @@ conf = c(
        scrna_rawdata              = 1, ## read count matrix and merge samples to a Seurat obj 
        scrna_filter               = 1, ## filter nFeatureRNA and nCountRNA
        scrna_preprocess           = 1, ## Normalize & FindvariablegFeatures and ScaleData
-       scrna_excludeRegressOut    = 1, ## Regress out mito and ribo effects 
        scrna_cellcycle            = 1, ## Cell cycle scoring
        scrna_cycleRegressOut      = 1, ## Regress out cell cycle effects
-       scrna_RegressOutAll        = 1, ## Regress out celly cycle & mito & ribo
+       scrna_mitoRegressOut       = 1, ## Regress out mito only
+       scrna_riboRegressOut       = 0, ## Regress out ribo only
+       scrna_mitoRiboRegressOut   = 0, ## Regress out ribo&mito 
+       scrna_RegressOutAll        = 0, ## Regress out celly cycle & mito & ribo
        scrna_integration          = 1, ## Integrate samples using Seurat 3
        scrna_ScaleIntegration     = 1, ## ScaleDatai&PCA and UMAP
        scrna_batchclustering      = 1, ## clustering with resolution from 0.1 to 0.8
        scrna_batch_markergenes    = 1, ## Marker Genes for clusters with different resolutions
        scrna_clustering           = 1, ## Set seurat_clusters or re-calculate
+       scrna_clusterwise_xcell    = 0, ## remove cells of each cluster according distinct criterion
+       scrna_del_mitogenes        = 0, ## !!!DANGEROUS, once deleted, never recovered!!!
        scrna_markergenes          = 1, ## markergenes for seurat_clusters
+       scrna_genesorteR           = 0, ## genesorteR analysis
        scrna_go                   = 1, ## Gene Ontology analysis
+       scrna_kegg                 = 0, ## kegg enrichment analysis
+       scrna_reactome             = 0, ## reactome enrichment analysis
+       scrna_hallmark             = 0, ## hallmark enrichment analysis
        scrna_fishertest_clusters  = 1, ## fisher test for clusters and stages
        scrna_MCAannotate          = 1, ## scMCA annotation celltypes
        scrna_ExternalAnnotation   = 1, ## Annotation from given databases(tsv)
        scrna_dego_name            = 1, ## DE & GO between samples
-       scrna_dego_stage           = 1, ## GO down for mark genes
+       scrna_dego_stage           = 1, ## DE & GO between stages
+       scrna_dego_stage_vsRest    = 0, ## DE & GO between one stage and all Rest
+       scrna_pathway_name         = 0, ## samples comparison KEGG&Reactome&hallmark 
+       scrna_pathway_stage        = 0, ## stages comparison KEGG&Reactome&hallmark 
+       scrna_pathway_stage_vsRest = 0, ## stages vsRest comparison KEGG&Reactome&hallmark 
+       scrna_clusterwise_xcell    = 0, ## keep cells for each cluster according to mito&ribo
+       scrna_fishertest_clusters  = 0, ## fisher test for clusters and stages
        scrna_merge_clusters       = 0, ## merge clusters 
        scrna_remove_clusters      = 0, ## remove clusters 
        scrna_remove_recluster     = 0, ## remove clusters and recluster with defualt resolution
@@ -114,6 +128,7 @@ conf = c(
        scrna_go                   = 0, ## Gene Ontology analysis
        scrna_dego_name            = 0, ## DE & GO between samples
        scrna_dego_stage           = 0) ## GO down for mark genes
+
 
 
 
