@@ -62,7 +62,7 @@ celltype_names <- unique(mdf$Cell.Type)
 
 o_genes <- rownames(scrna)
 for (a_celltype in celltype_names){
-    genes <- mdf[mdf$Cell.Type==a_celltype, ]$Mouse.Gene
+    genes <- mdf[mdf$Cell.Type==a_celltype,glue("{SPECIES}.Gene") ]
     print(a_celltype)
     genes <- intersect(genes, o_genes) 
     if (length(genes) == 0){
