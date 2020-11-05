@@ -20,6 +20,7 @@ knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
 ```{r }
 library(Seurat)
 library(knitr)
+library(kableExtra)
 library(dplyr)
 library(ggplot2)
 library(cowplot)
@@ -42,6 +43,35 @@ scrna <- readRDS(file = file.path(savedir, "scrna_rawdata.Rds"))
 Idents(object = scrna)<- "name"
 VlnPlot(object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo"), ncol=2,
         cols = colours, pt.size=0)
+
+meta <- scrna@meta.data
+
+stSample <- meta%>% group_by(name)%>% summarise(nCount.Mean=mean(nCount_RNA),
+                                          nCount.Median=median(nCount_RNA),
+                                          nFeature.Mean=mean(nCount_RNA),
+                                          nFeature.MeanMedian=median(nCount_RNA),
+                                          pctMt.Mean=mean(percent.mt),
+                                          pctMt.Median=median(percent.mt),
+                                          pctRb.Mean = mean(percent.ribo),
+                                          pctRb.Median = median(percent.ribo)
+                                          )
+stSample %>%  kable(caption = "Mean dan median for each sample", align = 'c') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+
+stCond <- meta%>% group_by(stage)%>% summarise(nCount.Mean=mean(nCount_RNA),
+                                          nCount.Median=median(nCount_RNA),
+                                          nFeature.Mean=mean(nCount_RNA),
+                                          nFeature.MeanMedian=median(nCount_RNA),
+                                          pctMt.Mean=mean(percent.mt),
+                                          pctMt.Median=median(percent.mt),
+                                          pctRb.Mean = mean(percent.ribo),
+                                          pctRb.Median = median(percent.ribo)
+                                          )
+stCond %>%  kable(caption = "Mean dan median for each condition", align = 'c') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+
 ```
 
 
@@ -54,6 +84,34 @@ scrna <- readRDS(file = file.path(savedir, "scrna_filter.Rds"))
 Idents(object = scrna)<- "name"
 VlnPlot(object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo"), ncol=2,
         cols = colours, pt.size = 0)
+
+meta <- scrna@meta.data
+
+stSample <- meta%>% group_by(name)%>% summarise(nCount.Mean=mean(nCount_RNA),
+                                          nCount.Median=median(nCount_RNA),
+                                          nFeature.Mean=mean(nCount_RNA),
+                                          nFeature.MeanMedian=median(nCount_RNA),
+                                          pctMt.Mean=mean(percent.mt),
+                                          pctMt.Median=median(percent.mt),
+                                          pctRb.Mean = mean(percent.ribo),
+                                          pctRb.Median = median(percent.ribo)
+                                          )
+stSample %>%  kable(caption = "Mean dan median for each sample", align = 'c') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+
+stCond <- meta%>% group_by(stage)%>% summarise(nCount.Mean=mean(nCount_RNA),
+                                          nCount.Median=median(nCount_RNA),
+                                          nFeature.Mean=mean(nCount_RNA),
+                                          nFeature.MeanMedian=median(nCount_RNA),
+                                          pctMt.Mean=mean(percent.mt),
+                                          pctMt.Median=median(percent.mt),
+                                          pctRb.Mean = mean(percent.ribo),
+                                          pctRb.Median = median(percent.ribo)
+                                          )
+stCond %>%  kable(caption = "Mean dan median for each condition", align = 'c') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
 ```
 
 ```{r fig.width=9, fig.height=18}

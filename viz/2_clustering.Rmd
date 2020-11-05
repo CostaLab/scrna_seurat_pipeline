@@ -15,8 +15,10 @@ params:
 ---
 
 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
+##TODO: sort cluster proport adviced by Johanes
 ```
 
 
@@ -24,6 +26,7 @@ knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
 library(Hmisc)
 library(Seurat)
 library(knitr)
+library(kableExtra)
 library(glue)
 library(dplyr)
 library(ggplot2)
@@ -91,6 +94,13 @@ fname <- switch(cluster_use,
 scrna <- readRDS(file=file.path(savedir,fname))
 DimPlot(scrna, reduction = "INTE_UMAP", group.by = "name", cols=colours)
 DimPlot(scrna, reduction = "INTE_UMAP", group.by = cluster_use, label=T, label.size=8)
+
+table(scrna$name, scrna@meta.data[, cluster_use]) %>%  kable(caption = "samples: cluster cells", align = 'c') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+table(scrna$stage, scrna@meta.data[, cluster_use]) %>%  kable(caption = "condition: cluster cells", align = 'c') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
 ```
 
 ### Clusters Statistic
@@ -108,7 +118,6 @@ if(all.is.numeric(df$Cluster)){ ## set int order if all cluster name are integer
 shift_trans = function(d = 0) {
   scales::trans_new("shift", transform = function(x) x - d, inverse = function(x) x + d)
 }
-                    
 if(length(table(scrna$stage))<=2){
     nm <- names(table(scrna$stage))[1]
     nm2 <- names(table(scrna$stage))[2]
@@ -151,6 +160,8 @@ if(length(table(scrna$stage))<=2){
       print(p)
     }
 }
+
+
 
 ```
 

@@ -2,11 +2,12 @@ R_install_list <- c("optparse", "futile.logger", "Seurat", "dplyr",
                     "future.apply", "WriteXLS", "clustree", "Matrix", 
                     "data.table", "ggplot2", "Hmisc", "foreach", 
                     "devtools", "doParallel", "glue", "openxlsx",
-                    "rmarkdown", "reshape2", "circlize", "assertthat")
+                    "rmarkdown", "reshape2", "circlize", "BiocManager",
+                    "kableExtra", "assertthat")
 
 
 
-Bio_install_list <- c("scMCA", "org.Mm.eg.db", 
+Bio_install_list <- c("scMCA", "clusterProfiler", "org.Mm.eg.db", 
                       "clusterProfiler", "org.Hs.eg.db", 
                       "ComplexHeatmap", "EnhancedVolcano",
                       "ReactomePA", "msigdbr")
@@ -87,6 +88,6 @@ if(length(failed_vec) == 0){
     } 
 }else{
     message("\n\n===================================================\n
-              Failed to install packages: ", paste(failed_vec, collapse=" "), " please check!!!!
+             Failed to install packages: ", paste(failed_vec, collapse=" "), " please check!!!! 
             \r===================================================\n")
 }
