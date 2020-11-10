@@ -1,17 +1,17 @@
 ### --------------Initail info----------------------------
-PROJECT = "Mouse heart Gli&CD45 project" ## set project name 
+PROJECT = "Mouse heart Gli&CD45 project" ## set project name
 ORGAN = 'Heart'           #For external annotation. Options: Blood, Heart, Intestine, Kidney
 SPECIES = "Mouse"         #For external annotation. Options: Human, Mouse
-MCA_NAME = "Neonatal-Heart" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/ 
+MCA_NAME = "Neonatal-Heart" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
 
 # filtering params when create seurat object
-MINCELLS  = 5 
+MINCELLS  = 5
 MINGENES  = 50
 
 ### -------------- Data SRC-----------------------------
-ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv" 
+ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
 
-data_src = c( 
+data_src = c(
 
      NK1_Gli1_IRI     =   "data/summed_mtx/sum_NK1_Gli1_IRI/",
      NK2_CD45_IRI     =   "data/summed_mtx/sum_NK2_CD45_IRI/",
@@ -24,23 +24,25 @@ data_src = c(
 stage_lst = c(
     NK1_Gli1_IRI      = "IRI",
     NK2_CD45_IRI      = "IRI",
-    NK3_Gli1_Sham     = "Sham", 
-    NK4_CD45_Sham     = "Sham" 
+    NK3_Gli1_Sham     = "Sham",
+    NK4_CD45_Sham     = "Sham"
 )
 
 ### -------------- RUN PARAMETERS-----------------------------
 
-## 0. omit,     1. calc & save,      2. load   3.  
+## 0. omit,     1. calc & save,      2. load   3.
 conf = c(
-       scrna_rawdata              = 1, ## read count matrix and merge samples to a Seurat obj 
+       scrna_rawdata              = 1, ## read count matrix and merge samples to a Seurat obj
        scrna_filter               = 1, ## filter nFeatureRNA and nCountRNA
        scrna_preprocess           = 1, ## Normalize & FindvariablegFeatures and ScaleData
        scrna_cellcycle            = 1, ## Cell cycle scoring
        scrna_cycleRegressOut      = 1, ## Regress out cell cycle effects
-       scrna_mitoRegressOut       = 1, ## Regress out mito only
+       scrna_CCmitoRegressOut     = 1, ## Regress out mito & cell cycle
+       scrna_mitoRegressOut       = 0, ## Regress out mito only
        scrna_riboRegressOut       = 0, ## Regress out ribo only
-       scrna_mitoRiboRegressOut   = 0, ## Regress out ribo&mito 
-       scrna_RegressOutAll        = 0, ## Regress out celly cycle & mito & ribo
+       scrna_CCriboRegressOut     = 0, ## Regress out ribo & cell cycle
+       scrna_mitoRiboRegressOut   = 0, ## Regress out ribo&mito
+       scrna_CCmitoRiboRegressOut = 0, ## Regress out ribo&mito  & cell cycle
        scrna_integration          = 1, ## Integrate samples using Seurat 3
        scrna_ScaleIntegration     = 1, ## ScaleDatai&PCA and UMAP
        scrna_batchclustering      = 1, ## clustering with resolution from 0.1 to 0.8
@@ -60,13 +62,13 @@ conf = c(
        scrna_dego_name            = 1, ## DE & GO between samples
        scrna_dego_stage           = 1, ## DE & GO between stages
        scrna_dego_stage_vsRest    = 1, ## DE & GO between one stage and all Rest
-       scrna_pathway_name         = 1, ## samples comparison KEGG&Reactome&hallmark 
-       scrna_pathway_stage        = 1, ## stages comparison KEGG&Reactome&hallmark 
-       scrna_pathway_stage_vsRest = 1, ## stages vsRest comparison KEGG&Reactome&hallmark 
+       scrna_pathway_name         = 1, ## samples comparison KEGG&Reactome&hallmark
+       scrna_pathway_stage        = 1, ## stages comparison KEGG&Reactome&hallmark
+       scrna_pathway_stage_vsRest = 1, ## stages vsRest comparison KEGG&Reactome&hallmark
        scrna_clusterwise_xcell    = 0, ## keep cells for each cluster according to mito&ribo
        scrna_fishertest_clusters  = 0, ## fisher test for clusters and stages
-       scrna_merge_clusters       = 0, ## merge clusters 
-       scrna_remove_clusters      = 0, ## remove clusters 
+       scrna_merge_clusters       = 0, ## merge clusters
+       scrna_remove_clusters      = 0, ## remove clusters
        scrna_remove_recluster     = 0, ## remove clusters and recluster with defualt resolution
        scrna_markergenes          = 0, ## markergenes for seurat_clusters
        scrna_go                   = 0, ## Gene Ontology analysis

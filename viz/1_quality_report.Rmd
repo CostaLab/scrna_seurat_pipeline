@@ -84,6 +84,18 @@ scrna <- readRDS(file = file.path(savedir, "scrna_filter.Rds"))
 Idents(object = scrna)<- "name"
 VlnPlot(object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo"), ncol=2,
         cols = colours, pt.size = 0)
+scrna <- readRDS(file = file.path(savedir, "scrna_cellcycle.Rds"))
+features = c("G1.Score", "S.Score", "G2M.Score")
+ps <- lapply(features, function(fea){
+             VlnPlot(object = scrna, 
+                  features = fea,
+                  group.by="name",
+                  cols = colours, 
+                  pt.size=0) + NoLegend()
+
+})
+plot_grid(plotlist=ps, ncol=2)
+
 
 meta <- scrna@meta.data
 
@@ -116,6 +128,7 @@ stCond %>%  kable(caption = "Mean dan median for each condition", align = 'c') %
 
 ```{r fig.width=9, fig.height=18}
 ## nGene<=>nFeature_RNA, nUMI<=>nCount_RNA
+Idents(object = scrna)<- "name"
 p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.mt", cols=colours)
 p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.ribo",cols=colours)
 p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",cols=colours)

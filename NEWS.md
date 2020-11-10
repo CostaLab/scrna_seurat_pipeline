@@ -41,3 +41,11 @@
  * Add Volcano plots and GO heatmap
 
 
+## version 1.0.3  --- 11.10.2020
+ * Fix install_packages.R scMCA from BiocManager to install_github
+ * Change cycyle var to regress from CC.Difference to G2M.Score&S.Score
+ * Add 3 function with cellcycle regressout
+ * Add G1.Score to Metadata G1.Score=1-S.Score-G2M.Score
+ * Add violin plot for cell cycle
+ * Add tables for quanlity check and clusters
+
