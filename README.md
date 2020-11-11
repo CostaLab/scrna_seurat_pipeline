@@ -106,6 +106,7 @@ conf = c(
        scrna_batch_markergenes    = 1, ## Marker Genes for clusters with different resolutions
        scrna_clustering           = 1, ## Set seurat_clusters or re-calculate
        scrna_clusterwise_xcell    = 1, ## remove cells of each cluster according distinct criterion
+       scrna_cluster_annotation   = 1, ## Annotate clusters according to `cluster_annotation`
        scrna_del_mitogenes        = 0, ## !!!DANGEROUS, once deleted, never recovered!!!
        scrna_markergenes          = 1, ## markergenes for seurat_clusters
        scrna_genesorteR           = 1, ## genesorteR analysis
@@ -130,12 +131,21 @@ conf = c(
        scrna_markergenes          = 0, ## markergenes for seurat_clusters
        scrna_go                   = 0, ## Gene Ontology analysis
        scrna_dego_name            = 0, ## DE & GO between samples
-       scrna_dego_stage           = 0) ## GO down for mark genes
+       scrna_dego_stage           = 0) ## DE & GO between stages 
 
 
 
 
 ### ----------specific settings for some functions ----------------
+
+## name[your operation name], value[dataframe which cluster, percentage to keep]
+scrna_clusterwise_filtercell_settings <- list(
+  "mito_cluster0,3,4,5"     =  data.frame(type="mito", max_pct=4, min_pct=0, cluster=c(0,3,4,5)),
+  "ribo_cluster2,7_filter"  =  data.frame(type="ribo", max_pct=30, min_pct=0, cluster=c(2,7)),
+  "mito_cluster6_filter"    =  data.frame(type="mito", max_pct=3, min_pct=0, cluster=6),
+  "mito_cluster8_filter"    =  data.frame(type="mito", max_pct=5, min_pct=0, cluster=8)
+)
+
 
 scrna_merge_clusters = list(
         "1+7" = c(1, 7),
@@ -146,6 +156,32 @@ scrna_merge_clusters = list(
 
 scrna_remove_clusters = c(1, 3, 6)
 scrna_remove_recluster = c(1, 3, 6)
+
+### cluster annotation
+from_cluster_slot = "removed_clusters"
+cluster_annotation <- c(
+    "0" = "Vascular endothelial",
+    "1" = "Fibroblasts 1",
+    "2" = "Cardiomyocytes 1",
+    "3" = "Endothelial Cells 1",
+    "4" = "Macrophages",
+    "6" = "Pericytes 1",
+    "7" = "Cardiomyocytes 2",
+    "8" = "Fibroblasts 2",
+    "9" = "Cardiomyocytes 3",
+    "10" = "Fibroblasts 3",
+    "11" = "Lymphatic endothelial",
+    "12" = "VSMCs",
+    "13" = "Mesothelial cells",
+    "14" = "Cardiomyocytes 4",
+    "15" = "Lymphocytes",
+    "16" = "T-cells 1",
+    "18" = "Endothelial cells 2",
+    "19" = "Pericytes 2",
+    "20" = "T-cells 2",
+    "21" = "Pericytes 2",
+    "22" = "T-cells 3"
+)
 ```
 
 #### Parameters

@@ -49,6 +49,7 @@ conf = c(
        scrna_batch_markergenes    = 1, ## Marker Genes for clusters with different resolutions
        scrna_clustering           = 1, ## Set seurat_clusters or re-calculate
        scrna_clusterwise_xcell    = 1, ## remove cells of each cluster according distinct criterion
+       scrna_cluster_annotation   = 1, ## Annotate clusters according to `cluster_annotation`
        scrna_del_mitogenes        = 0, ## !!!DANGEROUS, once deleted, never recovered!!!
        scrna_markergenes          = 1, ## markergenes for seurat_clusters
        scrna_genesorteR           = 1, ## genesorteR analysis
