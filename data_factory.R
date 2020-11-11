@@ -806,17 +806,6 @@ generate_scrna_ScaleIntegration <- function(scrna){
              # Run the standard workflow for visualization and clustering
              scrna <- ScaleData(scrna, verbose = FALSE)
              scrna <- RunPCA(scrna, npcs = 30, verbose = FALSE, reduction.name="INTE_PCA")
-
-             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA"), verbose = FALSE)
-             scrna <- RunPCA(scrna, npcs = 30, verbose = FALSE, reduction.name="INTE_PCA_UMI")
-
-
-             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA","percent.mt", "percent.ribo"), verbose = FALSE)
-             scrna <- RunPCA(scrna, npcs = 30, verbose = FALSE, reduction.name="INTE_PCA_EXCLUDE")
-
-             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA", "percent.mt", "percent.ribo", "G2M.Score", "S.Score"), verbose = FALSE)
-             scrna <- RunPCA(scrna, npcs = 30, verbose = FALSE, reduction.name="INTE_PCA_ALL")
-
              scrna <- RunUMAP(scrna, reduction = "INTE_PCA", dims = 1:20, reduction.name="INTE_UMAP")
            },
            error=function(cond) {
