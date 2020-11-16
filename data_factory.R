@@ -1405,7 +1405,7 @@ generate_scrna_dego_stage_vsRest <- function(scrna){
                             return(de.list)
            }, mc.cores=1)
 
-  saveRDS(all_de_list, "save/all_de_list.Rds")
+  saveRDS(all_de_list, file.path(SAVE_DIR,"all_de_list.Rds"))
   names(all_de_list) <- sapply(lst, function(x) paste0(x, ".vs.Rest") )
 
   for(nm in names(all_de_list)) {
