@@ -1755,7 +1755,7 @@ get_reactome_up <- function(de.list){
       print("null")
       next
     }
-    reactome <- enrichPathway(gene=genes_e$ENTREZID, organism = "mouse", readable=T)
+    reactome <- enrichPathway(gene=genes_e$ENTREZID, organism = reactomeorgan, readable=T)
     if(is.null(reactome)){
       reactome.up.list[(id)] = list(NULL)
     }else{
@@ -1810,7 +1810,7 @@ get_reactome_down <- function(de.list){
       next
     }
 
-    reactome <- enrichPathway(gene=genes_e$ENTREZID, organism = "mouse", readable=T)
+    reactome <- enrichPathway(gene=genes_e$ENTREZID, organism = reactomeorgan, readable=T)
     if(is.null(reactome)){
       reactome.down.list[(id)] = list(NULL)
     }else{
