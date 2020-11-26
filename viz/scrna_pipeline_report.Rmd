@@ -14,6 +14,13 @@ params:
 ---
 ```{r setup_args, include=FALSE}
 args <- commandArgs(TRUE)
+
+# User needs to have .set_R_libs.R in their home directory
+# otherwise .set_R_libs.R in pipeline folder is used
+home_dir = file.path("","home",Sys.info()["user"]
+if(file.exists(home_dir,".set_R_libs.R")) source(file.path(home_dir,".set_R_libs.R"))
+else source(".set_R_libs.R")
+
 ```
 ---
 title: "`r params$project` SC-RNA Analysis Pipeline"
