@@ -14,8 +14,7 @@ output:
 
 
 ```{r setup, include=FALSE}
-args <- commandArgs(TRUE)
-savedir = args[1]
+savedir = params$savedir
 ```
 
 ```{r Marker_genes, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }

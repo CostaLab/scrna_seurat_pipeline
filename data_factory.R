@@ -5,9 +5,12 @@ VERSION = "1.0.3"
 
 # User needs to have .set_R_libs.R in their home directory
 # otherwise .set_R_libs.R in pipeline folder is used
-home_dir = file.path("","home",Sys.info()["user"]
-if(file.exists(home_dir,".set_R_libs.R")) source(file.path(home_dir,".set_R_libs.R"))
-else source(".set_R_libs.R")
+home_dir = file.path("","home",Sys.info()["user"])
+if(file.exists(file.path(home_dir,".set_R_libs.R"))){
+  source(file.path(home_dir,".set_R_libs.R"))
+}else{
+  source(".set_R_libs.R")
+}
 
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -825,11 +828,32 @@ generate_scrna_ScaleIntegration <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+generate_scrna_ScaleSingleton <- function(scrna){
+  ret_code = 0
+  tryCatch(
+           {
+             DefaultAssay(scrna) <- "singleton"
+             # Run the standard workflow for visualization and clustering
+             scrna <- ScaleData(scrna, verbose = FALSE)
+             scrna <- RunPCA(scrna, npcs = 30, verbose = FALSE, reduction.name="SINGLE_PCA")
+             scrna <- RunUMAP(scrna, reduction = "SINGLE_PCA", dims = 1:20, reduction.name="SINGLE_UMAP")
+           },
+           error=function(cond) {
+             ret_code <<- -1
+             logger.error(cond)
+             logger.error(traceback())
+           },
+           finally={
+             return(list(scrna, ret_code))
+           })
+  return(list(scrna, ret_code))
+}
+
 generate_scrna_sltn_batch_clustering <- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             scrna <- FindNeighbors(scrna, reduction = "EXCLUDE_CCMR_PCA", dims = FINDNEIGHBORS_DIM)
+             scrna <- FindNeighbors(scrna, reduction = "SINGLE_PCA", dims = FINDNEIGHBORS_DIM)
              scrna <- FindClusters(scrna, resolution = CLUSTER_RESOLUTION_RANGE) ##
 
            },
@@ -854,7 +878,7 @@ generate_scrna_singleton_clustering <- function(scrna){
              #if(a_meta %in% colnames(scrna@meta.data)){
              #    scrna$seurat_clusters <- scrna@meta.data[, a_meta]
              #}else{
-             scrna <- FindNeighbors(scrna, reduction = "EXCLUDE_CCMR_PCA", dims = FINDNEIGHBORS_DIM)
+             scrna <- FindNeighbors(scrna, reduction = "SINGLE_PCA", dims = FINDNEIGHBORS_DIM)
              scrna <- FindClusters(scrna, resolution = CLUSTER_RESOLUTION) ##
              #}
 

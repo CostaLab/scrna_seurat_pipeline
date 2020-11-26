@@ -9,15 +9,12 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '3'
-params:
-    cluster: "which cluster to analysis"
 
 ---
 ## Marker Genes & GO analysis
 
 ```{r setup, include=FALSE}
-args <- commandArgs(TRUE)
-savedir = args[1]
+savedir = params$savedir
 ```
 
 ```{r Marker_genes, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }

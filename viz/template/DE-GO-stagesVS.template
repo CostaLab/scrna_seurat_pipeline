@@ -9,9 +9,6 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '3'
-
-params:
-    cluster: "which cluster to analysis"
 ---
 ## Differential Expression & GO analysis(between groups)
 
@@ -68,9 +65,8 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
   return(g)
 }
 
-#savedir <- "save/save-{{CC}}"
-#savedir <- "../save"
-savedir = "{{savedir}}"
+#savedir = "{{savedir}}"
+savedir = params$savedir
 scrna <- readRDS(file.path(savedir, "scrna_dego_stage.Rds"))
 
 cluster_use <- params$cluster

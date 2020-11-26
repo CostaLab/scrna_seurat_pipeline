@@ -6,13 +6,13 @@ PROJ=$1
 SAVED_DATA="../save${PROJ}"
 
 FUNCS=(
-        QC
-        # DEs
-        # Clusters
-        # DEGO
-        # EXT_MARKERS
-        # DEGO_1v1
-        # DEGO_stage
+        --QC
+        # --DEs
+        # --Clusters
+        # --DEGO
+        # --EXT_MARKERS
+        # --DEGO_1v1
+        # --DEGO_stage
 )
 
 
@@ -41,12 +41,14 @@ cp -r ../charts${PROJ}/* report${PROJ}/data
 python code_generator.py -c $cluster -cf "conf/config${PROJ}.R" -b "../" -p "$PROJ"
 grip --export report${PROJ}/index.md
 
-Rscript  -e "rmarkdown::render(
-    'scrna_pipeline_report.Rmd',
-    output_file='report${PROJ}/scrna_report.html',
-    clean=TRUE,
-    params=list(cluster='${cluster}',project='${PROJ}')
-  )" ${SAVED_DATA} "${FUNCS[@]}"
+Rscript make_report.R --proj=$PROJ --cluster=$cluster --save_dir=$SAVED_DATA "${FUNCS[@]}"
+
+# Rscript  -e "rmarkdown::render(
+#     'scrna_pipeline_report.Rmd',
+#     output_file='report${PROJ}/scrna_report.html',
+#     clean=TRUE,
+#     params=list(cluster='${cluster}',project='${PROJ}')
+#   )" ${SAVED_DATA} "${FUNCS[@]}"
 
 # for a_func in "${FUNCS[@]}"; do
 #   case $a_func in

@@ -14,9 +14,8 @@ output:
 # Data Quality Check
 
 ```{r setup, include=FALSE}
-args <- commandArgs(TRUE)
 knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
-savedir = args[1]
+savedir = params$savedir
 ```
 
 

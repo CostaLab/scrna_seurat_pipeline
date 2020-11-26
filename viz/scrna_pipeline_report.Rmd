@@ -10,33 +10,25 @@ output:
 params:
     cluster: "clusters to analyse"
     project: "name/tag of the project"
+    savedir: "directory where rds files were saved"
+    funcs: "analysis steps to be performed"
 
 ---
-```{r setup_args, include=FALSE}
-args <- commandArgs(TRUE)
-
-# User needs to have .set_R_libs.R in their home directory
-# otherwise .set_R_libs.R in pipeline folder is used
-home_dir = file.path("","home",Sys.info()["user"]
-if(file.exists(home_dir,".set_R_libs.R")) source(file.path(home_dir,".set_R_libs.R"))
-else source(".set_R_libs.R")
-
-```
 ---
 title: "`r params$project` SC-RNA Analysis Pipeline"
 ---
 
-```{r qc, child=if(any(grepl("QC",args))) '1_quality_report.Rmd'}
+```{r qc, child=if(any(grepl("--QC",params$funcs,fixed=TRUE))) '1_quality_report.Rmd'}
 ```
-```{r clusters_de, child=if(any(grepl("DEs",args))) '2_clusters_DEs.Rmd'}
+```{r clusters_de, child=if(any(grepl("--DEs",params$funcs,fixed=TRUE))) '2_clusters_DEs.Rmd'}
 ```
-```{r clustering, child=if(any(grepl("Clusters",args))) '2_clustering.Rmd'}
+```{r clustering, child=if(any(grepl("--Clusters",params$funcs,fixed=TRUE))) '2_clustering.Rmd'}
 ```
-```{r de_go_analysis, child=if(any(grepl("DEGO",args))) '3_DE_GO-analysis.Rmd'}
+```{r de_go_analysis, child=if(any(grepl("--DEGO",params$funcs,fixed=TRUE))) '3_DE_GO-analysis.Rmd'}
 ```
-```{r external_markers, child=if(any(grepl("EXT_MARKERS",args))) '3_external_markers.Rmd'}
+```{r external_markers, child=if(any(grepl("--EXT_MARKERS",params$funcs,fixed=TRUE))) '3_external_markers.Rmd'}
 ```
-```{r de_go_stages, child=if(any(grepl("DEGO_stage",args))) 'DE-GO-analysis-stagesVS.Rmd'}
+```{r de_go_stages, child=if(any(grepl("--DEGO_stage",params$funcs,fixed=TRUE))) 'DE-GO-analysis-stagesVS.Rmd'}
 ```
-```{r de_go_1v1, child=if(any(grepl("DEGO_1v1",args))) 'DE-GO-analysis-1v1.Rmd'}
+```{r de_go_1v1, child=if(any(grepl("--DEGO_1v1",params$funcs,fixed=TRUE))) 'DE-GO-analysis-1v1.Rmd'}
 ```

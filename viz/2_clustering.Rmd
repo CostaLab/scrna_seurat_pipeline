@@ -9,15 +9,12 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '3'
-params:
-    cluster: "which cluster to analysis"
 
 ---
 
 ```{r setup, include=FALSE}
-args <- commandArgs(TRUE)
 knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
-savedir = args[1]
+savedir = params$savedir
 ##TODO: sort cluster proport adviced by Johanes
 ```
 
