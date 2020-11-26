@@ -1,6 +1,6 @@
 ---
-title: "Between Groups DE & GO analysis" 
-author: "Mingbo Cheng" 
+title: "Between Groups DE & GO analysis"
+author: "Mingbo Cheng"
 date: "{{TODAY}}"
 output:
   html_document:
@@ -21,8 +21,8 @@ params:
 library(ggplot2)
 library(gridExtra)
 library(cowplot)
-library(dplyr) 
-library(openxlsx) 
+library(dplyr)
+library(openxlsx)
 library(WriteXLS)
 library(stringr)
 library(digest)
@@ -69,11 +69,12 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
 }
 
 #savedir <- "save/save-{{CC}}"
-savedir <- "../save"
+#savedir <- "../save"
+savedir = "{{savedir}}"
 scrna <- readRDS(file.path(savedir, "scrna_dego_stage.Rds"))
 
 cluster_use <- params$cluster
-dego_stage_name <-paste0("dego_stage_", cluster_use) 
+dego_stage_name <-paste0("dego_stage_", cluster_use)
 de.list <- scrna@tools[[dego_stage_name]]
 all_de_list <-  scrna@tools[[dego_stage_name]]$de
 all_goup_list <-  scrna@tools[[dego_stage_name]]$goup
@@ -85,14 +86,14 @@ all_godown_list <-  scrna@tools[[dego_stage_name]]$godown
 
 par(mar = c(0,0,0,0))
 plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
-text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use), 
+text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use),
      cex = 1.6, col = "red")
 
 ```
 
 {% for tX, tY in lst_stages %}
 
-## Plot {{tX}} vs {{tY}} 
+## Plot {{tX}} vs {{tY}}
 
 #### DE
 
@@ -103,12 +104,12 @@ text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use),
 #> names(scrna@tools$dego_stage_removed_clusters$de)
 #[1] "MxCre.vs.Csnk"
 #> names(scrna@tools$dego_name_removed_clusters$de)
-#[1] "A_MxCre.vs.B_MxCre" "A_MxCre.vs.C_Csnk"  "A_MxCre.vs.D_Csnk" 
-#[4] "B_MxCre.vs.C_Csnk"  "B_MxCre.vs.D_Csnk"  "C_Csnk.vs.D_Csnk"  
+#[1] "A_MxCre.vs.B_MxCre" "A_MxCre.vs.C_Csnk"  "A_MxCre.vs.D_Csnk"
+#[4] "B_MxCre.vs.C_Csnk"  "B_MxCre.vs.D_Csnk"  "C_Csnk.vs.D_Csnk"
 #> names(scrna@tools$dego_name_removed_clusters$de[["A_MxCre.vs.B_MxCre"]])
 # [1] "0"  "2"  "4"  "5"  "7"  "8"  "9"  "10" "11" "12" "13" "14"
 
-a_vs <- "{{tX}}.vs.{{tY}}" 
+a_vs <- "{{tX}}.vs.{{tY}}"
 
 de.list <- all_de_list[[a_vs]]
 
@@ -116,13 +117,13 @@ de.list <- lapply(de.list, subset, subset = p_val_adj < 0.05)
 
 plots <- list()
 for (i in names(de.list)){
-  
+
   if(nrow(de.list[[i]]) == 0){
     next
   }
   x.lim = max(abs(de.list[[i]]$avg_logFC))
   x.lim <- c(-x.lim, x.lim)
-  plots[[i]] <- GeneBarPlot(de.list[[i]], xlim = x.lim, 
+  plots[[i]] <- GeneBarPlot(de.list[[i]], xlim = x.lim,
                     main = paste("cluster", as.character(i), sep = " "))
 }
 
@@ -141,7 +142,7 @@ if(length(plots) > 0){
 #### {{tX}} vs {{tY}} Volcano
 
 ```{r echo=FALSE, warning= FALSE, message=FALSE, fig.width=8, fig.height=8}
-a_vs <- "{{tX}}.vs.{{tY}}" 
+a_vs <- "{{tX}}.vs.{{tY}}"
 de.list <- all_de_list[[a_vs]]
 help_sort_func <- ifelse(all.is.numeric(names(de.list)), as.numeric, function(x){x})
 
@@ -217,12 +218,12 @@ if(length(filtered_go) > 10){
 
 
 ```{r echo=FALSE, warning= FALSE, message=FALSE, fig.width=15, fig.height=30}
-a_vs <- "{{tX}}.vs.{{tY}}" 
+a_vs <- "{{tX}}.vs.{{tY}}"
 go_ups <- all_goup_list[[a_vs]]
 go_ups <- go_ups[sapply(go_ups, function(x) dim(x)[1]) > 0]
 
 ### up genes top 10
-go.plot.list = lapply(go_ups, function(x){ 
+go.plot.list = lapply(go_ups, function(x){
             df <- x@result
             if (is.list(df) && length(df)==0){
               log.m = as.data.frame(list())
@@ -232,22 +233,22 @@ go.plot.list = lapply(go_ups, function(x){
             log.m$names =as.factor(sapply(df$Description, function(y){
               y <- as.character(trimws(y))
               if(str_length(y) > 60){
-                hs <- digest(y, "crc32") 
+                hs <- digest(y, "crc32")
                 y = paste(substr(y, 1, 50), hs)}
-                return(y) })) 
+                return(y) }))
             log.m <- log.m[order(log.m[,1],decreasing = TRUE),]
-            showCategory = min(length(log.m[,1]), 10) 
+            showCategory = min(length(log.m[,1]), 10)
             log.m <- log.m[1:showCategory, ]
-            log.m <- log.m[order(log.m[,1],decreasing = FALSE),]    
+            log.m <- log.m[order(log.m[,1],decreasing = FALSE),]
             return(log.m)
             } )
 
 ### up genes plot
 plots = lapply(seq_along(go.plot.list), function(y, i) {
-        col <- y[[i]] 
+        col <- y[[i]]
         if(length(col) == 0)
           return(NULL)
-        ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) + 
+        ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) +
         geom_bar(stat="identity", fill="#3399CC", color="grey50") +
         ggtitle(paste("GO Up ", names(y)[i])) +
         theme(axis.text.y  = element_text(size=14)) +
@@ -315,7 +316,7 @@ if(length(filtered_go) > 10){
 
 ```{r echo=FALSE, warning= FALSE, message=FALSE, fig.width=15, fig.height=30}
 ### down genes top 10
-a_vs <- "{{tX}}.vs.{{tY}}" 
+a_vs <- "{{tX}}.vs.{{tY}}"
 go_downs <- all_godown_list[[a_vs]]
 go_downs <-  go_downs[sapply(go_downs, function(x) dim(x)[1]) > 0]
 
@@ -371,14 +372,13 @@ cluster.de.top10 <- lapply(de.list, function(x) {
 
 for (i in names(de.list)){
    if(nrow(cluster.de.top10[[i]]) == 0) {
-      next 
-   }   
-   print(sprintf("Cluster %s", i)) 
-   ps<- FeaturePlot(scrna, features = cluster.de.top10[[i]]$gene, 
-                    cols = c("lightgrey", "red"), 
+      next
+   }
+   print(sprintf("Cluster %s", i))
+   ps<- FeaturePlot(scrna, features = cluster.de.top10[[i]]$gene,
+                    cols = c("lightgrey", "red"),
                     reduction = "INTE_UMAP")
    print(ps)
 }
 ```
 {% endfor %}
-
