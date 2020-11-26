@@ -11,10 +11,12 @@ output:
     toc_depth: '3'
 ---
 
+# Data Quality Check
 
 ```{r setup, include=FALSE}
 args <- commandArgs(TRUE)
 knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
+savedir = args[1]
 ```
 
 
@@ -28,10 +30,6 @@ library(cowplot)
 library(reshape2)
 library(urltools)
 
-# DATA_DIR <- "../"
-#
-# savedir <- paste(DATA_DIR, "save", sep="")
-savedir = args[1]
 dir.create(savedir)
 
 colours = c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99")

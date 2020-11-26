@@ -1,7 +1,7 @@
 ---
 title: "Marker Genes DE for different resolutions"
 author: "Mingbo Cheng"
-date: "`r format(Sys.time(), '%d %B, %Y')`" 
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
     toc: yes
@@ -10,22 +10,24 @@ output:
     toc: yes
     toc_depth: '3'
 ---
+## Cluster Results
 
 
-
+```{r setup, include=FALSE}
+args <- commandArgs(TRUE)
+savedir = args[1]
+```
 
 ```{r Marker_genes, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
 library(ggplot2)
 library(gridExtra)
 library(cowplot)
-library(dplyr) 
+library(dplyr)
 library(stringr)
 library(digest)
 library(openxlsx)
 library(Seurat)
 library(Hmisc)
-
-DATA_DIR <- "../"
 
 
 GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
@@ -60,8 +62,6 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
   }
   return(g)
 }
-
-savedir <- "../save/"
 
 scrna <- readRDS(file=file.path(savedir, "scrna_batch_markergenes.Rds"))
 cluster.de.list <- scrna@tools$de_batch
@@ -102,7 +102,7 @@ for (resolution in seq(0.1, 0.8, 0.1)){
 ```
 
 
-## DE genes on heatmap 
+## DE genes on heatmap
 
 ```{r loopclusters, echo=FALSE, warning= FALSE, message=FALSE, fig.height=13,  fig.width=10}
 DefaultAssay(scrna) <- "RNA"
@@ -119,7 +119,7 @@ for (resolution in seq(0.1, 0.8, 0.1)){
 
         cluster.de.top8_combine <- do.call(rbind, cluster.de.top8)
         genes <- unique(cluster.de.top8_combine$gene)
-        
+
         p <- DoHeatmap(object = scrna,
                 features = genes,
                 group.by = sprintf("integrated_snn_res.%.1f", resolution),
@@ -128,11 +128,10 @@ for (resolution in seq(0.1, 0.8, 0.1)){
                 slot = "scale.data",
                 assay = "RNA",
                 raster = FALSE,
-                combine= T) + ggtitle(sprintf("resolution: %.1f", resolution)) + NoLegend() 
-        
+                combine= T) + ggtitle(sprintf("resolution: %.1f", resolution)) + NoLegend()
+
         print(p)
-    
+
 }
 
 ```
-

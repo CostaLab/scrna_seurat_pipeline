@@ -1,7 +1,7 @@
 ---
 title: "Marker Genes DE & GO"
 author: "Mingbo Cheng"
-date: "`r format(Sys.time(), '%d %B, %Y')`" 
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
     toc: yes
@@ -13,12 +13,18 @@ params:
     cluster: "which cluster to analysis"
 
 ---
+## Marker Genes & GO analysis
+
+```{r setup, include=FALSE}
+args <- commandArgs(TRUE)
+savedir = args[1]
+```
 
 ```{r Marker_genes, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
 library(ggplot2)
 library(gridExtra)
 library(cowplot)
-library(dplyr) 
+library(dplyr)
 library(stringr)
 library(digest)
 library(openxlsx)
@@ -28,13 +34,11 @@ library(glue)
 library(ComplexHeatmap)
 library(EnhancedVolcano)
 
-DATA_DIR <- "../"
-
 cluster_use <- params$cluster
 
 par(mar = c(0,0,0,0))
 plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
-text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use), 
+text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use),
      cex = 1.6, col = "red")
 
 
@@ -75,7 +79,7 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
   return(g)
 }
 
-savedir <- "../save/"
+
 scrna <- readRDS(file.path(savedir, "scrna_markergenes.Rds"))
 cluster.de <- scrna@tools[[de_cluster_name]]
 cluster.de <- cluster.de[sapply(cluster.de, function(m) nrow(m) >0)]
@@ -88,15 +92,15 @@ cluster.de.top10 <- lapply(cluster.de, function(x) {
 
 ## top10 DE heatmaps
 ```{r, echo=FALSE, warning= FALSE, message=FALSE, fig.width=13, fig.height=12}
-genes <- as.vector(unlist(sapply(cluster.de.top10, function(x)x$gene)))  
+genes <- as.vector(unlist(sapply(cluster.de.top10, function(x)x$gene)))
 scrna <- ScaleData(scrna, rownames(scrna))
-help_sort_func <- ifelse(all.is.numeric(unique(scrna@meta.data[, cluster_use])), 
-                                          function(x) as.numeric(x)-1, 
+help_sort_func <- ifelse(all.is.numeric(unique(scrna@meta.data[, cluster_use])),
+                                          function(x) as.numeric(x)-1,
                                           as.character)
-scrna@meta.data[, cluster_use] <- help_sort_func(scrna@meta.data[, cluster_use]) 
+scrna@meta.data[, cluster_use] <- help_sort_func(scrna@meta.data[, cluster_use])
 DoHeatmap(scrna, features=genes,
         group.by = cluster_use,
-        disp.min = -2, 
+        disp.min = -2,
         disp.max = 2,
         slot = "scale.data",
         assay = "RNA",
@@ -141,9 +145,9 @@ for (id in sort(help_sort_func(names(cluster.de)))) {
   a_de$log2FC <- a_de$avg_logFC / log(2)
   up <- nrow(a_de %>% filter(log2FC>= 1 & p_val_adj<=0.05) )
   down <- nrow(a_de %>% filter(log2FC <= -1 & p_val_adj<=0.05))
-  p <- EnhancedVolcano(a_de, 
-                       x="log2FC", 
-                       y = "p_val_adj", 
+  p <- EnhancedVolcano(a_de,
+                       x="log2FC",
+                       y = "p_val_adj",
                        lab=rownames(a_de),
                        pointSize = 1.0,
                        pCutoff = 0.05,
@@ -177,9 +181,9 @@ if(length(filtered_go) > 10){
   df.list <- lapply(names(df.list), function(x) df.list[[x]] %>% mutate(name=x))
   mdf <- do.call(rbind, df.list)
   pmdf <- mdf[, c("Description", "name", "p.adjust")]
-  
+
   pmtx <- reshape2::dcast(pmdf,  Description ~ name)
-  
+
   rownames(pmtx) <- pmtx$Description
   pmtx$Description <- NULL
   help_mtx <- pmtx
@@ -206,8 +210,8 @@ if(length(filtered_go) > 10){
 ### up genes top 10
 
 go.up.list <-scrna@tools[[go_cluster_name]]$goup
-go.plot.list = lapply(go.up.list, function(x){ 
-            df = x@result 
+go.plot.list = lapply(go.up.list, function(x){
+            df = x@result
             if (is.list(df) && length(df)==0){
               log.m = as.data.frame(list())
               return(log.m)
@@ -216,23 +220,23 @@ go.plot.list = lapply(go.up.list, function(x){
             log.m$names =as.factor(sapply(df$Description, function(y){
               y <- as.character(trimws(y))
               if(str_length(y) > 50){
-                hs <- digest(y, "crc32") 
+                hs <- digest(y, "crc32")
                 y = paste(substr(y, 1, 40), hs)}
-                return(y) })) 
+                return(y) }))
             #log.m$names = df$Description
             log.m <- log.m[order(log.m[,1],decreasing = TRUE),]
-            showCategory = min(length(log.m[,1]), 10) 
+            showCategory = min(length(log.m[,1]), 10)
             log.m <- log.m[1:showCategory, ]
-            log.m <- log.m[order(log.m[,1],decreasing = FALSE),]    
+            log.m <- log.m[order(log.m[,1],decreasing = FALSE),]
             return(log.m)
             } )
 
 ### up genes plot
 plots <- lapply(seq_along(go.plot.list), function(y, i) {
-        col <- y[[i]] 
+        col <- y[[i]]
         if(length(col) == 0)
           return(NULL)
-        ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) + 
+        ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) +
         geom_bar(stat="identity", fill="#3399CC", color="grey50") +
         ggtitle(paste("GO Up, ", names(y)[i])) +
         theme(axis.text.y  = element_text(size=20)) +
@@ -265,9 +269,9 @@ if(length(filtered_go) > 10){
   df.list <- lapply(names(df.list), function(x) df.list[[x]] %>% mutate(name=x))
   mdf <- do.call(rbind, df.list)
   pmdf <- mdf[, c("Description", "name", "p.adjust")]
-  
+
   pmtx <- reshape2::dcast(pmdf,  Description ~ name)
-  
+
   rownames(pmtx) <- pmtx$Description
   pmtx$Description <- NULL
   help_mtx <- pmtx
@@ -303,9 +307,9 @@ go.plot.list = lapply(go.down.list, function(x){
             log.m$names =as.factor(sapply(df$Description, function(y){
               y <- as.character(trimws(y))
               if(str_length(y) > 50){
-                hs <- digest(y, "crc32") 
+                hs <- digest(y, "crc32")
                 y = paste(substr(y, 1, 40), hs)}
-                return(y) })) 
+                return(y) }))
             #log.m$names = df$Description
             log.m <- log.m[order(log.m[,1],decreasing = TRUE),]
             showCategory = min(length(log.m[,1]), 10)
@@ -334,10 +338,10 @@ plot_grid(plotlist=plots, ncol=2)
 ## DE genes on UMAP plot
 
 ```{r loopclusters, echo=FALSE, warning= FALSE, message=FALSE, fig.height=10, fig.width=13}
-Idents(scrna) <- cluster_use 
+Idents(scrna) <- cluster_use
 for (i in names(cluster.de) ){
   #plots = list()
- print(sprintf("Cluster %s:", i)) 
+ print(sprintf("Cluster %s:", i))
  ps<- FeaturePlot(scrna, features = cluster.de.top10[[as.character(i)]]$gene,
                     label=T,
                     label.size=2,
@@ -346,4 +350,3 @@ for (i in names(cluster.de) ){
  print(ps)
 }
 ```
-

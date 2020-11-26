@@ -14,10 +14,10 @@ params:
 
 ---
 
-
-
 ```{r setup, include=FALSE}
+args <- commandArgs(TRUE)
 knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
+savedir = args[1]
 ##TODO: sort cluster proport adviced by Johanes
 ```
 
@@ -35,9 +35,6 @@ library(reshape2)
 library(urltools)
 library(clustree)
 
-DATA_DIR <- "../"
-
-savedir <- paste(DATA_DIR, "save", sep="")
 dir.create(savedir)
 
 colours <- c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99")
@@ -46,7 +43,7 @@ cluster_use <- params$cluster
 
 par(mar = c(0,0,0,0))
 plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
-text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use), 
+text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use),
      cex = 1.6, col = "red")
 
 
@@ -68,9 +65,9 @@ names(cluster.de.list) = as.character(seq(0.1, 0.8, 0.1))
 nms <- names(cluster.de.list)
 plist <- list()
 for(nm in nms){
-    
+
     plist[[nm]] <- DimPlot(scrna, reduction = "INTE_UMAP", group.by =  paste0("integrated_snn_res.", nm),
-                                       label=T, label.size=8) + 
+                                       label=T, label.size=8) +
                                      ggtitle(sprintf("resolution %s", nm))
 
 }
@@ -80,25 +77,26 @@ CombinePlots(plots=plist, ncol=2)
 
 
 
-### Clusters 
+### Clusters
 
 ```{r fig.width=9, fig.height=7}
-fname <- switch(cluster_use,
-               "seurat_clusters" = "scrna_clustering.Rds",
-               "removed_clusters" = "scrna_remove_clusters.Rds", 
-               "merged_clusters" = "scrna_merge_clusters.Rds",
-               "remove_recluster" = "scrna_remove_recluster.Rds",
-               "annotation"  = "scrna_cluster_annotation.Rds"
-               )
+fname <- switch(
+  cluster_use,
+  "seurat_clusters" = "scrna_clustering.Rds",
+  "removed_clusters" = "scrna_remove_clusters.Rds",
+  "merged_clusters" = "scrna_merge_clusters.Rds",
+  "remove_recluster" = "scrna_remove_recluster.Rds",
+  "annotation"  = "scrna_cluster_annotation.Rds"
+)
 
 scrna <- readRDS(file=file.path(savedir,fname))
 DimPlot(scrna, reduction = "INTE_UMAP", group.by = "name", cols=colours)
 DimPlot(scrna, reduction = "INTE_UMAP", group.by = cluster_use, label=T, label.size=8)
 
-table(scrna$name, scrna@meta.data[, cluster_use]) %>%  kable(caption = "samples: cluster cells", align = 'c') %>% 
+table(scrna$name, scrna@meta.data[, cluster_use]) %>%  kable(caption = "samples: cluster cells", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
-table(scrna$stage, scrna@meta.data[, cluster_use]) %>%  kable(caption = "condition: cluster cells", align = 'c') %>% 
+table(scrna$stage, scrna@meta.data[, cluster_use]) %>%  kable(caption = "condition: cluster cells", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
 ```
@@ -110,7 +108,7 @@ scrna <- readRDS(file=file.path(savedir,"scrna_fishertest_clusters.Rds"))
 df <- scrna@tools[[fisher_cluster_name]]
 
 if(all.is.numeric(df$Cluster)){ ## set int order if all cluster name are integers
-  df$Cluster <- factor(as.character(df$Cluster), 
+  df$Cluster <- factor(as.character(df$Cluster),
                        levels = sort(as.numeric(as.character(df$Cluster)), decreasing=T))
 }
 
@@ -121,21 +119,21 @@ shift_trans = function(d = 0) {
 if(length(table(scrna$stage))<=2){
     nm <- names(table(scrna$stage))[1]
     nm2 <- names(table(scrna$stage))[2]
-    
-    aodds <- glue("odds.ratio_{nm}.vs.{nm2}", ) 
+
+    aodds <- glue("odds.ratio_{nm}.vs.{nm2}", )
     p <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
-      geom_bar(stat="identity") +    
+      geom_bar(stat="identity") +
       coord_flip() +
       guides(fill = guide_legend(reverse = TRUE)) +
-      scale_y_continuous(trans = shift_trans(1)) + geom_text(data = df, 
-                  aes_string("Cluster", 1, label = glue("pval.adjust_{nm}.vs.{nm2}")), 
+      scale_y_continuous(trans = shift_trans(1)) + geom_text(data = df,
+                  aes_string("Cluster", 1, label = glue("pval.adjust_{nm}.vs.{nm2}")),
                   position = "identity",
-                  size=4) + 
-      ggtitle(sprintf("%s vs %s (odds ratio > 1 means more %s)", nm, nm2, nm))+ 
+                  size=4) +
+      ggtitle(sprintf("%s vs %s (odds ratio > 1 means more %s)", nm, nm2, nm))+
       xlab("Cluster") +
-      ylab("odds ratio")  
+      ylab("odds ratio")
     print(p)
-    
+
 }else{
     pairs <- combn(1:length(table(scrna$stage)), 2)
     n <- length(pairs)/2
@@ -144,19 +142,19 @@ if(length(table(scrna$stage))<=2){
         i2 <- pairs[1:2, i][2]
         nm <- unique(scrna$stage)[i1]
         nm2 <- unique(scrna$stage)[i2]
-        
-        aodds <- glue("odds.ratio_{nm}.vs.{nm2}") 
+
+        aodds <- glue("odds.ratio_{nm}.vs.{nm2}")
         p <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
-        geom_bar(stat="identity") +    
+        geom_bar(stat="identity") +
         coord_flip() +
         guides(fill = guide_legend(reverse = TRUE)) +
-        scale_y_continuous(trans = shift_trans(1)) + 
-        geom_text(data = df, 
-                  aes_string("Cluster", 1, label = glue("pval.adjust_{nm}.vs.{nm2}")), 
+        scale_y_continuous(trans = shift_trans(1)) +
+        geom_text(data = df,
+                  aes_string("Cluster", 1, label = glue("pval.adjust_{nm}.vs.{nm2}")),
                   position = "identity",
-                  size=4) + ggtitle(glue("{nm} vs {nm2} (odds ratio > 1 means more {nm})"))+ 
+                  size=4) + ggtitle(glue("{nm} vs {nm2} (odds ratio > 1 means more {nm})"))+
                   xlab("Cluster") +
-                  ylab("odds ratio")  
+                  ylab("odds ratio")
       print(p)
     }
 }
@@ -170,27 +168,27 @@ if(length(table(scrna$stage))<=2){
 
 ```{r fig.width=13, fig.height=7}
 name_len <- length(table(scrna@meta.data$name))
-help_sort_func <- ifelse(all.is.numeric(unique(scrna@meta.data[, cluster_use])), 
-                                          function(x) as.numeric(x)-1, 
+help_sort_func <- ifelse(all.is.numeric(unique(scrna@meta.data[, cluster_use])),
+                                          function(x) as.numeric(x)-1,
                                           as.character)
 scrna@meta.data[,cluster_use] <- help_sort_func(scrna@meta.data[,cluster_use])
 
-cluster_propotion_before = t(prop.table(x = table(scrna@meta.data$name, scrna@meta.data[, cluster_use]), margin = 2)) 
+cluster_propotion_before = t(prop.table(x = table(scrna@meta.data$name, scrna@meta.data[, cluster_use]), margin = 2))
 cluster_propotion_before = cluster_propotion_before[,1:name_len]
 cluster_propotion_before_sort = cluster_propotion_before[order(cluster_propotion_before[,1],
                                         cluster_propotion_before[,2],decreasing=TRUE),]
 
 par(xpd=TRUE)
 par(mar = c(5,2,2,12))
-barplot(t(cluster_propotion_before_sort), col=colours, xlab="cluster", 
+barplot(t(cluster_propotion_before_sort), col=colours, xlab="cluster",
         legend.text = colnames(cluster_propotion_before_sort),
-        args.legend = list(x ='right', bty='n', inset=c(-0.13,0), xpd = TRUE), 
+        args.legend = list(x ='right', bty='n', inset=c(-0.13,0), xpd = TRUE),
         names.arg = rownames(cluster_propotion_before_sort),
         main = "Propotion of dataset")
 ```
 
 
-### Amount Distribution 
+### Amount Distribution
 
 ```{r amount_Plot, echo=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=9}
 BarPlot <- function(x, fill, xlab = NULL, ylab = "Cells", legend.title = NULL,
@@ -226,7 +224,7 @@ gplot + scale_fill_manual(values= colours)
 
 
 
-### Cell cycle phase 
+### Cell cycle phase
 ```{r fig.width=9, fig.height=7}
 DimPlot(scrna, reduction = "INTE_UMAP", group.by = "Phase")
 ```
@@ -235,7 +233,7 @@ DimPlot(scrna, reduction = "INTE_UMAP", group.by = "Phase")
 
 ### FeaturePlot
 ```{r fig.width=9, fig.height=7}
-FeaturePlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA"), 
+FeaturePlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA"),
                    cols = c("lightgrey", "red"),
                    ncol = 2)
 FeaturePlot(scrna, features = c("CC.Difference", "S.Score", "G2M.Score"),
@@ -243,7 +241,7 @@ FeaturePlot(scrna, features = c("CC.Difference", "S.Score", "G2M.Score"),
                    ncol = 2)
 ```
 
-### Violin Plot 
+### Violin Plot
 ```{r fig.width=9, fig.height=7}
 VlnPlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA", "CC.Difference", "S.Score", "G2M.Score"),
 	 group.by = cluster_use,
@@ -258,7 +256,7 @@ VlnPlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeatur
 scrna <- readRDS(file=file.path(savedir, "scrna_MCAannotate.Rds"))
 p <- DimPlot(object = scrna, pt.size = 0.2,
 	         group.by = "MCA_annotate") +
-	 theme(legend.position = "right", 
+	 theme(legend.position = "right",
 		   legend.title = element_text(colour="blue", size=4, face="bold"),
 	       legend.text = element_text(size = 7))
 
@@ -275,10 +273,10 @@ HoverLocator(plot = p, information = FetchData(object = scrna, vars = c("MCA_ann
 scrna <- readRDS(file=file.path(savedir, "scrna_ExternalAnnotation.Rds"))
 p <- DimPlot(object = scrna, pt.size = 0.2,
 	         group.by = "external_annotation") +
-	 theme(legend.position = "right", 
+	 theme(legend.position = "right",
 		   legend.title = element_text(colour="blue", size=4, face="bold"),
 	       legend.text = element_text(size = 7))
 
-HoverLocator(plot = p, information = FetchData(object = scrna, 
+HoverLocator(plot = p, information = FetchData(object = scrna,
 					  vars = c("external_annotation", cluster_use)))
 ```

@@ -3,6 +3,12 @@
 ###Set VERSION
 VERSION = "1.0.3"
 
+# User needs to have .set_R_libs.R in their home directory
+# otherwise .set_R_libs.R in pipeline folder is used
+home_dir = file.path("","home",Sys.info()["user"]
+if(file.exists(home_dir,".set_R_libs.R")) source(file.path(home_dir,".set_R_libs.R"))
+else source(".set_R_libs.R")
+
 
 args <- commandArgs(trailingOnly = TRUE)
 if(length(args) == 1 && (args[1] == "-v" | args[1] == "--version")){

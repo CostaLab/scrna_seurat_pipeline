@@ -4,18 +4,21 @@ author: "Mingbo Cheng"
 date: '`r format(Sys.Date(), "%Y-%B-%d")`'
 output:
   html_document:
-    toc: yes 
+    toc: yes
     toc_depth: 3
   pdf_document:
-    toc: yes 
-    toc_depth: '3' 
+    toc: yes
+    toc_depth: '3'
 params:
     cluster: "which cluster to analysis"
 ---
 
 
 ```{r setup, include=FALSE}
+args <- commandArgs(TRUE)
+savedir = args[1]
 knitr::opts_chunk$set(warning = F, message = F, echo = T)
+
 library(Seurat)
 library(stringr)
 library(dplyr)
@@ -25,10 +28,7 @@ library(glue)
 
 #pa <- data.frame("cluster"="removed_clusters", stringsAsFactors=F)
 
-pa <- params 
-
-DATA_DIR <- "../"
-savedir <- paste(DATA_DIR, "save", sep="")
+pa <- params
 
 
 scrna <- readRDS(file = file.path(savedir, "scrna_markergenes.Rds"))
@@ -42,7 +42,7 @@ SPECIES = scrna@tools$parameter[[len]]['species']
 
 
 
-df <- read.csv(file=file.path(DATA_DIR, ANNOTATION_EXTERNAL_FILE), sep="\t", stringsAsFactors=F)
+df <- read.csv(file=file.path(savedir, ANNOTATION_EXTERNAL_FILE), sep="\t", stringsAsFactors=F)
 df <- df[!apply(df, 1, function(x) all(x=="")), ]
 
 if(!(ORGAN %in% df$Tissue.of.Origin)){
@@ -64,9 +64,9 @@ o_genes <- rownames(scrna)
 for (a_celltype in celltype_names){
     genes <- mdf[mdf$Cell.Type==a_celltype,glue("{SPECIES}.Gene") ]
     print(a_celltype)
-    genes <- intersect(genes, o_genes) 
+    genes <- intersect(genes, o_genes)
     if (length(genes) == 0){
-        next 
+        next
     }
 
 for (i in seq(1, length(genes), by=4)){
@@ -101,4 +101,3 @@ for (i in seq(1, length(genes), by=9)){
 
 }
 ```
-
