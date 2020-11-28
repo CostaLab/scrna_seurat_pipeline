@@ -832,7 +832,7 @@ generate_scrna_ScaleSingleton <- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             DefaultAssay(scrna) <- "singleton"
+
              # Run the standard workflow for visualization and clustering
              scrna <- ScaleData(scrna, verbose = FALSE)
              scrna <- RunPCA(scrna, npcs = 30, verbose = FALSE, reduction.name="SINGLE_PCA")
