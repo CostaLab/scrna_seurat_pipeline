@@ -13,7 +13,7 @@ output:
 ---
 ## Marker Genes & GO analysis
 
-```{r setup, include=FALSE}
+```{r , include=FALSE}
 savedir = params$savedir
 ```
 

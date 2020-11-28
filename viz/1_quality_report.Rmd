@@ -13,7 +13,7 @@ output:
 
 # Data Quality Check
 
-```{r setup, include=FALSE}
+```{r , include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
 savedir = params$savedir
 ```

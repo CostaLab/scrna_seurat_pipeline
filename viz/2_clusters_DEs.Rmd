@@ -13,7 +13,7 @@ output:
 ## Cluster Results
 
 
-```{r setup, include=FALSE}
+```{r , include=FALSE}
 savedir = params$savedir
 ```
 

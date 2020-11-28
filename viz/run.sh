@@ -9,6 +9,7 @@ FUNCS=(
         --QC
         # --DEs
         # --Clusters
+        --Singleton
         # --DEGO
         # --EXT_MARKERS
         # --DEGO_1v1
@@ -30,7 +31,7 @@ FUNCS=(
 #cluster="remove_recluster"
 #cluster="merged_clusters"
 
-cluster="seurat_clusters"
+cluster="singleton"
 
 #!!!!!!!!!----------------------------------
 

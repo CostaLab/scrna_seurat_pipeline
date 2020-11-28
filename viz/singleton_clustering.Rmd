@@ -1,0 +1,68 @@
+---
+title: "Clustering"
+author: "Tiago Maié"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+
+---
+
+```{r , include=FALSE}
+knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
+savedir = params$savedir
+##TODO: sort cluster proport adviced by Johanes
+```
+
+
+```{r }
+library(Hmisc)
+library(Seurat)
+library(knitr)
+library(kableExtra)
+library(glue)
+library(dplyr)
+library(ggplot2)
+library(cowplot)
+library(reshape2)
+library(urltools)
+library(clustree)
+
+dir.create(savedir)
+
+colours <- c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99")
+
+cluster_use <- params$cluster
+
+par(mar = c(0,0,0,0))
+plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
+text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use),
+     cex = 1.6, col = "red")
+
+
+fisher_cluster_name <- paste0("fishertest_", cluster_use)
+```
+
+### Singleton Clusters
+
+```{r fig.width=9, fig.height=7}
+fname <- switch(
+  cluster_use,
+  "singleton" = "scrna_singleton_clustering.Rds"
+)
+
+scrna <- readRDS(file=file.path(savedir,fname))
+DimPlot(scrna, reduction = "SINGLE_UMAP", group.by = "name", cols=colours)
+DimPlot(scrna, reduction = "SINGLE_UMAP", group.by = cluster_use, label=T, label.size=8)
+
+table(scrna$name, scrna@meta.data[, cluster_use]) %>%  kable(caption = "samples: cluster cells", align = 'c') %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+table(scrna$stage, scrna@meta.data[, cluster_use]) %>%  kable(caption = "condition: cluster cells", align = 'c') %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+```
