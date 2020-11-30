@@ -499,7 +499,7 @@ generate_scrna_del_mitogenes <- function(scrna){
   restgenes <- setdiff(allgenes, mitogenes)
   scrna <- scrna[restgenes, ]
 
-  return(list(return_code, scrna))
+  return(list( scrna, return_code))
 }
 
 generate_scrna_preprocess <- function(scrna){
