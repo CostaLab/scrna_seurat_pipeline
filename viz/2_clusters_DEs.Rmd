@@ -62,9 +62,11 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
   return(g)
 }
 
-scrna <- readRDS(file=file.path(savedir, "scrna_batch_markergenes.Rds"))
+
 if(identical(params$cluster,"singleton")){
   scrna <- readRDS(file=file.path(savedir, "scrna_singleton_markergenes.Rds"))
+}else{
+  scrna <- readRDS(file=file.path(savedir, "scrna_batch_markergenes.Rds"))
 }
 cluster.de.list <- scrna@tools$de_batch
 
