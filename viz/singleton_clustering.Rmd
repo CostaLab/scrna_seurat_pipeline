@@ -27,6 +27,7 @@ library(kableExtra)
 library(glue)
 library(dplyr)
 library(ggplot2)
+library(foreach)
 library(cowplot)
 library(reshape2)
 library(urltools)
@@ -144,7 +145,7 @@ cluster.de.list <- foreach(i=CLUSTER_RESOLUTION_RANGE) %do%{
 
   de.df = FindAllMarkers(scrna, logfc.threshold=0)
   cluster.de <- split(de.df, de.df$cluster)
-  
+
 }
 
 scrna@tools[["de_batch"]] <- cluster.de.list
