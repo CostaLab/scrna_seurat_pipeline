@@ -63,10 +63,13 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
 }
 
 
+col_string=""
 if(identical(params$cluster,"singleton")){
   scrna <- readRDS(file=file.path(savedir, "scrna_singleton_markergenes.Rds"))
+  col_string = "RNA_snn_res."
 }else{
   scrna <- readRDS(file=file.path(savedir, "scrna_batch_markergenes.Rds"))
+  col_string = "integrated_snn_res."
 }
 cluster.de.list <- scrna@tools$de_batch
 
@@ -115,6 +118,7 @@ scrna <- ScaleData(scrna,  rownames(scrna))
 cluster.de.list <- scrna@tools$de_batch
 names(cluster.de.list) <- as.character(seq(0.1,0.8,0.1))
 names(cluster.de.list)
+
 for (resolution in seq(0.1, 0.8, 0.1)){
       #cluster.de <- cluster.de.list[[as.character(resolution)]]
         cluster.de.top8 <- lapply(cluster.de, function(x) {
@@ -126,7 +130,7 @@ for (resolution in seq(0.1, 0.8, 0.1)){
 
         p <- DoHeatmap(object = scrna,
                 features = genes,
-                group.by = sprintf("integrated_snn_res.%.1f", resolution),
+                group.by = sprintf(paste0(col_string,"%.1f"), resolution),
                 disp.min = -2,
                 disp.max = 2,
                 slot = "scale.data",
