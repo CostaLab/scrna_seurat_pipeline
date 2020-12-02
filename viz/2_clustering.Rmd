@@ -69,7 +69,7 @@ for(nm in nms){
 
 }
 
-CombinePlots(plots=plist, ncol=2)
+patchwork::wrap_plots(plist, ncol=2)
 ```
 
 

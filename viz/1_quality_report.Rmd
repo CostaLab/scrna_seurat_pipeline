@@ -45,29 +45,38 @@ VlnPlot(object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt",
 
 meta <- scrna@meta.data
 
-stSample <- meta%>% group_by(name)%>% summarise(nCount.Mean=mean(nCount_RNA),
-                                          nCount.Median=median(nCount_RNA),
-                                          nFeature.Mean=mean(nCount_RNA),
-                                          nFeature.MeanMedian=median(nCount_RNA),
-                                          pctMt.Mean=mean(percent.mt),
-                                          pctMt.Median=median(percent.mt),
-                                          pctRb.Mean = mean(percent.ribo),
-                                          pctRb.Median = median(percent.ribo)
-                                          )
-stSample %>%  kable(caption = "Mean dan median for each sample", align = 'c') %>%
+stSample <- meta %>%
+  group_by(name) %>%
+  summarise(
+    nCount.Mean=mean(nCount_RNA),
+    nCount.Median=median(nCount_RNA),
+    nFeature.Mean=mean(nCount_RNA),
+    nFeature.MeanMedian=median(nCount_RNA),
+    pctMt.Mean=mean(percent.mt),
+    pctMt.Median=median(percent.mt),
+    pctRb.Mean = mean(percent.ribo),
+    pctRb.Median = median(percent.ribo)
+  )
+
+stSample %>%
+  kable(caption = "Mean and median for each sample", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
+stCond <- meta %>%
+  group_by(stage) %>%
+  summarise(
+    nCount.Mean=mean(nCount_RNA),
+    nCount.Median=median(nCount_RNA),
+    nFeature.Mean=mean(nCount_RNA),
+    nFeature.MeanMedian=median(nCount_RNA),
+    pctMt.Mean=mean(percent.mt),
+    pctMt.Median=median(percent.mt),
+    pctRb.Mean = mean(percent.ribo),
+    pctRb.Median = median(percent.ribo)
+  )
 
-stCond <- meta%>% group_by(stage)%>% summarise(nCount.Mean=mean(nCount_RNA),
-                                          nCount.Median=median(nCount_RNA),
-                                          nFeature.Mean=mean(nCount_RNA),
-                                          nFeature.MeanMedian=median(nCount_RNA),
-                                          pctMt.Mean=mean(percent.mt),
-                                          pctMt.Median=median(percent.mt),
-                                          pctRb.Mean = mean(percent.ribo),
-                                          pctRb.Median = median(percent.ribo)
-                                          )
-stCond %>%  kable(caption = "Mean dan median for each condition", align = 'c') %>%
+stCond %>%
+  kable(caption = "Mean and median for each condition", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
 
@@ -98,29 +107,38 @@ plot_grid(plotlist=ps, ncol=2)
 
 meta <- scrna@meta.data
 
-stSample <- meta%>% group_by(name)%>% summarise(nCount.Mean=mean(nCount_RNA),
-                                          nCount.Median=median(nCount_RNA),
-                                          nFeature.Mean=mean(nCount_RNA),
-                                          nFeature.MeanMedian=median(nCount_RNA),
-                                          pctMt.Mean=mean(percent.mt),
-                                          pctMt.Median=median(percent.mt),
-                                          pctRb.Mean = mean(percent.ribo),
-                                          pctRb.Median = median(percent.ribo)
-                                          )
-stSample %>%  kable(caption = "Mean dan median for each sample", align = 'c') %>%
+stSample <- meta %>%
+  group_by(name) %>%
+  summarise(
+    nCount.Mean=mean(nCount_RNA),
+    nCount.Median=median(nCount_RNA),
+    nFeature.Mean=mean(nCount_RNA),
+    nFeature.MeanMedian=median(nCount_RNA),
+    pctMt.Mean=mean(percent.mt),
+    pctMt.Median=median(percent.mt),
+    pctRb.Mean = mean(percent.ribo),
+    pctRb.Median = median(percent.ribo)
+  )
+
+stSample %>%
+  kable(caption = "Mean and median for each sample", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
+stCond <- meta %>%
+  group_by(stage) %>%
+  summarise(
+    nCount.Mean=mean(nCount_RNA),
+    nCount.Median=median(nCount_RNA),
+    nFeature.Mean=mean(nCount_RNA),
+    nFeature.MeanMedian=median(nCount_RNA),
+    pctMt.Mean=mean(percent.mt),
+    pctMt.Median=median(percent.mt),
+    pctRb.Mean = mean(percent.ribo),
+    pctRb.Median = median(percent.ribo)
+  )
 
-stCond <- meta%>% group_by(stage)%>% summarise(nCount.Mean=mean(nCount_RNA),
-                                          nCount.Median=median(nCount_RNA),
-                                          nFeature.Mean=mean(nCount_RNA),
-                                          nFeature.MeanMedian=median(nCount_RNA),
-                                          pctMt.Mean=mean(percent.mt),
-                                          pctMt.Median=median(percent.mt),
-                                          pctRb.Mean = mean(percent.ribo),
-                                          pctRb.Median = median(percent.ribo)
-                                          )
-stCond %>%  kable(caption = "Mean dan median for each condition", align = 'c') %>%
+stCond %>%
+  kable(caption = "Mean and median for each condition", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
 ```
@@ -131,7 +149,7 @@ Idents(object = scrna)<- "name"
 p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.mt", cols=colours)
 p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.ribo",cols=colours)
 p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",cols=colours)
-CombinePlots(plots = list(p1, p2, p3), ncol=1)
+patchwork::wrap_plots(list(p1, p2, p3), ncol=1)
 ```
 
 
@@ -142,7 +160,7 @@ scrna <- readRDS(file = file.path(savedir, "scrna_preprocess.Rds"))
 top10 <- head(VariableFeatures(scrna), 10)
 plot1 <- VariableFeaturePlot(scrna)
 plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
-CombinePlots(plots = list(plot1, plot2))
+patchwork::wrap_plots(list(plot1, plot2))
 ```
 
 
