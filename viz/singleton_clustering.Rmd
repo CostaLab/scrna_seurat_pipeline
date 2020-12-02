@@ -131,23 +131,3 @@ VlnPlot(
   pt.size=0
 )
 ```
-
-```{r }
-len <- length(seq(0.1, 0.8, 0.1))
-cluster.de.list <- vector("list", length = len)
-CLUSTER_RESOLUTION_RANGE=seq(0.1, 0.8, 0.1)
-i=CLUSTER_RESOLUTION_RANGE[1]
-names(cluster.de.list) <- as.character(CLUSTER_RESOLUTION_RANGE)
-cluster.de.list <- foreach(i=CLUSTER_RESOLUTION_RANGE) %do%{
-  DefaultAssay(scrna) <- "RNA"
-  cluster_name <- sprintf("RNA_snn_res.%s", i)
-  Idents(scrna) <- cluster_name
-
-  de.df = FindAllMarkers(scrna, logfc.threshold=0)
-  cluster.de <- split(de.df, de.df$cluster)
-
-}
-
-scrna@tools[["de_batch"]] <- cluster.de.list
-
-```
