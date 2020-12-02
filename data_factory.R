@@ -1216,6 +1216,36 @@ generate_scrna_batch_markergenes <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+generate_scrna_singleton_markergenes <- function(scrna){
+  ret_code = 0
+  tryCatch(
+           {
+             len <- length(CLUSTER_RESOLUTION_RANGE)
+             cluster.de.list <- vector("list", length = len)
+             names(cluster.de.list) <- as.character(CLUSTER_RESOLUTION_RANGE)
+             cluster.de.list <- foreach(i=CLUSTER_RESOLUTION_RANGE) %do%{
+               DefaultAssay(scrna) <- "RNA"
+               cluster_name <- sprintf("RNA_snn_res.%s", i)
+               Idents(scrna) <- cluster_name
+               de.df = FindAllMarkers(scrna, logfc.threshold=0)
+               cluster.de <- split(de.df, de.df$cluster)
+             }
+
+             scrna@tools[["de_batch"]] <- cluster.de.list
+           },
+           error=function(cond) {
+             ret_code <<- -1
+             logger.error(cond)
+             logger.error(traceback())
+           },
+
+           finally={
+             return(list(scrna, ret_code))
+           })
+  return(list(scrna, ret_code))
+}
+
+
 
 generate_scrna_genesorteR <- function(scrna){
   suppressPackageStartupMessages(library(genesorteR))
