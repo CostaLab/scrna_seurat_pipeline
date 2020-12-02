@@ -20,11 +20,11 @@ title: "`r params$project` SC-RNA Analysis Pipeline"
 
 ```{r qc, child=if(any(grepl("--QC",params$funcs,fixed=TRUE))) '1_quality_report.Rmd'}
 ```
-```{r clusters_de, child=if(any(grepl("--DEs",params$funcs,fixed=TRUE))) '2_clusters_DEs.Rmd'}
+```{r singleton, child=if(any(grepl("--Singleton",params$funcs,fixed=TRUE))) 'singleton_clustering.Rmd'}
 ```
 ```{r clustering, child=if(any(grepl("--Clusters",params$funcs,fixed=TRUE))) '2_clustering.Rmd'}
 ```
-```{r singleton, child=if(any(grepl("--Singleton",params$funcs,fixed=TRUE))) 'singleton_clustering.Rmd'}
+```{r clusters_de, child=if(any(grepl("--DEs",params$funcs,fixed=TRUE))) '2_clusters_DEs.Rmd'}
 ```
 ```{r de_go_analysis, child=if(any(grepl("--DEGO",params$funcs,fixed=TRUE))) '3_DE_GO-analysis.Rmd'}
 ```

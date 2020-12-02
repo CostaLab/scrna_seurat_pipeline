@@ -874,14 +874,13 @@ generate_scrna_singleton_clustering <- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             #a_meta <- sprintf("integrated_snn_res.%s", CLUSTER_RESOLUTION)
-             #if(a_meta %in% colnames(scrna@meta.data)){
-             #    scrna$seurat_clusters <- scrna@meta.data[, a_meta]
-             #}else{
-             scrna <- FindNeighbors(scrna, reduction = "SINGLE_PCA", dims = FINDNEIGHBORS_DIM)
-             scrna <- FindClusters(scrna, resolution = CLUSTER_RESOLUTION) ##
-             #}
-
+             a_meta <- sprintf("RNA_snn_res.%s", CLUSTER_RESOLUTION)
+             if(a_meta %in% colnames(scrna@meta.data)){
+                scrna@meta.data[, DEFUALT_CLUSTER_NAME] <- scrna@meta.data[, a_meta]
+             }else{
+               scrna <- FindNeighbors(scrna, reduction = "SINGLE_PCA", dims = FINDNEIGHBORS_DIM)
+               scrna <- FindClusters(scrna, resolution = CLUSTER_RESOLUTION) ##
+             }
            },
            error=function(cond) {
              ret_code <<- -1
