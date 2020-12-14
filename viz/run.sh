@@ -3,25 +3,34 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 FUNCS=(
-        QC 
+        QC
         DEs
         Clusters
         DEGO
+        KEGG
+        hallmark
+        Reactome
         EXT_MARKERS
+        DEGO_stage
+        hallmark_stage
+        reactome_stage
+        kegg_stage
         DEGO_1v1
-        DEGO_stage 
+        hallmark_1v1
+        reactome_1v1
+        kegg_1v1
 )
 
 
 
 #!!!!!!!!------clusters to choose-------------
-# In general, we choose seurat_clusters, 
+# In general, we choose seurat_clusters,
 # If you are using removed or merged clusters,
 # choose the following:
             # seurat_clusters
             # merged_clusters
             # removed_clusters
-            # remove_recluster 
+            # remove_recluster
 
 #cluster="removed_clusters"
 #cluster="remove_recluster"
@@ -64,6 +73,29 @@ for a_func in "${FUNCS[@]}"; do
                  clean=TRUE,
                  params=list(cluster=\"${cluster}\"))"
 		;;
+	KEGG)
+        Rscript -e rmarkdown::render"('3_KEGG.Rmd',
+                 output_file=\"report/data/KEGG.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	hallmark)
+        Rscript -e rmarkdown::render"('3_hallmark.Rmd',
+                 output_file=\"report/data/hallmark.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	Reactome)
+        Rscript -e rmarkdown::render"('3_Reactome.Rmd',
+                 output_file=\"report/data/Reactome.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+
+
 	EXT_MARKERS)
         Rscript -e rmarkdown::render"('3_external_markers.Rmd',
                  output_file=\"report/data/external_markers.html\",
@@ -83,7 +115,50 @@ for a_func in "${FUNCS[@]}"; do
                  clean=TRUE,
                  params=list(cluster=\"${cluster}\"))"
 		;;
+
+	hallmark_1v1)
+        Rscript -e rmarkdown::render"('hallmark-1v1.Rmd',
+                 output_file=\"report/data/hallmark_1vs1.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	reactome_1v1)
+        Rscript -e rmarkdown::render"('reactome-1v1.Rmd',
+                 output_file=\"report/data/reactome_1vs1.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+	kegg_1v1)
+        Rscript -e rmarkdown::render"('kegg-1v1.Rmd',
+                 output_file=\"report/data/kegg_1vs1.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	hallmark_stage)
+        Rscript -e rmarkdown::render"('hallmark-stageVS.Rmd',
+                 output_file=\"report/data/hallmark_stageVS.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	reactome_stage)
+        Rscript -e rmarkdown::render"('reactome-stageVS.Rmd',
+                 output_file=\"report/data/reactome_stageVS.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+	kegg_stage)
+        Rscript -e rmarkdown::render"('kegg-stageVS.Rmd',
+                 output_file=\"report/data/kegg_stageVS.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+
   esac
+
 
 done
 

@@ -7,28 +7,57 @@
 
 ## 2.Cluster Results
 - [clusters](data/clusters.html)
-- [marker genes with different resolutions](data/clusters_DEs.html)
 
-## 3. Marker Genes & GO analysis
+## 3. Marker Genes & GO & pathway analysis
  - [DE & GO ](data/dego.html)
+ - [hallmark ](data/hallmark.html)
+ - [KEGG ](data/KEGG.html)
+ - [Reactome ](data/Reactome.html)
  - [External Markers](data/external_markers.html)
  - [DE-excel](data/de_{{cluster_use}}.xlsx)
  - [GO-UP-excel](data/goup_{{cluster_use}}.xlsx)
  - [GO-DOWN-excel](data/godown_{{cluster_use}}.xlsx)
+ - [Hallmark-UP-excel](data/hallmarkup_{{cluster_use}}.xlsx)
+ - [Hallmark-DOWN-excel](data/hallmarkdown_{{cluster_use}}.xlsx)
+ - [KEGG-UP-excel](data/keggup_{{cluster_use}}.xlsx)
+ - [KEGG-DOWN-excel](data/keggdown_{{cluster_use}}.xlsx)
+ - [Reactome-UP-excel](data/reactomeup_{{cluster_use}}.xlsx)
+ - [Reactome-DOWN-excel](data/reactomedown_{{cluster_use}}.xlsx)
+
+
 
 ## 4. Differential Expression & GO analysis(between groups)
  - [DE&GO](data/gv.html)
  - DE FILES
     {% for x, y in list_stages %}
-	- [DE {{x}}.vs.{{y}}.xlsx](data/{{x}}.vs.{{y}}.de_{{cluster_use}}.xlsx )
+  - [DE {{x}}.vs.{{y}}.xlsx](data/{{x}}.vs.{{y}}.de_{{cluster_use}}.xlsx )
     {% endfor %}
  - GO FILES
     {% for x, y in list_stages %}
-	- [GO UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.goup_{{cluster_use}}.xlsx)
-	- [GO DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.godown_{{cluster_use}}.xlsx)
+  - [GO UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.goup_{{cluster_use}}.xlsx)
+  - [GO DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.godown_{{cluster_use}}.xlsx)
     {% endfor %}
 
-## 5. Differential Expression & GO analysis(between samples)
+
+## 5. Pathway analysis (between groups)
+
+ - [Reactome stage](data/reactome_stageVS.html)
+ - [KEGG stage](data/kegg_stageVS.html)
+ - [hallmark stage](data/hallmark_stageVS.html)
+
+ - pathway FILES
+    {% for x, y in list_stages %}
+	- [Hallmark UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.hallmarkup_{{cluster_use}}.xlsx)
+	- [Hallmark DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.hallmarkdown_{{cluster_use}}.xlsx)
+	- [kegg UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.KEGGup_{{cluster_use}}.xlsx)
+	- [kegg DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.KEGGdown_{{cluster_use}}.xlsx)
+	- [Reactome UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.Reactomeup_{{cluster_use}}.xlsx)
+	- [Reactome DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.Reactomedown_{{cluster_use}}.xlsx)
+    {% endfor %}
+
+
+
+## 6. Differential Expression & GO analysis(between samples)
  - [DE&GO](data/1vs1.html)
 
  - DE FILES
@@ -43,5 +72,19 @@
 	- [GO DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.godown_{{cluster_use}}.xlsx)
     {% endfor %}
 
+## 7. Pathway analysis (between samples)
 
+ - [Reactome 1v1](data/reactome_1vs1.html)
+ - [KEGG 1v1](data/kegg_1vs1.html)
+ - [hallmark 1v1](data/hallmark_1vs1.html)
+
+ - pathway FILES
+    {% for x, y in list_1v1 %}
+	- [Hallmark UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.hallmarkup_{{cluster_use}}.xlsx)
+	- [Hallmark DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.hallmarkdown_{{cluster_use}}.xlsx)
+	- [kegg UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.KEGGup_{{cluster_use}}.xlsx)
+	- [kegg DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.KEGGdown_{{cluster_use}}.xlsx)
+	- [Reactome UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.Reactomeup_{{cluster_use}}.xlsx)
+	- [Reactome DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.Reactomedown_{{cluster_use}}.xlsx)
+    {% endfor %}
 

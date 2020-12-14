@@ -1,0 +1,215 @@
+---
+title: "KEGG"
+author: "Mingbo Cheng"
+date: "`r format(Sys.time(), '%d %B, %Y')`" 
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+    toc_float: true
+    number_sections: true
+params:
+    cluster: "which cluster to analysis"
+
+---
+
+```{r Marker_genes, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
+library(ggplot2)
+library(gridExtra)
+library(cowplot)
+library(dplyr) 
+library(stringr)
+library(digest)
+library(openxlsx)
+library(Seurat)
+library(Hmisc)
+library(glue)
+library(ComplexHeatmap)
+library(EnhancedVolcano)
+
+DATA_DIR <- "../"
+savedir <- "../save"
+
+cluster_use <- params$cluster
+
+kegg_cluster_name <- paste0("kegg_", cluster_use)
+```
+
+## kegg up analysis
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=13, fig.height=20}
+scrna <- readRDS(file.path(savedir, "scrna_kegg.Rds"))
+kegg.up.list <-scrna@tools[[kegg_cluster_name]]$keggup
+
+df.list <- lapply(names(kegg.up.list), function(x) kegg.up.list[[x]]@result)
+names(df.list) <- names(kegg.up.list)
+intersect_keggID <- Reduce(intersect, lapply(df.list, function(x) x$ID))
+filtered_kegg <- c()
+for(keggid in  intersect_keggID){
+    is_sigs <- sapply(df.list, function(x)x[x$ID==keggid,]$p.adjust < 0.05)
+    if(any(is_sigs) & table(is_sigs)["TRUE"] == 1){
+        filtered_kegg <- c(filtered_kegg, keggid)
+    }
+}
+
+if(length(filtered_kegg) > 10){
+  df.list <- lapply(df.list, function(x) x %>% filter(ID %in% filtered_kegg) )
+  df.list <- lapply(names(df.list), function(x) df.list[[x]] %>% mutate(name=x))
+  mdf <- do.call(rbind, df.list)
+  pmdf <- mdf[, c("Description", "name", "p.adjust")]
+  
+  pmtx <- reshape2::dcast(pmdf,  Description ~ name)
+  
+  rownames(pmtx) <- pmtx$Description
+  pmtx$Description <- NULL
+  help_mtx <- pmtx
+  help_mtx[help_mtx >= 0.05] = 1000
+  help_mtx[help_mtx < 0.05] = 1
+  help_mtx <- help_mtx[do.call(order, help_mtx),]
+  pmtx <- -log10(pmtx)
+  pmtx[pmtx>2] = 2
+  pmtx <- pmtx[rownames(help_mtx), ]
+  col_fun <-  circlize::colorRamp2(c(0, 1, +2), c("purple", "black", "yellow"))
+  p <- Heatmap(as.matrix(pmtx),
+         name = "-log10(padjust)",
+         cluster_columns = F,
+         cluster_rows = F,
+         show_row_names=T,
+         col=col_fun)
+  draw(p, heatmap_legend_side = "left")
+}
+
+```
+
+
+```{r xlsxnplot, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=22, fig.height=40}
+### up genes top 10
+
+kegg.up.list <-scrna@tools[[kegg_cluster_name]]$keggup
+kegg.plot.list = lapply(kegg.up.list, function(x){ 
+            df = x@result 
+            if (is.list(df) && length(df)==0){
+              log.m = as.data.frame(list())
+              return(log.m)
+            }
+            log.m = as.data.frame(-log10(df$p.adjust))
+            log.m$names =as.factor(sapply(df$Description, function(y){
+              y <- as.character(trimws(y))
+              if(str_length(y) > 50){
+                hs <- digest(y, "crc32") 
+                y = paste(substr(y, 1, 40), hs)}
+                return(y) })) 
+            #log.m$names = df$Description
+            log.m <- log.m[order(log.m[,1],decreasing = TRUE),]
+            showCatekeggry = min(length(log.m[,1]), 10) 
+            log.m <- log.m[1:showCatekeggry, ]
+            log.m <- log.m[order(log.m[,1],decreasing = FALSE),]    
+            return(log.m)
+            } )
+
+### up genes plot
+plots <- lapply(seq_along(kegg.plot.list), function(y, i) {
+        col <- y[[i]] 
+        if(length(col) == 0)
+          return(NULL)
+        ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) + 
+        geom_bar(stat="identity", fill="#3399CC", color="grey50") +
+        ggtitle(paste("kegg Up, ", names(y)[i])) +
+        theme(axis.text.y  = element_text(size=20)) +
+        scale_y_continuous(name="-log10(p-value)") +
+        scale_x_discrete(name= "") +
+        coord_flip()}
+       ,
+       y=kegg.plot.list)
+plot_grid(plotlist=plots, ncol=2)
+```
+
+## kegg down analysis
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=13, fig.height=20}
+kegg.down.list <-scrna@tools[[kegg_cluster_name]]$keggdown
+
+df.list <- lapply(names(kegg.down.list), function(x) kegg.down.list[[x]]@result)
+names(df.list) <- names(kegg.down.list)
+intersect_keggID <- Reduce(intersect, lapply(df.list, function(x) x$ID))
+filtered_kegg <- c()
+for(keggid in  intersect_keggID){
+    is_sigs <- sapply(df.list, function(x)x[x$ID==keggid,]$p.adjust < 0.05)
+    if(any(is_sigs) & table(is_sigs)["TRUE"] == 1){
+        filtered_kegg <- c(filtered_kegg, keggid)
+    }
+}
+
+if(length(filtered_kegg) > 10){
+  df.list <- lapply(df.list, function(x) x %>% filter(ID %in% filtered_kegg) )
+  df.list <- lapply(names(df.list), function(x) df.list[[x]] %>% mutate(name=x))
+  mdf <- do.call(rbind, df.list)
+  pmdf <- mdf[, c("Description", "name", "p.adjust")]
+  
+  pmtx <- reshape2::dcast(pmdf,  Description ~ name)
+  
+  rownames(pmtx) <- pmtx$Description
+  pmtx$Description <- NULL
+  help_mtx <- pmtx
+  help_mtx[help_mtx >= 0.05] = 1000
+  help_mtx[help_mtx < 0.05] = 1
+  help_mtx <- help_mtx[do.call(order, help_mtx),]
+  pmtx <- -log10(pmtx)
+  pmtx[pmtx>2] = 2
+  pmtx <- pmtx[rownames(help_mtx), ]
+  col_fun <-  circlize::colorRamp2(c(0, 1, +2), c("purple", "black", "yellow"))
+  p <- Heatmap(as.matrix(pmtx),
+         name = "-log10(padjust)",
+         cluster_columns = F,
+         cluster_rows = F,
+         show_row_names=T,
+         col=col_fun)
+  draw(p, heatmap_legend_side = "left")
+}
+```
+
+
+```{r xlsxndnplot, echo=FALSE, message=FALSE, warning=FALSE, results='hide',  fig.width=22, fig.height=40}
+
+### down genes top 10
+kegg.plot.list = lapply(kegg.down.list, function(x){
+            #df = fortify(x, showCatekeggry=Inf)
+            df = x@result
+            if (is.list(df) && length(df)==0){
+              log.m = as.data.frame(list())
+              return(log.m)
+            }
+            log.m = as.data.frame(-log10(df$p.adjust))
+            log.m$names =as.factor(sapply(df$Description, function(y){
+              y <- as.character(trimws(y))
+              if(str_length(y) > 50){
+                hs <- digest(y, "crc32") 
+                y = paste(substr(y, 1, 40), hs)}
+                return(y) })) 
+            #log.m$names = df$Description
+            log.m <- log.m[order(log.m[,1],decreasing = TRUE),]
+            showCatekeggry = min(length(log.m[,1]), 10)
+            log.m <- log.m[1:showCatekeggry, ]
+            log.m <- log.m[order(log.m[,1],decreasing = FALSE),]
+            return(log.m)
+            } )
+
+### down genes plot
+plots<-lapply(seq_along(kegg.plot.list), function(y, i) {
+        col <- y[[i]]
+        if(length(col) == 0)
+          return(NULL)
+        ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) +
+        geom_bar(stat="identity", fill= "#3399CC", color="grey50") +
+        ggtitle(paste("kegg Down", names(y)[i])) +
+        theme(axis.text.y  = element_text(size=20)) +
+        scale_y_continuous(name="-log10(p-value)") +
+        scale_x_discrete(name= "") +
+        coord_flip()}
+       ,
+       y=kegg.plot.list)
+plot_grid(plotlist=plots, ncol=2)
+```
