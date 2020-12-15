@@ -1277,7 +1277,7 @@ generate_scrna_dego_name <- function(scrna){
                             de.list <- de.list[sapply(de.list, function(x){(!is.null(x[[1]]))})]
                             nm <- paste0(ident.use[1], ".vs.", ident.use[2])
                             return(de.list)
-           }, mc.cores=WORKER_NUM)
+           }, mc.cores=1)
 
   names(all_de_list) <- sapply(lst, function(x) paste0(x[1], ".vs.", x[2]) )
 
@@ -1342,7 +1342,7 @@ generate_scrna_dego_stage <- function(scrna){
                             de.list <- de.list[sapply(de.list, function(x){(!is.null(x[[1]]))})]
                             nm <- paste0(ident.use[1], ".vs.", ident.use[2])
                             return(de.list)
-           }, mc.cores=WORKER_NUM)
+           }, mc.cores=1)
 
   names(all_de_list) <- sapply(lst, function(x) paste0(x[1], ".vs.", x[2]) )
 
