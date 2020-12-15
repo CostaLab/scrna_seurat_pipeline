@@ -97,6 +97,21 @@ def generate_md_idx(out):
     fw.write(st)
 #endf generate_md_idx
 
+def generate_md_idx_pdf(out):
+    tfile = open("template/index_pdf.template")
+    tmplt = tfile.read()
+    t = Template(tmplt)
+    st = t.render(list_1v1=lst_1v1,
+                  list_stages=lst_stages,
+                  project_name=project_name[0],
+                  cluster_use = cluster_use)
+
+    fw = open(out, 'w')
+    fw.write(st)
+#endf generate_md_idx
+
+
+
 
 def generate_report_stagesVS(out):
     tfile = open("template/DE-GO-stagesVS.template")
@@ -250,6 +265,7 @@ def main():
     generate_report_stageVS_kegg("kegg-stageVS.Rmd")
 
     generate_md_idx(os.path.join(out_dir, "index.md"))
+    generate_md_idx_pdf(os.path.join("report_pdf", "index.md"))
 #endf main
 
 

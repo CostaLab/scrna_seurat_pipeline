@@ -9,8 +9,6 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '3'
-    toc_float: true
-    number_sections: true
 
 params:
     cluster: "which cluster to analysis"
