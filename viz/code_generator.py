@@ -97,7 +97,11 @@ def generate_md_idx(out):
     fw.write(st)
 #endf generate_md_idx
 
-def generate_md_idx_pdf(out):
+def generate_md_idx_pdf(out, folder="report_pdf"):
+
+    if not os.path.exists(folder):
+        os.mkdir(folder)
+
     tfile = open("template/index_pdf.template")
     tmplt = tfile.read()
     t = Template(tmplt)
@@ -265,7 +269,9 @@ def main():
     generate_report_stageVS_kegg("kegg-stageVS.Rmd")
 
     generate_md_idx(os.path.join(out_dir, "index.md"))
-    generate_md_idx_pdf(os.path.join("report_pdf", "index.md"))
+
+    out_dir = "report_pdf"
+    generate_md_idx_pdf(os.path.join(out_dir, "index.md"), out_dir)
 #endf main
 
 
