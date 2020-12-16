@@ -1,0 +1,24 @@
+---
+title: "Output data"
+author: "Tiago Maié"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+## Output tables
+
+```{r, include=FALSE}
+xfun::pkg_load2(c("htmltools", "mime"))
+```
+
+```{r, echo=FALSE}
+xfun::embed_dir(
+  file.path(paste0('report',params$project),"data"),
+  text = 'Download full data'
+)
+```

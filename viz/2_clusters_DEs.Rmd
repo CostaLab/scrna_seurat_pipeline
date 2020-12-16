@@ -17,7 +17,7 @@ output:
 savedir = params$savedir
 ```
 
-```{r Marker_genes, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
 library(ggplot2)
 library(gridExtra)
 library(cowplot)
@@ -79,7 +79,7 @@ cluster.de.list <- scrna@tools$de_batch
 
 ## Plot the top 10 DE genes in each cluster.
 
-```{r TOP10_DE,echo=FALSE, warning= FALSE, message=FALSE, fig.width=13, fig.height=20}
+```{r,echo=FALSE, warning= FALSE, message=FALSE, fig.width=13, fig.height=20}
 
 names(cluster.de.list) <- as.character(seq(0.1, 0.8, 0.1)) ##------
 for (resolution in seq(0.1, 0.8, 0.1)){
@@ -111,7 +111,7 @@ for (resolution in seq(0.1, 0.8, 0.1)){
 
 ## DE genes on heatmap
 
-```{r loopclusters, echo=FALSE, warning= FALSE, message=FALSE, fig.height=13,  fig.width=10}
+```{r, echo=FALSE, warning= FALSE, message=FALSE, fig.height=13,  fig.width=10}
 DefaultAssay(scrna) <- "RNA"
 scrna <- ScaleData(scrna,  rownames(scrna))
 

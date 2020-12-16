@@ -55,7 +55,7 @@ mdf= df[df$Tissue.of.Origin == ORGAN, c(glue("{SPECIES}.Gene"), "Cell.Type")]
 celltype_names <- unique(mdf$Cell.Type)
 ```
 
-
+## External markers
 ```{r}
 
 o_genes <- rownames(scrna)

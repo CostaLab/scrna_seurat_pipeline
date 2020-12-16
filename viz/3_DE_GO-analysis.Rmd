@@ -11,13 +11,13 @@ output:
     toc_depth: '3'
 
 ---
-## Marker Genes & GO analysis
+
 
 ```{r , include=FALSE}
 savedir = params$savedir
 ```
 
-```{r Marker_genes, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
 library(ggplot2)
 library(gridExtra)
 library(cowplot)
@@ -110,7 +110,7 @@ DoHeatmap(scrna, features=genes,
 
 ## Plot the top 10 DE genes in each cluster.
 
-```{r TOP10_DE,echo=FALSE, warning= FALSE, message=FALSE, fig.width=13, fig.height=12}
+```{r,echo=FALSE, warning= FALSE, message=FALSE, fig.width=13, fig.height=12}
 
 plots = list()
 
@@ -203,7 +203,7 @@ if(length(filtered_go) > 10){
 ```
 
 
-```{r xlsxnplot, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=22, fig.height=40}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=22, fig.height=40}
 ### up genes top 10
 
 go.up.list <-scrna@tools[[go_cluster_name]]$goup
@@ -290,7 +290,7 @@ if(length(filtered_go) > 10){
 ```
 
 
-```{r xlsxndnplot, echo=FALSE, message=FALSE, warning=FALSE, results='hide',  fig.width=22, fig.height=40}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide',  fig.width=22, fig.height=40}
 
 ### down genes top 10
 go.plot.list = lapply(go.down.list, function(x){
@@ -334,7 +334,7 @@ plot_grid(plotlist=plots, ncol=2)
 
 ## DE genes on UMAP plot
 
-```{r loopclusters, echo=FALSE, warning= FALSE, message=FALSE, fig.height=10, fig.width=13}
+```{r, echo=FALSE, warning= FALSE, message=FALSE, fig.height=10, fig.width=13}
 Idents(scrna) <- cluster_use
 for (i in names(cluster.de) ){
   #plots = list()

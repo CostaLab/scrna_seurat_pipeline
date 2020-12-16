@@ -13,7 +13,7 @@ output:
 ## Differential Expression & GO analysis(between samples)
 
 
-```{r Marker_genes, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
 #use former data coz the DE analysis takes too much time.
 library(ggplot2)
 library(gridExtra)

@@ -48,7 +48,7 @@ text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use),
 fisher_cluster_name <- paste0("fishertest_", cluster_use)
 ```
 
-# Singleton Clustering
+
 
 ## Clusters Resolution
 ```{r fig.width=9, fig.height=7}

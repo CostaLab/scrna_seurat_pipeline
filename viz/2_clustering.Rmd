@@ -47,7 +47,7 @@ text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use),
 fisher_cluster_name <- paste0("fishertest_", cluster_use)
 ```
 
-### Clusters Resolution
+## Clusters Resolution
 ```{r fig.height=10, fig.width=13}
 scrna <- readRDS(file = file.path(savedir, "scrna_batchclustering.Rds"))
 clustree(scrna, prefix = "integrated_snn_res.")
@@ -74,7 +74,7 @@ patchwork::wrap_plots(plist, ncol=2)
 
 
 
-### Clusters
+## Clusters
 
 ```{r fig.width=9, fig.height=7}
 fname <- switch(
@@ -98,7 +98,7 @@ table(scrna$stage, scrna@meta.data[, cluster_use]) %>%  kable(caption = "conditi
 
 ```
 
-### Clusters Statistic
+## Clusters Statistic
 
 ```{r}
 scrna <- readRDS(file=file.path(savedir,"scrna_fishertest_clusters.Rds"))
@@ -161,7 +161,7 @@ if(length(table(scrna$stage))<=2){
 ```
 
 
-### Proportion
+## Proportion
 
 ```{r fig.width=13, fig.height=7}
 name_len <- length(table(scrna@meta.data$name))
@@ -185,9 +185,9 @@ barplot(t(cluster_propotion_before_sort), col=colours, xlab="cluster",
 ```
 
 
-### Amount Distribution
+## Amount Distribution
 
-```{r amount_Plot, echo=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=9}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=9}
 BarPlot <- function(x, fill, xlab = NULL, ylab = "Cells", legend.title = NULL,
     main = NULL, print.number = TRUE) {
     counts <- as.data.frame(table(x, fill))
@@ -221,14 +221,14 @@ gplot + scale_fill_manual(values= colours)
 
 
 
-### Cell cycle phase
+## Cell cycle phase
 ```{r fig.width=9, fig.height=7}
 DimPlot(scrna, reduction = "INTE_UMAP", group.by = "Phase")
 ```
 
 
 
-### FeaturePlot
+## FeaturePlot
 ```{r fig.width=9, fig.height=7}
 FeaturePlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA"),
                    cols = c("lightgrey", "red"),
@@ -238,7 +238,7 @@ FeaturePlot(scrna, features = c("CC.Difference", "S.Score", "G2M.Score"),
                    ncol = 2)
 ```
 
-### Violin Plot
+## Violin Plot
 ```{r fig.width=9, fig.height=7}
 VlnPlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA", "CC.Difference", "S.Score", "G2M.Score"),
 	 group.by = cluster_use,
@@ -248,7 +248,7 @@ VlnPlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeatur
 
 
 
-### MCA annotation
+## MCA annotation
 ```{r fig.width=9, fig.height=7}
 scrna <- readRDS(file=file.path(savedir, "scrna_MCAannotate.Rds"))
 p <- DimPlot(object = scrna, pt.size = 0.2,
@@ -264,7 +264,7 @@ HoverLocator(plot = p, information = FetchData(object = scrna, vars = c("MCA_ann
 ```
 
 
-### External Annotation
+## External Annotation
 
 ```{r fig.width=9, fig.height=7}
 scrna <- readRDS(file=file.path(savedir, "scrna_ExternalAnnotation.Rds"))

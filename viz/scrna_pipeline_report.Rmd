@@ -17,15 +17,19 @@ params:
 ---
 title: "`r params$project` SC-RNA Analysis Pipeline"
 ---
-
+# Data Quality Check
 ```{r qc, child=if(any(grepl("--QC",params$funcs,fixed=TRUE))) '1_quality_report.Rmd'}
 ```
+
+# Clustering
 ```{r singleton, child=if(any(grepl("--Singleton",params$funcs,fixed=TRUE))) 'singleton_clustering.Rmd'}
 ```
 ```{r clustering, child=if(any(grepl("--Clusters",params$funcs,fixed=TRUE))) '2_clustering.Rmd'}
 ```
 ```{r clusters_de, child=if(any(grepl("--DEs",params$funcs,fixed=TRUE))) '2_clusters_DEs.Rmd'}
 ```
+
+# Marker Genes & GO analysis
 ```{r de_go_analysis, child=if(any(grepl("--DEGO",params$funcs,fixed=TRUE))) '3_DE_GO-analysis.Rmd'}
 ```
 ```{r external_markers, child=if(any(grepl("--EXT_MARKERS",params$funcs,fixed=TRUE))) '3_external_markers.Rmd'}
@@ -33,4 +37,8 @@ title: "`r params$project` SC-RNA Analysis Pipeline"
 ```{r de_go_stages, child=if(any(grepl("--DEGO_stage",params$funcs,fixed=TRUE))) 'DE-GO-analysis-stagesVS.Rmd'}
 ```
 ```{r de_go_1v1, child=if(any(grepl("--DEGO_1v1",params$funcs,fixed=TRUE))) 'DE-GO-analysis-1v1.Rmd'}
+```
+
+# Download all the data
+```{r get_data, child=if(any(grepl("--GET_DATA",params$funcs,fixed=TRUE))) 'get_data.Rmd'}
 ```

@@ -7,13 +7,14 @@ SAVED_DATA="../save${PROJ}"
 
 FUNCS=(
         --QC
-        # --DEs
-        # --Clusters
         --Singleton
-        # --DEGO
-        # --EXT_MARKERS
+        --DEs
+        # --Clusters
+        #--DEGO
+        #--EXT_MARKERS
         # --DEGO_1v1
         # --DEGO_stage
+	--GET_DATA
 )
 
 
