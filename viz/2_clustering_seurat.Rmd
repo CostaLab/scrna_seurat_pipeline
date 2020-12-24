@@ -43,27 +43,23 @@ dir.create(savedir)
 
 colours <- c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99")
 
-cluster_use <- params$cluster
+cluster_use <- "seurat_inte_clusters"
 
 par(mar = c(0,0,0,0))
 plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
 text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use), 
      cex = 1.6, col = "red")
+
+
 ```
 
 ### Clusters Resolution
 ```{r fig.height=10, fig.width=13}
 scrna <- readRDS(file = file.path(savedir, "scrna_phase_comparing.Rds"))
 fisher_cluster_name <- paste0("fishertest_", cluster_use)
-
-if(cluster_use %ni% names(scrna@meta.data)){
-  stop(glue("ERORR:There's no this {cluster_use} slot, please check!!!"))
-}
-
 if(fisher_cluster_name %ni% names(scrna@tools)){
-  stop(glue("ERORR:fishertest hasn't been calculated for cluster {cluster_use}\n Please run [scrna_fishertest_clusters]!!!"))
+    stop(glue("ERORR:fishertest hasn't been calculate for cluster {cluster_use}\n Please run [scrna_fishertest_clusters]!!!"))
 }
-
 clustree(scrna, prefix = "integrated_snn_res.")
 ```
 
@@ -74,7 +70,7 @@ nms <- names(cluster.de.list)
 plist <- list()
 for(nm in nms){
     
-    plist[[nm]] <- DimPlot(scrna, reduction = "DEFAULT_UMAP", group.by =  paste0("integrated_snn_res.", nm),
+    plist[[nm]] <- DimPlot(scrna, reduction = "INTE_UMAP", group.by =  paste0("integrated_snn_res.", nm),
                                        label=T, label.size=8) + 
                                      ggtitle(sprintf("resolution %s", nm))
 
@@ -88,9 +84,9 @@ CombinePlots(plots=plist, ncol=2)
 ### Clusters 
 
 ```{r fig.width=9, fig.height=7}
-
-DimPlot(scrna, reduction = "DEFAULT_UMAP", group.by = "name", cols=colours)
-DimPlot(scrna, reduction = "DEFAULT_UMAP", group.by = cluster_use, label=T, label.size=8)
+#scrna <- readRDS(file=file.path(savedir,fname))
+DimPlot(scrna, reduction = "INTE_UMAP", group.by = "name", cols=colours)
+DimPlot(scrna, reduction = "INTE_UMAP", group.by = cluster_use, label=T, label.size=8)
 
 table(scrna$name, scrna@meta.data[, cluster_use]) %>%  kable(caption = "samples: cluster cells", align = 'c') %>% 
   kable_styling(bootstrap_options = c("striped", "hover"))
@@ -224,7 +220,7 @@ gplot + scale_fill_manual(values= colours)
 
 ### Cell cycle phase 
 ```{r fig.width=9, fig.height=7}
-DimPlot(scrna, reduction = "DEFAULT_UMAP", group.by = "Phase")
+DimPlot(scrna, reduction = "INTE_UMAP", group.by = "Phase")
 ```
 
 
@@ -241,7 +237,7 @@ FeaturePlot(scrna, features = c("CC.Difference","G1.Score", "S.Score", "G2M.Scor
 
 ### Violin Plot 
 ```{r fig.width=9, fig.height=7}
-VlnPlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA", "CC.Difference", "G1.Score","S.Score", "G2M.Score"),
+VlnPlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA", "CC.Difference", "G1.Score", "S.Score", "G2M.Score"),
 	 group.by = cluster_use,
 	 pt.size=0)
 ```

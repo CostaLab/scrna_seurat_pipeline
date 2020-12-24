@@ -32,14 +32,19 @@ library(Hmisc)
 library(EnhancedVolcano)
 library(ComplexHeatmap)
 library(glue)
+`%ni%` <- Negate(`%in%`)
 
 
 #savedir <- "save/save-{{CC}}"
 savedir <- "../save"
-scrna <- readRDS(file.path(savedir, "scrna_pathway_stage.Rds"))
+scrna <- readRDS(file.path(savedir, "scrna_phase_comparing.Rds"))
 
 cluster_use <- params$cluster
 reactome_sample_stage <-paste0("pathway_stage_", cluster_use)
+if(reactome_sample_stage %ni% names(scrna@tools)){
+  stop(glue("ERORR:reactome stages comparing hasn't been calculated for cluster:{cluster_use}\n Please run [scrna_pathway_stage]!!!"))
+}
+
 all_reactomeup_list <-  scrna@tools[[reactome_sample_stage]]$reactomeup
 all_reactomedown_list <-  scrna@tools[[reactome_sample_stage]]$reactomedown
 ```

@@ -63,7 +63,7 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
 
 savedir <- "../save/"
 
-scrna <- readRDS(file=file.path(savedir, "scrna_batch_markergenes.Rds"))
+scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
 cluster.de.list <- scrna@tools$de_batch
 
 

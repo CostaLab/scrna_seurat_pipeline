@@ -2,6 +2,8 @@
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+set -e
+
 FUNCS=(
         QC
         DEs
@@ -43,7 +45,7 @@ cluster="seurat_clusters"
 
 echo -e "Use cluster slot ${RED} $cluster ${NC}"
 mkdir -p report_pdf/data
-cp -r ../charts/* report_pdf/data
+cp -r -p ../charts/* report_pdf/data
 python code_generator.py -c $cluster
 grip --export report_pdf/index.md
 

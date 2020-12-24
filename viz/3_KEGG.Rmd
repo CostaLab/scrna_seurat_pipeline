@@ -27,6 +27,7 @@ library(Hmisc)
 library(glue)
 library(ComplexHeatmap)
 library(EnhancedVolcano)
+`%ni%` <- Negate(`%in%`)
 
 DATA_DIR <- "../"
 savedir <- "../save"
@@ -39,7 +40,13 @@ kegg_cluster_name <- paste0("kegg_", cluster_use)
 ## kegg up analysis
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=13, fig.height=20}
-scrna <- readRDS(file.path(savedir, "scrna_kegg.Rds"))
+scrna <- readRDS(file.path(savedir, "scrna_phase_comparing.Rds"))
+
+if(kegg_cluster_name %ni% names(scrna@tools)){
+    stop(glue("kegg hasn't been calculated for cluster {cluster_use}\n Please run [scrna_kegg]!!!"))
+}
+
+
 kegg.up.list <-scrna@tools[[kegg_cluster_name]]$keggup
 
 df.list <- lapply(names(kegg.up.list), function(x) kegg.up.list[[x]]@result)

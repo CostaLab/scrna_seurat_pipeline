@@ -2,10 +2,14 @@
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+set -e
+
 FUNCS=(
         QC
         DEs
         Clusters
+        Clusters_harmony
+        Clusters_seurat
         DEGO
         KEGG
         hallmark
@@ -35,6 +39,7 @@ FUNCS=(
 #cluster="removed_clusters"
 #cluster="remove_recluster"
 #cluster="merged_clusters"
+#cluster="annotation"
 
 cluster="seurat_clusters"
 
@@ -43,7 +48,7 @@ cluster="seurat_clusters"
 
 echo -e "Use cluster slot ${RED} $cluster ${NC}"
 mkdir -p report/data
-cp -r ../charts/* report/data
+cp -r -p ../charts/* report/data
 python code_generator.py -c $cluster
 grip --export report/index.md
 
@@ -67,6 +72,21 @@ for a_func in "${FUNCS[@]}"; do
                  clean=TRUE,
                  params=list(cluster=\"${cluster}\"))"
 		;;
+
+	Clusters_harmony)
+        Rscript -e rmarkdown::render"('2_clustering_harmony.Rmd',
+                 output_file=\"report/data/clusters_harmony.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	Clusters_seurat)
+        Rscript -e rmarkdown::render"('2_clustering_harmony.Rmd',
+                 output_file=\"report/data/clusters_seurat.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
 	DEGO)
         Rscript -e rmarkdown::render"('3_DE_GO-analysis.Rmd',
                  output_file=\"report/data/dego.html\",

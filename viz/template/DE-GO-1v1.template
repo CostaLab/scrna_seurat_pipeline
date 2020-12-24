@@ -32,7 +32,7 @@ library(Hmisc)
 library(EnhancedVolcano)
 library(ComplexHeatmap)
 library(glue)
-
+`%ni%` <- Negate(`%in%`)
 
 GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
   #de.data = cluster.de[[id]]
@@ -69,10 +69,21 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
 
 #savedir <- "save/save-{{CC}}"
 savedir <- "../save"
-scrna <- readRDS(file.path(savedir, "scrna_dego_name.Rds"))
+scrna <- readRDS(file.path(savedir, "scrna_phase_comparing.Rds"))
+
 
 cluster_use <- params$cluster
 dego_sample_name <-paste0("dego_name_", cluster_use) 
+
+if(dego_sample_name %ni% names(scrna@tools)){
+  stop(glue("ERORR:DE&GO samples comparing hasn't been calculated for cluster:{cluster_use}\n Please run [scrna_dego_name]!!!"))
+}
+
+
+
+
+
+
 de.list <- scrna@tools[[dego_sample_name]]
 all_de_list <-  scrna@tools[[dego_sample_name]]$de
 all_goup_list <-  scrna@tools[[dego_sample_name]]$goup
@@ -373,7 +384,7 @@ for (i in names(de.list)){
    print(sprintf("Cluster %s", i)) 
    ps<- FeaturePlot(scrna, features = cluster.de.top10[[i]]$gene, 
                     cols = c("lightgrey", "red"), 
-                    reduction = "INTE_UMAP")
+                    reduction = "DEFAULT_UMAP")
    print(ps)
 }
 ```

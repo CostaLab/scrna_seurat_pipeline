@@ -32,14 +32,18 @@ library(Hmisc)
 library(EnhancedVolcano)
 library(ComplexHeatmap)
 library(glue)
+`%ni%` <- Negate(`%in%`)
 
 
 #savedir <- "save/save-{{CC}}"
 savedir <- "../save"
-scrna <- readRDS(file.path(savedir, "scrna_pathway_stage.Rds"))
+scrna <- readRDS(file.path(savedir, "scrna_phase_comparing.Rds"))
 
 cluster_use <- params$cluster
 kegg_sample_stage <-paste0("pathway_stage_", cluster_use)
+if(kegg_sample_stage %ni% names(scrna@tools)){
+  stop(glue("ERORR:kegg stages comparing hasn't been calculated for cluster:{cluster_use}\n Please run [scrna_pathway_stage]!!!"))
+}
 all_keggup_list <-  scrna@tools[[kegg_sample_stage]]$keggup
 all_keggdown_list <-  scrna@tools[[kegg_sample_stage]]$keggdown
 ```

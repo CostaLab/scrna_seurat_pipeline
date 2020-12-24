@@ -3,14 +3,14 @@ R_install_list <- c("optparse", "futile.logger", "Seurat", "dplyr",
                     "data.table", "ggplot2", "Hmisc", "foreach",
                     "devtools", "doParallel", "glue", "openxlsx",
                     "rmarkdown", "reshape2", "circlize", "BiocManager",
-                    "kableExtra", "assertthat")
+                    "kableExtra", "assertthat", "configr")
 
 
 
 Bio_install_list <- c("org.Mm.eg.db", "clusterProfiler",
                       "org.Hs.eg.db", "ComplexHeatmap",
                       "EnhancedVolcano","ReactomePA",
-                      "msigdbr")
+                      "msigdbr", "harmony")
 
 devtools_install_list <- c("mahmoudibrahim/genesorteR", "ggjlab/scMCA")
 

@@ -1,7 +1,7 @@
 ---
 title: "hallmark"
 author: "Mingbo Cheng"
-date: "`r format(Sys.time(), '%d %B, %Y')`" 
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
     toc: yes
@@ -18,7 +18,7 @@ params:
 library(ggplot2)
 library(gridExtra)
 library(cowplot)
-library(dplyr) 
+library(dplyr)
 library(stringr)
 library(digest)
 library(openxlsx)
@@ -27,6 +27,8 @@ library(Hmisc)
 library(glue)
 library(ComplexHeatmap)
 library(EnhancedVolcano)
+`%ni%` <- Negate(`%in%`)
+
 
 DATA_DIR <- "../"
 savedir <- "../save"
@@ -39,7 +41,11 @@ hallmark_cluster_name <- paste0("hallmark_", cluster_use)
 ## hallmark up analysis
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=13, fig.height=20}
-scrna <- readRDS(file.path(savedir, "scrna_hallmark.Rds"))
+scrna <- readRDS(file.path(savedir, "scrna_phase_comparing.Rds"))
+if(hallmark_cluster_name %ni% names(scrna@tools)){
+  stop(glue("hallmark hasn't been calculated for cluster {cluster_use}\n Please run [scrna_hallmark]!!!"))
+}
+
 hallmark.up.list <-scrna@tools[[hallmark_cluster_name]]$hallmarkup
 
 df.list <- lapply(names(hallmark.up.list), function(x) hallmark.up.list[[x]]@result)
@@ -58,9 +64,9 @@ if(length(filtered_hallmark) > 10){
   df.list <- lapply(names(df.list), function(x) df.list[[x]] %>% mutate(name=x))
   mdf <- do.call(rbind, df.list)
   pmdf <- mdf[, c("Description", "name", "p.adjust")]
-  
+
   pmtx <- reshape2::dcast(pmdf,  Description ~ name)
-  
+
   rownames(pmtx) <- pmtx$Description
   pmtx$Description <- NULL
   help_mtx <- pmtx
@@ -87,8 +93,8 @@ if(length(filtered_hallmark) > 10){
 ### up genes top 10
 
 hallmark.up.list <-scrna@tools[[hallmark_cluster_name]]$hallmarkup
-hallmark.plot.list = lapply(hallmark.up.list, function(x){ 
-            df = x@result 
+hallmark.plot.list = lapply(hallmark.up.list, function(x){
+            df = x@result
             if (is.list(df) && length(df)==0){
               log.m = as.data.frame(list())
               return(log.m)
@@ -97,23 +103,23 @@ hallmark.plot.list = lapply(hallmark.up.list, function(x){
             log.m$names =as.factor(sapply(df$Description, function(y){
               y <- as.character(trimws(y))
               if(str_length(y) > 50){
-                hs <- digest(y, "crc32") 
+                hs <- digest(y, "crc32")
                 y = paste(substr(y, 1, 40), hs)}
-                return(y) })) 
+                return(y) }))
             #log.m$names = df$Description
             log.m <- log.m[order(log.m[,1],decreasing = TRUE),]
-            showCatehallmarkry = min(length(log.m[,1]), 10) 
+            showCatehallmarkry = min(length(log.m[,1]), 10)
             log.m <- log.m[1:showCatehallmarkry, ]
-            log.m <- log.m[order(log.m[,1],decreasing = FALSE),]    
+            log.m <- log.m[order(log.m[,1],decreasing = FALSE),]
             return(log.m)
             } )
 
 ### up genes plot
 plots <- lapply(seq_along(hallmark.plot.list), function(y, i) {
-        col <- y[[i]] 
+        col <- y[[i]]
         if(length(col) == 0)
           return(NULL)
-        ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) + 
+        ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) +
         geom_bar(stat="identity", fill="#3399CC", color="grey50") +
         ggtitle(paste("hallmark Up, ", names(y)[i])) +
         theme(axis.text.y  = element_text(size=20)) +
@@ -146,9 +152,9 @@ if(length(filtered_hallmark) > 10){
   df.list <- lapply(names(df.list), function(x) df.list[[x]] %>% mutate(name=x))
   mdf <- do.call(rbind, df.list)
   pmdf <- mdf[, c("Description", "name", "p.adjust")]
-  
+
   pmtx <- reshape2::dcast(pmdf,  Description ~ name)
-  
+
   rownames(pmtx) <- pmtx$Description
   pmtx$Description <- NULL
   help_mtx <- pmtx
@@ -184,9 +190,9 @@ hallmark.plot.list = lapply(hallmark.down.list, function(x){
             log.m$names =as.factor(sapply(df$Description, function(y){
               y <- as.character(trimws(y))
               if(str_length(y) > 50){
-                hs <- digest(y, "crc32") 
+                hs <- digest(y, "crc32")
                 y = paste(substr(y, 1, 40), hs)}
-                return(y) })) 
+                return(y) }))
             #log.m$names = df$Description
             log.m <- log.m[order(log.m[,1],decreasing = TRUE),]
             showCatehallmarkry = min(length(log.m[,1]), 10)

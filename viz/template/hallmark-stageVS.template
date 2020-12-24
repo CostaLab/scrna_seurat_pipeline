@@ -32,14 +32,19 @@ library(Hmisc)
 library(EnhancedVolcano)
 library(ComplexHeatmap)
 library(glue)
+`%ni%` <- Negate(`%in%`)
 
 
 #savedir <- "save/save-{{CC}}"
 savedir <- "../save"
-scrna <- readRDS(file.path(savedir, "scrna_pathway_stage.Rds"))
+scrna <- readRDS(file.path(savedir, "scrna_phase_comparing.Rds"))
 
 cluster_use <- params$cluster
 hallmark_sample_stage <-paste0("pathway_stage_", cluster_use)
+if(hallmark_sample_stage %ni% names(scrna@tools)){
+  stop(glue("ERORR:hallmark stages comparing hasn't been calculated for cluster:{cluster_use}\n Please run [scrna_pathway_stage]!!!"))
+}
+
 all_hallmarkup_list <-  scrna@tools[[hallmark_sample_stage]]$hallmarkup
 all_hallmarkdown_list <-  scrna@tools[[hallmark_sample_stage]]$hallmarkdown
 ```
