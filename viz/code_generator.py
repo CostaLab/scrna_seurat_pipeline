@@ -49,9 +49,11 @@ for name,value in options:
         cluster_use = value
         print("cluster use:", cluster_use)
 
+    fw = open(out, 'w')
+
     fw.write("%s\n" %head)
 
-    fw = open(out, 'w')
+
 
     thead = open("template/head.template")
     tmplth = thead.read()
