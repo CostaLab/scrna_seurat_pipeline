@@ -5,6 +5,7 @@ import datetime
 import os
 import sys
 import argparse
+import getopt
 import rpy2.robjects.packages as rpackages
 import rpy2.robjects as robjects
 from itertools import combinations
@@ -35,12 +36,20 @@ seen = set()
 u_stages = [x for x in stages if x not in seen and not seen.add(x)]  ##remove dup
 lst_stages = list(combinations(u_stages, 2))
 
+cluster_use = "seurat_clusters"
+savedir = os.path.join(DATADIR, "save/")#robjects.r("SAVE_DIR")[0]
 
-savedir = os.path.join(DATADIR, "save"+args.proj_tag)  #robjects.r("SAVE_DIR")[0]
+try:
+    options,args = getopt.getopt(sys.argv[1:],"c:")
+except getopt.GetoptError:
+    print("Error Parameters")
+    sys.exit()
+for name,value in options:
+    if name in "-c":
+        cluster_use = value
+        print("cluster use:", cluster_use)
 
-
-def generate_1v1(out):
-    # Currently not in use?
+    fw.write("%s\n" %head)
 
     fw = open(out, 'w')
 
@@ -48,8 +57,8 @@ def generate_1v1(out):
     tmplth = thead.read()
     t = Template(tmplth)
     today = datetime.date.today().strftime("%d%B%Y")
-    head = t.render(today=today,
-                    svdir=savedir)
+    head = t.render(today = today,
+                    svdir = savedir)
 
     fw.write("%s\n" %head)
 
@@ -74,9 +83,11 @@ def generate_1v1(out):
                              tX = x,
                              tY = y)
 
+
         fw.write("%s\n" %one_plots)
 
 #endf generate_1v1
+
 
 
 def generate_md_idx(out):
@@ -91,6 +102,25 @@ def generate_md_idx(out):
     fw = open(out, 'w')
     fw.write(st)
 #endf generate_md_idx
+
+def generate_md_idx_pdf(out, folder="report_pdf"):
+
+    if not os.path.exists(folder):
+        os.mkdir(folder)
+
+    tfile = open("template/index_pdf.template")
+    tmplt = tfile.read()
+    t = Template(tmplt)
+    st = t.render(list_1v1=lst_1v1,
+                  list_stages=lst_stages,
+                  project_name=project_name[0],
+                  cluster_use = args.cluster_use)
+
+    fw = open(out, 'w')
+    fw.write(st)
+#endf generate_md_idx
+
+
 
 
 def generate_report_stagesVS(out):
@@ -129,11 +159,128 @@ def generate_report_1v1(out):
 #endf generate_groupVS
 
 
+def generate_report_1v1_hallmark(out):
+    tfile = open("template/hallmark-1v1.template")
+    tmpl = tfile.read()
+    today = datetime.date.today().strftime("%d%B%Y")
+    cc = 6
+
+    t = Template(tmpl)
+    r = t.render(
+        TODAY = today,
+        CC = cc,
+        lst_1v1 = lst_1v1
+    )
+    fw = open(out, "w")
+    fw.write("%s\n\n" % r)
+#endf generate_groupVS
+
+
+def generate_report_stageVS_hallmark(out):
+    tfile = open("template/hallmark-stageVS.template")
+    tmpl = tfile.read()
+    today = datetime.date.today().strftime("%d%B%Y")
+    cc = 6
+
+    t = Template(tmpl)
+    r = t.render(
+        TODAY = today,
+        CC = cc,
+        lst_stage = lst_stages
+    )
+    fw = open(out, "w")
+    fw.write("%s\n\n" % r)
+#endf generate_groupVS
+
+
+def generate_report_1v1_reactome(out):
+    tfile = open("template/reactome-1v1.template")
+    tmpl = tfile.read()
+    today = datetime.date.today().strftime("%d%B%Y")
+    cc = 6
+
+    t = Template(tmpl)
+    r = t.render(
+        TODAY = today,
+        CC = cc,
+        lst_1v1 = lst_1v1
+    )
+    fw = open(out, "w")
+    fw.write("%s\n\n" % r)
+#endf generate_groupVS
+
+def generate_report_stageVS_reactome(out):
+    tfile = open("template/reactome-stageVS.template")
+    tmpl = tfile.read()
+    today = datetime.date.today().strftime("%d%B%Y")
+    cc = 6
+
+    t = Template(tmpl)
+    r = t.render(
+        TODAY = today,
+        CC = cc,
+        lst_stage = lst_stages
+    )
+    fw = open(out, "w")
+    fw.write("%s\n\n" % r)
+#endf generate_groupVS
+
+
+
+
+def generate_report_1v1_kegg(out):
+    tfile = open("template/kegg-1v1.template")
+    tmpl = tfile.read()
+    today = datetime.date.today().strftime("%d%B%Y")
+    cc = 6
+
+    t = Template(tmpl)
+    r = t.render(
+        TODAY = today,
+        CC = cc,
+        lst_1v1 = lst_1v1
+    )
+    fw = open(out, "w")
+    fw.write("%s\n\n" % r)
+#endf generate_groupVS
+
+
+def generate_report_stageVS_kegg(out):
+    tfile = open("template/kegg-stageVS.template")
+    tmpl = tfile.read()
+    today = datetime.date.today().strftime("%d%B%Y")
+    cc = 6
+
+    t = Template(tmpl)
+    r = t.render(
+        TODAY = today,
+        CC = cc,
+        lst_stage = lst_stages
+    )
+    fw = open(out, "w")
+    fw.write("%s\n\n" % r)
+#endf generate_groupVS
+
+
+
+
+
+
 def main():
     out_dir = "report"+args.proj_tag
     generate_report_1v1("DE-GO-analysis-1v1.Rmd")
+    generate_report_1v1_hallmark("hallmark-1v1.Rmd")
+    generate_report_1v1_reactome("reactome-1v1.Rmd")
+    generate_report_1v1_kegg("kegg-1v1.Rmd")
     generate_report_stagesVS("DE-GO-analysis-stagesVS.Rmd")
+    generate_report_stageVS_hallmark("hallmark-stageVS.Rmd")
+    generate_report_stageVS_reactome("reactome-stageVS.Rmd")
+    generate_report_stageVS_kegg("kegg-stageVS.Rmd")
+
     generate_md_idx(os.path.join(out_dir, "index.md"))
+
+    out_dir = "report_pdf"
+    generate_md_idx_pdf(os.path.join(out_dir, "index.md"), out_dir)
 #endf main
 
 

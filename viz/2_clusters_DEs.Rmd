@@ -68,7 +68,7 @@ if(identical(params$cluster,"singleton")){
   scrna <- readRDS(file=file.path(savedir, "scrna_singleton_markergenes.Rds"))
   col_string = "RNA_snn_res."
 }else{
-  scrna <- readRDS(file=file.path(savedir, "scrna_batch_markergenes.Rds"))
+  scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
   col_string = "integrated_snn_res."
 }
 cluster.de.list <- scrna@tools$de_batch

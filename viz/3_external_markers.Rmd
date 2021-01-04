@@ -29,7 +29,7 @@ library(glue)
 pa <- params
 
 
-scrna <- readRDS(file = file.path(savedir, "scrna_markergenes.Rds"))
+scrna <- readRDS(file = file.path(savedir, "scrna_phase_comparing.Rds"))
 
 len <- length(scrna@tools$parameter)
 

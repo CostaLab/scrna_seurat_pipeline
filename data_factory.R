@@ -1,7 +1,7 @@
 #!/usr/bin/Rscript
 
 ###Set VERSION
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 
 # User needs to have .set_R_libs.R in their home directory
 # otherwise .set_R_libs.R in pipeline folder is used
@@ -22,6 +22,8 @@ if(length(args) == 1 && (args[1] == "-v" | args[1] == "--version")){
 
 suppressPackageStartupMessages(library(optparse))      ## Options
 suppressPackageStartupMessages(library(futile.logger)) ## logger
+suppressPackageStartupMessages(library(dplyr))
+`%ni%` <- Negate(`%in%`)
 
 
 
@@ -108,6 +110,12 @@ AllOptions <- function(){
                        help="downstream analysis default cluster name  [default %default]",
                        metavar="character")
 
+  parser <- add_option(parser, c("--harmony_dim"), type="character", default="1:20",
+                       help="dims keep to do clustering using harmony [default %default]",
+                       metavar="character")
+
+
+
 
   return(parser)
 }
@@ -122,6 +130,7 @@ MAXMEMMEGA            = pa$MaxMemMega
 SAVE_DIR              = pa$savedir
 CHARTS_DIR            = pa$chartsdir
 INTEGRATED_DIM        = eval(parse(text=pa$dims4Integrate))
+HARMONY_DIM           = eval(parse(text=pa$harmony_dim))
 FINDNEIGHBORS_DIM     = eval(parse(text=pa$Dims4FindNeighbors))
 CLUSTER_RESOLUTION    = pa$clusterresolution
 DEFUALT_CLUSTER_NAME  = pa$defaultclustername
@@ -251,7 +260,7 @@ plan_record <- function(plan){
 ## executing plan
 conf = conf[conf > 0]
 
-if(conf[1] != 2 & names(conf)[1] != "scrna_rawdata"){
+if(conf[1] != 2 & (names(conf)[1] %ni% c("scrna_phase_preprocess", "scrna_phase_singleton"))){
   logger.error("!!Run without loading data, please check execution plan")
   stop("exit 1")
 }
@@ -288,7 +297,6 @@ plan_record(plan)
 # library roxygen2 -> to maintain documents
 
 suppressPackageStartupMessages(library(Seurat))
-suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(glue))
 suppressPackageStartupMessages(library(future.apply))    ## parallel
 suppressPackageStartupMessages(library(WriteXLS))
@@ -299,6 +307,8 @@ suppressPackageStartupMessages(library(stringr))
 suppressPackageStartupMessages(library(Hmisc))
 suppressPackageStartupMessages(library(foreach))
 suppressPackageStartupMessages(library(doParallel))
+
+
 registerDoParallel(cores=WORKER_NUM)
 
 
@@ -333,13 +343,13 @@ conf_main <- function(){
         ret_list <-  eval(parse(text=func_call))
         scrna  <- ret_list[[1]]
         ret_code <- ret_list[[2]]
-        stopifnot(ret_code == 0)
-        if(key == "scrna_rawdata"){
-          scrna@tools$parameter[[cur_time]] <- unlist(pa)
-          scrna@tools$execution[[cur_time]] <- conf
+        if(ret_code != 0){
+          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
+          stop(glue("ERROR when run {key}"))
         }
-        saveRDS(scrna, file=file.path(SAVE_DIR, NRds))
-        logger.info(paste("finished", func_name))
+        phase_name <- get_output_name(scrna, key) ### only first store, or second time
+        saveRDS(scrna, file=file.path(SAVE_DIR, glue("{phase_name}.Rds")))
+        logger.info(paste("finished", f_name))
       }
     }else{
       logger.error("Wrong setting in config file in section RUN PARAMETERS\n Only 0 1 2 permitted")
@@ -348,6 +358,34 @@ conf_main <- function(){
     }
   }
   logger.info("===============Finished===============")
+}
+
+
+get_regressout_vector <- function(){
+    dic <- list(
+            "mito"      = "percent.mt",
+            "ribo"      = "percent.ribo",
+            "cellcycle" = c("G2M.Score", "S.Score") )
+
+    keep <- names(preprocess_regressout[preprocess_regressout==1])
+    ro <- unlist(dic[keep])
+    names(ro) <- NULL
+    return(ro)
+}
+
+get_output_name<- function(scrna, scrna_run_name){
+    ret_code <- 0
+    pconf <- configr::read.config("static/phase.ini")
+    phases <- names(pconf)
+
+    if (scrna_run_name %in% paste0("scrna_", phases)){
+      return(scrna_run_name)
+    }else if(length(unique(scrna$name)) == 1){
+      return("scrna_phase_singleton")
+    }else{
+      return("scrna_phase_comparing")
+    }
+
 }
 
 
@@ -455,6 +493,7 @@ generate_scrna_rawdata <- function(scrna){
              }
              scrna[["percent.mt"]] <- PercentageFeatureSet(scrna, pattern = "^mt-|^MT-")
              scrna[["percent.ribo"]] <- PercentageFeatureSet(scrna, pattern = "^Rpl|^Rps|^RPL|^RPS")
+             scrna@tools[["meta_order"]] <- list(name = names(data_src), stage=unique(stage_lst))
 
            },
            error=function(cond) {
@@ -470,6 +509,118 @@ generate_scrna_rawdata <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+generate_scrna_phase_singleton <- function(scrna){
+  ret_code <- 0
+  pconf <- configr::read.config("static/phase.ini")
+  pconf <- pconf[["phase_singleton"]]
+  pconf <- pconf[pconf== 1]
+
+
+  for (key in names(pconf)){
+      f_name = paste("generate_", key, sep="")
+      f_call = paste(f_name, "(scrna)", sep="")
+      logger.info(paste("executing", f_name))
+      ret_list <-  eval(parse(text=f_call))
+      scrna  <- ret_list[[1]]
+      ret_code <- ret_list[[2]]
+      if(ret_code != 0){
+          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
+          stop(glue("ERROR when run {key}"))
+      }
+      if(key == "scrna_rawdata"){
+          scrna@tools$parameter[[cur_time]] <- unlist(pa)
+          scrna@tools$execution[[cur_time]] <- conf
+          NRds = paste0(key, ".Rds")
+          saveRDS(scrna, file=file.path(SAVE_DIR, NRds))
+      }
+      logger.info(paste("finished", f_name))
+
+   }
+  return(list(scrna, ret_code))
+}
+
+
+
+generate_scrna_phase_preprocess <- function(scrna){
+  ret_code <- 0
+  pconf <- configr::read.config("static/phase.ini")
+  pconf <- pconf[["phase_preprocess"]]
+  pconf <- pconf[pconf== 1]
+
+
+  for (key in names(pconf)){
+      f_name = paste("generate_", key, sep="")
+      f_call = paste(f_name, "(scrna)", sep="")
+      logger.info(paste("executing", f_name))
+      ret_list <-  eval(parse(text=f_call))
+      scrna  <- ret_list[[1]]
+      ret_code <- ret_list[[2]]
+      if(ret_code != 0){
+          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
+          stop(glue("ERROR when run {key}"))
+      }
+      if(key == "scrna_rawdata"){
+          scrna@tools$parameter[[cur_time]] <- unlist(pa)
+          scrna@tools$execution[[cur_time]] <- conf
+          NRds = paste0(key, ".Rds")
+          saveRDS(scrna, file=file.path(SAVE_DIR, NRds))
+      }
+      logger.info(paste("finished", f_name))
+
+   }
+  return(list(scrna, ret_code))
+}
+
+generate_scrna_phase_clustering <- function(scrna){
+  ret_code <- 0
+  pconf <- configr::read.config("static/phase.ini")
+  pconf <- pconf[["phase_clustering"]]
+  pconf <- pconf[pconf== 1]
+
+  if (SPECIES == "Human"){
+    names(pconf) <- gsub("scrna_MCAannotate", "scrna_HCLannotate", names(pconf))
+  }
+
+  for (key in names(pconf)){
+      f_name = paste("generate_", key, sep="")
+      f_call = paste(f_name, "(scrna)", sep="")
+      logger.info(paste("executing", f_name))
+      ret_list <-  eval(parse(text=f_call))
+      scrna  <- ret_list[[1]]
+      ret_code <- ret_list[[2]]
+      if(ret_code != 0){
+          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
+          stop(glue("ERROR when run {key}"))
+      }
+      logger.info(paste("finished", f_name))
+
+   }
+  return(list(scrna, ret_code))
+}
+
+generate_scrna_phase_comparing <- function(scrna){
+  ret_code <- 0
+  pconf <- configr::read.config("static/phase.ini")
+  pconf <- pconf[["phase_comparing"]]
+  pconf <- pconf[pconf== 1]
+  for (key in names(pconf)){
+      f_name = paste("generate_", key, sep="")
+      f_call = paste(f_name, "(scrna)", sep="")
+      logger.info(paste("executing", f_name))
+      ret_list <-  eval(parse(text=f_call))
+      scrna  <- ret_list[[1]]
+      ret_code <- ret_list[[2]]
+      if(ret_code != 0){
+          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
+          stop(glue("ERROR when run {key}"))
+      }
+      logger.info(paste("finished", f_name))
+   }
+  return(list(scrna, ret_code))
+
+}
+
+
 
 generate_scrna_filter <- function(scrna){
   ret_code = 0
@@ -484,7 +635,7 @@ generate_scrna_filter <- function(scrna){
                              percent.ribo > pct_ribofloor &
                              percent.ribo < pct_riboceiling)
            },
-           error=function(cond) {
+            error=function(cond) {
              ret_code <<- -1
              logger.error(cond)
              logger.error(traceback())
@@ -508,7 +659,7 @@ generate_scrna_del_mitogenes <- function(scrna){
   restgenes <- setdiff(allgenes, mitogenes)
   scrna <- scrna[restgenes, ]
 
-  return(list(return_code, scrna))
+  return(list( scrna, return_code))
 }
 
 generate_scrna_preprocess <- function(scrna){
@@ -611,12 +762,12 @@ generate_scrna_cycleRegressOut <- function(scrna){
 }
 
 ## Regressout cell cycle and mitochondrial
-generate_scrna_CCmitoRegressOut<- function(scrna){
+generate_scrna_regressOut<- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA","percent.mt", "S.Score", "G2M.Score"), features = rownames(scrna))
-             scrna <- RunPCA(scrna, features = VariableFeatures(scrna), nfeatures.print = 10, reduction.name="EXCLUDE_CCMITO_PCA")
+             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA", get_regressout_vector()), features = rownames(scrna))
+             scrna <- RunPCA(scrna, features = VariableFeatures(scrna), nfeatures.print = 10, reduction.name="RegressOut_PCA")
            },
            error=function(cond) {
              ret_code <<- -1
@@ -632,102 +783,6 @@ generate_scrna_CCmitoRegressOut<- function(scrna){
 
 
 
-generate_scrna_mitoRegressOut<- function(scrna){
-  ret_code = 0
-  tryCatch(
-           {
-             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA","percent.mt"), features = rownames(scrna))
-             scrna <- RunPCA(scrna, features = VariableFeatures(scrna), nfeatures.print = 10, reduction.name="EXCLUDE_MITO_PCA")
-           },
-           error=function(cond) {
-             ret_code <<- -1
-             logger.error(cond)
-             logger.error(traceback())
-           },
-
-           finally={
-             return(list(scrna, ret_code))
-           })
-  return(list(scrna, ret_code))
-}
-
-generate_scrna_CCriboRegressOut<- function(scrna){
-  ret_code = 0
-  tryCatch(
-           {
-             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA", "percent.ribo","G2M.Score", "S.Score"), features = rownames(scrna))
-             scrna <- RunPCA(scrna, features = VariableFeatures(scrna), nfeatures.print = 10, reduction.name="EXCLUDE_CCRIBO_PCA")
-           },
-           error=function(cond) {
-             ret_code <<- -1
-             logger.error(cond)
-             logger.error(traceback())
-           },
-
-           finally={
-             return(list(scrna, ret_code))
-           })
-  return(list(scrna, ret_code))
-}
-
-generate_scrna_riboRegressOut<- function(scrna){
-  ret_code = 0
-  tryCatch(
-           {
-             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA","percent.ribo"), features = rownames(scrna))
-             scrna <- RunPCA(scrna, features = VariableFeatures(scrna), nfeatures.print = 10, reduction.name="EXCLUDE_RIBO_PCA")
-           },
-           error=function(cond) {
-             ret_code <<- -1
-             logger.error(cond)
-             logger.error(traceback())
-           },
-
-           finally={
-             return(list(scrna, ret_code))
-           })
-  return(list(scrna, ret_code))
-}
-
-generate_scrna_CCmitoRiboRegressOut<- function(scrna){
-  ret_code = 0
-  tryCatch(
-           {
-             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA", "percent.mt","percent.ribo","G2M.Score", "S.Score"), features = rownames(scrna))
-             scrna <- RunPCA(scrna, features = VariableFeatures(scrna), nfeatures.print = 10, reduction.name="EXCLUDE_CCMR_PCA")
-           },
-           error=function(cond) {
-             ret_code <<- -1
-             logger.error(cond)
-             logger.error(traceback())
-           },
-
-           finally={
-             return(list(scrna, ret_code))
-           })
-  return(list(scrna, ret_code))
-}
-
-
-
-generate_scrna_mitoRiboRegressOut<- function(scrna){
-  ret_code = 0
-  tryCatch(
-           {
-             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA", "percent.mt","percent.ribo"), features = rownames(scrna))
-             scrna <- RunPCA(scrna, features = VariableFeatures(scrna), nfeatures.print = 10, reduction.name="EXCLUDE_MR_PCA")
-           },
-           error=function(cond) {
-             ret_code <<- -1
-             logger.error(cond)
-             logger.error(traceback())
-           },
-
-           finally={
-             return(list(scrna, ret_code))
-           })
-  return(list(scrna, ret_code))
-}
 
 select_features <- function(data.list){
   ret_code = 0
@@ -774,45 +829,44 @@ scale_pca <- function(features){
   return(data.list)
 }
 
-generate_scrna_integration <- function(scrna){
+
+generate_scrna_integration_harmony <- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             bak_tools <- scrna@tools
-             data.list <- SplitObject(scrna, split.by = "name")
-             data.list <- lapply(X = data.list, FUN = function(x) {
-                                   x <- NormalizeData(x)
-                                   x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)})
-
-             anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM)## THIS IS CCA DIMENSIONS
-             scrna <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM) ## THIS IS PCA DIMENSION
-             ## keep the order of name and stage
-             scrna$name <- factor(scrna$name, levels=names(data_src))
-             scrna$stage <- factor(scrna$stage, levels=unique(stage_lst[names(data_src)]))
-             scrna@tools$parameter <- bak_tools$parameter
-             scrna@tools$execution <- bak_tools$execution
-
+            scrna <- harmony::RunHarmony(scrna,  "name", plot_convergence = "True", reduction = "RegressOut_PCA")
+            scrna <- RunUMAP(scrna, reduction = "harmony", dims = 1:20, reduction.name= "harmony_UMAP")
            },
            error=function(cond) {
              ret_code <<- -1
              logger.error(cond)
              logger.error(traceback())
            },
-
            finally={
-             rm(anchors)
-             rm(data.list)
              return(list(scrna, ret_code))
            })
+
   return(list(scrna, ret_code))
 }
 
-generate_scrna_ScaleIntegration <- function(scrna){
+generate_scrna_integration_seurat <- function(scrna){
   ret_code = 0
   tryCatch(
            {
+             data.list <- SplitObject(scrna, split.by = "name")
+             data.list <- lapply(X = data.list, FUN = function(x) {
+                                   x <- NormalizeData(x)
+                                   x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)})
+
+             ## scale = False to use previous scaled data
+             anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=F)## THIS IS CCA DIMENSIONS
+             scrna_inte <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM) ## THIS IS PCA DIMENSION
+             ## keep the order of integration obj
+             scrna_inte <- scrna_inte[, colnames(scrna)]
+             scrna[['integrated']] <- scrna_inte[['integrated']]
+             scrna@commands <- c(scrna@commands, scrna_inte@commands)
+             scrna@tools <- c(scrna@tools, scrna_inte@tools)
              DefaultAssay(scrna) <- "integrated"
-             # Run the standard workflow for visualization and clustering
              scrna <- ScaleData(scrna, verbose = FALSE)
              scrna <- RunPCA(scrna, npcs = 30, verbose = FALSE, reduction.name="INTE_PCA")
              scrna <- RunUMAP(scrna, reduction = "INTE_PCA", dims = 1:20, reduction.name="INTE_UMAP")
@@ -848,6 +902,7 @@ generate_scrna_ScaleSingleton <- function(scrna){
            })
   return(list(scrna, ret_code))
 }
+
 
 generate_scrna_sltn_batch_clustering <- function(scrna){
   ret_code = 0
@@ -896,12 +951,23 @@ generate_scrna_clustering <- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             a_meta <- sprintf("integrated_snn_res.%s", CLUSTER_RESOLUTION)
-             if(a_meta %in% colnames(scrna@meta.data)){
-               scrna$seurat_clusters <- scrna@meta.data[, a_meta]
-             }else{
-               scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM)
-               scrna <- FindClusters(scrna, resolution = CLUSTER_RESOLUTION) ##
+               DefaultAssay(scrna) <- "integrated"
+               scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM) %>%
+                            FindClusters(resolution = CLUSTER_RESOLUTION) ##
+
+               scrna$seurat_inte_clusters <- scrna$seurat_clusters
+
+               DefaultAssay(scrna) <- "RNA"
+               scrna = FindNeighbors(scrna, reduction = "harmony", dims = HARMONY_DIM) %>%
+                            FindClusters(resolution = CLUSTER_RESOLUTION) ##
+               scrna$harmony_inte_clusters <- scrna$seurat_clusters
+
+             if(INTEGRATION_OPTION == "harmony"){
+                scrna$seurat_clusters <- scrna$harmony_inte_clusters
+                scrna[["DEFAULT_UMAP"]] <- scrna[["harmony_UMAP"]]
+             }else if(INTEGRATION_OPTION == "seurat"){
+                scrna$seurat_clusters <- scrna$seurat_inte_clusters
+                scrna[["DEFAULT_UMAP"]] <- scrna[["INTE_UMAP"]]
              }
 
            },
@@ -966,8 +1032,15 @@ generate_scrna_batchclustering <- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM)
-             scrna <- FindClusters(scrna, resolution = CLUSTER_RESOLUTION_RANGE) ##
+
+             DefaultAssay(scrna) <- "integrated"
+             scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM) %>%
+                                  FindClusters(resolution = CLUSTER_RESOLUTION_RANGE) ##
+
+             DefaultAssay(scrna) <- "RNA"
+             scrna <-  FindNeighbors(scrna, reduction = "harmony", dims = HARMONY_DIM) %>%
+                                  FindClusters(resolution = CLUSTER_RESOLUTION_RANGE) ##
+
            },
            error=function(cond) {
              ret_code <<- -1
@@ -980,11 +1053,55 @@ generate_scrna_batchclustering <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+
+
+
+generate_scrna_fishertest_inte_clusters <- function(scrna){
+  ret_code = 0
+  CLUSTER_TO_TEST_VEC <- c("seurat_inte_clusters",  "harmony_inte_clusters")
+  for(CLUSTER_TO_TEST in CLUSTER_TO_TEST_VEC){
+
+     STAGE_TO_TEST <- "stage"
+     stages <- scrna@tools[["meta_order"]][[STAGE_TO_TEST]]
+
+     ## to avoid matrix still a table
+     count.matrix <- as.matrix(Matrix(table(scrna@meta.data[, CLUSTER_TO_TEST], scrna@meta.data[, STAGE_TO_TEST])))
+     count.matrix <- count.matrix[rowSums(count.matrix)>0, ]
+     df <- as.data.frame(count.matrix, stringsAsFactors=F)
+     help_sort_func <- ifelse(all.is.numeric(names(df)), as.numeric, function(x){x})
+     inm <-help_sort_func(rownames(df))
+     if(all.is.numeric(names(df))){
+       df$Cluster <- factor(rownames(df), levels=(min(inm)):(max(inm)))
+     }else{
+       df$Cluster <- factor(rownames(df))#, levels=(min(inm)):(max(inm)))
+     }
+
+
+     stages_comb <- list_stages()
+     for (x in 1:length(stages_comb)){
+       a <- stages_comb[[x]][1]
+       b <- stages_comb[[x]][2]
+       df[, glue("o.{a}")] <- sum(count.matrix[, a]) - df[, a]
+       df[, glue("o.{b}")] <- sum(count.matrix[, b]) - df[, b]
+       for(cluster in df$Cluster){
+         mtx <- matrix(unlist(df[cluster, c(a, b, glue("o.{a}"), glue("o.{b}"))]), nrow=2)
+         ft <- fisher.test(mtx,workspace=1e9)
+         df[cluster, glue("pval_{a}.vs.{b}")] <- ft$p.value
+         df[cluster, glue("odds.ratio_{a}.vs.{b}")] <- ft$estimate
+       }
+       df[, glue("pval.adjust_{a}.vs.{b}")] <- p.adjust(df[, glue("pval_{a}.vs.{b}")],  method = "bonferroni")
+     }
+     scrna@tools[[sprintf("fishertest_%s", CLUSTER_TO_TEST)]] <- df
+  }
+  return(list(scrna, ret_code))
+}
+
+
 generate_scrna_fishertest_clusters <- function(scrna){
   ret_code = 0
   CLUSTER_TO_TEST <- DEFUALT_CLUSTER_NAME
   STAGE_TO_TEST <- "stage"
-  stages <- names(table(scrna@meta.data[, STAGE_TO_TEST]))
+  stages <- scrna@tools[["meta_order"]][[STAGE_TO_TEST]]
 
   ## to avoid matrix still a table
   count.matrix <- as.matrix(Matrix(table(scrna@meta.data[, CLUSTER_TO_TEST], scrna@meta.data[, STAGE_TO_TEST])))
@@ -1071,7 +1188,7 @@ generate_scrna_remove_recluster <- function(scrna){
   Idents(scrna) <- "seurat_clusters"
   keeps <- setdiff(unique(scrna$seurat_clusters), scrna_remove_clusters)
   scrna <- subset(scrna, idents= keeps)
-  ret_list <- generate_scrna_integration(scrna)
+  ret_list <- generate_scrna_integration_seurat(scrna)
   scrna <- ret_list[[1]]
   ret_code <- ret_list[[2]]
   if(ret_code != 0){
@@ -1109,6 +1226,12 @@ generate_scrna_MCAannotate <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+##Void function, waiting for implementation
+generate_scrna_HCLannotate <- function(scrna){
+  ret_code = 0
+  logger.warn("Human HCL hasn't been implemented yet !!!!!")
+  return(list(scrna, ret_code))
+}
 
 generate_scrna_ExternalAnnotation <- function(scrna){
   ret_code = 0
@@ -1336,7 +1459,7 @@ generate_scrna_dego_name <- function(scrna){
                             de.list <- de.list[sapply(de.list, function(x){(!is.null(x[[1]]))})]
                             nm <- paste0(ident.use[1], ".vs.", ident.use[2])
                             return(de.list)
-           }, mc.cores=WORKER_NUM)
+           }, mc.cores=1)
 
   names(all_de_list) <- sapply(lst, function(x) paste0(x[1], ".vs.", x[2]) )
 
@@ -1401,7 +1524,7 @@ generate_scrna_dego_stage <- function(scrna){
                             de.list <- de.list[sapply(de.list, function(x){(!is.null(x[[1]]))})]
                             nm <- paste0(ident.use[1], ".vs.", ident.use[2])
                             return(de.list)
-           }, mc.cores=WORKER_NUM)
+           }, mc.cores=1)
 
   names(all_de_list) <- sapply(lst, function(x) paste0(x[1], ".vs.", x[2]) )
 

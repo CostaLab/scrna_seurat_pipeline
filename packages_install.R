@@ -49,7 +49,7 @@ bioc_pkgs_to_install = c(
 )
 
 github_pkgs_to_install = c(
-  "mahmoudibrahim/genesorteR", "ggjlab/scMCA"
+  "mahmoudibrahim/genesorteR", "ggjlab/scMCA", "immunogenomics/harmony"
 )
 gith_pkg_names = gsub("[a-z]+/","",github_pkgs_to_install)
 

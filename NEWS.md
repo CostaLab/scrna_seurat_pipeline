@@ -49,3 +49,23 @@
  * Add violin plot for cell cycle
  * Add tables for quanlity check and clusters
 
+## version 1.0.4  --- 12.24.2020
+ * Fix fishertest failed due to the calculating order
+ * Fix more cpu cores used than being set
+ * Change organizing of the index file
+ * Change Regressout using conf rather than different functions
+ * Change Most of viz are based on scrna_phase_comparing.Rds
+ * Change execution plan to several groups, make it sample
+    * scrna_phase_preprocess -- QC and regressOut mito etc.
+    * scrna_phase_clustering -- integration & clustering
+    * scrna_phase_comparing -- all other analysis
+    * scrna_phase_singleton -- single sample
+ * Add static/phase.ini to control each group of analysis functions
+    * each section is a group defines which and order to run in this group
+    * if set to 0 will omit
+ * Add harmony integration
+ * Add 2 viz clustering Rmds to exclusively plot harmony and seurat clusters
+ * Add G1.Score to clustering viz
+ * Add catching exception when comparing has been calculated
+ * Add once encountering error, stop for viz
+ * Add unimplemented function scrna_HCLannotate

@@ -88,11 +88,10 @@ stCond %>%
 
 ```{r  fig.width=9, fig.height=7}
 
-scrna <- readRDS(file = file.path(savedir, "scrna_filter.Rds"))
+scrna <- readRDS(file = file.path(savedir, "scrna_phase_preprocess.Rds"))
 Idents(object = scrna)<- "name"
 VlnPlot(object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo"), ncol=2,
         cols = colours, pt.size = 0)
-scrna <- readRDS(file = file.path(savedir, "scrna_cellcycle.Rds"))
 features = c("G1.Score", "S.Score", "G2M.Score")
 ps <- lapply(features, function(fea){
              VlnPlot(object = scrna,
@@ -156,7 +155,6 @@ patchwork::wrap_plots(list(p1, p2, p3), ncol=1)
 
 ## High variable genes
 ```{r  fig.width=13, fig.height=5}
-scrna <- readRDS(file = file.path(savedir, "scrna_preprocess.Rds"))
 top10 <- head(VariableFeatures(scrna), 10)
 plot1 <- VariableFeaturePlot(scrna)
 plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
@@ -169,12 +167,10 @@ patchwork::wrap_plots(list(plot1, plot2))
 ### before
 
 ```{r fig.width=10, fig.height=8}
-scrna <- readRDS(file = file.path(savedir, "scrna_cellcycle.Rds"))
 DimPlot(scrna, reduction="BCELLCYCLE_PCA")
 ```
 
 ### after
 ```{r fig.width=10, fig.height=8}
-scrna <- readRDS(file = file.path(savedir, "scrna_cycleRegressOut.Rds"))
 DimPlot(scrna, reduction="CELLCYCLED_PCA")
 ```
