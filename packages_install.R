@@ -10,9 +10,9 @@ R_install_list <- c("optparse", "futile.logger", "Seurat", "dplyr",
 Bio_install_list <- c("org.Mm.eg.db", "clusterProfiler",
                       "org.Hs.eg.db", "ComplexHeatmap",
                       "EnhancedVolcano","ReactomePA",
-                      "msigdbr", "harmony")
+                      "msigdbr")
 
-devtools_install_list <- c("mahmoudibrahim/genesorteR", "ggjlab/scMCA")
+devtools_install_list <- c("mahmoudibrahim/genesorteR", "ggjlab/scMCA", "immunogenomics/harmony")
 
 
 failed_vec <- c()
