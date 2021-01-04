@@ -22,6 +22,10 @@ if(file.exists(file.path(home_dir,".set_R_libs.R"))){
   source(".set_R_libs.R")
 }
 
+
+# report_data = as.list(list.files(file.path(paste0('report',PROJ),'data')))
+report_data_folder = file.path(paste0('report',PROJ),'data')
+
 rmarkdown::render(
   'scrna_pipeline_report.Rmd',
   output_file=file.path(paste0('report',PROJ),'scrna_report.html'),
@@ -30,6 +34,7 @@ rmarkdown::render(
     cluster=CLUSTER,
     project=PROJ,
     savedir=SAVE_DIR,
-    funcs=FUNCS
+    funcs=FUNCS,
+    report_data_folder=report_data_folder
   )
 )

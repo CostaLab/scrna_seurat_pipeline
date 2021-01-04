@@ -12,6 +12,7 @@ params:
     project: "name/tag of the project"
     savedir: "directory where rds files were saved"
     funcs: "analysis steps to be performed"
+    report_data_folder: "folder with the output tables"
 
 ---
 ---

@@ -39,8 +39,8 @@ ORGAN = scrna@tools$parameter[[len]]['organ']
 SPECIES = scrna@tools$parameter[[len]]['species']
 
 
-
-df <- read.csv(file=file.path(savedir, ANNOTATION_EXTERNAL_FILE), sep="\t", stringsAsFactors=F)
+# FIXME pathing
+df <- read.csv(file=file.path("..", ANNOTATION_EXTERNAL_FILE), sep="\t", stringsAsFactors=F)
 df <- df[!apply(df, 1, function(x) all(x=="")), ]
 
 if(!(ORGAN %in% df$Tissue.of.Origin)){
