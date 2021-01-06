@@ -228,9 +228,11 @@ DimPlot(scrna, reduction = "INTE_UMAP", group.by = "Phase")
 ### FeaturePlot
 ```{r fig.width=9, fig.height=7}
 FeaturePlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA"), 
+                   reduction = "INTE_UMAP",
                    cols = c("lightgrey", "red"),
                    ncol = 2)
 FeaturePlot(scrna, features = c("CC.Difference","G1.Score", "S.Score", "G2M.Score"),
+                   reduction = "INTE_UMAP",
                    cols = c("lightgrey", "red"),
                    ncol = 2)
 ```
@@ -248,6 +250,7 @@ VlnPlot(scrna, features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeatur
 ### MCA annotation
 ```{r fig.width=9, fig.height=7}
 p <- DimPlot(object = scrna, pt.size = 0.2,
+           reduction = "INTE_UMAP",
 	         group.by = "MCA_annotate") +
 	 theme(legend.position = "right", 
 		   legend.title = element_text(colour="blue", size=4, face="bold"),
@@ -264,6 +267,7 @@ HoverLocator(plot = p, information = FetchData(object = scrna, vars = c("MCA_ann
 
 ```{r fig.width=9, fig.height=7}
 p <- DimPlot(object = scrna, pt.size = 0.2,
+           reduction = "INTE_UMAP",
 	         group.by = "external_annotation") +
 	 theme(legend.position = "right", 
 		   legend.title = element_text(colour="blue", size=4, face="bold"),
