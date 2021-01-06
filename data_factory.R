@@ -349,7 +349,7 @@ conf_main <- function(){
         }
         phase_name <- get_output_name(scrna, key) ### only first store, or second time
         saveRDS(scrna, file=file.path(SAVE_DIR, glue("{phase_name}.Rds")))
-        logger.info(paste("finished", f_name))
+        logger.info(paste("finished", phase_name))
       }
     }else{
       logger.error("Wrong setting in config file in section RUN PARAMETERS\n Only 0 1 2 permitted")

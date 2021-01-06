@@ -37,22 +37,21 @@ u_stages = [x for x in stages if x not in seen and not seen.add(x)]  ##remove du
 lst_stages = list(combinations(u_stages, 2))
 
 cluster_use = "seurat_clusters"
-savedir = os.path.join(DATADIR, "save/")#robjects.r("SAVE_DIR")[0]
+savedir = os.path.join(DATADIR, "save"+args.proj_tag)#robjects.r("SAVE_DIR")[0]
 
-try:
-    options,args = getopt.getopt(sys.argv[1:],"c:")
-except getopt.GetoptError:
-    print("Error Parameters")
-    sys.exit()
-for name,value in options:
-    if name in "-c":
-        cluster_use = value
-        print("cluster use:", cluster_use)
+# try:
+#     options,args = getopt.getopt(sys.argv[1:],"c:")
+# except getopt.GetoptError:
+#     print("Error Parameters")
+#     sys.exit()
+# for name,value in options:
+#     if name in "-c":
+#         cluster_use = value
+#         print("cluster use:", cluster_use)
+
+def generate_1v1(out):
 
     fw = open(out, 'w')
-
-    fw.write("%s\n" %head)
-
 
 
     thead = open("template/head.template")

@@ -60,7 +60,7 @@ gith_pkg_names = gsub("[a-z]+/","",github_pkgs_to_install)
 if(!force_install){
   packages_to_install = packages_to_install[!(packages_to_install %in% installed.packages()[,"Package"])]
   bioc_pkgs_to_install = bioc_pkgs_to_install[!(bioc_pkgs_to_install %in% installed.packages()[,"Package"])]
-  github_pkgs_to_install = gith_pkg_names[!(gith_pkg_names %in% installed.packages()[,"Package"])]
+  github_pkgs_to_install = github_pkgs_to_install[!(gith_pkg_names %in% installed.packages()[,"Package"])]
 }
 
 if(length(packages_to_install)){

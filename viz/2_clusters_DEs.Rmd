@@ -9,137 +9,43 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '3'
+params:
+    cluster: "clusters to analyse"
+    project: "name/tag of the project"
+    savedir: "directory where rds files were saved"
+    funcs: "analysis steps to be performed"
+    report_data_folder: "folder with the output tables"
+    report_tables_folder: "folder with the table elements"
+    report_plots_folder: "folder with the plot elements"
+    report_plots_folder_png: "folder with the png plot elements"
+    report_plots_folder_pdf: "folder with the pdf plot elements"
 ---
 ## Cluster Results
 
-
-```{r , include=FALSE}
-savedir = params$savedir
-```
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
-library(ggplot2)
-library(gridExtra)
-library(cowplot)
-library(dplyr)
-library(stringr)
-library(digest)
-library(openxlsx)
-library(Seurat)
-library(Hmisc)
-
-
-GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
-  #de.data = cluster.de[[id]]
-  #de.data = plot_de
-  if (any(colnames(de.data) == "cluster")) {
-    top5.up <- de.data %>% group_by(cluster) %>% top_n(10, avg_logFC) %>%filter(avg_logFC > 0) %>% arrange(-avg_logFC)
-    top5.dn <- de.data %>% group_by(cluster) %>% top_n(10, -avg_logFC) %>%filter(avg_logFC < 0) %>% arrange(-avg_logFC)
-  } else {
-    top5.up <- de.data  %>% top_n(10, avg_logFC) %>%filter(avg_logFC > 0) %>% arrange(-avg_logFC)
-    top5.dn <- de.data  %>% top_n(10, -avg_logFC) %>%filter(avg_logFC < 0) %>% arrange(-avg_logFC)
-  }
-  top.up.dn <- rbind(top5.up, top5.dn)
-  top.up.dn$gene <- make.unique(top.up.dn$gene)
-  top.up.dn$type = ifelse(top.up.dn$avg_logFC > 0, "positive", "negative")
-  top.up.dn$type <- factor(top.up.dn$type, levels = c("positive", "negative"))
-  g <- ggplot(data = top.up.dn,
-              aes(x = gene, y = avg_logFC, fill = type)) +
-    geom_bar(stat="identity") +
-    scale_x_discrete(limits=rev(top.up.dn$gene)) +
-    theme(legend.position="none", axis.text=element_text(size=15)) +
-    scale_fill_manual(values = c(positive = "#E41A1C", negative = "#377EB8")) +
-    coord_flip()
-  if (!is.null(main)) {
-    g <- g + ggtitle(main)
-  } else {
-    g <- g + ggtitle("Average logFC for the top 5 up and top 5 down regulated genes")
-  }
-  if (!is.null(xlim)) {
-    # Coordinates are flipped
-    g <- g + ylim(xlim)
-  }
-  return(g)
-}
-
-
-col_string=""
-if(identical(params$cluster,"singleton")){
-  scrna <- readRDS(file=file.path(savedir, "scrna_singleton_markergenes.Rds"))
-  col_string = "RNA_snn_res."
-}else{
-  scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
-  col_string = "integrated_snn_res."
-}
-cluster.de.list <- scrna@tools$de_batch
-
-
-```
-
-
 ## Plot the top 10 DE genes in each cluster.
-
-```{r,echo=FALSE, warning= FALSE, message=FALSE, fig.width=13, fig.height=20}
-
-names(cluster.de.list) <- as.character(seq(0.1, 0.8, 0.1)) ##------
-for (resolution in seq(0.1, 0.8, 0.1)){
-        cluster.de <- cluster.de.list[[as.character(resolution)]]
-        cluster.de <- cluster.de[sapply(cluster.de, function(m) nrow(m) >0)]
-        cluster.de.top10 <- lapply(cluster.de, function(x) {
-            x %>% top_n(10, avg_logFC) %>% arrange(-avg_logFC)
-        })
-
-        plots = list()
-        help_sort_func <- ifelse(all.is.numeric(names(cluster.de)), as.numeric, function(x){x})
-        for (id in sort(help_sort_func(names(cluster.de)))) {
-          id = as.character(id)
-          cluster.genes <- cluster.de.top10[[id]]
-          x.lim = max(abs(cluster.de[[id]]$avg_logFC))
-          x.lim <- c(-x.lim, x.lim)
-          plots[[id]] <- GeneBarPlot(cluster.de[[id]], xlim = x.lim, main = id)
-        }
-
-        ps <- plot_grid(plotlist=plots)
-        title <- ggdraw() + draw_label(sprintf("resolution %s", resolution), fontface='bold')
-
-        p <- plot_grid(title, ps, ncol=1, rel_heights=c(0.1, 1))
-        print(p)
-}
-
+```{r clusterDE_genes_resolution, out.width="100%", echo=FALSE}
+flist = grep(
+  "clusterDE_genes_resolution-",
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+)
+knitr::include_graphics(flist)
 ```
-
 
 ## DE genes on heatmap
-
-```{r, echo=FALSE, warning= FALSE, message=FALSE, fig.height=13,  fig.width=10}
-DefaultAssay(scrna) <- "RNA"
-scrna <- ScaleData(scrna,  rownames(scrna))
-
-cluster.de.list <- scrna@tools$de_batch
-names(cluster.de.list) <- as.character(seq(0.1,0.8,0.1))
-names(cluster.de.list)
-
-for (resolution in seq(0.1, 0.8, 0.1)){
-      #cluster.de <- cluster.de.list[[as.character(resolution)]]
-        cluster.de.top8 <- lapply(cluster.de, function(x) {
-            x %>% top_n(8, avg_logFC) %>% arrange(-avg_logFC)
-        })
-
-        cluster.de.top8_combine <- do.call(rbind, cluster.de.top8)
-        genes <- unique(cluster.de.top8_combine$gene)
-
-        p <- DoHeatmap(object = scrna,
-                features = genes,
-                group.by = sprintf(paste0(col_string,"%.1f"), resolution),
-                disp.min = -2,
-                disp.max = 2,
-                slot = "scale.data",
-                assay = "RNA",
-                raster = FALSE,
-                combine= T) + ggtitle(sprintf("resolution: %.1f", resolution)) + NoLegend()
-
-        print(p)
-
-}
-
+```{r heatmapDE_genes_resolution, out.width="100%", echo=FALSE}
+flist = grep(
+  "heatmapDE_genes_resolution-",
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+)
+knitr::include_graphics(flist)
 ```
