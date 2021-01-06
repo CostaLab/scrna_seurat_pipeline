@@ -81,7 +81,7 @@ for a_func in "${FUNCS[@]}"; do
 		;;
 
 	Clusters_seurat)
-        Rscript -e rmarkdown::render"('2_clustering_harmony.Rmd',
+        Rscript -e rmarkdown::render"('2_clustering_seurat.Rmd',
                  output_file=\"report/data/clusters_seurat.html\",
                  clean=TRUE,
                  params=list(cluster=\"${cluster}\"))"
