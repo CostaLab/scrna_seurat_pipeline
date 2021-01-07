@@ -10,24 +10,15 @@ output:
     toc: yes
     toc_depth: '3'
 ---
+## Data directory: [data_dir](data)
+
 ## Output tables
-
-
-```{r, echo=FALSE}
-# this solution allows us to embed htmls with the compressed files themselves
-# however some browsers dont support it at all (IE) or partially (Chrome)
-# xfun::pkg_load2(c("htmltools", "mime"))
-# xfun::embed_dir(
-#   file.path(paste0('report',params$project),"data"),
-#   text = 'Download full data'
-# )
-```
-```{r}
+```{r include_data_in_html, echo=FALSE, eval=TRUE}
 ## Directory path as an example
 downloadthis::download_dir(
   path = params$report_data_folder,
   output_name = "Report_data",
-  button_label = "Download data",
+  button_label = " Download data",
   button_type = "success",
   has_icon = TRUE,
   icon = "fa fa-save",

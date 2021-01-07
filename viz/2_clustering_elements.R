@@ -3,6 +3,8 @@ scrna <- readRDS(file = file.path(savedir, "scrna_phase_comparing.Rds"))
 
 for(cluster_use in available_clusters){
 
+  message(paste0("### Producing elements for cluster: ",cluster_use))
+
   fisher_cluster_name <- paste0("fishertest_", cluster_use)
 
   if(cluster_use %ni% names(scrna@meta.data)){
@@ -20,6 +22,7 @@ for(cluster_use in available_clusters){
   if(cluster_use == "harmony_inte_clusters") umap_reduction = "harmony_UMAP"
   if(cluster_use == "seurat_inte_clusters") umap_reduction = "INTE_UMAP"
 
+  message("### Making cluster tree")
   plt = clustree(scrna, prefix = pref_def)
   save_ggplot_formats(
     plt=plt,
@@ -29,6 +32,7 @@ for(cluster_use in available_clusters){
   )
 
 
+  message("### Making umap resolution list")
   # UMAP resolution list
   cluster_de_list <- scrna@tools$de_batch
   # FIXME should be the resolution vector the user defined right?
@@ -54,7 +58,7 @@ for(cluster_use in available_clusters){
     width=15, height=20
   )
 
-
+  message("### Making umap grouped by name")
   ## Clusters
   plt = DimPlot(scrna, reduction = umap_reduction, group.by = "name", cols=colours)
   save_ggplot_formats(
@@ -63,6 +67,7 @@ for(cluster_use in available_clusters){
     plt_name=paste0("umap_groupby_name_",cluster_use),
     width=9, height=7
   )
+  message("### Making umap grouped by clusters")
   plt = DimPlot(scrna, reduction = umap_reduction, group.by = cluster_use, label=T, label.size=8)
   save_ggplot_formats(
     plt=plt,
@@ -82,6 +87,7 @@ for(cluster_use in available_clusters){
 
 
   ## Clusters Statistic
+  message("### Making cluster statistics barplot")
   df <- scrna@tools[[fisher_cluster_name]]
 
   if(all.is.numeric(df$Cluster)){ ## set int order if all cluster name are integers
@@ -157,6 +163,7 @@ for(cluster_use in available_clusters){
 
 
   ## Proportion
+  message("### Making sample proportions per cluster barplot")
   name_len <- length(table(scrna@meta.data$name))
   help_sort_func <- ifelse(
     all.is.numeric(unique(scrna@meta.data[, cluster_use])),
@@ -208,6 +215,7 @@ for(cluster_use in available_clusters){
 
 
   ## Amount Distribution
+  message("### Making sample amount distribution barplot")
   #myel <- SetAllIdent(scrna, "name")
 
   plt = BarPlot(
@@ -223,6 +231,7 @@ for(cluster_use in available_clusters){
 
 
   ## Cell cycle phase
+  message("### Making cellcycle phases umap")
   plt = DimPlot(scrna, reduction = umap_reduction, group.by = "Phase")
   save_ggplot_formats(
     plt=plt,
@@ -232,6 +241,7 @@ for(cluster_use in available_clusters){
   )
 
   ## FeaturePlot
+  message("### Making umap featureplot with QC elements")
   plt = FeaturePlot(
     scrna,
     features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA"),
@@ -245,6 +255,7 @@ for(cluster_use in available_clusters){
     plt_name=paste0("umap_featureplot_qc_",cluster_use),
     width=9, height=7
   )
+  message("### Making umap featureplot with ccycle elements")
   plt = FeaturePlot(
     scrna,
     features = c("CC.Difference","G1.Score", "S.Score", "G2M.Score"),
@@ -261,6 +272,7 @@ for(cluster_use in available_clusters){
 
 
   ## Violin Plot
+  message("### Making violinplot with QC and ccycle elements")
   plt = VlnPlot(
     scrna,
     features = c(
@@ -280,32 +292,67 @@ for(cluster_use in available_clusters){
 
 
   ## MCA annotation
-  plt <- DimPlot(
-    object = scrna,
-    reduction = umap_reduction,
-    pt.size = 0.2,
-    group.by = "MCA_annotate"
-  ) +
-  theme(
-    legend.position = "right",
-    legend.title = element_text(colour="blue", size=4, face="bold"),
-    legend.text = element_text(size = 7)
-  )
-  save_ggplot_formats(
-    plt=plt,
-    base_plot_dir=report_plots_folder,
-    plt_name=paste0("mca_annotate_",cluster_use),
-    width=9, height=7
-  )
+  if("MCA_annotate" %in% names(scrna@meta.data)){
+    message("### Making umap with MCA annotation")
+    plt <- DimPlot(
+      object = scrna,
+      reduction = umap_reduction,
+      pt.size = 0.2,
+      group.by = "MCA_annotate"
+    ) +
+    theme(
+      legend.position = "right",
+      legend.title = element_text(colour="blue", size=4, face="bold"),
+      legend.text = element_text(size = 7)
+    )
+    save_ggplot_formats(
+      plt=plt,
+      base_plot_dir=report_plots_folder,
+      plt_name=paste0("mca_annotate_",cluster_use),
+      width=9, height=7
+    )
 
-  # also save plot and information as rds so that it can be later rendered in the report as plotly
-  saveRDS(plt,file.path(report_plots_folder,paste0("mca_annotate_plt_",cluster_use,".RDS")))
-  saveRDS(
-    FetchData(object = scrna, vars = c("MCA_annotate", cluster_use)),
-    file.path(report_plots_folder,paste0("mca_annotate_info_",cluster_use,".RDS"))
-  )
+    # also save plot and information as rds so that it can be later rendered in the report as plotly
+    message("### Saving MCA annotation data to produce plotly in report")
+    saveRDS(plt,file.path(report_plots_folder,paste0("mca_annotate_plt_",cluster_use,".RDS")))
+    saveRDS(
+      FetchData(object = scrna, vars = c("MCA_annotate", cluster_use)),
+      file.path(report_plots_folder,paste0("mca_annotate_info_",cluster_use,".RDS"))
+    )
+  }
+
+  ## HCL annotation
+  if("MCA_annotate" %in% names(scrna@meta.data)){
+    message("### Making umap with HCL annotation")
+    plt <- DimPlot(
+      object = scrna,
+      reduction = umap_reduction,
+      pt.size = 0.2,
+      group.by = "HCL_annotate"
+    ) +
+    theme(
+      legend.position = "right",
+      legend.title = element_text(colour="blue", size=4, face="bold"),
+      legend.text = element_text(size = 7)
+    )
+    save_ggplot_formats(
+      plt=plt,
+      base_plot_dir=report_plots_folder,
+      plt_name=paste0("hcl_annotate_",cluster_use),
+      width=9, height=7
+    )
+
+    # also save plot and information as rds so that it can be later rendered in the report as plotly
+    message("### Saving MCA annotation data to produce plotly in report")
+    saveRDS(plt,file.path(report_plots_folder,paste0("hcl_annotate_plt_",cluster_use,".RDS")))
+    saveRDS(
+      FetchData(object = scrna, vars = c("HCL_annotate", cluster_use)),
+      file.path(report_plots_folder,paste0("hcl_annotate_info_",cluster_use,".RDS"))
+    )
+  }
 
   ## External Annotation
+  message("### Making umap with external annotation")
   plt <- DimPlot(object = scrna,reduction = umap_reduction, pt.size = 0.2, group.by = "external_annotation") +
     theme(legend.position = "right",
     legend.title = element_text(colour="blue", size=4, face="bold"),
@@ -317,6 +364,7 @@ for(cluster_use in available_clusters){
     plt_name=paste0("external_annotation_",cluster_use),
     width=9, height=7
   )
+  message("### Saving external annotation data to produce plotly in report")
   saveRDS(plt,file.path(report_plots_folder,paste0("external_annotation_plt_",cluster_use,".RDS")))
   saveRDS(
     FetchData(object = scrna, vars = c("external_annotation", cluster_use)),

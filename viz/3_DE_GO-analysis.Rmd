@@ -25,12 +25,13 @@ params:
 
 ## top10 DE heatmaps
 ```{r heatmap_top10_de_genes, out.width="100%", echo=FALSE}
-knitr::include_graphics(
+fname = knitr::include_graphics(
   file.path(
     params$report_plots_folder_png,
     paste0("heatmap_top10-de-genes_cluster-",params$cluster,".png")
   )
 )
+if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 
 ## Plot the top 10 DE genes in each cluster.
@@ -97,7 +98,7 @@ if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 
 ## DE genes on UMAP plot
-```{r heatmap_go_down, out.width="100%", echo=FALSE}
+```{r umap_de_genes, out.width="100%", echo=FALSE}
 flist = grep(
   paste0("umap_featureplot_top10deg_cluster-",params$cluster),
   list.files(

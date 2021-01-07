@@ -3,16 +3,6 @@
 ###Set VERSION
 VERSION = "1.0.4"
 
-# User needs to have .set_R_libs.R in their home directory
-# otherwise .set_R_libs.R in pipeline folder is used
-home_dir = file.path("","home",Sys.info()["user"])
-if(file.exists(file.path(home_dir,".set_R_libs.R"))){
-  source(file.path(home_dir,".set_R_libs.R"))
-}else{
-  source(".set_R_libs.R")
-}
-
-
 args <- commandArgs(trailingOnly = TRUE)
 if(length(args) == 1 && (args[1] == "-v" | args[1] == "--version")){
   message("scRNA seurat pipeline\nVersion: \n\t", VERSION, "\n")
@@ -221,6 +211,7 @@ pa$project_name       = PROJECT
 pa$organ              = ORGAN
 pa$species            = SPECIES
 pa$mca_name           = MCA_NAME
+pa$hcl_name           = HCL_NAME
 pa$external_file      = ANNOTATION_EXTERNAL_FILE
 pa$data_src           = data_src
 pa$stage_lst          = stage_lst
@@ -576,10 +567,6 @@ generate_scrna_phase_clustering <- function(scrna){
   pconf <- configr::read.config("static/phase.ini")
   pconf <- pconf[["phase_clustering"]]
   pconf <- pconf[pconf== 1]
-
-  if (SPECIES == "Human"){
-    names(pconf) <- gsub("scrna_MCAannotate", "scrna_HCLannotate", names(pconf))
-  }
 
   for (key in names(pconf)){
       f_name = paste("generate_", key, sep="")
@@ -1226,10 +1213,19 @@ generate_scrna_MCAannotate <- function(scrna){
   return(list(scrna, ret_code))
 }
 
-##Void function, waiting for implementation
 generate_scrna_HCLannotate <- function(scrna){
   ret_code = 0
-  logger.warn("Human HCL hasn't been implemented yet !!!!!")
+  suppressPackageStartupMessages(require(scHCL))
+  hcl_result <- scHCL(GetAssayData(object=scrna, slot="counts"), numbers_plot = 3)
+  pattern = gsub("-",".",HCL_NAME)
+  corr=hcl_result$cors_matrix[grep(pattern,rownames(hcl_result$cors_matrix),fixed=TRUE),]
+  if(dim(corr)[1] == 0){
+    logger.error("Cannot find HCL name, please check!")
+    stop("exit 1")
+  }
+  res=rownames(corr)[max.col(t(corr))]
+  scrna$HCL_annotate <- res
+  Idents(object=scrna) <- "name"
   return(list(scrna, ret_code))
 }
 

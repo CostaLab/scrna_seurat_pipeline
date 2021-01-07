@@ -52,11 +52,17 @@ library(kableExtra)
 ```
 ```{r de_go_analysis, child=if(any(grepl("DEGO",params$funcs,fixed=TRUE))) '3_DE_GO-analysis.Rmd'}
 ```
+```{r hallmark_analysis, child=if(any(grepl("hallmark",params$funcs,fixed=TRUE))) '3_hallmark.Rmd'}
+```
+```{r KEGG_analysis, child=if(any(grepl("KEGG",params$funcs,fixed=TRUE))) '3_KEGG.Rmd'}
+```
+```{r Reactome_analysis, child=if(any(grepl("Reactome",params$funcs,fixed=TRUE))) '3_Reactome.Rmd'}
+```
 ```{r de_go_stages, child=if(any(grepl("DEGO_stage",params$funcs,fixed=TRUE))) 'DE-GO-analysis-stagesVS.Rmd'}
 ```
 ```{r de_go_1v1, child=if(any(grepl("DEGO_1v1",params$funcs,fixed=TRUE))) 'DE-GO-analysis-1v1.Rmd'}
 ```
 
-# Download all the data
+# Download data
 ```{r get_data, child=if(any(grepl("GET_DATA",params$funcs,fixed=TRUE))) 'get_data.Rmd'}
 ```

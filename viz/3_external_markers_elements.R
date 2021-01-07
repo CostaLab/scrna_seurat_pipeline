@@ -33,12 +33,13 @@ saveRDS(
 )
 
 ## External markers
+message(paste0("### ","External markers"))
 o_genes <- rownames(scrna)
 for (a_celltype in celltype_names){
 
   genes <- mdf[mdf$Cell.Type==a_celltype,glue::glue("{SPECIES}.Gene") ]
 
-  print(a_celltype)
+  message(paste0("### ",a_celltype))
   genes <- intersect(genes, o_genes)
   if (length(genes) == 0){
       next
@@ -46,16 +47,18 @@ for (a_celltype in celltype_names){
 
   for (i in seq(1, length(genes), by=4)){
     ni = min(i+3, length(genes))
-    p1 <- FeaturePlot(object = scrna,
-              pt.size=0.01,
-              label=T,
-              label.size=2,
-              features = genes[i:ni],
-              reduction = "INTE_UMAP",
-              order = T,
-              cols = c("lightgrey", "red"),
-              ncol = 2,
-              max.cutoff = 'q95')
+    p1 <- FeaturePlot(
+      object = scrna,
+      pt.size=0.01,
+      label=T,
+      label.size=2,
+      features = genes[i:ni],
+      reduction = "INTE_UMAP",
+      order = T,
+      cols = c("lightgrey", "red"),
+      ncol = 2,
+      max.cutoff = 'q95'
+    )
     save_ggplot_formats(
       plt=p1,
       base_plot_dir=report_plots_folder,
@@ -94,6 +97,4 @@ for (a_celltype in celltype_names){
       width=9, height=7
     )
   }
-
-
 }

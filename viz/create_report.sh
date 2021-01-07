@@ -15,26 +15,26 @@ SAVED_DATA="../save${PROJ}"
 EXT_ANNOT="../external/Human_and_mouse_cell_markers-Markers.tsv"
 
 FUNCS=(
-        #Singleton
-        QC
-        DEs
-        Clusters
-        Clusters_harmony
-        Clusters_seurat
-        EXT_MARKERS
-        DEGO
-        # hallmark
-        # KEGG
-        # Reactome
-        # DEGO_stage
-        # hallmark_stage
-        # reactome_stage
-        # kegg_stage
-        # DEGO_1v1
-        # hallmark_1v1
-        # reactome_1v1
-        # kegg_1v1
-	#GET_DATA
+  #Singleton
+  QC
+  DEs
+  Clusters
+  Clusters_harmony
+  Clusters_seurat
+  EXT_MARKERS
+  DEGO
+  hallmark
+  KEGG
+  Reactome
+  # DEGO_stage
+  # hallmark_stage
+  # reactome_stage
+  # kegg_stage
+  # DEGO_1v1
+  # hallmark_1v1
+  # reactome_1v1
+  # kegg_1v1
+  GET_DATA
 )
 
 
@@ -68,4 +68,12 @@ grip --export report${PROJ}/index.md
 if [[ "$MAKE_ELEMENTS" == true ]]; then
   Rscript make_report_elements.R --proj=$PROJ --cluster=$cluster --save_dir=$SAVED_DATA --ext_annot=$EXT_ANNOT "${FUNCS[@]}"
 fi
+if [ $? -ne 0 ]; then
+  echo "make_report_elements.R has not finished successfully."
+  exit 1
+fi
 Rscript make_report.R --proj=$PROJ --cluster=$cluster --save_dir=$SAVED_DATA "${FUNCS[@]}"
+if [ $? -ne 0 ]; then
+  echo "make_report.R has not finished successfully."
+  exit 1
+fi
