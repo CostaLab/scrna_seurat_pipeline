@@ -19,8 +19,6 @@ params:
     report_plots_folder: "folder with the plot elements"
     report_plots_folder_png: "folder with the png plot elements"
     report_plots_folder_pdf: "folder with the pdf plot elements"
-
-
 ---
 
 ```{r , include=FALSE}
@@ -86,7 +84,7 @@ readRDS(
 ```
 
 ### Clusters Statistic
-```{r cluster_statistics, out.width="100%", echo=FALSE}
+```{r cluster_statistics, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 flist = grep(
   "cluster_statistics_",
   list.files(
@@ -101,7 +99,7 @@ knitr::include_graphics(flist)
 ```
 
 ### Proportion
-```{r cluster_sample_proportions, out.width="100%", echo=FALSE}
+```{r cluster_sample_proportions, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 knitr::include_graphics(
   file.path(
     params$report_plots_folder_png,
@@ -111,7 +109,7 @@ knitr::include_graphics(
 ```
 
 ### Amount Distribution
-```{r cluster_sample_distribution, out.width="100%", echo=FALSE}
+```{r cluster_sample_distribution, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 knitr::include_graphics(
   file.path(
     params$report_plots_folder_png,
@@ -159,7 +157,7 @@ knitr::include_graphics(
 ```
 
 ### MCA annotation
-```{r mca_annotate, out.width="100%", echo=FALSE}
+```{r mca_annotate, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 knitr::include_graphics(
   file.path(
     params$report_plots_folder_png,
@@ -167,7 +165,7 @@ knitr::include_graphics(
   )
 )
 ```
-```{r mca_annotate_hover, out.width="100%", echo=FALSE, eval=FALSE}
+```{r mca_annotate_hover, out.width="100%", echo=FALSE, eval=FALSE, eval=(params$cluster!="singleton")}
 plt = readRDS(
   file.path(
     params$report_plots_folder,
@@ -183,8 +181,33 @@ info = readRDS(
 Seurat::HoverLocator(plot = plt, information = info)
 ```
 
+### HCL annotation
+```{r hcl_annotate, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("hcl_annotate_",params$cluster,".png")
+  )
+)
+```
+```{r hcl_annotate_hover, out.width="100%", echo=FALSE, eval=FALSE, eval=(params$cluster!="singleton")}
+plt = readRDS(
+  file.path(
+    params$report_plots_folder,
+    paste0("hcl_annotate_plt_",params$cluster,".RDS")
+  )
+)
+info = readRDS(
+  file.path(
+    params$report_plots_folder,
+    paste0("hcl_annotate_info_",params$cluster,".RDS")
+  )
+)
+Seurat::HoverLocator(plot = plt, information = info)
+```
+
 ### External Annotation
-```{r external_annotation, out.width="100%", echo=FALSE}
+```{r external_annotation, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 knitr::include_graphics(
   file.path(
     params$report_plots_folder_png,
@@ -192,7 +215,7 @@ knitr::include_graphics(
   )
 )
 ```
-```{r external_annotation_hover, out.width="100%", echo=FALSE, eval=FALSE}
+```{r external_annotation_hover, out.width="100%", echo=FALSE, eval=FALSE, eval=(params$cluster!="singleton")}
 plt = readRDS(
   file.path(
     params$report_plots_folder,

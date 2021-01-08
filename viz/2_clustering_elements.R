@@ -17,10 +17,12 @@ for(cluster_use in available_clusters){
 
   pref_def = "integrated_snn_res."
   if(cluster_use == "harmony_inte_clusters") pref_def = "RNA_snn_res."
+  if(cluster_use == "singleton") pref_def = "RNA_snn_res."
 
   umap_reduction = "DEFAULT_UMAP"
   if(cluster_use == "harmony_inte_clusters") umap_reduction = "harmony_UMAP"
   if(cluster_use == "seurat_inte_clusters") umap_reduction = "INTE_UMAP"
+  if(cluster_use == "singleton") umap_reduction = "SINGLE_UMAP"
 
   message("### Making cluster tree")
   plt = clustree(scrna, prefix = pref_def)
@@ -44,7 +46,7 @@ for(cluster_use in available_clusters){
     plist[[nm]] <- DimPlot(
       scrna,
       reduction = umap_reduction,
-      group.by =  paste0("integrated_snn_res.", nm), #FIXME group.by remains the same regardless of reduction?
+      group.by =  paste0(pref_def, nm), #FIXME group.by remains the same regardless of reduction?
       label=T, label.size=8
     ) + ggtitle(sprintf("resolution %s", nm))
 
@@ -85,150 +87,151 @@ for(cluster_use in available_clusters){
     file.path(report_tables_folder, paste0("stCond_table_cluster_",cluster_use,".RDS"))
   )
 
+  if(cluster_use != "singleton"){
+    ## Clusters Statistics
+    message("### Making cluster statistics barplot")
+    df <- scrna@tools[[fisher_cluster_name]]
 
-  ## Clusters Statistic
-  message("### Making cluster statistics barplot")
-  df <- scrna@tools[[fisher_cluster_name]]
+    if(all.is.numeric(df$Cluster)){ ## set int order if all cluster name are integers
+      df$Cluster <- factor(
+        as.character(df$Cluster),
+        levels = sort(as.numeric(as.character(df$Cluster)), decreasing=T)
+      )
+    }
 
-  if(all.is.numeric(df$Cluster)){ ## set int order if all cluster name are integers
-    df$Cluster <- factor(
-      as.character(df$Cluster),
-      levels = sort(as.numeric(as.character(df$Cluster)), decreasing=T)
-    )
-  }
+    shift_trans = function(d = 0) {
+      scales::trans_new(
+        "shift",
+        transform = function(x) x - d,
+        inverse = function(x) x + d)
+    }
 
-  shift_trans = function(d = 0) {
-    scales::trans_new(
-      "shift",
-      transform = function(x) x - d,
-      inverse = function(x) x + d)
-  }
+    if(length(table(scrna$stage))<=2){
+      nm <- scrna@tools[["meta_order"]][["stage"]][1]
+      nm2 <- scrna@tools[["meta_order"]][["stage"]][2]
 
-  if(length(table(scrna$stage))<=2){
-    nm <- scrna@tools[["meta_order"]][["stage"]][1]
-    nm2 <- scrna@tools[["meta_order"]][["stage"]][2]
-
-    aodds <- glue("odds.ratio_{nm}.vs.{nm2}", )
-    plt <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
-      geom_bar(stat="identity") +
-      coord_flip() +
-      guides(fill = guide_legend(reverse = TRUE)) +
-      scale_y_continuous(trans = shift_trans(1)) + geom_text(data = df,
-                  aes_string("Cluster", 1, label = glue("pval.adjust_{nm}.vs.{nm2}")),
-                  position = "identity",
-                  size=4) +
-      ggtitle(sprintf("%s vs %s (odds ratio > 1 means more %s)", nm, nm2, nm))+
-      xlab("Cluster") +
-      ylab("odds ratio")+
-      theme_minimal()
-
-    save_ggplot_formats(
-      plt=plt,
-      base_plot_dir=report_plots_folder,
-      plt_name=paste0("cluster_statistics_",nm,"-vs-",nm2,"_",fisher_cluster_name),
-      width=9, height=7
-    )
-
-  }else{
-    pairs <- combn(1:length(table(scrna$stage)), 2)
-    n <- length(pairs)/2
-    for (i in 1:n){
-      i1 <- pairs[1:2, i][1]
-      i2 <- pairs[1:2, i][2]
-      nm <- scrna@tools[["meta_order"]][["stage"]][i1]
-      nm2 <- scrna@tools[["meta_order"]][["stage"]][i2]
-
-      aodds <- glue("odds.ratio_{nm}.vs.{nm2}")
+      aodds <- glue("odds.ratio_{nm}.vs.{nm2}", )
       plt <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
-      geom_bar(stat="identity") +
-      coord_flip() +
-      guides(fill = guide_legend(reverse = TRUE)) +
-      scale_y_continuous(trans = shift_trans(1)) +
-      geom_text(data = df,
-                aes_string("Cluster", 1, label = glue("pval.adjust_{nm}.vs.{nm2}")),
-                position = "identity",
-                size=4) +
-      ggtitle(glue("{nm} vs {nm2} (odds ratio > 1 means more {nm})"))+
-      xlab("Cluster") +
-      ylab("odds ratio")+
-      theme_minimal()
+        geom_bar(stat="identity") +
+        coord_flip() +
+        guides(fill = guide_legend(reverse = TRUE)) +
+        scale_y_continuous(trans = shift_trans(1)) + geom_text(data = df,
+                    aes_string("Cluster", 1, label = glue("pval.adjust_{nm}.vs.{nm2}")),
+                    position = "identity",
+                    size=4) +
+        ggtitle(sprintf("%s vs %s (odds ratio > 1 means more %s)", nm, nm2, nm))+
+        xlab("Cluster") +
+        ylab("odds ratio")+
+        theme_minimal()
+
       save_ggplot_formats(
         plt=plt,
         base_plot_dir=report_plots_folder,
         plt_name=paste0("cluster_statistics_",nm,"-vs-",nm2,"_",fisher_cluster_name),
         width=9, height=7
       )
+
+    }else{
+      pairs <- combn(1:length(table(scrna$stage)), 2)
+      n <- length(pairs)/2
+      for (i in 1:n){
+        i1 <- pairs[1:2, i][1]
+        i2 <- pairs[1:2, i][2]
+        nm <- scrna@tools[["meta_order"]][["stage"]][i1]
+        nm2 <- scrna@tools[["meta_order"]][["stage"]][i2]
+
+        aodds <- glue("odds.ratio_{nm}.vs.{nm2}")
+        plt <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
+        geom_bar(stat="identity") +
+        coord_flip() +
+        guides(fill = guide_legend(reverse = TRUE)) +
+        scale_y_continuous(trans = shift_trans(1)) +
+        geom_text(data = df,
+                  aes_string("Cluster", 1, label = glue("pval.adjust_{nm}.vs.{nm2}")),
+                  position = "identity",
+                  size=4) +
+        ggtitle(glue("{nm} vs {nm2} (odds ratio > 1 means more {nm})"))+
+        xlab("Cluster") +
+        ylab("odds ratio")+
+        theme_minimal()
+        save_ggplot_formats(
+          plt=plt,
+          base_plot_dir=report_plots_folder,
+          plt_name=paste0("cluster_statistics_",nm,"-vs-",nm2,"_",fisher_cluster_name),
+          width=9, height=7
+        )
+      }
     }
+
+
+    ## Proportion
+    message("### Making sample proportions per cluster barplot")
+    name_len <- length(table(scrna@meta.data$name))
+    help_sort_func <- ifelse(
+      all.is.numeric(unique(scrna@meta.data[, cluster_use])),
+      function(x) as.numeric(x) - 1,
+      as.character
+    )
+    scrna@meta.data[,cluster_use] <- help_sort_func(scrna@meta.data[,cluster_use])
+
+    cluster_propotion_before = t(prop.table(x = table(scrna@meta.data$name, scrna@meta.data[, cluster_use]), margin = 2))
+    cluster_propotion_before = cluster_propotion_before[,1:name_len]
+    cluster_propotion_before_sort = cluster_propotion_before[order(cluster_propotion_before[,1],
+                                            cluster_propotion_before[,2],decreasing=TRUE),]
+
+    # barplot uses default graphic device hence we use the std functions to save it
+    png(
+      filename=file.path(report_plots_folder_png,paste0("cluster_sample_proportions_",cluster_use,".png")),
+      width=13,
+      height=7,
+      units="in",
+      res=300
+    )
+    par(xpd=TRUE)
+    par(mar = c(5,2,2,12))
+    barplot(
+      t(cluster_propotion_before_sort), col=colours, xlab="cluster",
+      legend.text = colnames(cluster_propotion_before_sort),
+      args.legend = list(x ='right', bty='n', inset=c(-0.13,0), xpd = TRUE),
+      names.arg = rownames(cluster_propotion_before_sort),
+      main = "Propotion of dataset"
+    )
+    dev.off()
+
+    pdf(
+      file=file.path(report_plots_folder_pdf,paste0("cluster_sample_proportions_",cluster_use,".pdf")),
+      width=13,
+      height=7
+    )
+    par(xpd=TRUE)
+    par(mar = c(5,2,2,12))
+    barplot(
+      t(cluster_propotion_before_sort), col=colours, xlab="cluster",
+      legend.text = colnames(cluster_propotion_before_sort),
+      args.legend = list(x ='right', bty='n', inset=c(-0.13,0), xpd = TRUE),
+      names.arg = rownames(cluster_propotion_before_sort),
+      main = "Propotion of dataset"
+    )
+    dev.off()
+
+
+
+    ## Amount Distribution
+    message("### Making sample amount distribution barplot")
+    #myel <- SetAllIdent(scrna, "name")
+
+    plt = BarPlot(
+      scrna@meta.data[, cluster_use], fill = scrna$name, xlab = "Cluster",
+      legend.title = "Replicate", main = "Amount of samples in each cluster")
+    plt = plt + scale_fill_manual(values=colours)
+    save_ggplot_formats(
+      plt=plt,
+      base_plot_dir=report_plots_folder,
+      plt_name=paste0("cluster_sample_distribution_",cluster_use),
+      width=14, height=9
+    )
+
   }
-
-
-  ## Proportion
-  message("### Making sample proportions per cluster barplot")
-  name_len <- length(table(scrna@meta.data$name))
-  help_sort_func <- ifelse(
-    all.is.numeric(unique(scrna@meta.data[, cluster_use])),
-    function(x) as.numeric(x) - 1,
-    as.character
-  )
-  scrna@meta.data[,cluster_use] <- help_sort_func(scrna@meta.data[,cluster_use])
-
-  cluster_propotion_before = t(prop.table(x = table(scrna@meta.data$name, scrna@meta.data[, cluster_use]), margin = 2))
-  cluster_propotion_before = cluster_propotion_before[,1:name_len]
-  cluster_propotion_before_sort = cluster_propotion_before[order(cluster_propotion_before[,1],
-                                          cluster_propotion_before[,2],decreasing=TRUE),]
-
-  # barplot uses default graphic device hence we use the std functions to save it
-  png(
-    filename=file.path(report_plots_folder_png,paste0("cluster_sample_proportions_",cluster_use,".png")),
-    width=13,
-    height=7,
-    units="in",
-    res=300
-  )
-  par(xpd=TRUE)
-  par(mar = c(5,2,2,12))
-  barplot(
-    t(cluster_propotion_before_sort), col=colours, xlab="cluster",
-    legend.text = colnames(cluster_propotion_before_sort),
-    args.legend = list(x ='right', bty='n', inset=c(-0.13,0), xpd = TRUE),
-    names.arg = rownames(cluster_propotion_before_sort),
-    main = "Propotion of dataset"
-  )
-  dev.off()
-
-  pdf(
-    file=file.path(report_plots_folder_pdf,paste0("cluster_sample_proportions_",cluster_use,".pdf")),
-    width=13,
-    height=7
-  )
-  par(xpd=TRUE)
-  par(mar = c(5,2,2,12))
-  barplot(
-    t(cluster_propotion_before_sort), col=colours, xlab="cluster",
-    legend.text = colnames(cluster_propotion_before_sort),
-    args.legend = list(x ='right', bty='n', inset=c(-0.13,0), xpd = TRUE),
-    names.arg = rownames(cluster_propotion_before_sort),
-    main = "Propotion of dataset"
-  )
-  dev.off()
-
-
-
-  ## Amount Distribution
-  message("### Making sample amount distribution barplot")
-  #myel <- SetAllIdent(scrna, "name")
-
-  plt = BarPlot(
-    scrna@meta.data[, cluster_use], fill = scrna$name, xlab = "Cluster",
-    legend.title = "Replicate", main = "Amount of samples in each cluster")
-  plt = plt + scale_fill_manual(values=colours)
-  save_ggplot_formats(
-    plt=plt,
-    base_plot_dir=report_plots_folder,
-    plt_name=paste0("cluster_sample_distribution_",cluster_use),
-    width=14, height=9
-  )
-
 
   ## Cell cycle phase
   message("### Making cellcycle phases umap")
@@ -352,23 +355,30 @@ for(cluster_use in available_clusters){
   }
 
   ## External Annotation
-  message("### Making umap with external annotation")
-  plt <- DimPlot(object = scrna,reduction = umap_reduction, pt.size = 0.2, group.by = "external_annotation") +
-    theme(legend.position = "right",
-    legend.title = element_text(colour="blue", size=4, face="bold"),
-    legend.text = element_text(size = 7))
-
-  save_ggplot_formats(
-    plt=plt,
-    base_plot_dir=report_plots_folder,
-    plt_name=paste0("external_annotation_",cluster_use),
-    width=9, height=7
-  )
-  message("### Saving external annotation data to produce plotly in report")
-  saveRDS(plt,file.path(report_plots_folder,paste0("external_annotation_plt_",cluster_use,".RDS")))
-  saveRDS(
-    FetchData(object = scrna, vars = c("external_annotation", cluster_use)),
-    file.path(report_plots_folder,paste0("external_annotation_info_",cluster_use,".RDS"))
-  )
-
+  if("external_annotation" %in% names(scrna@meta.data)){
+    message("### Making umap with external annotation")
+    plt <- DimPlot(
+      object = scrna,
+      reduction = umap_reduction,
+      pt.size = 0.2,
+      group.by = "external_annotation"
+    ) +
+    theme(
+      legend.position = "right",
+      legend.title = element_text(colour="blue", size=4, face="bold"),
+      legend.text = element_text(size = 7)
+    )
+    save_ggplot_formats(
+      plt=plt,
+      base_plot_dir=report_plots_folder,
+      plt_name=paste0("external_annotation_",cluster_use),
+      width=9, height=7
+    )
+    message("### Saving external annotation data to produce plotly in report")
+    saveRDS(plt,file.path(report_plots_folder,paste0("external_annotation_plt_",cluster_use,".RDS")))
+    saveRDS(
+      FetchData(object = scrna, vars = c("external_annotation", cluster_use)),
+      file.path(report_plots_folder,paste0("external_annotation_info_",cluster_use,".RDS"))
+    )
+  }
 }

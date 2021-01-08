@@ -13,6 +13,7 @@ PROJ=$1
 MAKE_ELEMENTS=$2
 SAVED_DATA="../save${PROJ}"
 EXT_ANNOT="../external/Human_and_mouse_cell_markers-Markers.tsv"
+MAKE_SINGLE_FILE="TRUE"
 
 FUNCS=(
   #Singleton
@@ -72,7 +73,7 @@ if [ $? -ne 0 ]; then
   echo "make_report_elements.R has not finished successfully."
   exit 1
 fi
-Rscript make_report.R --proj=$PROJ --cluster=$cluster --save_dir=$SAVED_DATA "${FUNCS[@]}"
+Rscript make_report.R --proj=$PROJ --cluster=$cluster --save_dir=$SAVED_DATA --make_single_file=$MAKE_SINGLE_FILE "${FUNCS[@]}"
 if [ $? -ne 0 ]; then
   echo "make_report.R has not finished successfully."
   exit 1
