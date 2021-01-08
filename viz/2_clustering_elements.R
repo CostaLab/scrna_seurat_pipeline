@@ -322,7 +322,7 @@ for(cluster_use in available_clusters){
   }
 
   ## HCL annotation
-  if("MCA_annotate" %in% names(scrna@meta.data)){
+  if("HCL_annotate" %in% names(scrna@meta.data)){
     message("### Making umap with HCL annotation")
     plt <- DimPlot(
       object = scrna,
@@ -343,7 +343,7 @@ for(cluster_use in available_clusters){
     )
 
     # also save plot and information as rds so that it can be later rendered in the report as plotly
-    message("### Saving MCA annotation data to produce plotly in report")
+    message("### Saving HCL annotation data to produce plotly in report")
     saveRDS(plt,file.path(report_plots_folder,paste0("hcl_annotate_plt_",cluster_use,".RDS")))
     saveRDS(
       FetchData(object = scrna, vars = c("HCL_annotate", cluster_use)),
