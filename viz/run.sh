@@ -52,9 +52,140 @@ cluster="singleton"
 
 echo $PROJ
 echo -e "Use cluster slot ${RED} $cluster ${NC}"
-mkdir -p report${PROJ}/data
-cp -r ../charts${PROJ}/* report${PROJ}/data
-python code_generator.py -c $cluster -cf "conf/config${PROJ}.R" -b "../" -p "$PROJ"
-grip --export report${PROJ}/index.md
+mkdir -p report/data
+cp -r -p ../charts/* report/data
+python code_generator.py -c $cluster
+grip --export report/index.md
+
+
+
+for a_func in "${FUNCS[@]}"; do
+  case $a_func in
+	QC)
+        Rscript -e rmarkdown::render"('1_quality_report.Rmd',
+                 output_file=\"report/data/data_quality.html\",
+                 clean=TRUE)"
+		;;
+	DEs)
+        Rscript -e rmarkdown::render"('2_clusters_DEs.Rmd',
+                 output_file=\"report/data/clusters_DEs.html\",
+                 clean=TRUE)"
+		;;
+	Clusters)
+        Rscript -e rmarkdown::render"('2_clustering.Rmd',
+                 output_file=\"report/data/clusters.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	Clusters_harmony)
+        Rscript -e rmarkdown::render"('2_clustering_harmony.Rmd',
+                 output_file=\"report/data/clusters_harmony.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	Clusters_seurat)
+        Rscript -e rmarkdown::render"('2_clustering_seurat.Rmd',
+                 output_file=\"report/data/clusters_seurat.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	DEGO)
+        Rscript -e rmarkdown::render"('3_DE_GO-analysis.Rmd',
+                 output_file=\"report/data/dego.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+	KEGG)
+        Rscript -e rmarkdown::render"('3_KEGG.Rmd',
+                 output_file=\"report/data/KEGG.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	hallmark)
+        Rscript -e rmarkdown::render"('3_hallmark.Rmd',
+                 output_file=\"report/data/hallmark.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	Reactome)
+        Rscript -e rmarkdown::render"('3_Reactome.Rmd',
+                 output_file=\"report/data/Reactome.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+
+
+	EXT_MARKERS)
+        Rscript -e rmarkdown::render"('3_external_markers.Rmd',
+                 output_file=\"report/data/external_markers.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	DEGO_stage)
+        Rscript -e rmarkdown::render"('DE-GO-analysis-stagesVS.Rmd',
+                 output_file=\"report/data/gv.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+	DEGO_1v1)
+        Rscript -e rmarkdown::render"('DE-GO-analysis-1v1.Rmd',
+                 output_file=\"report/data/1vs1.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	hallmark_1v1)
+        Rscript -e rmarkdown::render"('hallmark-1v1.Rmd',
+                 output_file=\"report/data/hallmark_1vs1.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	reactome_1v1)
+        Rscript -e rmarkdown::render"('reactome-1v1.Rmd',
+                 output_file=\"report/data/reactome_1vs1.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+	kegg_1v1)
+        Rscript -e rmarkdown::render"('kegg-1v1.Rmd',
+                 output_file=\"report/data/kegg_1vs1.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	hallmark_stage)
+        Rscript -e rmarkdown::render"('hallmark-stageVS.Rmd',
+                 output_file=\"report/data/hallmark_stageVS.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	reactome_stage)
+        Rscript -e rmarkdown::render"('reactome-stageVS.Rmd',
+                 output_file=\"report/data/reactome_stageVS.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+	kegg_stage)
+        Rscript -e rmarkdown::render"('kegg-stageVS.Rmd',
+                 output_file=\"report/data/kegg_stageVS.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+
+  esac
+
+
+done
+
 
 Rscript make_report.R --proj=$PROJ --cluster=$cluster --save_dir=$SAVED_DATA "${FUNCS[@]}"

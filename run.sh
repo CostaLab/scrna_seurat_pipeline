@@ -16,14 +16,14 @@
 
 ################################################################
 # PATH
-if [ -r /usr/local_host/etc/bashrc ]; then
-   . /usr/local_host/etc/bashrc
-fi
-
-export PATH=/usr/bin:$PATH
-export PATH=/usr/local_host/bin:$PATH
-source /home/sz753404/for-se/anaconda3/bin/activate 
-conda activate r_env4s3
+#if [ -r /usr/local_host/etc/bashrc ]; then
+#   . /usr/local_host/etc/bashrc
+#fi
+#
+#export PATH=/usr/bin:$PATH
+#export PATH=/usr/local_host/bin:$PATH
+#source /home/sz753404/for-se/anaconda3/bin/activate
+#conda activate r_env4s3
 ################################################################
 # LIBRARYPATH
 

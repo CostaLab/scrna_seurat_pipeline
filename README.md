@@ -55,33 +55,38 @@ The pipeline is controlled by the most important configuration file **conf/confi
 
 ```R
 #conf/config.R
-### --------------Initail info----------------------------
-PROJECT = "Intestine project" ## set project name
-ORGAN = 'Intestine'           #For external annotation. Options: Blood, Heart, Intestine, Kidney
+### --------------Initial info----------------------------
+PROJECT = "Mouse Blood project" ## set project name
+ORGAN = 'Blood'           #For external annotation. Options: Blood, Heart, Intestine, Kidney
 SPECIES = "Mouse"         #For external annotation. Options: Human, Mouse
-MCA_NAME = "Fetal_Intestine"  #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
+MCA_NAME = "Bone-Marrow" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
 
-MINCELLS  = 5   ## when creating seuratobject
-MINGENES  = 50  ## when creating seuratobject
+
+# filtering params when create seurat object
+MINCELLS  = 5
+MINGENES  = 50
+
+
+INTEGRATION_OPTION = "seurat" ### or harmony
 
 ### -------------- Data SRC-----------------------------
 ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
 
 data_src = c(
-
-     NK1_Gli1_IRI     =   "data/summed_mtx/sum_NK1_Gli1_IRI/",
-     NK2_CD45_IRI     =   "data/summed_mtx/sum_NK2_CD45_IRI/",
-     NK3_Gli1_Sham    =   "data/summed_mtx/sum_NK3_Gli1_Sham/",
-     NK4_CD45_Sham    =   "data/summed_mtx/sum_NK4_CD45_Sham/"
+      A_MxCre    =   "data/A_MxCre",
+      B_MxCre    =   "data/B_MxCre",
+      C_Csnk     =   "data/C_Csnk",
+      D_Csnk     =   "data/D_Csnk"
 )
 
-#A_MxCre B_MxCre  C_Csnk  D_Csnk
+
+
 ##------------------ SET REPLICATE GROUP --------------
 stage_lst = c(
-    NK1_Gli1_IRI      = "IRI",
-    NK2_CD45_IRI      = "IRI",
-    NK3_Gli1_Sham     = "Sham",
-    NK4_CD45_Sham     = "Sham"
+        A_MxCre      =   "MxCre",
+        B_MxCre      =   "MxCre",
+        C_Csnk       =   "Csnk",
+        D_Csnk       =   "Csnk"
 )
 
 ## Phase_1, set 1 to regressout
@@ -103,7 +108,7 @@ conf = c(
        scrna_del_mitogenes        = 0, ## !!!DANGEROUS, once deleted, never recovered!!!
        scrna_merge_clusters       = 0, ## merge clusters
        scrna_remove_clusters      = 0, ## remove clusters
-       scrna_remove_recluster     = 0) ## remove clusters and recluster with defualt resolution
+       scrna_remove_recluster     = 0) ## remove clusters and recluster with default resolution
 
 
 
@@ -238,54 +243,50 @@ cluster="seurat_clusters" # <seurat_clusters|removed_clusters|remove_recluster|m
 r$> sessionInfo()
 R version 4.0.1 (2020-06-06)
 Platform: x86_64-conda_cos6-linux-gnu (64-bit)
-Running under: CentOS Linux 8 (Core)
+Running under: CentOS Linux 8
 
 Matrix products: default
 BLAS/LAPACK: /mnt/data/mingbo/miniconda3/envs/r4.0.1/lib/libopenblasp-r0.3.9.so
 
 locale:
- [1] LC_CTYPE=en_US.UTF-8    LC_NUMERIC=C            LC_TIME=en_US.UTF-8     LC_COLLATE=en_US.UTF-8  LC_MONETARY=C
- [6] LC_MESSAGES=en_US.UTF-8 LC_PAPER=C              LC_NAME=C               LC_ADDRESS=C            LC_TELEPHONE=C
-[11] LC_MEASUREMENT=C        LC_IDENTIFICATION=C
+ [1] LC_CTYPE=en_US.UTF-8    LC_NUMERIC=C            LC_TIME=en_US.UTF-8     LC_COLLATE=en_US.UTF-8  LC_MONETARY=C           LC_MESSAGES=en_US.UTF-8
+ [7] LC_PAPER=C              LC_NAME=C               LC_ADDRESS=C            LC_TELEPHONE=C          LC_MEASUREMENT=C        LC_IDENTIFICATION=C
 
 attached base packages:
- [1] grid      stats4    parallel  stats     graphics  grDevices utils     datasets  methods   base
+ [1] grid      parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base
 
 other attached packages:
- [1] EnhancedVolcano_1.7.16 ggrepel_0.8.2          ComplexHeatmap_2.6.0   openxlsx_4.2.2         digest_0.6.27          gridExtra_2.3
- [7] urltools_1.7.3         reshape2_1.4.4         cowplot_1.1.0          kableExtra_1.2.1       knitr_1.30             msigdbr_7.2.1
-[13] ReactomePA_1.33.1      org.Hs.eg.db_3.12.0    org.Mm.eg.db_3.12.0    AnnotationDbi_1.52.0   IRanges_2.24.0         S4Vectors_0.28.0
-[19] Biobase_2.50.0         BiocGenerics_0.36.0    clusterProfiler_3.17.5 scMCA_0.2.0            genesorteR_0.4.3       doParallel_1.0.16
-[25] iterators_1.0.13       foreach_1.5.1          Hmisc_4.4-1            Formula_1.2-4          survival_3.2-7         lattice_0.20-41
-[31] stringr_1.4.0          data.table_1.13.2      Matrix_1.2-18          clustree_0.4.3         ggraph_2.0.3           ggplot2_3.3.2
-[37] WriteXLS_6.0.0         future.apply_1.6.0     future_1.19.1          glue_1.4.2             dplyr_1.0.2            Seurat_3.2.2
-[43] futile.logger_1.4.3    optparse_1.6.6
+ [1] EnhancedVolcano_1.7.16 ggrepel_0.8.2          ComplexHeatmap_2.6.0   openxlsx_4.2.2         digest_0.6.27          dplyr_1.0.2
+ [7] cowplot_1.1.0          gridExtra_2.3          genesorteR_0.4.3       doParallel_1.0.16      iterators_1.0.13       foreach_1.5.1
+[13] Hmisc_4.4-1            Formula_1.2-4          survival_3.2-7         lattice_0.20-41        stringr_1.4.0          data.table_1.13.2
+[19] Matrix_1.2-18          clustree_0.4.3         ggraph_2.0.3           WriteXLS_6.0.0         future.apply_1.6.0     future_1.19.1
+[25] glue_1.4.2             Seurat_3.2.2           msigdbr_7.2.1          ReactomePA_1.33.1      org.Hs.eg.db_3.12.0    org.Mm.eg.db_3.12.0
+[31] AnnotationDbi_1.52.0   IRanges_2.24.0         S4Vectors_0.28.0       Biobase_2.50.0         BiocGenerics_0.36.0    clusterProfiler_3.17.5
+[37] scMCA_0.2.0            ggplot2_3.3.2
 
 loaded via a namespace (and not attached):
   [1] reticulate_1.16       tidyselect_1.1.0      RSQLite_2.2.1         htmlwidgets_1.5.2     BiocParallel_1.24.0   Rtsne_0.15
   [7] scatterpie_0.1.5      munsell_0.5.0         codetools_0.2-17      ica_1.0-2             DT_0.16               miniUI_0.1.1.1
- [13] withr_2.3.0           colorspace_1.4-1      GOSemSim_2.15.2       ggalt_0.4.0           rstudioapi_0.11       ROCR_1.0-11
- [19] tensor_1.5            Rttf2pt1_1.3.8        DOSE_3.15.4           listenv_0.8.0         polyclip_1.10-0       bit64_4.0.5
- [25] farver_2.0.3          pheatmap_1.0.12       downloader_0.4        vctrs_0.3.4           generics_0.1.0        lambda.r_1.2.4
+ [13] withr_2.3.0           colorspace_1.4-1      GOSemSim_2.15.2       ggalt_0.4.0           knitr_1.30            rstudioapi_0.11
+ [19] ROCR_1.0-11           tensor_1.5            Rttf2pt1_1.3.8        DOSE_3.15.4           listenv_0.8.0         polyclip_1.10-0
+ [25] bit64_4.0.5           farver_2.0.3          pheatmap_1.0.12       downloader_0.4        vctrs_0.3.4           generics_0.1.0
  [31] xfun_0.18             R6_2.5.0              ggbeeswarm_0.6.0      clue_0.3-57           graphlayouts_0.7.0    rsvd_1.0.3
  [37] spatstat.utils_1.17-0 fgsea_1.15.2          promises_1.1.1        scales_1.1.1          nnet_7.3-14           enrichplot_1.9.4
  [43] beeswarm_0.2.3        gtable_0.3.0          ash_1.0-15            Cairo_1.5-12.2        globals_0.13.1        goftest_1.2-2
  [49] tidygraph_1.2.0       rlang_0.4.8           GlobalOptions_0.1.2   splines_4.0.1         extrafontdb_1.0       lazyeval_0.2.2
- [55] checkmate_2.0.0       BiocManager_1.30.10   abind_1.4-5           backports_1.2.0       httpuv_1.5.4          qvalue_2.21.0
- [61] extrafont_0.17        tools_4.0.1           ellipsis_0.3.1        RColorBrewer_1.1-2    ggridges_0.5.2        Rcpp_1.0.5
- [67] plyr_1.8.6            base64enc_0.1-3       purrr_0.3.4           rpart_4.1-15          deldir_0.1-29         GetoptLong_1.0.4
- [73] pbapply_1.4-3         viridis_0.5.1         zoo_1.8-8             cluster_2.1.0         magrittr_1.5          futile.options_1.0.1
- [79] DO.db_2.9             circlize_0.4.11       triebeard_0.3.0       lmtest_0.9-38         RANN_2.6.1            reactome.db_1.70.0
- [85] fitdistrplus_1.1-1    matrixStats_0.57.0    patchwork_1.0.1       mime_0.9              evaluate_0.14         xtable_1.8-4
- [91] jpeg_0.1-8.1          mclust_5.4.6          shape_1.4.5           compiler_4.0.1        maps_3.3.0            tibble_3.0.4
- [97] KernSmooth_2.23-17    crayon_1.3.4          shadowtext_0.0.7      htmltools_0.5.0       mgcv_1.8-33           later_1.1.0.1
-[103] tidyr_1.1.2           DBI_1.1.0             tweenr_1.0.1          formatR_1.7           proj4_1.0-10          MASS_7.3-53
-[109] rappdirs_0.3.1        getopt_1.20.3         igraph_1.2.6          pkgconfig_2.0.3       rvcheck_0.1.8         foreign_0.8-80
-[115] plotly_4.9.2.1        xml2_1.3.2            vipor_0.4.5           webshot_0.5.2         rvest_0.3.6           sctransform_0.3.1
-[121] RcppAnnoy_0.0.16      graph_1.67.1          spatstat.data_1.4-3   rmarkdown_2.4         leiden_0.3.3          fastmatch_1.1-0
-[127] htmlTable_2.1.0       uwot_0.1.8            shiny_1.5.0           graphite_1.35.3       rjson_0.2.20          lifecycle_0.2.0
-[133] nlme_3.1-149          jsonlite_1.7.1        viridisLite_0.3.0     pillar_1.4.6          ggrastr_0.2.1         fastmap_1.0.1
-[139] httr_1.4.2            GO.db_3.12.1          zip_2.1.1             spatstat_1.64-1       png_0.1-7             shinythemes_1.1.2
-[145] bit_4.0.4             ggforce_0.3.2         stringi_1.5.3         blob_1.2.1            latticeExtra_0.6-29   memoise_1.1.0
-[151] irlba_2.3.3
+ [55] checkmate_2.0.0       BiocManager_1.30.10   reshape2_1.4.4        abind_1.4-5           backports_1.2.0       httpuv_1.5.4
+ [61] qvalue_2.21.0         extrafont_0.17        tools_4.0.1           ellipsis_0.3.1        RColorBrewer_1.1-2    ggridges_0.5.2
+ [67] Rcpp_1.0.5            plyr_1.8.6            base64enc_0.1-3       purrr_0.3.4           rpart_4.1-15          deldir_0.1-29
+ [73] GetoptLong_1.0.4      pbapply_1.4-3         viridis_0.5.1         zoo_1.8-8             cluster_2.1.0         magrittr_1.5
+ [79] DO.db_2.9             circlize_0.4.11       lmtest_0.9-38         RANN_2.6.1            reactome.db_1.70.0    fitdistrplus_1.1-1
+ [85] matrixStats_0.57.0    patchwork_1.0.1       mime_0.9              xtable_1.8-4          jpeg_0.1-8.1          mclust_5.4.6
+ [91] shape_1.4.5           compiler_4.0.1        maps_3.3.0            tibble_3.0.4          KernSmooth_2.23-17    crayon_1.3.4
+ [97] shadowtext_0.0.7      htmltools_0.5.0       mgcv_1.8-33           later_1.1.0.1         tidyr_1.1.2           DBI_1.1.0
+[103] tweenr_1.0.1          proj4_1.0-10          MASS_7.3-53           rappdirs_0.3.1        igraph_1.2.6          pkgconfig_2.0.3
+[109] rvcheck_0.1.8         foreign_0.8-80        plotly_4.9.2.1        vipor_0.4.5           sctransform_0.3.1     RcppAnnoy_0.0.16
+[115] graph_1.67.1          spatstat.data_1.4-3   leiden_0.3.3          fastmatch_1.1-0       htmlTable_2.1.0       uwot_0.1.8
+[121] shiny_1.5.0           graphite_1.35.3       rjson_0.2.20          lifecycle_0.2.0       nlme_3.1-149          jsonlite_1.7.1
+[127] viridisLite_0.3.0     pillar_1.4.6          ggrastr_0.2.1         fastmap_1.0.1         httr_1.4.2            GO.db_3.12.1
+[133] zip_2.1.1             spatstat_1.64-1       png_0.1-7             shinythemes_1.1.2     bit_4.0.4             ggforce_0.3.2
+[139] stringi_1.5.3         blob_1.2.1            latticeExtra_0.6-29   memoise_1.1.0         irlba_2.3.3
 ```

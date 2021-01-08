@@ -1,8 +1,9 @@
-### --------------Initail info----------------------------
-PROJECT = "Mouse heart Gli&CD45 project" ## set project name
-ORGAN = 'Heart'           #For external annotation. Options: Blood, Heart, Intestine, Kidney
+### --------------Initial info----------------------------
+PROJECT = "Mouse Blood project" ## set project name
+ORGAN = 'Blood'           #For external annotation. Options: Blood, Heart, Intestine, Kidney
 SPECIES = "Mouse"         #For external annotation. Options: Human, Mouse
-MCA_NAME = "Neonatal-Heart" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
+MCA_NAME = "Bone-Marrow" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
+
 
 # filtering params when create seurat object
 MINCELLS  = 5
@@ -15,21 +16,22 @@ INTEGRATION_OPTION = "seurat" ### or harmony
 ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
 
 data_src = c(
-
-     NK1_Gli1_IRI     =   "data/summed_mtx/sum_NK1_Gli1_IRI/",
-     NK2_CD45_IRI     =   "data/summed_mtx/sum_NK2_CD45_IRI/",
-     NK3_Gli1_Sham    =   "data/summed_mtx/sum_NK3_Gli1_Sham/",
-     NK4_CD45_Sham    =   "data/summed_mtx/sum_NK4_CD45_Sham/"
+      A_MxCre    =   "data/A_MxCre",
+      B_MxCre    =   "data/B_MxCre",
+      C_Csnk     =   "data/C_Csnk",
+      D_Csnk     =   "data/D_Csnk"
 )
+
 
 
 ##------------------ SET REPLICATE GROUP --------------
 stage_lst = c(
-    NK1_Gli1_IRI      = "IRI",
-    NK2_CD45_IRI      = "IRI",
-    NK3_Gli1_Sham     = "Sham",
-    NK4_CD45_Sham     = "Sham"
+        A_MxCre      =   "MxCre",
+        B_MxCre      =   "MxCre",
+        C_Csnk       =   "Csnk",
+        D_Csnk       =   "Csnk"
 )
+
 
 
 ## Phase_1, set 1 to regressout
@@ -56,7 +58,7 @@ conf = c(
        scrna_del_mitogenes        = 0, ## !!!DANGEROUS, once deleted, never recovered!!!
        scrna_merge_clusters       = 0, ## merge clusters
        scrna_remove_clusters      = 0, ## remove clusters
-       scrna_remove_recluster     = 0) ## remove clusters and recluster with defualt resolution
+       scrna_remove_recluster     = 0) ## remove clusters and recluster with default resolution
 
 ### ----------specific settings for some functions ----------------
 

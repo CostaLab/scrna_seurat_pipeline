@@ -1,74 +1,66 @@
-### --------------Initail info----------------------------
-PROJECT = "Intestine project" ## set project name 
-ORGAN = 'Intestine'           #For external annotation. Options: Blood, Heart, Intestine, Kidney
+### --------------Initial info----------------------------
+PROJECT = "Mouse Blood project" ## set project name
+ORGAN = 'Blood'           #For external annotation. Options: Blood, Heart, Intestine, Kidney
 SPECIES = "Mouse"         #For external annotation. Options: Human, Mouse
-MCA_NAME = "Fetal_Intestine"  #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/ 
+MCA_NAME = "Bone-Marrow" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
 
-MINCELLS  = 5 
+
+# filtering params when create seurat object
+MINCELLS  = 5
 MINGENES  = 50
 
+
+INTEGRATION_OPTION = "seurat" ### or harmony
+
 ### -------------- Data SRC-----------------------------
-ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv" 
+ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
 
-data_src = c( 
-      I = "./results.200402/I/filtered_feature_bc_matrix",
-      Nd7 = "./results.200402/Nd7/filtered_feature_bc_matrix",
-      Ad7 = "./results.200402/Ad7/filtered_feature_bc_matrix"
-
+data_src = c(
+      A_MxCre    =   "data/A_MxCre",
+      B_MxCre    =   "data/B_MxCre",
+      C_Csnk     =   "data/C_Csnk",
+      D_Csnk     =   "data/D_Csnk"
 )
 
-#A_MxCre B_MxCre  C_Csnk  D_Csnk 
+
+
 ##------------------ SET REPLICATE GROUP --------------
 stage_lst = c(
-        I      =   "I",
-        Nd7      =   "Nd7",
-        Ad7       =   "Ad7"
+        A_MxCre      =   "MxCre",
+        B_MxCre      =   "MxCre",
+        C_Csnk       =   "Csnk",
+        D_Csnk       =   "Csnk"
 )
+
+
+
+## Phase_1, set 1 to regressout
+preprocess_regressout = c("mito"      = 1,
+                          "ribo"      = 0,
+                          "cellcycle" = 1)
+
+
+#Analysis_phases
+#1. scrna_phase_preprocess
+#2. scrna_phase_clustering
+#3. scrna_phase_comparing
+
 
 ### -------------- RUN PARAMETERS-----------------------------
 
-## 0. omit,     1. calc & save,      2. load   3.  
+## 0. omit,     1. calc & save,      2. load
 conf = c(
-       scrna_rawdata              = 0, ## read count matrix and merge samples to a Seurat obj 
-       scrna_filter               = 0, ## filter nFeatureRNA and nCountRNA
-       scrna_preprocess           = 0, ## Normalize & FindvariablegFeatures and ScaleData
-       scrna_excludeRegressOut    = 0, ## Regress out mito and ribo effects 
-       scrna_cellcycle            = 0, ## Cell cycle scoring
-       scrna_cycleRegressOut      = 0, ## Regress out cell cycle effects
-       scrna_RegressOutAll        = 0, ## Regress out celly cycle & mito & ribo
-       scrna_integration          = 0, ## Integrate samples using Seurat 3
-       scrna_ScaleIntegration     = 0, ## ScaleDatai&PCA and UMAP
-       scrna_batchclustering      = 0, ## clustering with resolution from 0.1 to 0.8
-       scrna_batch_markergenes    = 0, ## Marker Genes for clusters with different resolutions
-       scrna_clustering           = 0, ## Set seurat_clusters or re-calculate
-       scrna_markergenes          = 0, ## markergenes for seurat_clusters
-       scrna_go                   = 0, ## Gene Ontology analysis
-       scrna_fishertest_clusters  = 0, ## fisher test for clusters and stages
-       scrna_MCAannotate          = 0, ## scMCA annotation celltypes
-       scrna_ExternalAnnotation   = 0, ## Annotation from given databases(tsv)
-       scrna_dego_name            = 0, ## DE & GO between samples
-       scrna_dego_stage           = 2, ## DE & GO between stages(conditions) 
-       scrna_merge_clusters       = 0, ## merge clusters 
-       scrna_remove_clusters      = 1, ## remove clusters 
-       scrna_remove_recluster     = 0, ## remove clusters and recluster with defualt resolution
-       scrna_markergenes          = 1, ## markergenes for seurat_clusters
-       scrna_go                   = 1, ## Gene Ontology analysis
-       scrna_dego_name            = 1, ## DE & GO between samples
-       scrna_dego_stage           = 1, ## GO down for mark genes
-       scrna_fishertest_clusters  = 1, ## fisher test for clusters and stages
-       scrna_MCAannotate          = 1, ## scMCA annotation celltypes
-       scrna_ExternalAnnotation   = 1) ## Annotation from given databases(tsv)
-
-
+       scrna_phase_preprocess     = 0, ## quality check and preprocessing before integration
+       scrna_phase_clustering     = 0, ## integration & clustering
+       scrna_phase_comparing      = 2, ## DE GO pathway analysis etc. All rest calculating will be stored here
+       scrna_cluster_annotation   = 0, ## Annotate clusters according to `cluster_annotation`
+       scrna_clusterwise_xcell    = 0, ## remove cells of each cluster according distinct criterion
+       scrna_del_mitogenes        = 0, ## !!!DANGEROUS, once deleted, never recovered!!!
+       scrna_merge_clusters       = 0, ## merge clusters
+       scrna_remove_clusters      = 1, ## remove clusters
+       scrna_remove_recluster     = 0) ## remove clusters and recluster with default resolution
 
 ### ----------specific settings for some functions ----------------
 
-scrna_merge_clusters = list(
-        "1+7" = c(1, 7),
-        "2+6" = c(2, 6),
-        "10+11+16" = c(10, 11, 16)
-)
-
 
 scrna_remove_clusters = c(1, 3, 6)
-scrna_remove_recluster = c(1, 3, 6)
