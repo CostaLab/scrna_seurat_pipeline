@@ -148,6 +148,10 @@ dir.create(report_tables_folder, recursive = TRUE)
 if(any(grepl("QC",funcs,fixed=TRUE))) source("1_quality_report_elements.R")
 if(any(grepl("DEs",funcs,fixed=TRUE))) source("2_clusters_DEs_elements.R")
 if(any(grepl("Clusters",funcs,fixed=TRUE))) source("2_clustering_elements.R")
+if(any(grepl("Singleton",funcs,fixed=TRUE))){
+  source("2_clustering_elements.R")
+  source("2_clusters_DEs_elements.R")
+}
 if(any(grepl("EXT_MARKERS",funcs,fixed=TRUE))) source("3_external_markers_elements.R")
 # FIXME possible problem where all term enrichment analysis is on the same place
 if(any(grepl("DEGO",funcs,fixed=TRUE))) source("3_DE_GO-analysis_elements.R")
