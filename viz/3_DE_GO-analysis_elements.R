@@ -217,6 +217,7 @@ for(enrich_cluster_name in enrch_analysis_vec){
         filename=file.path(report_plots_folder_png,paste0("heatmap_",enrich_type,"-",term_direction,"_cluster-",cluster,".png")),
         width=13,
         height=20,
+        type="cairo",
         units="in",
         res=300
       )

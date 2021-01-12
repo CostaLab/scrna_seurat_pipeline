@@ -1,5 +1,10 @@
 ## Clusters Resolution
-scrna <- readRDS(file = file.path(savedir, "scrna_phase_comparing.Rds"))
+if(identical(cluster,"singleton")){
+  # scrna <- readRDS(file=file.path(savedir, "scrna_singleton_markergenes.Rds"))
+  scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
+}else{
+  scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
+}
 
 for(cluster_use in available_clusters){
 
@@ -185,6 +190,7 @@ for(cluster_use in available_clusters){
       width=13,
       height=7,
       units="in",
+      type="cairo",
       res=300
     )
     par(xpd=TRUE)

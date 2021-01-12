@@ -1,7 +1,8 @@
 
 col_string=""
 if(identical(cluster,"singleton")){
-  scrna <- readRDS(file=file.path(savedir, "scrna_singleton_markergenes.Rds"))
+  # scrna <- readRDS(file=file.path(savedir, "scrna_singleton_markergenes.Rds"))
+  scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
   col_string = "RNA_snn_res."
 }else{
   scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))

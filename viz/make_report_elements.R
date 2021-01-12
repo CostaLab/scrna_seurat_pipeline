@@ -44,6 +44,7 @@ colours = c(
 save_ggplot_formats = function(
   plt, base_plot_dir, plt_name, create_plot_subdir=TRUE,
   formats=c("png","pdf"), units="in", width=20, height=20,
+  type="cairo",
   ...
 ){
   # if theres a plot and basedir
@@ -53,7 +54,12 @@ save_ggplot_formats = function(
       f_path_fmt = file.path(base_plot_dir,paste0(plt_name,".",fmt))
       if(create_plot_subdir) dir.create(file.path(base_plot_dir,fmt),recursive=TRUE,showWarnings=FALSE)
       if(dir.exists(file.path(base_plot_dir,fmt))) f_path_fmt = file.path(base_plot_dir,fmt,paste0(plt_name,".",fmt))
-      ggplot2::ggsave(filename=f_path_fmt,plot = plt,device = fmt,units = units,width = width,height = height,...)
+      if(fmt == "png"){
+        ggplot2::ggsave(filename=f_path_fmt,plot = plt,device = fmt,units = units,width = width,height = height,type=type,...)
+      }else{
+        ggplot2::ggsave(filename=f_path_fmt,plot = plt,device = fmt,units = units,width = width,height = height,...)
+      }
+
     }
   }
 }
