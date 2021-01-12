@@ -52,7 +52,12 @@ saveRDS(stCond,file.path(report_tables_folder,"stCond_prefilter.RDS"))
 ####################################################
 # post filtering
 ####################################################
-scrna <- readRDS(file = file.path(savedir, "scrna_phase_preprocess.Rds"))
+if(identical(cluster,"singleton")){
+  scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
+}else{
+  scrna <- readRDS(file = file.path(savedir, "scrna_phase_preprocess.Rds"))
+}
+
 Idents(object = scrna)<- "name"
 
 plt = VlnPlot(
