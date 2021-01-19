@@ -44,7 +44,7 @@ library(glue)
 
 #savedir <- "save/save-{{CC}}"
 savedir <- "../save"
-scrna <- readRDS(file.path(savedir, "scrna_phase_comparing.Rds"))
+scrna <- readRDS(file.path(params$savedir, "scrna_phase_comparing.Rds"))
 
 cluster_use <- params$cluster
 hallmark_sample_name <-paste0("pathway_name_", cluster_use)
