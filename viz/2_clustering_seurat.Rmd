@@ -157,7 +157,7 @@ knitr::include_graphics(
 ```
 
 ### HCL annotation
-```{r mca_annotate_seurat, out.width="100%", echo=FALSE}
+```{r hcl_annotate_seurat, out.width="100%", echo=FALSE}
 knitr::include_graphics(
   file.path(
     params$report_plots_folder_png,
