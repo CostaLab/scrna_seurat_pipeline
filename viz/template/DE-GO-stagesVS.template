@@ -9,6 +9,8 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '3'
+params:
+    cluster: "which cluster to analysis"
 ---
 ## Differential Expression & GO analysis(between groups)
 
