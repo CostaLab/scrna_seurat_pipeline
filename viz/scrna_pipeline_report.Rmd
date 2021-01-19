@@ -63,6 +63,9 @@ library(kableExtra)
 ```{r de_go_1v1, child=if(any(grepl("DEGO_1v1",params$funcs,fixed=TRUE))) 'DE-GO-analysis-1v1.Rmd'}
 ```
 
+# Interactive UMAPs
+[Interactive UMAPs ](data/interactive_UMAPs.html)
+
 # Download data
 ```{r get_data, child=if(any(grepl("GET_DATA",params$funcs,fixed=TRUE))) 'get_data.Rmd'}
 ```

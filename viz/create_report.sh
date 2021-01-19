@@ -35,6 +35,7 @@ FUNCS=(
   # hallmark_1v1
   # reactome_1v1
   # kegg_1v1
+  intUMAPs
   GET_DATA
 )
 

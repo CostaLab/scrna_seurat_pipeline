@@ -165,7 +165,7 @@ knitr::include_graphics(
   )
 )
 ```
-```{r mca_annotate_hover, out.width="100%", echo=FALSE, eval=FALSE, eval=(params$cluster!="singleton")}
+```{r mca_annotate_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
 plt = readRDS(
   file.path(
     params$report_plots_folder,
@@ -190,7 +190,7 @@ knitr::include_graphics(
   )
 )
 ```
-```{r hcl_annotate_hover, out.width="100%", echo=FALSE, eval=FALSE, eval=(params$cluster!="singleton")}
+```{r hcl_annotate_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
 plt = readRDS(
   file.path(
     params$report_plots_folder,
@@ -215,7 +215,7 @@ knitr::include_graphics(
   )
 )
 ```
-```{r external_annotation_hover, out.width="100%", echo=FALSE, eval=FALSE, eval=(params$cluster!="singleton")}
+```{r external_annotation_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
 plt = readRDS(
   file.path(
     params$report_plots_folder,

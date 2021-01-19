@@ -155,7 +155,15 @@ knitr::include_graphics(
   )
 )
 ```
-
+### HCL annotation
+```{r hcl_annotate_harmony, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("hcl_annotate_",fixed_cluster,".png")
+  )
+)
+```
 ### MCA annotation
 ```{r mca_annotate_harmony, out.width="100%", echo=FALSE}
 knitr::include_graphics(

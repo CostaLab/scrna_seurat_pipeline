@@ -77,6 +77,7 @@ for(i in FUNCS){
   if(grepl("hallmark_stage",i,fixed=TRUE)) render_func("hallmark-stageVS.Rmd","hallmark_stageVS")
   if(grepl("reactome_stage",i,fixed=TRUE)) render_func("reactome-stageVS.Rmd","reactome_stageVS")
   if(grepl("kegg_stage",i,fixed=TRUE)) render_func("kegg-stageVS.Rmd","kegg_stageVS")
+  if(grepl("intUMAPs",i,fixed=TRUE)) render_func("interactive_UMAPs.Rmd","interactive_UMAPs")
 }
 
 
