@@ -78,3 +78,64 @@ if [ $? -ne 0 ]; then
   echo "make_report.R has not finished successfully."
   exit 1
 fi
+
+
+for a_func in "${FUNCS[@]}"; do
+  case $a_func in
+	DEGO_stage)
+        Rscript -e rmarkdown::render"('DE-GO-analysis-stagesVS.Rmd',
+                 output_file=\"report/data/gv.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+	DEGO_1v1)
+        Rscript -e rmarkdown::render"('DE-GO-analysis-1v1.Rmd',
+                 output_file=\"report/data/1vs1.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	hallmark_1v1)
+        Rscript -e rmarkdown::render"('hallmark-1v1.Rmd',
+                 output_file=\"report/data/hallmark_1vs1.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	reactome_1v1)
+        Rscript -e rmarkdown::render"('reactome-1v1.Rmd',
+                 output_file=\"report/data/reactome_1vs1.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+	kegg_1v1)
+        Rscript -e rmarkdown::render"('kegg-1v1.Rmd',
+                 output_file=\"report/data/kegg_1vs1.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	hallmark_stage)
+        Rscript -e rmarkdown::render"('hallmark-stageVS.Rmd',
+                 output_file=\"report/data/hallmark_stageVS.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+	reactome_stage)
+        Rscript -e rmarkdown::render"('reactome-stageVS.Rmd',
+                 output_file=\"report/data/reactome_stageVS.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+	kegg_stage)
+        Rscript -e rmarkdown::render"('kegg-stageVS.Rmd',
+                 output_file=\"report/data/kegg_stageVS.html\",
+                 clean=TRUE,
+                 params=list(cluster=\"${cluster}\"))"
+		;;
+
+
+  esac
+
+done
