@@ -10,7 +10,15 @@ output:
     toc: yes
     toc_depth: '3'
 params:
-    cluster: "which cluster to analysis"
+    cluster: "clusters to analyse"
+    project: "name/tag of the project"
+    savedir: "directory where rds files were saved"
+    funcs: "analysis steps to be performed"
+    report_data_folder: "folder with the output tables"
+    report_tables_folder: "folder with the table elements"
+    report_plots_folder: "folder with the plot elements"
+    report_plots_folder_png: "folder with the png plot elements"
+    report_plots_folder_pdf: "folder with the pdf plot elements"
 ---
 ## Differential Expression & GO analysis(between groups)
 
