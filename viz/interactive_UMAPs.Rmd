@@ -28,7 +28,7 @@ knitr::opts_chunk$set(warning = F, message = F, echo = T)
 ## Cluster: `r colorize(params$cluster,"red")`
 
 ### HCL annotation
-```{r hcl_interactive, out.width="100%", echo=FALSE, eval=FALSE}
+```{r hcl_interactive, out.width="100%", echo=FALSE, eval=TRUE}
 plt = readRDS(
   file.path(
     params$report_plots_folder,
@@ -45,7 +45,7 @@ Seurat::HoverLocator(plot = plt, information = info)
 ```
 
 ### MCA annotation
-```{r mca_interactive, out.width="100%", echo=FALSE, eval=FALSE}
+```{r mca_interactive, out.width="100%", echo=FALSE, eval=TRUE}
 plt = readRDS(
   file.path(
     params$report_plots_folder,
@@ -62,7 +62,7 @@ Seurat::HoverLocator(plot = plt, information = info)
 ```
 
 ### External Annotation
-```{r external_annot_interactive, out.width="100%", echo=FALSE, eval=FALSE}
+```{r external_annot_interactive, out.width="100%", echo=FALSE, eval=TRUE}
 plt = readRDS(
   file.path(
     params$report_plots_folder,
