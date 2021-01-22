@@ -32,6 +32,11 @@
 ## 50 cores run, future memory
 Rscript data_factory.R -n 50  --MaxMemMega=100000
 
+
+## Preferred setup with a project name (i.e. YOURPROJ)
+# Rscript data_factory.R -n 8  --MaxMemMega=180000 -c conf/configYOURPROJ.R -s saveYOURPROJ -e chartsYOURPROJ -a seurat_clusters
+
+
 # set config file to use, default(conf/config.R) 
 #Rscript data_factory.R -c conf/another_config.R 
 
