@@ -38,7 +38,7 @@ packages_to_install = c(
   "rmarkdown", "reshape2", "circlize", "BiocManager",
   "kableExtra", "assertthat", "mclust", "shinythemes",
   "systemfonts", "igraph", "proj4", "Cairo", "ggalt",
-  "urltools"
+  "urltools", "downloadthis"
 )
 
 bioc_pkgs_to_install = c(
@@ -49,7 +49,7 @@ bioc_pkgs_to_install = c(
 )
 
 github_pkgs_to_install = c(
-  "mahmoudibrahim/genesorteR", "ggjlab/scMCA", "immunogenomics/harmony"
+  "mahmoudibrahim/genesorteR", "ggjlab/scMCA", "immunogenomics/harmony", "ggjlab/scHCL"
 )
 gith_pkg_names = gsub("[a-z]+/","",github_pkgs_to_install)
 
