@@ -3,6 +3,7 @@ PROJECT = "Mouse Blood project" ## set project name
 ORGAN = 'Blood'           #For external annotation. Options: Blood, Heart, Intestine, Kidney
 SPECIES = "Mouse"         #For external annotation. Options: Human, Mouse
 MCA_NAME = "Bone-Marrow" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
+HCL_NAME = "Adult-Bone-Marrow-CD34P" #For HCL annotation.
 
 
 # filtering params when create seurat object
