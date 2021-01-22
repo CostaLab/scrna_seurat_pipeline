@@ -3,7 +3,6 @@
 ###Set VERSION
 VERSION = "1.0.4"
 
-
 args <- commandArgs(trailingOnly = TRUE)
 if(length(args) == 1 && (args[1] == "-v" | args[1] == "--version")){
   message("scRNA seurat pipeline\nVersion: \n\t", VERSION, "\n")
@@ -212,6 +211,7 @@ pa$project_name       = PROJECT
 pa$organ              = ORGAN
 pa$species            = SPECIES
 pa$mca_name           = MCA_NAME
+pa$hcl_name           = HCL_NAME
 pa$external_file      = ANNOTATION_EXTERNAL_FILE
 pa$data_src           = data_src
 pa$stage_lst          = stage_lst
@@ -327,11 +327,11 @@ conf_main <- function(){
       scrna@tools$execution[[cur_time]] <- conf
       logger.info(paste("finished loading", NRds))
     }else if(val==1){
-      f_name = paste("generate_", key, sep="")
-      f_call = paste(f_name, "(scrna)", sep="")
-      logger.info(paste("executing", f_name))
+      func_name = paste("generate_", key, sep="")
+      func_call = paste(func_name, "(scrna)", sep="")
+      logger.info(paste("executing", func_name))
       if(startsWith(key, "scrna")){
-        ret_list <-  eval(parse(text=f_call))
+        ret_list <-  eval(parse(text=func_call))
         scrna  <- ret_list[[1]]
         ret_code <- ret_list[[2]]
         if(ret_code != 0){
@@ -340,7 +340,7 @@ conf_main <- function(){
         }
         phase_name <- get_output_name(scrna, key) ### only first store, or second time
         saveRDS(scrna, file=file.path(SAVE_DIR, glue("{phase_name}.Rds")))
-        logger.info(paste("finished", f_name))
+        logger.info(paste("finished", phase_name))
       }
     }else{
       logger.error("Wrong setting in config file in section RUN PARAMETERS\n Only 0 1 2 permitted")
@@ -567,10 +567,6 @@ generate_scrna_phase_clustering <- function(scrna){
   pconf <- configr::read.config("static/phase.ini")
   pconf <- pconf[["phase_clustering"]]
   pconf <- pconf[pconf== 1]
-
-  if (SPECIES == "Human"){
-    names(pconf) <- gsub("scrna_MCAannotate", "scrna_HCLannotate", names(pconf))
-  }
 
   for (key in names(pconf)){
       f_name = paste("generate_", key, sep="")
@@ -867,11 +863,28 @@ generate_scrna_integration_seurat <- function(scrna){
              logger.error(cond)
              logger.error(traceback())
            },
-
            finally={
-             rm(anchors)
-             rm(data.list)
-             rm(scrna_inte)
+             return(list(scrna, ret_code))
+           })
+  return(list(scrna, ret_code))
+}
+
+generate_scrna_ScaleSingleton <- function(scrna){
+  ret_code = 0
+  tryCatch(
+           {
+
+             # Run the standard workflow for visualization and clustering
+             scrna <- ScaleData(scrna, verbose = FALSE)
+             scrna <- RunPCA(scrna, npcs = 30, verbose = FALSE, reduction.name="SINGLE_PCA")
+             scrna <- RunUMAP(scrna, reduction = "SINGLE_PCA", dims = 1:20, reduction.name="SINGLE_UMAP")
+           },
+           error=function(cond) {
+             ret_code <<- -1
+             logger.error(cond)
+             logger.error(traceback())
+           },
+           finally={
              return(list(scrna, ret_code))
            })
   return(list(scrna, ret_code))
@@ -882,8 +895,8 @@ generate_scrna_sltn_batch_clustering <- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             scrna <- FindNeighbors(scrna, reduction = "RegressOut_PCA", dims = FINDNEIGHBORS_DIM)
-             scrna <- FindClusters(scrna, resolution = seq(0.1, 0.8, 0.1)) ##
+             scrna <- FindNeighbors(scrna, reduction = "SINGLE_PCA", dims = FINDNEIGHBORS_DIM)
+             scrna <- FindClusters(scrna, resolution = CLUSTER_RESOLUTION_RANGE) ##
 
            },
            error=function(cond) {
@@ -903,14 +916,13 @@ generate_scrna_singleton_clustering <- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             #a_meta <- sprintf("integrated_snn_res.%s", CLUSTER_RESOLUTION)
-             #if(a_meta %in% colnames(scrna@meta.data)){
-             #    scrna$seurat_clusters <- scrna@meta.data[, a_meta]
-             #}else{
-             scrna <- FindNeighbors(scrna, reduction = "RegressOut_PCA", dims = FINDNEIGHBORS_DIM)
-             scrna <- FindClusters(scrna, resolution = CLUSTER_RESOLUTION) ##
-             #}
-
+             a_meta <- sprintf("RNA_snn_res.%s", CLUSTER_RESOLUTION)
+             if(a_meta %in% colnames(scrna@meta.data)){
+                scrna@meta.data[, DEFUALT_CLUSTER_NAME] <- scrna@meta.data[, a_meta]
+             }else{
+               scrna <- FindNeighbors(scrna, reduction = "SINGLE_PCA", dims = FINDNEIGHBORS_DIM)
+               scrna <- FindClusters(scrna, resolution = CLUSTER_RESOLUTION) ##
+             }
            },
            error=function(cond) {
              ret_code <<- -1
@@ -1201,10 +1213,19 @@ generate_scrna_MCAannotate <- function(scrna){
   return(list(scrna, ret_code))
 }
 
-##Void function, waiting for implementation
 generate_scrna_HCLannotate <- function(scrna){
   ret_code = 0
-  logger.warn("Human HCL hasn't been implemented yet !!!!!")
+  suppressPackageStartupMessages(require(scHCL))
+  hcl_result <- scHCL(GetAssayData(object=scrna, slot="counts"), numbers_plot = 3)
+  pattern = gsub("-",".",HCL_NAME)
+  corr=hcl_result$cors_matrix[grep(pattern,rownames(hcl_result$cors_matrix),fixed=TRUE),]
+  if(dim(corr)[1] == 0){
+    logger.error("Cannot find HCL name, please check!")
+    stop("exit 1")
+  }
+  res=rownames(corr)[max.col(t(corr))]
+  scrna$HCL_annotate <- res
+  Idents(object=scrna) <- "name"
   return(list(scrna, ret_code))
 }
 
@@ -1312,6 +1333,36 @@ generate_scrna_batch_markergenes <- function(scrna){
            })
   return(list(scrna, ret_code))
 }
+
+generate_scrna_singleton_markergenes <- function(scrna){
+  ret_code = 0
+  tryCatch(
+           {
+             len <- length(CLUSTER_RESOLUTION_RANGE)
+             cluster.de.list <- vector("list", length = len)
+             names(cluster.de.list) <- as.character(CLUSTER_RESOLUTION_RANGE)
+             cluster.de.list <- foreach(i=CLUSTER_RESOLUTION_RANGE) %do%{
+               DefaultAssay(scrna) <- "RNA"
+               cluster_name <- sprintf("RNA_snn_res.%s", i)
+               Idents(scrna) <- cluster_name
+               de.df = FindAllMarkers(scrna, logfc.threshold=0)
+               cluster.de <- split(de.df, de.df$cluster)
+             }
+
+             scrna@tools[["de_batch"]] <- cluster.de.list
+           },
+           error=function(cond) {
+             ret_code <<- -1
+             logger.error(cond)
+             logger.error(traceback())
+           },
+
+           finally={
+             return(list(scrna, ret_code))
+           })
+  return(list(scrna, ret_code))
+}
+
 
 
 generate_scrna_genesorteR <- function(scrna){
@@ -2133,4 +2184,3 @@ get_pathway_comparison <- function(scrna, slot){
 if(!interactive()) {
   conf_main()
 }
-

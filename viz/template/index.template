@@ -31,7 +31,8 @@
    - [Reactome ](data/Reactome.html)
      - [Reactome-UP-excel](data/reactomeup_{{cluster_use}}.xlsx)
      - [Reactome-DOWN-excel](data/reactomedown_{{cluster_use}}.xlsx)
-
+ - Interactive UMAPs
+   - [Interactive UMAPs ](data/interactive_UMAPs.html)
 
 
 ## 4. Differential Expression & GO analysis(between groups)
@@ -114,5 +115,3 @@
 	  - [Reactome UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.Reactomeup_{{cluster_use}}.xlsx)
 	  - [Reactome DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.Reactomedown_{{cluster_use}}.xlsx)
     {% endfor %}
-
-

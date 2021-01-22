@@ -2,27 +2,32 @@
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-set -e
+PROJ=$1
+SAVED_DATA="../save${PROJ}"
 
 FUNCS=(
-        QC
-        DEs
-        Clusters
-        Clusters_harmony
-        Clusters_seurat
-        DEGO
-        KEGG
-        hallmark
-        Reactome
-        EXT_MARKERS
-        DEGO_stage
-        hallmark_stage
-        reactome_stage
-        kegg_stage
-        DEGO_1v1
-        hallmark_1v1
-        reactome_1v1
-        kegg_1v1
+        --QC
+        --Singleton
+        --DEs
+        # QC
+        # DEs
+        # Clusters
+        # Clusters_harmony
+        # Clusters_seurat
+        # DEGO
+        # KEGG
+        # hallmark
+        # Reactome
+        # EXT_MARKERS
+        # DEGO_stage
+        # hallmark_stage
+        # reactome_stage
+        # kegg_stage
+        # DEGO_1v1
+        # hallmark_1v1
+        # reactome_1v1
+        # kegg_1v1
+	--GET_DATA
 )
 
 
@@ -41,11 +46,11 @@ FUNCS=(
 #cluster="merged_clusters"
 #cluster="annotation"
 
-cluster="seurat_clusters"
+cluster="singleton"
 
 #!!!!!!!!!----------------------------------
 
-
+echo $PROJ
 echo -e "Use cluster slot ${RED} $cluster ${NC}"
 mkdir -p report/data
 cp -r -p ../charts/* report/data
@@ -183,3 +188,4 @@ for a_func in "${FUNCS[@]}"; do
 done
 
 
+Rscript make_report.R --proj=$PROJ --cluster=$cluster --save_dir=$SAVED_DATA "${FUNCS[@]}"
