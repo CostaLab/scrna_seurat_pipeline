@@ -24,7 +24,7 @@ params:
 
 ## Plot the top 10 DE genes in each cluster.
 ```{r clusterDE_genes_resolution, out.width="100%", echo=FALSE}
-flist = grep(
+flist = stringr::str_sort(grep(
   "clusterDE_genes_resolution-",
   list.files(
     params$report_plots_folder_png,
@@ -32,13 +32,13 @@ flist = grep(
   ),
   value=TRUE,
   fixed=TRUE
-)
+),numeric=TRUE)
 knitr::include_graphics(flist)
 ```
 
 ## DE genes on heatmap
 ```{r heatmapDE_genes_resolution, out.width="100%", echo=FALSE}
-flist = grep(
+flist = stringr::str_sort(grep(
   "heatmapDE_genes_resolution-",
   list.files(
     params$report_plots_folder_png,
@@ -46,6 +46,6 @@ flist = grep(
   ),
   value=TRUE,
   fixed=TRUE
-)
+),numeric=TRUE)
 knitr::include_graphics(flist)
 ```
