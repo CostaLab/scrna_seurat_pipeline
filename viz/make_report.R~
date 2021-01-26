@@ -8,10 +8,6 @@ SAVE_DIR = args[3]
 GEN_SINGLE_FILE = args[4]
 FUNCS = args[-c(1:4)]
 
-library(Seurat)
-library(celda)
-library(ggplot2)
-
 # TODO better param processing
 if(grepl("--proj",PROJ,fixed=TRUE)) PROJ=gsub("--proj=","",PROJ,fixed=TRUE)
 if(grepl("--cluster",CLUSTER,fixed=TRUE)) CLUSTER=gsub("--cluster=","",CLUSTER,fixed=TRUE)

@@ -372,7 +372,7 @@ get_output_name<- function(scrna, scrna_run_name){
     phases <- names(pconf)
 
     if(scrna_run_name == "scrna_ambient_rna"){
-      return("scrna_ambient_rna")
+      return("scrna_ambient_rna.Rds")
     } else if(scrna_run_name %in% paste0("scrna_", phases)){
       return(scrna_run_name)
     }else if(length(unique(scrna$name)) == 1){

@@ -1,45 +1,34 @@
-### --------------Initial info----------------------------
-PROJECT = "CALR_Adam" ## set project name
+### --------------Initail info----------------------------
+PROJECT = "CSCQC" ## set project name 
 ORGAN = 'Blood'           #For external annotation. Options: Blood, Heart, Intestine, Kidney
-SPECIES = "Mouse"         #For external annotation. Options: Human, Mouse
-MCA_NAME = "Bone-Marrow" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
+SPECIES = "Human"         #For external annotation. Options: Human, Mouse
+MCA_NAME = "Peripheral_Blood"  #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
 HCL_NAME = "Adult-Bone-Marrow-CD34P" #For HCL annotation.
 
-
 # filtering params when create seurat object
-MINCELLS  = 5
+MINCELLS  = 5 
 MINGENES  = 50
 
 
 INTEGRATION_OPTION = "seurat" ### or harmony
 
 ### -------------- Data SRC-----------------------------
-ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
+ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv" 
 
-data_src = c(
-      "Empty EV #31-1"      = "data/A_MxCre",
-      "Empty EV #31-2"      = "data/B_MxCre",
-      "CALR deletion #34-1" = "data/C_Csnk",
-      "CALR deletion #34-2" = "data/D_Csnk"
+data_src = c( 
+     pbmc     =   "/home/grasshoff/labcluster/data/reportKR05/"
 )
-
-
 
 ##------------------ SET REPLICATE GROUP --------------
 stage_lst = c(
-        "Empty EV #31-1" = "Empty EV",
-	"Empty EV #31-2" = "Empty EV",
-        "CALR deletion #34-1" = "CALR deletion",
-        "CALR deletion #34-2" = "CALR deletion"
+    pbmc      = "pbmc"
 )
-
-
 
 ## Phase_1, set 1 to regressout
 preprocess_regressout = c("mito"       = 1,
                           "ribo"       = 0,
                           "cellcycle"  = 1,
-			  "ambientRNA" = 1)
+                          "ambientRNA" = 1)
 
 
 #Analysis_phases
@@ -47,22 +36,18 @@ preprocess_regressout = c("mito"       = 1,
 #2. scrna_phase_clustering
 #3. scrna_phase_comparing
 
-
 ### -------------- RUN PARAMETERS-----------------------------
 
-## 0. omit,     1. calc & save,      2. load
+## 0. omit,     1. calc & save,      2. load   3.  
 conf = c(
-         scrna_phase_clustering     = 2, ## integration & clustering
-	 scrna_ambient_rna          = 1, ## estimating ambient RNA
-         scrna_remove_clusters      = 1, ## remove clusters
-         scrna_cluster_annotation   = 1, ## Annotate clusters according to `cluster_annotation`
+         scrna_phase_singleton      = 1,
+	 scrna_phase_clustering     = 1, ## integration & clustering
          scrna_phase_comparing      = 1 ## DE GO pathway analysis etc. All rest calculating will be stored here
         )
 
 ### ----------specific settings for some functions ----------------
 
 scrna_remove_clusters = c(3) # Cluster 3 is the erythrocytes cluster
-
 
 ### cluster annotation
 from_cluster_slot = "removed_clusters"
@@ -76,7 +61,6 @@ cluster_annotation <- c(
     "7" = "Unknown1",
     "8" = "Unknown2"
 )
-
 
 
 ### MCA annotation Reference

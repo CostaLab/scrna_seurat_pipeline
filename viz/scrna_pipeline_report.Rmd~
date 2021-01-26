@@ -35,10 +35,6 @@ library(kableExtra)
 ```{r qc, child=if(any(grepl("QC",params$funcs,fixed=TRUE))) '1_quality_report.Rmd'}
 ```
 
-# Ambient RNA
-```{r ambient_rna, child=if(any(grepl("AmbientRNA",params$funcs,fixed=TRUE))) 'ambientRNA_viz.Rmd'}
-```
-
 # Clustering
 ```{r singleton, child=if(any(grepl("Singleton",params$funcs,fixed=TRUE))) 'singleton_clustering.Rmd'}
 ```

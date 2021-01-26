@@ -7,13 +7,13 @@ SAVED_DATA="../save${PROJ}"
 
 FUNCS=(
         #--QC
-        --Ambient_RNA
         #--Singleton
         #--DEs
         # QC
         #Clusters
         #Clusters_harmony
         #Clusters_seurat
+        AmbientRNA
         DEGO
         KEGG
         hallmark
@@ -53,7 +53,7 @@ cluster="annotation"
 echo $PROJ
 echo -e "Use cluster slot ${RED} $cluster ${NC}"
 mkdir -p report/data
-cp -r -p ../charts/* report/data
+cp -r -p ../charts$PROJ/* report/data
 python3 code_generator.py -c $cluster
 grip --export report/index.md
 
@@ -123,8 +123,6 @@ for a_func in "${FUNCS[@]}"; do
                  clean=TRUE,
                  params=list(cluster=\"${cluster}\"))"
 		;;
-
-
 
 	EXT_MARKERS)
         Rscript -e rmarkdown::render"('3_external_markers.Rmd',

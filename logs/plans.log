@@ -1,0 +1,397 @@
+
+
+=======================================================================
+2021-01-26 10:03:03
+Parameters:
+			help:  FALSE
+			numberofcores:  1
+			MaxMemMega:  20000
+			configfile:  conf/configCALR_Adam.R
+			logname:  
+			nFeatureRNAfloor:  400
+			nFeatureRNAceiling:  Inf
+			nCountRNAfloor:  0
+			nCountRNAceiling:  40000
+			pct_mitofloor:  -Inf
+			pct_mitoceiling:  100
+			pct_ribofloor:  -Inf
+			pct_riboceiling:  100
+			countmatrixformat:  10X
+			savedir:  saveCALR_Adam
+			chartsdir:  chartsCALR_Adam
+			dims4Integrate:  1:20
+			Dims4FindNeighbors:  1:12
+			clusterresolution:  0.5
+			defaultclustername:  annotation
+			harmony_dim:  1:20
+			project_name:  CALR_Adam
+			organ:  Blood
+			species:  Mouse
+			mca_name:  Bone-Marrow
+			hcl_name:  Adult-Bone-Marrow-CD34P
+			external_file:  external/Human_and_mouse_cell_markers-Markers.tsv
+			data_src:  c(`Empty EV #31-1` = "data/A_MxCre", `Empty EV #31-2` = "data/B_MxCre", `CALR deletion #34-1` = "data/C_Csnk", `CALR deletion #34-2` = "data/D_Csnk")
+			stage_lst:  c(`Empty EV #31-1` = "Empty EV", `Empty EV #31-2` = "Empty EV", `CALR deletion #34-1` = "CALR deletion", `CALR deletion #34-2` = "CALR deletion")
+
+plan:
+			loading: scrna_phase_clustering
+			calculating: scrna_ambient_rna
+			calculating: scrna_remove_clusters
+			calculating: scrna_cluster_annotation
+			calculating: scrna_phase_comparing
+
+
+=======================================================================
+2021-01-26 11:46:13
+Parameters:
+			help:  FALSE
+			numberofcores:  1
+			MaxMemMega:  20000
+			configfile:  conf/configCSCQC.R
+			logname:  
+			nFeatureRNAfloor:  200
+			nFeatureRNAceiling:  Inf
+			nCountRNAfloor:  45
+			nCountRNAceiling:  12000
+			pct_mitofloor:  -Inf
+			pct_mitoceiling:  20
+			pct_ribofloor:  -Inf
+			pct_riboceiling:  40
+			countmatrixformat:  10X
+			savedir:  saveCSCQC/
+			chartsdir:  chartsCSCQC/
+			dims4Integrate:  1:20
+			Dims4FindNeighbors:  1:12
+			clusterresolution:  0.5
+			defaultclustername:  seurat_clusters
+			harmony_dim:  1:20
+			project_name:  CSCQC
+			organ:  Blood
+			species:  Human
+			mca_name:  Peripheral_Blood
+			hcl_name:  Adult-Bone-Marrow-CD34P
+			external_file:  external/Human_and_mouse_cell_markers-Markers.tsv
+			data_src:  /home/grasshoff/labcluster/data/reportKR05/
+			stage_lst:  pbmc
+
+plan:
+			calculating: scrna_phase_preprocess
+			calculating: scrna_phase_clustering
+			calculating: scrna_phase_comparing
+
+
+=======================================================================
+2021-01-26 11:55:03
+Parameters:
+			help:  FALSE
+			numberofcores:  1
+			MaxMemMega:  20000
+			configfile:  conf/configCSCQC.R
+			logname:  
+			nFeatureRNAfloor:  200
+			nFeatureRNAceiling:  Inf
+			nCountRNAfloor:  45
+			nCountRNAceiling:  12000
+			pct_mitofloor:  -Inf
+			pct_mitoceiling:  20
+			pct_ribofloor:  -Inf
+			pct_riboceiling:  40
+			countmatrixformat:  10X
+			savedir:  saveCSCQC/
+			chartsdir:  chartsCSCQC/
+			dims4Integrate:  1:20
+			Dims4FindNeighbors:  1:12
+			clusterresolution:  0.5
+			defaultclustername:  seurat_clusters
+			harmony_dim:  1:20
+			project_name:  CSCQC
+			organ:  Blood
+			species:  Human
+			mca_name:  Peripheral_Blood
+			hcl_name:  Adult-Bone-Marrow-CD34P
+			external_file:  external/Human_and_mouse_cell_markers-Markers.tsv
+			data_src:  /home/grasshoff/labcluster/data/reportKR05/
+			stage_lst:  pbmc
+
+plan:
+			calculating: scrna_phase_singleton
+			calculating: scrna_phase_clustering
+			calculating: scrna_phase_comparing
+
+
+=======================================================================
+2021-01-26 14:59:43
+Parameters:
+			help:  FALSE
+			numberofcores:  1
+			MaxMemMega:  20000
+			configfile:  conf/configCALR_Adam.R
+			logname:  
+			nFeatureRNAfloor:  400
+			nFeatureRNAceiling:  Inf
+			nCountRNAfloor:  0
+			nCountRNAceiling:  40000
+			pct_mitofloor:  -Inf
+			pct_mitoceiling:  100
+			pct_ribofloor:  -Inf
+			pct_riboceiling:  100
+			countmatrixformat:  10X
+			savedir:  saveCALR_Adam
+			chartsdir:  chartsCALR_Adam
+			dims4Integrate:  1:20
+			Dims4FindNeighbors:  1:12
+			clusterresolution:  0.5
+			defaultclustername:  annotation
+			harmony_dim:  1:20
+			project_name:  CALR_Adam
+			organ:  Blood
+			species:  Mouse
+			mca_name:  Bone-Marrow
+			hcl_name:  Adult-Bone-Marrow-CD34P
+			external_file:  external/Human_and_mouse_cell_markers-Markers.tsv
+			data_src:  c(`Empty EV #31-1` = "data/A_MxCre", `Empty EV #31-2` = "data/B_MxCre", `CALR deletion #34-1` = "data/C_Csnk", `CALR deletion #34-2` = "data/D_Csnk")
+			stage_lst:  c(`Empty EV #31-1` = "Empty EV", `Empty EV #31-2` = "Empty EV", `CALR deletion #34-1` = "CALR deletion", `CALR deletion #34-2` = "CALR deletion")
+
+plan:
+			loading: scrna_phase_clustering
+			calculating: scrna_ambient_rna
+			calculating: scrna_remove_clusters
+			calculating: scrna_cluster_annotation
+			calculating: scrna_phase_comparing
+
+
+=======================================================================
+2021-01-26 15:38:11
+Parameters:
+			help:  FALSE
+			numberofcores:  1
+			MaxMemMega:  20000
+			configfile:  conf/configCALR_Adam.R
+			logname:  
+			nFeatureRNAfloor:  400
+			nFeatureRNAceiling:  Inf
+			nCountRNAfloor:  0
+			nCountRNAceiling:  40000
+			pct_mitofloor:  -Inf
+			pct_mitoceiling:  100
+			pct_ribofloor:  -Inf
+			pct_riboceiling:  100
+			countmatrixformat:  10X
+			savedir:  saveCALR_Adam
+			chartsdir:  chartsCALR_Adam
+			dims4Integrate:  1:20
+			Dims4FindNeighbors:  1:12
+			clusterresolution:  0.5
+			defaultclustername:  annotation
+			harmony_dim:  1:20
+			project_name:  CALR_Adam
+			organ:  Blood
+			species:  Mouse
+			mca_name:  Bone-Marrow
+			hcl_name:  Adult-Bone-Marrow-CD34P
+			external_file:  external/Human_and_mouse_cell_markers-Markers.tsv
+			data_src:  c(`Empty EV #31-1` = "data/A_MxCre", `Empty EV #31-2` = "data/B_MxCre", `CALR deletion #34-1` = "data/C_Csnk", `CALR deletion #34-2` = "data/D_Csnk")
+			stage_lst:  c(`Empty EV #31-1` = "Empty EV", `Empty EV #31-2` = "Empty EV", `CALR deletion #34-1` = "CALR deletion", `CALR deletion #34-2` = "CALR deletion")
+
+plan:
+			loading: scrna_phase_clustering
+			calculating: scrna_ambient_rna
+			calculating: scrna_remove_clusters
+			calculating: scrna_cluster_annotation
+			calculating: scrna_phase_comparing
+
+
+=======================================================================
+2021-01-26 16:09:00
+Parameters:
+			help:  FALSE
+			numberofcores:  1
+			MaxMemMega:  20000
+			configfile:  conf/configCALR_Adam.R
+			logname:  
+			nFeatureRNAfloor:  400
+			nFeatureRNAceiling:  Inf
+			nCountRNAfloor:  0
+			nCountRNAceiling:  40000
+			pct_mitofloor:  -Inf
+			pct_mitoceiling:  100
+			pct_ribofloor:  -Inf
+			pct_riboceiling:  100
+			countmatrixformat:  10X
+			savedir:  saveCALR_Adam
+			chartsdir:  chartsCALR_Adam
+			dims4Integrate:  1:20
+			Dims4FindNeighbors:  1:12
+			clusterresolution:  0.5
+			defaultclustername:  annotation
+			harmony_dim:  1:20
+			project_name:  CALR_Adam
+			organ:  Blood
+			species:  Mouse
+			mca_name:  Bone-Marrow
+			hcl_name:  Adult-Bone-Marrow-CD34P
+			external_file:  external/Human_and_mouse_cell_markers-Markers.tsv
+			data_src:  c(`Empty EV #31-1` = "data/A_MxCre", `Empty EV #31-2` = "data/B_MxCre", `CALR deletion #34-1` = "data/C_Csnk", `CALR deletion #34-2` = "data/D_Csnk")
+			stage_lst:  c(`Empty EV #31-1` = "Empty EV", `Empty EV #31-2` = "Empty EV", `CALR deletion #34-1` = "CALR deletion", `CALR deletion #34-2` = "CALR deletion")
+
+plan:
+			loading: scrna_phase_clustering
+			calculating: scrna_ambient_rna
+
+
+=======================================================================
+2021-01-26 16:11:54
+Parameters:
+			help:  FALSE
+			numberofcores:  1
+			MaxMemMega:  20000
+			configfile:  conf/configCALR_Adam.R
+			logname:  
+			nFeatureRNAfloor:  400
+			nFeatureRNAceiling:  Inf
+			nCountRNAfloor:  0
+			nCountRNAceiling:  40000
+			pct_mitofloor:  -Inf
+			pct_mitoceiling:  100
+			pct_ribofloor:  -Inf
+			pct_riboceiling:  100
+			countmatrixformat:  10X
+			savedir:  saveCALR_Adam
+			chartsdir:  chartsCALR_Adam
+			dims4Integrate:  1:20
+			Dims4FindNeighbors:  1:12
+			clusterresolution:  0.5
+			defaultclustername:  annotation
+			harmony_dim:  1:20
+			project_name:  CALR_Adam
+			organ:  Blood
+			species:  Mouse
+			mca_name:  Bone-Marrow
+			hcl_name:  Adult-Bone-Marrow-CD34P
+			external_file:  external/Human_and_mouse_cell_markers-Markers.tsv
+			data_src:  c(`Empty EV #31-1` = "data/A_MxCre", `Empty EV #31-2` = "data/B_MxCre", `CALR deletion #34-1` = "data/C_Csnk", `CALR deletion #34-2` = "data/D_Csnk")
+			stage_lst:  c(`Empty EV #31-1` = "Empty EV", `Empty EV #31-2` = "Empty EV", `CALR deletion #34-1` = "CALR deletion", `CALR deletion #34-2` = "CALR deletion")
+
+plan:
+			loading: scrna_phase_clustering
+			calculating: scrna_ambient_rna
+
+
+=======================================================================
+2021-01-26 16:14:46
+Parameters:
+			help:  FALSE
+			numberofcores:  1
+			MaxMemMega:  20000
+			configfile:  conf/configCALR_Adam.R
+			logname:  
+			nFeatureRNAfloor:  400
+			nFeatureRNAceiling:  Inf
+			nCountRNAfloor:  0
+			nCountRNAceiling:  40000
+			pct_mitofloor:  -Inf
+			pct_mitoceiling:  100
+			pct_ribofloor:  -Inf
+			pct_riboceiling:  100
+			countmatrixformat:  10X
+			savedir:  saveCALR_Adam
+			chartsdir:  chartsCALR_Adam
+			dims4Integrate:  1:20
+			Dims4FindNeighbors:  1:12
+			clusterresolution:  0.5
+			defaultclustername:  annotation
+			harmony_dim:  1:20
+			project_name:  CALR_Adam
+			organ:  Blood
+			species:  Mouse
+			mca_name:  Bone-Marrow
+			hcl_name:  Adult-Bone-Marrow-CD34P
+			external_file:  external/Human_and_mouse_cell_markers-Markers.tsv
+			data_src:  c(`Empty EV #31-1` = "data/A_MxCre", `Empty EV #31-2` = "data/B_MxCre", `CALR deletion #34-1` = "data/C_Csnk", `CALR deletion #34-2` = "data/D_Csnk")
+			stage_lst:  c(`Empty EV #31-1` = "Empty EV", `Empty EV #31-2` = "Empty EV", `CALR deletion #34-1` = "CALR deletion", `CALR deletion #34-2` = "CALR deletion")
+
+plan:
+			loading: scrna_phase_clustering
+			calculating: scrna_ambient_rna
+
+
+=======================================================================
+2021-01-26 16:20:26
+Parameters:
+			help:  FALSE
+			numberofcores:  1
+			MaxMemMega:  20000
+			configfile:  conf/configCALR_Adam.R
+			logname:  
+			nFeatureRNAfloor:  400
+			nFeatureRNAceiling:  Inf
+			nCountRNAfloor:  0
+			nCountRNAceiling:  40000
+			pct_mitofloor:  -Inf
+			pct_mitoceiling:  100
+			pct_ribofloor:  -Inf
+			pct_riboceiling:  100
+			countmatrixformat:  10X
+			savedir:  saveCALR_Adam
+			chartsdir:  chartsCALR_Adam
+			dims4Integrate:  1:20
+			Dims4FindNeighbors:  1:12
+			clusterresolution:  0.5
+			defaultclustername:  annotation
+			harmony_dim:  1:20
+			project_name:  CALR_Adam
+			organ:  Blood
+			species:  Mouse
+			mca_name:  Bone-Marrow
+			hcl_name:  Adult-Bone-Marrow-CD34P
+			external_file:  external/Human_and_mouse_cell_markers-Markers.tsv
+			data_src:  c(`Empty EV #31-1` = "data/A_MxCre", `Empty EV #31-2` = "data/B_MxCre", `CALR deletion #34-1` = "data/C_Csnk", `CALR deletion #34-2` = "data/D_Csnk")
+			stage_lst:  c(`Empty EV #31-1` = "Empty EV", `Empty EV #31-2` = "Empty EV", `CALR deletion #34-1` = "CALR deletion", `CALR deletion #34-2` = "CALR deletion")
+
+plan:
+			loading: scrna_phase_clustering
+			calculating: scrna_ambient_rna
+			calculating: scrna_remove_clusters
+			calculating: scrna_cluster_annotation
+			calculating: scrna_phase_comparing
+
+
+=======================================================================
+2021-01-26 18:56:11
+Parameters:
+			help:  FALSE
+			numberofcores:  1
+			MaxMemMega:  20000
+			configfile:  conf/configCALR_Adam.R
+			logname:  
+			nFeatureRNAfloor:  400
+			nFeatureRNAceiling:  Inf
+			nCountRNAfloor:  0
+			nCountRNAceiling:  40000
+			pct_mitofloor:  -Inf
+			pct_mitoceiling:  100
+			pct_ribofloor:  -Inf
+			pct_riboceiling:  100
+			countmatrixformat:  10X
+			savedir:  saveCALR_Adam
+			chartsdir:  chartsCALR_Adam
+			dims4Integrate:  1:20
+			Dims4FindNeighbors:  1:12
+			clusterresolution:  0.5
+			defaultclustername:  annotation
+			harmony_dim:  1:20
+			project_name:  CALR_Adam
+			organ:  Blood
+			species:  Mouse
+			mca_name:  Bone-Marrow
+			hcl_name:  Adult-Bone-Marrow-CD34P
+			external_file:  external/Human_and_mouse_cell_markers-Markers.tsv
+			data_src:  c(`Empty EV #31-1` = "data/A_MxCre", `Empty EV #31-2` = "data/B_MxCre", `CALR deletion #34-1` = "data/C_Csnk", `CALR deletion #34-2` = "data/D_Csnk")
+			stage_lst:  c(`Empty EV #31-1` = "Empty EV", `Empty EV #31-2` = "Empty EV", `CALR deletion #34-1` = "CALR deletion", `CALR deletion #34-2` = "CALR deletion")
+
+plan:
+			loading: scrna_phase_clustering
+			calculating: scrna_ambient_rna
+			calculating: scrna_remove_clusters
+			calculating: scrna_cluster_annotation
+			calculating: scrna_phase_comparing
