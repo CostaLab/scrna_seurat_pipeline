@@ -49,10 +49,7 @@ plt[[1]]
 ```{r fig.width=9, fig.height=7}
 plt[[2]]
 ```
-<<<<<<< HEAD
 
 ```{r fig.width=9, fig.height=7}
 plt[[3]]
 ```
-=======
->>>>>>> 7b8390d9c3360da7eca8b36417681172a42775c2
