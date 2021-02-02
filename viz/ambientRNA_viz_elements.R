@@ -7,9 +7,11 @@ library(ggplot2)
 scrna <- readRDS(file = file.path(savedir, "scrna_phase_comparing.Rds"))
 plt <- list()
 
-plt[[1]] <- FeaturePlot(scrna, features = "decontX_contamination") + ggtitle(label = "Ambient RNA Contamintaion")
+plt[[1]] <- FeaturePlot(scrna, features = "soupX_contamination") + ggtitle(label = "Ambient RNA Contamintaion")
 
-plt[[2]] <- VlnPlot(object = scrna, features = "decontX_contamination", group.by = "seurat_clusters")
+plt[[2]] <- VlnPlot(object = scrna, features = "soupX_contamination", group.by = "seurat_clusters")
+
+plt[[3]] <- DimPlot(scrna, group.by = cluster)
 
 save_ggplot_formats(
   plt=plt[[1]],
@@ -24,4 +26,9 @@ save_ggplot_formats(
   width=9, height=7
 )
 
-
+save_ggplot_formats(
+  plt=plt[[3]],
+  base_plot_dir=report_plots_folder,
+  plt_name="ambient_cluster",
+  width=9, height=7
+)
