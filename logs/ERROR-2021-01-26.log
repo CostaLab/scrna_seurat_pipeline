@@ -1,5 +1,0 @@
-ERROR [2021-01-26 10:02:22] Please check the config file!
-ERROR [2021-01-26 11:51:20] Error in which(x = object.classes, useNames = TRUE): argument to 'which' is not logical
-
-ERROR [2021-01-26 11:59:42] Error: Cannot find 'SINGLE_PCA' in this Seurat object
-

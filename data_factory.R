@@ -510,21 +510,16 @@ generate_scrna_ambient_rna_decontX <- function(scrna){
            {
             # We convert the input SeuratObject to a SingleCellExperiment object
             # This is the require input for decontX
+            assay.used <- DefaultAssay(scrna)
             DefaultAssay(scrna) <- "RNA"
             scrna.sce <- as.SingleCellExperiment(scrna)
 
             # Now, we estimate and correct the amount of ambient RNA.
             # Since we have not given the function a clustering result,
             # decontX will do the clustering for us.
-	    
 	    # Since contamination is dependent on the specific experiment, we provide the decontX function with
 	    # the batch	information. The contamination is then calculated per sample.
             scrna.decont <- decontX(scrna.sce, batch = scrna$name)
-
-            # Now, we estimate and correct the amount of ambient RNA.
-            # Since we have not given the function a clustering result,
-            # decontX will do the clustering for us.
-            scrna.decont <- decontX(scrna.sce)
 
             # We add the estimated contamination and the decontaminated data to the SeuratObject
             scrna[["decontX"]] <- CreateAssayObject(counts = scrna.decont@assays@data$decontXcounts)
@@ -532,6 +527,7 @@ generate_scrna_ambient_rna_decontX <- function(scrna){
                                  col.name = "decontX_contamination")
             scrna <- AddMetaData(object = scrna, metadata = scrna.decont$decontX_clusters,
                                  col.name = "decontX_clusters")
+	    DefaultAssay(scrna) <- assay.used
             return(scrna)
 	    saveRDS(scrna, paste0(SAVE_DIR,"/scrna_ambientRNA.Rds"))
            },
