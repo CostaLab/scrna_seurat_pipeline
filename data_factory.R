@@ -298,7 +298,6 @@ suppressPackageStartupMessages(library(stringr))
 suppressPackageStartupMessages(library(Hmisc))
 suppressPackageStartupMessages(library(foreach))
 suppressPackageStartupMessages(library(doParallel))
-suppressPackageStartupMessages(library(celda))
 
 
 registerDoParallel(cores=WORKER_NUM)
@@ -504,7 +503,7 @@ generate_scrna_rawdata <- function(scrna){
   return(list(scrna, ret_code))
 }
 
-generate_scrna_ambient_rna <- function(scrna){
+generate_scrna_ambient_rna_decontX <- function(scrna){
   ret_code <- 0
 
   tryCatch(
@@ -549,6 +548,104 @@ generate_scrna_ambient_rna <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+generate_scrna_ambient_rna_soupX <- function(scrna){
+  ret_code <- 0
+  suppressPackageStartupMessages(library(SoupX))
+  tryCatch(
+           {
+	     # We get the tocs and tods
+	     tocs <- lapply(names(data_fil_unfil), scrna = scrna, 
+               function(x, scrna){
+	       scrna.subset <- subset(scrna, name == x)
+	       DefaultAssay(scrna.subset) <- "RNA"
+
+               filtered_matrix <- data_fil_unfil[[x]][1]
+               raw_matrix      <- data_fil_unfil[[x]][2]
+               toc <- Read10X(filtered_matrix)
+               tod <- Read10X(raw_matrix)
+
+               print(paste0(x ,": We remove all cells not in the Seurat object"))
+               cells <- colnames(scrna.subset)
+               print(paste0(x, ": We remove the sample name, that has been added to the cell barcode"))
+               cells <- gsub(".*_", "", cells)
+               cells <- cells[cells %in% colnames(toc)]
+
+               print(paste0(x, ": Now, we subset the toc file"))
+               toc <- toc[,cells]
+
+               result <- list(toc = toc,tod = tod)
+               return(result)
+	      }
+	     )
+	     names(tocs) <- names(data_fil_unfil)
+	     
+	     # We generate the soup channel objects for each sample
+	     soups <- list()
+	     tocs.names <- names(tocs)
+	     for(i in 1:length(tocs.names)){
+	       name <- tocs.names[i]
+	       
+	       sc <- SoupChannel(toc = tocs[[name]][[1]], tod = tocs[[name]][[2]])
+	       
+	       print(paste0(name, ": We now add the clustering and the UMAP dimensions to the meta data"))
+	       scrna.subset <- subset(scrna, cells = paste0(name, "_", colnames(sc$toc)))
+	       meta_data <- cbind(scrna.subset[["INTE_UMAP"]]@cell.embeddings, scrna.subset[[DEFUALT_CLUSTER_NAME]])
+	       meta_data[[DEFUALT_CLUSTER_NAME]] <- as.character(meta_data[[DEFUALT_CLUSTER_NAME]])
+	       rownames(meta_data) <- gsub(".*_", "", rownames(meta_data))
+	       meta_data <- meta_data[colnames(sc$toc),]
+
+               sc <- setClusters(sc, setNames(meta_data[,DEFUALT_CLUSTER_NAME], rownames(meta_data)))
+	       sc <- setDR(sc, meta_data[colnames(sc$toc), c("inteumap_1", "inteumap_2")])
+	       sc <- autoEstCont(sc, doPlot = FALSE)
+	       out <- adjustCounts(sc)
+	       result <- list(sc = sc, out = out)
+	       soups[[i]] <- result
+	     }
+	     names(soups) <- names(tocs)
+	     
+	     # We calculate the contamination per cell
+	     individualSoggy.overall <- list()
+	     individualStrained.overall <- list()
+	     individualPercentage.overall <- list()
+	     for(i in 1:length(soups)){
+	       individualSoggy.overall[[i]] <- colSums(soups[[i]]$sc$toc)
+	       individualStrained.overall[[i]] <- colSums(soups[[i]]$out)
+	       individualPercentage.overall[[i]] <- (individualSoggy.overall[[i]] -
+                                                     individualStrained.overall[[i]])/
+		  				     individualSoggy.overall[[i]]
+	     }
+	     names(individualSoggy.overall) <- names(soups)
+	     names(individualStrained.overall) <- names(soups)
+	     names(individualPercentage.overall) <- names(soups)
+	   
+	     individualPercentage.overall <- do.call("c", individualPercentage.overall)
+	     names(individualPercentage.overall) <- gsub("\\.", "_", names(individualPercentage.overall))
+	     names.unordered <- names(individualPercentage.overall)
+	     individualPercentage.overall <- individualPercentage.overall[match(colnames(scrna), names.unordered)]
+	     new.counts <- c()
+	     for(i in 1:length(soups)){
+	       colnames(soups[[i]][[2]]) <- paste0(names(soups[i]), "_", colnames(soups[[i]][[2]]))
+	       new.counts <- cbind(new.counts, soups[[i]][[2]])
+	     }
+	     scrna <- AddMetaData(scrna, metadata = individualPercentage.overall, col.name = "soupX_contamination")
+	     scrna[["soupX"]] <- CreateAssayObject(counts = new.counts)
+             DefaultAssay(scrna) <- "soupX"
+	   },
+	   
+	   error=function(cond) {
+             ret_code <<- -1
+             logger.error(cond)
+             logger.error(traceback())
+           },
+
+           finally={
+             rm(data.list)
+             return(list(scrna, ret_code))
+           }
+          )
+   return(list(scrna,ret_code))
+}
+
 generate_scrna_phase_singleton <- function(scrna){
   ret_code <- 0
   pconf <- configr::read.config("static/phase.ini")
@@ -578,7 +675,6 @@ generate_scrna_phase_singleton <- function(scrna){
    }
   return(list(scrna, ret_code))
 }
-
 
 
 generate_scrna_phase_preprocess <- function(scrna){
