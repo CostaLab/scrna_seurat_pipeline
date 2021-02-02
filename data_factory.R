@@ -356,8 +356,8 @@ get_regressout_vector <- function(){
     dic <- list(
             "mito"       = "percent.mt",
             "ribo"       = "percent.ribo",
-            "cellcycle"  = c("G2M.Score", "S.Score"),
-	    "ambientRNA" = "decontX_contamination")
+            "cellcycle"  = c("G2M.Score", "S.Score")
+	    )
 
     keep <- names(preprocess_regressout[preprocess_regressout==1])
     ro <- unlist(dic[keep])
