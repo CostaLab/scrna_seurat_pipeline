@@ -9,13 +9,9 @@ plt <- list()
 
 plt[[1]] <- FeaturePlot(scrna, features = "soupX_contamination") + ggtitle(label = "Ambient RNA Contamintaion")
 
-<<<<<<< HEAD
 plt[[2]] <- VlnPlot(object = scrna, features = "soupX_contamination", group.by = "seurat_clusters")
 
 plt[[3]] <- DimPlot(scrna, group.by = cluster)
-=======
-plt[[2]] <- VlnPlot(object = scrna, features = "decontX_contamination", group.by = cluster)
->>>>>>> 7b8390d9c3360da7eca8b36417681172a42775c2
 
 save_ggplot_formats(
   plt=plt[[1]],
