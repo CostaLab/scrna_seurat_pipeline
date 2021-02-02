@@ -23,6 +23,17 @@ data_src = c(
       D_Csnk     =   "data/D_Csnk"
 )
 
+### -------------- Filtered and Unfiltered Data --------------
+data_fil_unfil = list(
+"Empty EV #31-1"     =c("../../CALR_project/data/CALR_sequencingdata/Empty EV #31-1/filtered_feature_bc_matrix",
+                          "../../CALR_project/data/CALR_sequencingdata/Empty EV #31-1/raw_feature_bc_matrix"),
+"Empty EV #31-2"     =c("../../CALR_project/data/CALR_sequencingdata/Empty EV #31-2/filtered_feature_bc_matrix",
+                          "../../CALR_project/data/CALR_sequencingdata/Empty EV #31-2/raw_feature_bc_matrix"),
+"CALR deletion #34-1"=c("../../CALR_project/data/CALR_sequencingdata/CALR deletion #34-1/filtered_feature_bc_matrix",
+                          "../../CALR_project/data/CALR_sequencingdata/CALR deletion #34-1/raw_feature_bc_matrix"),
+"CALR deletion #34-2"=c("../../CALR_project/data/CALR_sequencingdata/CALR deletion #34-2/filtered_feature_bc_matrix",
+                          "../../CALR_project/data/CALR_sequencingdata/CALR deletion #34-2/raw_feature_bc_matrix")
+)
 
 
 ##------------------ SET REPLICATE GROUP --------------
