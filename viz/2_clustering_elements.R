@@ -323,10 +323,10 @@ for(cluster_use in available_clusters){
 
     # also save plot and information as rds so that it can be later rendered in the report as plotly
     message("### Saving MCA annotation data to produce plotly in report")
-    saveRDS(plt,file.path(report_plots_folder,paste0("mca_annotate_plt_",cluster_use,".RDS")))
+    saveRDS(plt,file.path(savedir,paste0("mca_annotate_plt_",cluster_use,".RDS")))
     saveRDS(
       FetchData(object = scrna, vars = c("MCA_annotate", cluster_use)),
-      file.path(report_plots_folder,paste0("mca_annotate_info_",cluster_use,".RDS"))
+      file.path(savedir,paste0("mca_annotate_info_",cluster_use,".RDS"))
     )
   }
 
@@ -353,10 +353,10 @@ for(cluster_use in available_clusters){
 
     # also save plot and information as rds so that it can be later rendered in the report as plotly
     message("### Saving HCL annotation data to produce plotly in report")
-    saveRDS(plt,file.path(report_plots_folder,paste0("hcl_annotate_plt_",cluster_use,".RDS")))
+    saveRDS(plt,file.path(savedir,paste0("hcl_annotate_plt_",cluster_use,".RDS")))
     saveRDS(
       FetchData(object = scrna, vars = c("HCL_annotate", cluster_use)),
-      file.path(report_plots_folder,paste0("hcl_annotate_info_",cluster_use,".RDS"))
+      file.path(savedir,paste0("hcl_annotate_info_",cluster_use,".RDS"))
     )
   }
 
@@ -381,10 +381,10 @@ for(cluster_use in available_clusters){
       width=9, height=7
     )
     message("### Saving external annotation data to produce plotly in report")
-    saveRDS(plt,file.path(report_plots_folder,paste0("external_annotation_plt_",cluster_use,".RDS")))
+    saveRDS(plt,file.path(savedir,paste0("external_annotation_plt_",cluster_use,".RDS")))
     saveRDS(
       FetchData(object = scrna, vars = c("external_annotation", cluster_use)),
-      file.path(report_plots_folder,paste0("external_annotation_info_",cluster_use,".RDS"))
+      file.path(savedir,paste0("external_annotation_info_",cluster_use,".RDS"))
     )
   }
 }

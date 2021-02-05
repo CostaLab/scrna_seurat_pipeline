@@ -31,13 +31,13 @@ knitr::opts_chunk$set(warning = F, message = F, echo = T)
 ```{r hcl_interactive, out.width="100%", echo=FALSE, eval=TRUE}
 plt = readRDS(
   file.path(
-    params$report_plots_folder,
+    params$savedir,
     paste0("hcl_annotate_plt_",params$cluster,".RDS")
   )
 )
 info = readRDS(
   file.path(
-    params$report_plots_folder,
+    params$savedir,
     paste0("hcl_annotate_info_",params$cluster,".RDS")
   )
 )
@@ -48,13 +48,13 @@ Seurat::HoverLocator(plot = plt, information = info)
 ```{r mca_interactive, out.width="100%", echo=FALSE, eval=TRUE}
 plt = readRDS(
   file.path(
-    params$report_plots_folder,
+    params$savedir,
     paste0("mca_annotate_plt_",params$cluster,".RDS")
   )
 )
 info = readRDS(
   file.path(
-    params$report_plots_folder,
+    params$savedir,
     paste0("mca_annotate_info_",params$cluster,".RDS")
   )
 )
@@ -65,13 +65,13 @@ Seurat::HoverLocator(plot = plt, information = info)
 ```{r external_annot_interactive, out.width="100%", echo=FALSE, eval=TRUE}
 plt = readRDS(
   file.path(
-    params$report_plots_folder,
+    params$savedir,
     paste0("external_annotation_plt_",params$cluster,".RDS")
   )
 )
 info = readRDS(
   file.path(
-    params$report_plots_folder,
+    params$savedir,
     paste0("external_annotation_info_",params$cluster,".RDS")
   )
 )

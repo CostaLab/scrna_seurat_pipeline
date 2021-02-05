@@ -36,7 +36,7 @@ if(file.exists(fname)) knitr::include_graphics(fname)
 
 ## Plot the top 10 DE genes in each cluster.
 ```{r genebarplot_top10_de_genes, out.width="100%", echo=FALSE}
-flist = grep(
+flist = stringr::str_sort(grep(
   paste0("top10-de-genes_per_cluster-",params$cluster),
   list.files(
     params$report_plots_folder_png,
@@ -44,12 +44,12 @@ flist = grep(
   ),
   value=TRUE,
   fixed=TRUE
-)
+),numeric=TRUE)
 knitr::include_graphics(flist)
 ```
 
 ```{r volcanoplots_cluster, out.width="100%", echo=FALSE}
-flist = grep(
+flist = stringr::str_sort(grep(
   paste0("volcanoplot_deg_cluster-",params$cluster),
   list.files(
     params$report_plots_folder_png,
@@ -57,7 +57,7 @@ flist = grep(
   ),
   value=TRUE,
   fixed=TRUE
-)
+),numeric=TRUE)
 knitr::include_graphics(flist)
 ```
 
@@ -99,7 +99,7 @@ if(file.exists(fname)) knitr::include_graphics(fname)
 
 ## DE genes on UMAP plot
 ```{r umap_de_genes, out.width="100%", echo=FALSE}
-flist = grep(
+flist = stringr::str_sort(grep(
   paste0("umap_featureplot_top10deg_cluster-",params$cluster),
   list.files(
     params$report_plots_folder_png,
@@ -107,6 +107,6 @@ flist = grep(
   ),
   value=TRUE,
   fixed=TRUE
-)
+),numeric=TRUE)
 knitr::include_graphics(flist)
 ```
