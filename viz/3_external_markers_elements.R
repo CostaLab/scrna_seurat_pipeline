@@ -53,7 +53,7 @@ for (a_celltype in celltype_names){
       label=T,
       label.size=2,
       features = genes[i:ni],
-      reduction = "INTE_UMAP",
+      reduction = "DEFAULT_UMAP",
       order = T,
       cols = c("lightgrey", "red"),
       ncol = 2,
