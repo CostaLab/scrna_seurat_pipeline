@@ -9,6 +9,10 @@ import getopt
 import rpy2.robjects.packages as rpackages
 import rpy2.robjects as robjects
 from itertools import combinations
+from requests.utils import requote_uri
+def intersect(a, b):
+    return set(a).intersection(b)
+
 
 ## GENERATE  R markdown and md according to the config file:
 #1.  dego 1v1
@@ -20,7 +24,41 @@ parser.add_argument('-c', '--cluster_use', default='seurat_clusters', help='clus
 parser.add_argument('-cf', '--config_file', default='conf/config.R', help='path to config file')
 parser.add_argument('-b', '--base_dir', default='../', help='path to base dir')
 parser.add_argument('-p', '--proj_tag', default='', help='project name or tag')
+parser.add_argument('-l', '--executing_list', default='[QC]', help='executing list to viz')
 args = parser.parse_args()
+
+exe_list = [i.strip() for i in eval(args.executing_list)]
+
+
+print("==========PLOT LIST===============:\n",
+        "\n".join(exe_list),
+       "\n==================================\n")
+
+viz_dict = { "quality": ["QC"],
+             "clustering": ["Clusters",
+                            "DEs",
+                            "Clusters_harmony",
+                            "Clusters_seurat",
+                            "intUMAPs"],
+
+             "clustersVS": ["EXT_MARKERS",
+                            "DEGO",
+                            "hallmark",
+                            "KEGG",
+                            "Reactome"],
+
+             "DEGOstageVS": ["DEGO_stage"],
+
+             "PWstageVS": ["hallmark_stage",
+                           "reactome_stage",
+                           "kegg_stage"],
+
+             "DEGOsampleVS":["DEGO_1v1"],
+
+             "PWsampleVS": ["hallmark_1v1",
+                           "reactome_1v1",
+                           "kegg_1v1"]
+}
 
 
 DATADIR = args.base_dir
@@ -95,7 +133,11 @@ def generate_md_idx(out):
     tfile = open("template/index.template")
     tmplt = tfile.read()
     t = Template(tmplt)
-    st = t.render(list_1v1=lst_1v1,
+    st = t.render(requote_uri=requote_uri,
+                  intersect=intersect,
+                  executing_list=exe_list,
+                  viz_dict=viz_dict,
+                  list_1v1=lst_1v1,
                   list_stages=lst_stages,
                   project_name=project_name[0],
                   cluster_use=args.cluster_use)
@@ -103,25 +145,6 @@ def generate_md_idx(out):
     fw = open(out, 'w')
     fw.write(st)
 #endf generate_md_idx
-
-def generate_md_idx_pdf(out, folder="report_pdf"):
-
-    if not os.path.exists(folder):
-        os.mkdir(folder)
-
-    tfile = open("template/index_pdf.template")
-    tmplt = tfile.read()
-    t = Template(tmplt)
-    st = t.render(list_1v1=lst_1v1,
-                  list_stages=lst_stages,
-                  project_name=project_name[0],
-                  cluster_use = args.cluster_use)
-
-    fw = open(out, 'w')
-    fw.write(st)
-#endf generate_md_idx
-
-
 
 
 def generate_report_stagesVS(out):
@@ -280,8 +303,6 @@ def main():
 
     generate_md_idx(os.path.join(out_dir, "index.md"))
 
-    out_dir = "report_pdf"
-    generate_md_idx_pdf(os.path.join(out_dir, "index.md"), out_dir)
 #endf main
 
 

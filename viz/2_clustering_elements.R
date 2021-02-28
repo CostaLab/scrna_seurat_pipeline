@@ -111,17 +111,24 @@ for(cluster_use in available_clusters){
         inverse = function(x) x + d)
     }
 
+    wrapp_invalid_name <- function(a_str){
+            ret <- stringr::str_replace_all(a_str, " ", "____")
+            ret <- stringr::str_replace_all(ret, "\t", "____")
+            return(ret)
+    }
+
+    colnames(df) <- sapply(colnames(df), wrapp_invalid_name)
     if(length(table(scrna$stage))<=2){
       nm <- scrna@tools[["meta_order"]][["stage"]][1]
       nm2 <- scrna@tools[["meta_order"]][["stage"]][2]
 
-      aodds <- glue("odds.ratio_{nm}.vs.{nm2}", )
+      aodds <- wrapp_invalid_name(glue("odds.ratio_{nm}.vs.{nm2}"))
       plt <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
         geom_bar(stat="identity") +
         coord_flip() +
         guides(fill = guide_legend(reverse = TRUE)) +
         scale_y_continuous(trans = shift_trans(1)) + geom_text(data = df,
-                    aes_string("Cluster", 1, label = glue("pval.adjust_{nm}.vs.{nm2}")),
+                    aes_string("Cluster", 1, label = wrapp_invalid_name(glue("pval.adjust_{nm}.vs.{nm2}"))),
                     position = "identity",
                     size=4) +
         ggtitle(sprintf("%s vs %s (odds ratio > 1 means more %s)", nm, nm2, nm))+
@@ -145,14 +152,14 @@ for(cluster_use in available_clusters){
         nm <- scrna@tools[["meta_order"]][["stage"]][i1]
         nm2 <- scrna@tools[["meta_order"]][["stage"]][i2]
 
-        aodds <- glue("odds.ratio_{nm}.vs.{nm2}")
+        aodds <- wrapp_invalid_name(glue("odds.ratio_{nm}.vs.{nm2}"))
         plt <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
         geom_bar(stat="identity") +
         coord_flip() +
         guides(fill = guide_legend(reverse = TRUE)) +
         scale_y_continuous(trans = shift_trans(1)) +
         geom_text(data = df,
-                  aes_string("Cluster", 1, label = glue("pval.adjust_{nm}.vs.{nm2}")),
+                  aes_string("Cluster", 1, label = wrapp_invalid_name(glue("pval.adjust_{nm}.vs.{nm2}"))),
                   position = "identity",
                   size=4) +
         ggtitle(glue("{nm} vs {nm2} (odds ratio > 1 means more {nm})"))+

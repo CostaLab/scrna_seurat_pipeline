@@ -21,6 +21,12 @@ params:
     report_plots_folder_pdf: "folder with the pdf plot elements"
 ---
 
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(kableExtra)
+```
+
+
 ```{r setup_clustering_harmony, include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
 fixed_cluster = "harmony_inte_clusters"

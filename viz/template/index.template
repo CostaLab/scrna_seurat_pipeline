@@ -1,117 +1,195 @@
 # {{project_name}} Analysis Pipeline
 
-## 1. Data Quality Check
+
+{% set count = 1 %}
+{% if intersect(viz_dict['quality'], executing_list) %}
+## {{count}}. Data Quality Check
 
 - [Data quality](data/data_quality.html)
 
+  {% set count = count + 1 %}
+{% endif %}
 
-## 2.Cluster Results
+
+
+
+{% if intersect(viz_dict['clustering'], executing_list) %}
+## {{count}}.Cluster Results
+{% if "Clusters" in executing_list %}
 - [clusters](data/clusters.html)
-- [marker genes with different resolutions](data/clusters_DEs.html)
-- [seurat_clusters](data/clusters_seurat.html)
-- [harmony_clusters](data/clusters_harmony.html)
+{% endif %}
 
-## 3. Marker Genes & GO & pathway analysis
+{% if "DEs" in executing_list %}
+- [marker genes with different resolutions](data/clusters_DEs.html)
+{% endif %}
+
+{% if "Clusters_seurat" in executing_list %}
+- [seurat_clusters](data/clusters_seurat.html)
+{% endif %}
+
+{% if "Clusters_harmony" in executing_list %}
+- [harmony_clusters](data/clusters_harmony.html)
+{% endif %}
+
+  {% set count = count + 1 %}
+{% endif %}
+
+
+
+{% if intersect(viz_dict['clustersVS'], executing_list) %}
+## {{count}}. Marker Genes & GO & pathway analysis
+
+{% if "EXT_MARKERS" in executing_list %}
  - [External Markers](data/external_markers.html)
+{% endif %}
+
+{% if "DEGO" in executing_list %}
  - DE & GO
    - [DE & GO ](data/dego.html)
      - [DE-excel](data/de_{{cluster_use}}.xlsx)
      - [GO-UP-excel](data/goup_{{cluster_use}}.xlsx)
      - [GO-DOWN-excel](data/godown_{{cluster_use}}.xlsx)
+{% endif %}
 
+
+{% if "hallmark" in executing_list %}
  - Hallmark
    - [hallmark ](data/hallmark.html)
     - [Hallmark-UP-excel](data/hallmarkup_{{cluster_use}}.xlsx)
     - [Hallmark-DOWN-excel](data/hallmarkdown_{{cluster_use}}.xlsx)
+{% endif %}
+
+{% if "KEGG" in executing_list %}
  - KEGG
    - [KEGG ](data/KEGG.html)
     - [KEGG-UP-excel](data/keggup_{{cluster_use}}.xlsx)
     - [KEGG-DOWN-excel](data/keggdown_{{cluster_use}}.xlsx)
+{% endif %}
+
+{% if "Reactome" in executing_list %}
  - Reactome
    - [Reactome ](data/Reactome.html)
      - [Reactome-UP-excel](data/reactomeup_{{cluster_use}}.xlsx)
      - [Reactome-DOWN-excel](data/reactomedown_{{cluster_use}}.xlsx)
+{% endif %}
+
+{% if "intUMAPs" in executing_list %}
  - Interactive UMAPs
    - [Interactive UMAPs ](data/interactive_UMAPs.html)
+{% endif %}
+
+  {% set count = count + 1 %}
+{% endif %}
 
 
-## 4. Differential Expression & GO analysis(between groups)
+{% if intersect(viz_dict['DEGOstageVS'], executing_list) %}
+## {{count}}. Differential Expression & GO analysis(between groups)
  - [DE&GO](data/gv.html)
  - DE FILES
     {% for x, y in list_stages %}
-   - [DE {{x}}.vs.{{y}}.xlsx](data/{{x}}.vs.{{y}}.de_{{cluster_use}}.xlsx )
+   - [DE {{x}}.vs.{{y}}.xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.de_{{cluster_use}}.xlsx )
     {% endfor %}
  - GO FILES
     {% for x, y in list_stages %}
-   - [GO UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.goup_{{cluster_use}}.xlsx)
-   - [GO DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.godown_{{cluster_use}}.xlsx)
+   - [GO UP    {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.goup_{{cluster_use}}.xlsx)
+   - [GO DOWN  {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.godown_{{cluster_use}}.xlsx)
     {% endfor %}
 
+  {% set count = count + 1 %}
+{% endif %}
 
-## 5. Pathway analysis (between groups)
 
+{% if intersect(viz_dict['PWstageVS'], executing_list) %}
+## {{count}}. Pathway analysis (between groups)
+
+{% if "hallmark_stage" in executing_list %}
  - Hallmark
    - [hallmark stage](data/hallmark_stageVS.html)
     {% for x, y in list_stages %}
-	   - [Hallmark UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.hallmarkup_{{cluster_use}}.xlsx)
-	   - [Hallmark DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.hallmarkdown_{{cluster_use}}.xlsx)
+	   - [Hallmark UP    {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.hallmarkup_{{cluster_use}}.xlsx)
+	   - [Hallmark DOWN  {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.hallmarkdown_{{cluster_use}}.xlsx)
     {% endfor %}
+{% endif %}
 
+
+{% if "kegg_stage" in executing_list %}
  - KEGG
    - [KEGG stage](data/kegg_stageVS.html)
     {% for x, y in list_stages %}
-	   - [kegg UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.KEGGup_{{cluster_use}}.xlsx)
-	   - [kegg DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.KEGGdown_{{cluster_use}}.xlsx)
+	   - [kegg UP    {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.KEGGup_{{cluster_use}}.xlsx)
+	   - [kegg DOWN  {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.KEGGdown_{{cluster_use}}.xlsx)
     {% endfor %}
+{% endif %}
 
 
+{% if "reactome_stage" in executing_list %}
  - Reactome
    - [Reactome stage](data/reactome_stageVS.html)
     {% for x, y in list_stages %}
-	   - [Reactome UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.Reactomeup_{{cluster_use}}.xlsx)
-	   - [Reactome DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.Reactomedown_{{cluster_use}}.xlsx)
+	   - [Reactome UP    {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.Reactomeup_{{cluster_use}}.xlsx)
+	   - [Reactome DOWN  {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.Reactomedown_{{cluster_use}}.xlsx)
     {% endfor %}
+{% endif %}
+
+
+  {% set count = count + 1 %}
+{% endif %}
 
 
 
-## 6. Differential Expression & GO analysis(between samples)
+{% if intersect(viz_dict['DEGOsampleVS'], executing_list) %}
+## {{count}}. Differential Expression & GO analysis(between samples)
  - [DE&GO](data/1vs1.html)
 
  - DE FILES
     {% for x, y in list_1v1 %}
-	- [DE {{x}}.vs.{{y}}.xlsx](data/{{x}}.vs.{{y}}.de_{{cluster_use}}.xlsx )
+	- [DE {{x}}.vs.{{y}}.xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.de_{{cluster_use}}.xlsx )
     {% endfor %}
 
  - GO FILES
 
     {% for x, y in list_1v1 %}
-	- [GO UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.goup_{{cluster_use}}.xlsx)
-	- [GO DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.godown_{{cluster_use}}.xlsx)
+	- [GO UP    {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.goup_{{cluster_use}}.xlsx)
+	- [GO DOWN  {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.godown_{{cluster_use}}.xlsx)
     {% endfor %}
 
-## 7. Pathway analysis (between samples)
+  {% set count = count + 1 %}
+{% endif %}
+
+
+{% if intersect(viz_dict['PWsampleVS'], executing_list) %}
+## {{count}}. Pathway analysis (between samples)
 
 
 
-
+{% if "hallmark_1v1" in executing_list %}
 - Hallmark
    - [hallmark 1v1](data/hallmark_1vs1.html)
     {% for x, y in list_1v1 %}
-	  - [Hallmark UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.hallmarkup_{{cluster_use}}.xlsx)
-	  - [Hallmark DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.hallmarkdown_{{cluster_use}}.xlsx)
+	  - [Hallmark UP    {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.hallmarkup_{{cluster_use}}.xlsx)
+	  - [Hallmark DOWN  {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.hallmarkdown_{{cluster_use}}.xlsx)
     {% endfor %}
+{% endif %}
 
+
+{% if "kegg_1v1" in executing_list %}
  - KEGG
    - [KEGG 1v1](data/kegg_1vs1.html)
     {% for x, y in list_1v1 %}
-	  - [kegg UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.KEGGup_{{cluster_use}}.xlsx)
-	  - [kegg DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.KEGGdown_{{cluster_use}}.xlsx)
+	  - [kegg UP    {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.KEGGup_{{cluster_use}}.xlsx)
+	  - [kegg DOWN  {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.KEGGdown_{{cluster_use}}.xlsx)
     {% endfor %}
+{% endif %}
 
 
+{% if "reactome_1v1" in executing_list %}
  - Reactome
    - [Reactome 1v1](data/reactome_1vs1.html)
     {% for x, y in list_1v1 %}
-	  - [Reactome UP    {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.Reactomeup_{{cluster_use}}.xlsx)
-	  - [Reactome DOWN  {{x}}.vs.{{y}} xlsx](data/{{x}}.vs.{{y}}.Reactomedown_{{cluster_use}}.xlsx)
+	  - [Reactome UP    {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.Reactomeup_{{cluster_use}}.xlsx)
+	  - [Reactome DOWN  {{x}}.vs.{{y}} xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.Reactomedown_{{cluster_use}}.xlsx)
     {% endfor %}
+{% endif %}
+
+  {% set count = count + 1 %}
+{% endif %}

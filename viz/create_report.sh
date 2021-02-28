@@ -27,18 +27,21 @@ FUNCS=(
   hallmark
   KEGG
   Reactome
-  # DEGO_stage
-  # hallmark_stage
-  # reactome_stage
-  # kegg_stage
-  # DEGO_1v1
-  # hallmark_1v1
-  # reactome_1v1
-  # kegg_1v1
+  DEGO_stage
+  hallmark_stage
+  reactome_stage
+  kegg_stage
+  DEGO_1v1
+  hallmark_1v1
+  reactome_1v1
+  kegg_1v1
   intUMAPs
   GET_DATA
 )
 
+function join_by { local d=$1; shift; local f=$1; shift; printf %s "$f" "${@/#/$d}"; }
+join_str=`join_by '", "' ${FUNCS[@]}`
+py_exe_list=\[\"${join_str}\"\]
 
 
 #!!!!!!!!------clusters to choose-------------
@@ -64,7 +67,7 @@ echo $PROJ
 echo -e "Use cluster slot ${RED} $cluster ${NC}"
 mkdir -p report${PROJ}/data
 cp -r ../charts${PROJ}/* report${PROJ}/data
-python code_generator.py -c $cluster -cf "conf/config${PROJ}.R" -b "../" -p "${PROJ}"
+python code_generator.py -c $cluster -cf "conf/config${PROJ}.R" -b "../" -p "${PROJ}" -l "${py_exe_list}"
 grip --export report${PROJ}/index.md
 
 if [[ "$MAKE_ELEMENTS" == true ]]; then

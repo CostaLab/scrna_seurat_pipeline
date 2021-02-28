@@ -23,6 +23,12 @@ params:
 
 ## Cluster: `r colorize(params$cluster,"red")`
 
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(kableExtra)
+```
+
+
 ## top10 DE heatmaps
 ```{r heatmap_top10_de_genes, out.width="100%", echo=FALSE}
 fname = knitr::include_graphics(
