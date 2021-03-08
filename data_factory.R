@@ -338,6 +338,9 @@ conf_main <- function(){
           saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
           stop(glue("ERROR when run {key}"))
         }
+        if("meta_order" %ni% names(scrna@tools)){
+          scrna@tools[["meta_order"]] <- list(name = names(data_src), stage=unique(stage_lst))
+        }
         phase_name <- get_output_name(scrna, key) ### only first store, or second time
         saveRDS(scrna, file=file.path(SAVE_DIR, glue("{phase_name}.Rds")))
         logger.info(paste("finished", phase_name))
@@ -585,6 +588,48 @@ generate_scrna_phase_clustering <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+
+generate_scrna_phase_existed_clusters <- function(scrna){
+  ret_code <- 0
+  pconf <- configr::read.config("static/phase.ini")
+  pconf <- pconf[["phase_existed_clusters"]]
+  pconf <- pconf[pconf== 1]
+
+  if(exists("existed_cluster_slots_map")){
+      nms <- names(existed_cluster_slots_map)
+      metas <- nms[startsWith(nms, "meta.")]
+      reductions <- nms[startsWith(nms, "reduction.")]
+      for(meta in metas){
+          assertthat::assert_that(existed_cluster_slots_map[meta] %in% names(scrna@meta.data))
+          meta_slot <- stringr::str_sub(meta, start=(nchar("meta.")+1))
+          scrna@meta.data[, meta_slot] <- scrna@meta.data[, existed_cluster_slots_map[meta]]
+      }
+      for(reduction in reductions){
+          assertthat::assert_that(existed_cluster_slots_map[reduction] %in% names(scrna@reductions))
+          reduction_slot <- stringr::str_sub(reduction, start=(nchar("reduction.")+1))
+          scrna[[reduction_slot]] <- scrna[[existed_cluster_slots_map[reduction]]]
+      }
+
+  }
+
+  for (key in names(pconf)){
+      f_name = paste("generate_", key, sep="")
+      f_call = paste(f_name, "(scrna)", sep="")
+      logger.info(paste("executing", f_name))
+      ret_list <-  eval(parse(text=f_call))
+      scrna  <- ret_list[[1]]
+      ret_code <- ret_list[[2]]
+      if(ret_code != 0){
+          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
+          stop(glue("ERROR when run {key}"))
+      }
+      logger.info(paste("finished", f_name))
+
+   }
+  return(list(scrna, ret_code))
+}
+
+
 generate_scrna_phase_comparing <- function(scrna){
   ret_code <- 0
   pconf <- configr::read.config("static/phase.ini")
@@ -703,6 +748,13 @@ generate_scrna_cellcycle <-function(scrna){
              scrna <- RunPCA(scrna, features = c(s.genes, g2m.genes), reduction.name="BCELLCYCLE_PCA")
              scrna <- CellCycleScoring(scrna, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
              scrna$G1.Score = 1 - scrna$S.Score - scrna$G2M.Score
+             scrna$CC.Difference <- scrna$S.Score - scrna$G2M.Score
+             if("percent.mt" %ni% names(scrna@meta.data)){ ## for existed clusters analysis
+                scrna[["percent.mt"]] <- PercentageFeatureSet(scrna, pattern = "^mt-|^MT-")
+             }
+             if("percent.ribo" %ni% names(scrna@meta.data)){
+                scrna[["percent.ribo"]] <- PercentageFeatureSet(scrna, pattern = "^Rpl|^Rps|^RPL|^RPS")
+             }
 
            },
            error=function(cond) {

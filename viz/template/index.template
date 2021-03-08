@@ -13,22 +13,29 @@
 
 
 
-{% if intersect(viz_dict['clustering'], executing_list) %}
-## {{count}}.Cluster Results
-{% if "Clusters" in executing_list %}
-- [clusters](data/clusters.html)
-{% endif %}
-
-{% if "DEs" in executing_list %}
-- [marker genes with different resolutions](data/clusters_DEs.html)
-{% endif %}
-
+{% if intersect(viz_dict['batch_clustering'], executing_list) %}
+## {{count}}. Batch Clustering Results
 {% if "Clusters_seurat" in executing_list %}
 - [seurat_clusters](data/clusters_seurat.html)
 {% endif %}
 
 {% if "Clusters_harmony" in executing_list %}
 - [harmony_clusters](data/clusters_harmony.html)
+{% endif %}
+
+{% if "DEs" in executing_list %}
+- [marker genes with different resolutions](data/clusters_DEs.html)
+{% endif %}
+
+  {% set count = count + 1 %}
+{% endif %}
+
+
+
+{% if intersect(viz_dict['clustering'], executing_list) %}
+## {{count}}. Final Clustering Results
+{% if "Clusters" in executing_list %}
+- [clusters](data/clusters.html)
 {% endif %}
 
   {% set count = count + 1 %}

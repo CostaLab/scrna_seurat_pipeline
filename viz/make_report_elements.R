@@ -147,6 +147,7 @@ dir.create(report_tables_folder, recursive = TRUE)
 # run necessary generators
 if(any(grepl("QC",funcs,fixed=TRUE))) source("1_quality_report_elements.R")
 if(any(grepl("DEs",funcs,fixed=TRUE))) source("2_clusters_DEs_elements.R")
+if(any(grepl("Clusters_",funcs,fixed=TRUE))) source("2_batch_clustering_elements.R")
 if(any(grepl("Clusters",funcs,fixed=TRUE))) source("2_clustering_elements.R")
 if(any(grepl("Singleton",funcs,fixed=TRUE))){
   source("2_clustering_elements.R")

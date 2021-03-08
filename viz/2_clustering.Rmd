@@ -32,25 +32,6 @@ library(kableExtra)
 
 ## Cluster: `r colorize(params$cluster,"red")`
 
-### Clusters Resolution
-```{r clustree_resolution, out.width="100%", echo=FALSE}
-knitr::include_graphics(
-  file.path(
-    params$report_plots_folder_png,
-    paste0("clustree_resolution_",params$cluster,".png")
-  )
-)
-```
-
-```{r umap_resolution_list, out.width="100%", echo=FALSE}
-knitr::include_graphics(
-  file.path(
-    params$report_plots_folder_png,
-    paste0("umap_resolution_list_",params$cluster,".png")
-  )
-)
-```
-
 ### Clusters
 ```{r umap_groupby_name, out.width="100%", echo=FALSE}
 knitr::include_graphics(
@@ -163,12 +144,11 @@ knitr::include_graphics(
 
 ### MCA annotation
 ```{r mca_annotate, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
-knitr::include_graphics(
-  file.path(
+fname <- file.path(
     params$report_plots_folder_png,
     paste0("mca_annotate_",params$cluster,".png")
   )
-)
+if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 ```{r mca_annotate_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
 plt = readRDS(
@@ -188,12 +168,11 @@ Seurat::HoverLocator(plot = plt, information = info)
 
 ### HCL annotation
 ```{r hcl_annotate, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
-knitr::include_graphics(
-  file.path(
+fname <- file.path(
     params$report_plots_folder_png,
     paste0("hcl_annotate_",params$cluster,".png")
   )
-)
+if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 ```{r hcl_annotate_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
 plt = readRDS(
@@ -213,12 +192,11 @@ Seurat::HoverLocator(plot = plt, information = info)
 
 ### External Annotation
 ```{r external_annotation, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
-knitr::include_graphics(
-  file.path(
+fname <- file.path(
     params$report_plots_folder_png,
     paste0("external_annotation_",params$cluster,".png")
   )
-)
+if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 ```{r external_annotation_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
 plt = readRDS(

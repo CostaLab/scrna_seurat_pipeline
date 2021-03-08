@@ -35,17 +35,18 @@ print("==========PLOT LIST===============:\n",
        "\n==================================\n")
 
 viz_dict = { "quality": ["QC"],
-             "clustering": ["Clusters",
-                            "DEs",
-                            "Clusters_harmony",
-                            "Clusters_seurat",
-                            "intUMAPs"],
+             "batch_clustering": ["Clusters_seurat",
+                                  "Clusters_harmony",
+                                  "DEs"],
+
+             "clustering": ["Clusters"],
 
              "clustersVS": ["EXT_MARKERS",
                             "DEGO",
                             "hallmark",
                             "KEGG",
-                            "Reactome"],
+                            "Reactome",
+                            "intUMAPs"],
 
              "DEGOstageVS": ["DEGO_stage"],
 

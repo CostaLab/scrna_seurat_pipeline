@@ -78,11 +78,17 @@ if(file.exists(fname)) knitr::include_graphics(fname)
 
 ```{r barplot_go_up, out.width="100%", echo=FALSE}
 ### up genes top 10
-fname=file.path(
-  params$report_plots_folder_png,
-  paste0("go_up_genes_barplot_cluster-",params$cluster,".png")
-)
-if(file.exists(fname)) knitr::include_graphics(fname)
+flist = stringr::str_sort(grep(
+  paste0("go_up_genes_barplot_cluster-", params$cluster),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+knitr::include_graphics(flist)
+
 ```
 
 ## GO down analysis
@@ -95,12 +101,19 @@ if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 
 ```{r barplot_go_down, out.width="100%", echo=FALSE}
-### up genes top 10
-fname=file.path(
-  params$report_plots_folder_png,
-  paste0("go_down_genes_barplot_cluster-",params$cluster,".png")
-)
-if(file.exists(fname)) knitr::include_graphics(fname)
+### down genes top 10
+
+flist = stringr::str_sort(grep(
+  paste0("go_down_genes_barplot_cluster-", params$cluster),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+knitr::include_graphics(flist)
+
 ```
 
 ## DE genes on UMAP plot
