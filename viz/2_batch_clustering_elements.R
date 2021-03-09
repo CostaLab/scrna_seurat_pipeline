@@ -64,3 +64,4 @@ for(cluster_use in available_clusters){
     plt_name=paste0("umap_resolution_list_",cluster_use),
     width=15, height=20
   )
+}
