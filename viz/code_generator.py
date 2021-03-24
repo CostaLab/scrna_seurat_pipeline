@@ -23,6 +23,8 @@ parser = argparse.ArgumentParser(description='Process arguments.')
 parser.add_argument('-c', '--cluster_use', default='seurat_clusters', help='clusters to choose')
 parser.add_argument('-cf', '--config_file', default='conf/config.R', help='path to config file')
 parser.add_argument('-b', '--base_dir', default='../', help='path to base dir')
+parser.add_argument('-o', '--output_dir', default='../', help='path to output dir')
+parser.add_argument('-s', '--save_dir', default='../', help='path to save dir')
 parser.add_argument('-p', '--proj_tag', default='', help='project name or tag')
 parser.add_argument('-l', '--executing_list', default='[QC]', help='executing list to viz')
 args = parser.parse_args()
@@ -64,7 +66,7 @@ viz_dict = { "quality": ["QC"],
 
 DATADIR = args.base_dir
 
-robjects.r['source'](os.path.join(DATADIR, args.config_file))  ### load config
+robjects.r['source'](args.config_file)  ### load config
 names = robjects.r("names(data_src)")
 lst_1v1 = list(combinations(names, 2))
 stages = robjects.r("stage_lst")
@@ -75,8 +77,10 @@ seen = set()
 u_stages = [x for x in stages if x not in seen and not seen.add(x)]  ##remove dup
 lst_stages = list(combinations(u_stages, 2))
 
+# FIXME should 'cluster_use' be redefined here?
 cluster_use = "seurat_clusters"
-savedir = os.path.join(DATADIR, "save"+args.proj_tag)#robjects.r("SAVE_DIR")[0]
+# savedir = os.path.join(DATADIR, "save"+args.proj_tag)#robjects.r("SAVE_DIR")[0]
+savedir = args.save_dir
 
 # try:
 #     options,args = getopt.getopt(sys.argv[1:],"c:")
@@ -292,7 +296,8 @@ def generate_report_stageVS_kegg(out):
 
 
 def main():
-    out_dir = "report"+args.proj_tag
+
+    out_dir = args.output_dir
     generate_report_1v1("DE-GO-analysis-1v1.Rmd")
     generate_report_1v1_hallmark("hallmark-1v1.Rmd")
     generate_report_1v1_reactome("reactome-1v1.Rmd")
