@@ -21,7 +21,7 @@ Create the scrna report.
     -ch, --chart_path CHART_PATH path where the chart data of your analysis was saved, usually "chart_[PROJECT_NAME]"
     -e, --ext_annot EXT_ANNOT    path to the external annotation file
     -o, --output OUTPUT_FOLDER   optional, default is "./report_[PROJECT_NAME]", path to the output folder
-    -a, --author AUTHOR          optional, default is "CostaLab", define the author of the analysis
+    -a, --author AUTHOR          optional, default is "CostaLab", define the author of the analysis, this name MUST NOT have spaces
     -m, --make_elements          optional flag, if set, make all report elements (plots/figures) from scratch
     -so, --one_file              optional flag, if set, in addition to the default report, also produce the one file report
 EOF
@@ -203,25 +203,26 @@ echo -e "Use cluster slot ${RED} $cluster ${NC}"
 mkdir -p $OUTPUT_FOLDER/data
 cp -r $CHART_DATA_PATH/* $OUTPUT_FOLDER/data
 
-python code_generator.py \
+python viz/code_generator.py \
   -c $cluster \
   -cf $CONFIG_FILE_PATH \
-  --base_dir "../" \
   --save_dir "${SAVE_DATA_PATH}" \
   --output_dir "${OUTPUT_FOLDER}" \
   --proj_tag "${PROJECT}" \
   --executing_list "${py_exe_list}"
+  # --base_dir "../" \
 
 grip --export $OUTPUT_FOLDER/index.md
 
 
 # Make report elements
 if [[ "$MAKE_ELEMENTS" == 1 ]]; then
-  Rscript make_report_elements.R \
+  Rscript viz/make_report_elements.R \
     --proj=$PROJECT \
     --cluster=$cluster \
     --save_dir=$SAVE_DATA_PATH \
     --ext_annot=$EXT_ANNOT_PATH \
+    --output_dir=$OUTPUT_FOLDER \
     "${FUNCS[@]}"
 fi
 if [ $? -ne 0 ]; then
@@ -230,7 +231,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Produce report
-Rscript make_report.R \
+Rscript viz/make_report.R \
   --proj=$PROJECT \
   --cluster=$cluster \
   --save_dir=$SAVE_DATA_PATH \

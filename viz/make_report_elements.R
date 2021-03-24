@@ -6,31 +6,32 @@ PROJ = args[1]
 CLUSTER = args[2]
 SAVE_DIR = args[3]
 ANNOTATION_EXTERNAL_FILE_PATH = args[4]
-FUNCS = args[-c(1:4)]
+OUTPUT_DIR = args[5]
+FUNCS = args[-c(1:5)]
 
 # TODO better param processing
 if(grepl("--proj",PROJ,fixed=TRUE)) PROJ=gsub("--proj=","",PROJ,fixed=TRUE)
 if(grepl("--cluster",CLUSTER,fixed=TRUE)) CLUSTER=gsub("--cluster=","",CLUSTER,fixed=TRUE)
 if(grepl("--save_dir",SAVE_DIR,fixed=TRUE)) SAVE_DIR=gsub("--save_dir=","",SAVE_DIR,fixed=TRUE)
 if(grepl("--ext_annot",ANNOTATION_EXTERNAL_FILE_PATH,fixed=TRUE)) ANNOTATION_EXTERNAL_FILE_PATH=gsub("--ext_annot=","",ANNOTATION_EXTERNAL_FILE_PATH,fixed=TRUE)
+if(grepl("--output_dir",OUTPUT_DIR,fixed=TRUE)) OUTPUT_DIR=gsub("--output_dir=","",OUTPUT_DIR,fixed=TRUE)
 
-
-library(Seurat)
-library(Hmisc)
-library(knitr)
-library(kableExtra)
-library(dplyr)
-library(glue)
-library(ggplot2)
-library(cowplot)
-library(reshape2)
-library(urltools)
-library(clustree)
-library(stringr)
-library(digest)
-library(openxlsx)
-library(ComplexHeatmap)
-library(EnhancedVolcano)
+suppressPackageStartupMessages(library(Seurat))
+suppressPackageStartupMessages(library(Hmisc))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(kableExtra))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(glue))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(cowplot))
+suppressPackageStartupMessages(library(reshape2))
+suppressPackageStartupMessages(library(urltools))
+suppressPackageStartupMessages(library(clustree))
+suppressPackageStartupMessages(library(stringr))
+suppressPackageStartupMessages(library(digest))
+suppressPackageStartupMessages(library(openxlsx))
+suppressPackageStartupMessages(library(ComplexHeatmap))
+suppressPackageStartupMessages(library(EnhancedVolcano))
 
 # define colour palette
 colours = c(
@@ -135,8 +136,8 @@ if(any(grepl("Clusters_harmony",funcs,fixed=TRUE))) available_clusters = c(avail
 if(any(grepl("Clusters_seurat",funcs,fixed=TRUE))) available_clusters = c(available_clusters,"seurat_inte_clusters")
 print(available_clusters)
 # define/create dirs
-report_tables_folder = file.path(paste0('report',PROJ),'tables')
-report_plots_folder = file.path(paste0('report',PROJ),'plots')
+report_tables_folder = file.path(OUTPUT_DIR,'tables')
+report_plots_folder = file.path(OUTPUT_DIR,'plots')
 report_plots_folder_png = file.path(report_plots_folder,'png')
 report_plots_folder_pdf = file.path(report_plots_folder,'pdf')
 
@@ -145,14 +146,14 @@ dir.create(report_plots_folder_pdf, recursive = TRUE)
 dir.create(report_tables_folder, recursive = TRUE)
 
 # run necessary generators
-if(any(grepl("QC",funcs,fixed=TRUE))) source("1_quality_report_elements.R")
-if(any(grepl("DEs",funcs,fixed=TRUE))) source("2_clusters_DEs_elements.R")
-if(any(grepl("Clusters_",funcs,fixed=TRUE))) source("2_batch_clustering_elements.R")
-if(any(grepl("Clusters",funcs,fixed=TRUE))) source("2_clustering_elements.R")
+if(any(grepl("QC",funcs,fixed=TRUE))) source("viz/1_quality_report_elements.R")
+if(any(grepl("DEs",funcs,fixed=TRUE))) source("viz/2_clusters_DEs_elements.R")
+if(any(grepl("Clusters_",funcs,fixed=TRUE))) source("viz/2_batch_clustering_elements.R")
+if(any(grepl("Clusters",funcs,fixed=TRUE))) source("viz/2_clustering_elements.R")
 if(any(grepl("Singleton",funcs,fixed=TRUE))){
-  source("2_clustering_elements.R")
-  source("2_clusters_DEs_elements.R")
+  source("viz/2_clustering_elements.R")
+  source("viz/2_clusters_DEs_elements.R")
 }
-if(any(grepl("EXT_MARKERS",funcs,fixed=TRUE))) source("3_external_markers_elements.R")
+if(any(grepl("EXT_MARKERS",funcs,fixed=TRUE))) source("viz/3_external_markers_elements.R")
 # FIXME possible problem where all term enrichment analysis is on the same place
-if(any(grepl("DEGO",funcs,fixed=TRUE))) source("3_DE_GO-analysis_elements.R")
+if(any(grepl("DEGO",funcs,fixed=TRUE))) source("viz/3_DE_GO-analysis_elements.R")

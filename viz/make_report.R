@@ -68,32 +68,32 @@ render_func = function(rmd_input_filename, output_filename){
 }
 
 for(i in FUNCS){
-  if(grepl("QC",i,fixed=TRUE)) render_func("1_quality_report.Rmd","data_quality")
-  if(grepl("DEs",i,fixed=TRUE)) render_func("2_clusters_DEs.Rmd","clusters_DEs")
-  if(grepl("Clusters",i,fixed=TRUE) | grepl("Singleton",i,fixed=TRUE)) render_func("2_clustering.Rmd","clusters")
-  if(grepl("Clusters_harmony",i,fixed=TRUE)) render_func("2_clustering_harmony.Rmd","clusters_harmony")
-  if(grepl("Clusters_seurat",i,fixed=TRUE)) render_func("2_clustering_seurat.Rmd","clusters_seurat")
-  if(grepl("EXT_MARKERS",i,fixed=TRUE)) render_func("3_external_markers.Rmd","external_markers")
-  if(grepl("DEGO",i,fixed=TRUE)) render_func("3_DE_GO-analysis.Rmd","dego")
-  if(grepl("KEGG",i,fixed=TRUE)) render_func("3_KEGG.Rmd","KEGG")
-  if(grepl("hallmark",i,fixed=TRUE)) render_func("3_hallmark.Rmd","hallmark")
-  if(grepl("Reactome",i,fixed=TRUE)) render_func("3_Reactome.Rmd","Reactome")
-  if(grepl("DEGO_stage",i,fixed=TRUE)) render_func("DE-GO-analysis-stagesVS.Rmd","gv")
-  if(grepl("DEGO_1v1",i,fixed=TRUE)) render_func("DE-GO-analysis-1v1.Rmd","1vs1")
-  if(grepl("hallmark_1v1",i,fixed=TRUE)) render_func("hallmark-1v1.Rmd","hallmark_1vs1")
-  if(grepl("reactome_1v1",i,fixed=TRUE)) render_func("reactome-1v1.Rmd","reactome_1vs1")
-  if(grepl("kegg_1v1",i,fixed=TRUE)) render_func("kegg-1v1.Rmd","kegg_1vs1")
-  if(grepl("hallmark_stage",i,fixed=TRUE)) render_func("hallmark-stageVS.Rmd","hallmark_stageVS")
-  if(grepl("reactome_stage",i,fixed=TRUE)) render_func("reactome-stageVS.Rmd","reactome_stageVS")
-  if(grepl("kegg_stage",i,fixed=TRUE)) render_func("kegg-stageVS.Rmd","kegg_stageVS")
-  if(grepl("intUMAPs",i,fixed=TRUE)) render_func("interactive_UMAPs.Rmd","interactive_UMAPs")
+  if(grepl("QC",i,fixed=TRUE)) render_func("viz/1_quality_report.Rmd","data_quality")
+  if(grepl("DEs",i,fixed=TRUE)) render_func("viz/2_clusters_DEs.Rmd","clusters_DEs")
+  if(grepl("Clusters",i,fixed=TRUE) | grepl("Singleton",i,fixed=TRUE)) render_func("viz/2_clustering.Rmd","clusters")
+  if(grepl("Clusters_harmony",i,fixed=TRUE)) render_func("viz/2_clustering_harmony.Rmd","clusters_harmony")
+  if(grepl("Clusters_seurat",i,fixed=TRUE)) render_func("viz/2_clustering_seurat.Rmd","clusters_seurat")
+  if(grepl("EXT_MARKERS",i,fixed=TRUE)) render_func("viz/3_external_markers.Rmd","external_markers")
+  if(grepl("DEGO",i,fixed=TRUE)) render_func("viz/3_DE_GO-analysis.Rmd","dego")
+  if(grepl("KEGG",i,fixed=TRUE)) render_func("viz/3_KEGG.Rmd","KEGG")
+  if(grepl("hallmark",i,fixed=TRUE)) render_func("viz/3_hallmark.Rmd","hallmark")
+  if(grepl("Reactome",i,fixed=TRUE)) render_func("viz/3_Reactome.Rmd","Reactome")
+  if(grepl("DEGO_stage",i,fixed=TRUE)) render_func("viz/DE-GO-analysis-stagesVS.Rmd","gv")
+  if(grepl("DEGO_1v1",i,fixed=TRUE)) render_func("viz/DE-GO-analysis-1v1.Rmd","1vs1")
+  if(grepl("hallmark_1v1",i,fixed=TRUE)) render_func("viz/hallmark-1v1.Rmd","hallmark_1vs1")
+  if(grepl("reactome_1v1",i,fixed=TRUE)) render_func("viz/reactome-1v1.Rmd","reactome_1vs1")
+  if(grepl("kegg_1v1",i,fixed=TRUE)) render_func("viz/kegg-1v1.Rmd","kegg_1vs1")
+  if(grepl("hallmark_stage",i,fixed=TRUE)) render_func("viz/hallmark-stageVS.Rmd","hallmark_stageVS")
+  if(grepl("reactome_stage",i,fixed=TRUE)) render_func("viz/reactome-stageVS.Rmd","reactome_stageVS")
+  if(grepl("kegg_stage",i,fixed=TRUE)) render_func("viz/kegg-stageVS.Rmd","kegg_stageVS")
+  if(grepl("intUMAPs",i,fixed=TRUE)) render_func("viz/interactive_UMAPs.Rmd","interactive_UMAPs")
 }
 
 
 if(GEN_SINGLE_FILE){
   # generate report including everything in a single file
   rmarkdown::render(
-    'scrna_pipeline_report.Rmd',
+    'viz/scrna_pipeline_report.Rmd',
     output_file=file.path(OUTPUT_DIR,'scrna_report'),
     output_format=c("html_document"),
     clean=TRUE,

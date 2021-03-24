@@ -22,7 +22,7 @@ def intersect(a, b):
 parser = argparse.ArgumentParser(description='Process arguments.')
 parser.add_argument('-c', '--cluster_use', default='seurat_clusters', help='clusters to choose')
 parser.add_argument('-cf', '--config_file', default='conf/config.R', help='path to config file')
-parser.add_argument('-b', '--base_dir', default='../', help='path to base dir')
+# parser.add_argument('-b', '--base_dir', default='../', help='path to base dir')
 parser.add_argument('-o', '--output_dir', default='../', help='path to output dir')
 parser.add_argument('-s', '--save_dir', default='../', help='path to save dir')
 parser.add_argument('-p', '--proj_tag', default='', help='project name or tag')
@@ -64,7 +64,7 @@ viz_dict = { "quality": ["QC"],
 }
 
 
-DATADIR = args.base_dir
+# DATADIR = args.base_dir
 
 robjects.r['source'](args.config_file)  ### load config
 names = robjects.r("names(data_src)")
@@ -97,7 +97,7 @@ def generate_1v1(out):
     fw = open(out, 'w')
 
 
-    thead = open("template/head.template")
+    thead = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),"template/head.template"))
     tmplth = thead.read()
     t = Template(tmplth)
     today = datetime.date.today().strftime("%d%B%Y")
@@ -106,7 +106,7 @@ def generate_1v1(out):
 
     fw.write("%s\n" %head)
 
-    tfile = open("template/DE-GO-1v1.template")
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-1v1.template"))
     tmpltr = tfile.read()
     for x,y in lst_1v1:
         vs = "%s vs %s" % (x, y)
@@ -135,7 +135,7 @@ def generate_1v1(out):
 
 
 def generate_md_idx(out):
-    tfile = open("template/index.template")
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/index.template"))
     tmplt = tfile.read()
     t = Template(tmplt)
     st = t.render(requote_uri=requote_uri,
@@ -153,7 +153,7 @@ def generate_md_idx(out):
 
 
 def generate_report_stagesVS(out):
-    tfile = open("template/DE-GO-stagesVS.template")
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-stagesVS.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
     cc = 6
@@ -171,7 +171,7 @@ def generate_report_stagesVS(out):
 
 
 def generate_report_1v1(out):
-    tfile = open("template/DE-GO-1v1.template")
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-1v1.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
     cc = 6
@@ -189,7 +189,7 @@ def generate_report_1v1(out):
 
 
 def generate_report_1v1_hallmark(out):
-    tfile = open("template/hallmark-1v1.template")
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/hallmark-1v1.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
     cc = 6
@@ -206,7 +206,7 @@ def generate_report_1v1_hallmark(out):
 
 
 def generate_report_stageVS_hallmark(out):
-    tfile = open("template/hallmark-stageVS.template")
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/hallmark-stageVS.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
     cc = 6
@@ -223,7 +223,7 @@ def generate_report_stageVS_hallmark(out):
 
 
 def generate_report_1v1_reactome(out):
-    tfile = open("template/reactome-1v1.template")
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/reactome-1v1.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
     cc = 6
@@ -239,7 +239,7 @@ def generate_report_1v1_reactome(out):
 #endf generate_groupVS
 
 def generate_report_stageVS_reactome(out):
-    tfile = open("template/reactome-stageVS.template")
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/reactome-stageVS.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
     cc = 6
@@ -258,7 +258,7 @@ def generate_report_stageVS_reactome(out):
 
 
 def generate_report_1v1_kegg(out):
-    tfile = open("template/kegg-1v1.template")
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/kegg-1v1.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
     cc = 6
@@ -275,7 +275,7 @@ def generate_report_1v1_kegg(out):
 
 
 def generate_report_stageVS_kegg(out):
-    tfile = open("template/kegg-stageVS.template")
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/kegg-stageVS.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
     cc = 6
