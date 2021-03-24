@@ -1,12 +1,10 @@
 #!/bin/bash
 
-
-
+# define default params
 AUTHOR="CostaLab"
 DEFAULT_OUTPUT_FOLDER="report_"
 MAKE_ELEMENTS=0
 MAKE_SINGLE_FILE=0
-
 
 # Usage info
 show_help() {
@@ -27,7 +25,7 @@ Create the scrna report.
 EOF
 }
 
-
+# argument parsing
 while (( $# )); do
   case $1 in
     -h|-\?|--help)
@@ -56,11 +54,11 @@ while (( $# )); do
     ;;
     -m|--make_elements)
       MAKE_ELEMENTS=1
-      shift # past argument
+      shift # past argument, just a tag, no value
     ;;
     -so|--one_file)
       MAKE_SINGLE_FILE=1
-      shift # past argument
+      shift # past argument, just a tag, no value
     ;;
     -s|--save_path)
       if [ "$2" ]; then
@@ -112,7 +110,7 @@ while (( $# )); do
   esac
 done
 
-
+# check if needed parameters have been defined
 if [ -z "$PROJECT" ]; then
   printf 'ERROR: "-p, --project" need to be defined.'
   exit 1
@@ -152,6 +150,8 @@ fi
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# TODO the steps to perform as well as all the inline parameters should
+# probably be specified in a file and fetched from there
 FUNCS=(
   #Singleton
   QC
