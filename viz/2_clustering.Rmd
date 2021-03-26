@@ -42,6 +42,14 @@ knitr::include_graphics(
   )
 )
 ```
+```{r umap_groupby_stage, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_groupby_stage_",params$cluster,".png")
+  )
+)
+```
 ```{r umap_groupby_cluster, out.width="100%", echo=FALSE}
 knitr::include_graphics(
   file.path(

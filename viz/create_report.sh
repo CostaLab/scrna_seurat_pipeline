@@ -223,6 +223,7 @@ if [[ "$MAKE_ELEMENTS" == 1 ]]; then
     --save_dir=$SAVE_DATA_PATH \
     --ext_annot=$EXT_ANNOT_PATH \
     --output_dir=$OUTPUT_FOLDER \
+    --config_file=$CONFIG_FILE_PATH \
     "${FUNCS[@]}"
 fi
 if [ $? -ne 0 ]; then

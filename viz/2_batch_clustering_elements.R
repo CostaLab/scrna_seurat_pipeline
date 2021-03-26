@@ -48,11 +48,19 @@ for(cluster_use in available_clusters){
   plist <- list()
   for(nm in nms){
 
+    col_def <- rev(
+      viridis::viridis_pal(option = cluster_viridis_opt)(
+        length(unique(scrna@meta.data[,paste0(pref_def, nm)]))
+      )
+    )
+
     plist[[nm]] <- DimPlot(
       scrna,
       reduction = umap_reduction,
-      group.by =  paste0(pref_def, nm), #FIXME group.by remains the same regardless of reduction?
-      label=T, label.size=8
+      group.by =  paste0(pref_def, nm),
+      label=TRUE,
+      label.size=8,
+      cols=col_def
     ) + ggtitle(sprintf("resolution %s", nm))
 
   }

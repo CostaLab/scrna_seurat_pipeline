@@ -7,7 +7,8 @@ CLUSTER = args[2]
 SAVE_DIR = args[3]
 ANNOTATION_EXTERNAL_FILE_PATH = args[4]
 OUTPUT_DIR = args[5]
-FUNCS = args[-c(1:5)]
+CONFIG_FILE=args[6]
+FUNCS = args[-c(1:6)]
 
 # TODO better param processing
 if(grepl("--proj",PROJ,fixed=TRUE)) PROJ=gsub("--proj=","",PROJ,fixed=TRUE)
@@ -15,6 +16,7 @@ if(grepl("--cluster",CLUSTER,fixed=TRUE)) CLUSTER=gsub("--cluster=","",CLUSTER,f
 if(grepl("--save_dir",SAVE_DIR,fixed=TRUE)) SAVE_DIR=gsub("--save_dir=","",SAVE_DIR,fixed=TRUE)
 if(grepl("--ext_annot",ANNOTATION_EXTERNAL_FILE_PATH,fixed=TRUE)) ANNOTATION_EXTERNAL_FILE_PATH=gsub("--ext_annot=","",ANNOTATION_EXTERNAL_FILE_PATH,fixed=TRUE)
 if(grepl("--output_dir",OUTPUT_DIR,fixed=TRUE)) OUTPUT_DIR=gsub("--output_dir=","",OUTPUT_DIR,fixed=TRUE)
+if(grepl("--config_file",CONFIG_FILE,fixed=TRUE)) CONFIG_FILE=gsub("--config_file=","",CONFIG_FILE,fixed=TRUE)
 
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(Hmisc))
@@ -33,11 +35,65 @@ suppressPackageStartupMessages(library(openxlsx))
 suppressPackageStartupMessages(library(ComplexHeatmap))
 suppressPackageStartupMessages(library(EnhancedVolcano))
 
-# define colour palette
-colours = c(
+
+# Get config options
+viz_conf=NULL
+source(CONFIG_FILE)
+
+# define colours
+# cluster_colors
+cluster_viridis_opt = ifelse(
+  any(grepl("cluster_color_option",names(viz_conf),fixed = TRUE)),
+  viz_conf[["cluster_color_option"]], # Config option
+  "D" # Default
+)
+
+# replicate_colors
+replicates_viridis_opt = ifelse(
+  any(grepl("replicate_color_option",names(viz_conf),fixed = TRUE)),
+  viz_conf[["replicate_color_option"]],
+  "C"
+)
+
+# divergent color for negative values
+neg_color = ifelse(
+  any(grepl("neg_color",names(viz_conf),fixed = TRUE)),
+  viz_conf[["neg_color"]],
+  colorBlindness::Blue2DarkOrange12Steps[2]
+)
+
+# divergent color for positive values
+pos_color = ifelse(
+  any(grepl("pos_color",names(viz_conf),fixed = TRUE)),
+  viz_conf[["pos_color"]],
+  rev(colorBlindness::Blue2DarkOrange12Steps)[2]
+)
+
+# divergent color for base values
+base_color = ifelse(
+  any(grepl("base_color",names(viz_conf),fixed = TRUE)),
+  viz_conf[["base_color"]],
+  "lightgrey"
+)
+
+# divergent palette for neg to pos values
+neg_pos_divergent_palette = ifelse(
+  any(grepl("neg_pos_divergent_palette",names(viz_conf),fixed = TRUE)),
+  viz_conf[["neg_pos_divergent_palette"]],
+  colorBlindness::Blue2DarkOrange12Steps
+)
+
+zero_pos_divergent_colors = c(base_color,pos_color)
+
+override_colours = c(
   "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99",
   "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99"
 )
+
+# colorRampPalette(rev(RColorBrewer::brewer.pal(9, "RdBu")))(10)
+# colorRampPalette(c(colorBlindness::Blue2DarkOrange18Steps[1],rev(colorBlindness::Blue2DarkOrange18Steps)[1]))(18)
+
+
 
 # define helper functions
 `%ni%` <- Negate(`%in%`)
@@ -85,7 +141,8 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
     scale_x_discrete(limits=rev(top.up.dn$gene)) +
     theme_minimal() +
     theme(legend.position="none", axis.text=element_text(size=15)) +
-    scale_fill_manual(values = c(positive = "#E41A1C", negative = "#377EB8")) +
+    # scale_fill_manual(values = c(positive = "#E41A1C", negative = "#377EB8")) +
+    scale_fill_manual(values = c(positive = pos_color, negative = neg_color)) +
     coord_flip()
   if (!is.null(main)) {
     g <- g + ggtitle(main)

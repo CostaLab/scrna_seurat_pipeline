@@ -56,11 +56,13 @@ help_sort_func <- ifelse(
 )
 
 scrna@meta.data[, cluster] <- help_sort_func(scrna@meta.data[, cluster])
+col_def <- rev(viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,cluster]))))
 
 plthm = DoHeatmap(
   scrna,
   features=genes,
   group.by = cluster,
+  group.colors=col_def,
   disp.min = -2,
   disp.max = 2,
   slot = "scale.data",
@@ -101,7 +103,7 @@ if(length(plots) > 0){
       plt=plt,
       base_plot_dir=report_plots_folder,
       plt_name=paste0("top10-de-genes_per_cluster-",cluster,"_p",i,"-",ni),
-      width=13, height=12
+      width=13, height=7
     )
 	}
 }

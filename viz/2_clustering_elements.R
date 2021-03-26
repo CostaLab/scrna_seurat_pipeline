@@ -28,8 +28,16 @@ for(cluster_use in available_clusters){
 
 
   message("### Making umap grouped by name")
+  group_by <- "name"
+  col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
   ## Clusters
-  plt = DimPlot(scrna, reduction = umap_reduction, group.by = "name", cols=colours)
+  plt = DimPlot(
+    scrna,
+    reduction = umap_reduction,
+    group.by = group_by,
+    cols=col_def
+  )
+
   save_ggplot_formats(
     plt=plt,
     base_plot_dir=report_plots_folder,
@@ -37,11 +45,36 @@ for(cluster_use in available_clusters){
     width=9, height=7
   )
   message("### Making umap grouped by clusters")
-  plt = DimPlot(scrna, reduction = umap_reduction, group.by = cluster_use, label=T, label.size=8)
+  group_by <- cluster_use
+  col_def <- rev(viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by]))))
+  plt = DimPlot(
+    scrna,
+    reduction = umap_reduction,
+    group.by = group_by,
+    cols=col_def,
+    label=TRUE,
+    label.size=8
+  )
   save_ggplot_formats(
     plt=plt,
     base_plot_dir=report_plots_folder,
     plt_name=paste0("umap_groupby_cluster_",cluster_use),
+    width=9, height=7
+  )
+
+  message("### Making umap grouped by stage")
+  group_by <- "stage"
+  col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
+  plt = DimPlot(
+    scrna,
+    reduction = umap_reduction,
+    group.by = group_by,
+    cols=col_def
+  )
+  save_ggplot_formats(
+    plt=plt,
+    base_plot_dir=report_plots_folder,
+    plt_name=paste0("umap_groupby_stage_",cluster_use),
     width=9, height=7
   )
 
@@ -58,6 +91,8 @@ for(cluster_use in available_clusters){
     ## Clusters Statistics
     message("### Making cluster statistics barplot")
     df <- scrna@tools[[fisher_cluster_name]]
+    df <- df %>% mutate_at(vars(starts_with("pval.adjust_")),~formatC(x=.,format = "e",digits = 3))
+
 
     if(all.is.numeric(df$Cluster)){ ## set int order if all cluster name are integers
       df$Cluster <- factor(
@@ -79,24 +114,37 @@ for(cluster_use in available_clusters){
             return(ret)
     }
 
+    col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(df$Cluster)))
     colnames(df) <- sapply(colnames(df), wrapp_invalid_name)
+
     if(length(table(scrna$stage))<=2){
       nm <- scrna@tools[["meta_order"]][["stage"]][1]
       nm2 <- scrna@tools[["meta_order"]][["stage"]][2]
 
       aodds <- wrapp_invalid_name(glue("odds.ratio_{nm}.vs.{nm2}"))
-      plt <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
-        geom_bar(stat="identity") +
-        coord_flip() +
-        guides(fill = guide_legend(reverse = TRUE)) +
-        scale_y_continuous(trans = shift_trans(1)) + geom_text(data = df,
-                    aes_string("Cluster", 1, label = wrapp_invalid_name(glue("pval.adjust_{nm}.vs.{nm2}"))),
-                    position = "identity",
-                    size=4) +
-        ggtitle(sprintf("%s vs %s (odds ratio > 1 means more %s)", nm, nm2, nm))+
-        xlab("Cluster") +
-        ylab("odds ratio")+
-        theme_minimal()
+
+      plt <- ggplot(
+        data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")
+      ) +
+      geom_bar(stat="identity") +
+      coord_flip() +
+      guides(fill = guide_legend(reverse = TRUE)) +
+      scale_y_continuous(trans = shift_trans(1)) +
+      geom_text(
+        data = df,
+        aes_string(
+          x="Cluster",
+          y=1,
+          label = wrapp_invalid_name(glue::glue("pval.adjust_{nm}.vs.{nm2}"))
+        ),
+        position = "identity",
+        size=4
+      ) +
+      scale_fill_manual(values=col_def) +
+      ggtitle(sprintf("%s vs %s (odds ratio > 1 means more %s)", nm, nm2, nm))+
+      xlab("Cluster") +
+      ylab("odds ratio")+
+      theme_minimal()
 
       save_ggplot_formats(
         plt=plt,
@@ -115,19 +163,28 @@ for(cluster_use in available_clusters){
         nm2 <- scrna@tools[["meta_order"]][["stage"]][i2]
 
         aodds <- wrapp_invalid_name(glue("odds.ratio_{nm}.vs.{nm2}"))
+
         plt <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
         geom_bar(stat="identity") +
         coord_flip() +
         guides(fill = guide_legend(reverse = TRUE)) +
         scale_y_continuous(trans = shift_trans(1)) +
-        geom_text(data = df,
-                  aes_string("Cluster", 1, label = wrapp_invalid_name(glue("pval.adjust_{nm}.vs.{nm2}"))),
-                  position = "identity",
-                  size=4) +
+        geom_text(
+          data = df,
+          aes_string(
+            x="Cluster",
+            y=1,
+            label = wrapp_invalid_name(glue("pval.adjust_{nm}.vs.{nm2}"))
+          ),
+          position = "identity",
+          size=4
+        ) +
+        scale_fill_manual(values=col_def) +
         ggtitle(glue("{nm} vs {nm2} (odds ratio > 1 means more {nm})"))+
         xlab("Cluster") +
         ylab("odds ratio")+
         theme_minimal()
+
         save_ggplot_formats(
           plt=plt,
           base_plot_dir=report_plots_folder,
@@ -150,8 +207,13 @@ for(cluster_use in available_clusters){
 
     cluster_propotion_before = t(prop.table(x = table(scrna@meta.data$name, scrna@meta.data[, cluster_use]), margin = 2))
     cluster_propotion_before = cluster_propotion_before[,1:name_len]
-    cluster_propotion_before_sort = cluster_propotion_before[order(cluster_propotion_before[,1],
-                                            cluster_propotion_before[,2],decreasing=TRUE),]
+    cluster_propotion_before_sort = cluster_propotion_before[order(
+      cluster_propotion_before[,1],
+      cluster_propotion_before[,2],
+      decreasing=TRUE
+    ),]
+
+    col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(name_len)
 
     # barplot uses default graphic device hence we use the std functions to save it
     png(
@@ -165,7 +227,7 @@ for(cluster_use in available_clusters){
     par(xpd=TRUE)
     par(mar = c(5,2,2,12))
     barplot(
-      t(cluster_propotion_before_sort), col=colours, xlab="cluster",
+      t(cluster_propotion_before_sort), col=col_def, xlab="cluster",
       legend.text = colnames(cluster_propotion_before_sort),
       args.legend = list(x ='right', bty='n', inset=c(-0.13,0), xpd = TRUE),
       names.arg = rownames(cluster_propotion_before_sort),
@@ -181,7 +243,7 @@ for(cluster_use in available_clusters){
     par(xpd=TRUE)
     par(mar = c(5,2,2,12))
     barplot(
-      t(cluster_propotion_before_sort), col=colours, xlab="cluster",
+      t(cluster_propotion_before_sort), col=col_def, xlab="cluster",
       legend.text = colnames(cluster_propotion_before_sort),
       args.legend = list(x ='right', bty='n', inset=c(-0.13,0), xpd = TRUE),
       names.arg = rownames(cluster_propotion_before_sort),
@@ -195,10 +257,12 @@ for(cluster_use in available_clusters){
     message("### Making sample amount distribution barplot")
     #myel <- SetAllIdent(scrna, "name")
 
+    col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(scrna@meta.data[,"name"])))
+
     plt = BarPlot(
       scrna@meta.data[, cluster_use], fill = scrna$name, xlab = "Cluster",
       legend.title = "Replicate", main = "Amount of samples in each cluster")
-    plt = plt + scale_fill_manual(values=colours)
+    plt = plt + scale_fill_manual(values=col_def) + theme_minimal()
     save_ggplot_formats(
       plt=plt,
       base_plot_dir=report_plots_folder,
@@ -210,7 +274,16 @@ for(cluster_use in available_clusters){
 
   ## Cell cycle phase
   message("### Making cellcycle phases umap")
-  plt = DimPlot(scrna, reduction = umap_reduction, group.by = "Phase")
+
+  group_by <- "Phase"
+  col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
+
+  plt = DimPlot(
+    scrna,
+    reduction = umap_reduction,
+    group.by = group_by,
+    cols=col_def
+  )
   save_ggplot_formats(
     plt=plt,
     base_plot_dir=report_plots_folder,
@@ -220,10 +293,11 @@ for(cluster_use in available_clusters){
 
   ## FeaturePlot
   message("### Making umap featureplot with QC elements")
+  col_def <- c(base_color,pos_color)
   plt = FeaturePlot(
     scrna,
     features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA"),
-    cols = c("lightgrey", "red"),
+    cols = col_def,
     reduction=umap_reduction,
     ncol = 2
   )
@@ -237,7 +311,7 @@ for(cluster_use in available_clusters){
   plt = FeaturePlot(
     scrna,
     features = c("CC.Difference","G1.Score", "S.Score", "G2M.Score"),
-    cols = c("lightgrey", "red"),
+    cols = col_def,
     reduction=umap_reduction,
     ncol = 2
   )
@@ -251,13 +325,17 @@ for(cluster_use in available_clusters){
 
   ## Violin Plot
   message("### Making violinplot with QC and ccycle elements")
+  group_by <- cluster_use
+  feats_to_plot <- c(
+    "percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA",
+    "CC.Difference", "G1.Score", "S.Score", "G2M.Score"
+  )
+  col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
   plt = VlnPlot(
     scrna,
-    features = c(
-      "percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA",
-      "CC.Difference", "G1.Score", "S.Score", "G2M.Score"
-    ),
-    group.by = cluster_use,
+    features = feats_to_plot,
+    group.by = group_by,
+    cols = col_def,
     pt.size = 0
   )
   save_ggplot_formats(
@@ -272,11 +350,14 @@ for(cluster_use in available_clusters){
   ## MCA annotation
   if("MCA_annotate" %in% names(scrna@meta.data)){
     message("### Making umap with MCA annotation")
+    group_by <- "MCA_annotate"
+    col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
     plt <- DimPlot(
       object = scrna,
       reduction = umap_reduction,
       pt.size = 0.2,
-      group.by = "MCA_annotate"
+      cols=col_def,
+      group.by = group_by
     ) +
     theme(
       legend.position = "right",
@@ -302,11 +383,14 @@ for(cluster_use in available_clusters){
   ## HCL annotation
   if("HCL_annotate" %in% names(scrna@meta.data)){
     message("### Making umap with HCL annotation")
+    group_by <- "HCL_annotate"
+    col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
     plt <- DimPlot(
       object = scrna,
       reduction = umap_reduction,
       pt.size = 0.2,
-      group.by = "HCL_annotate"
+      cols=col_def,
+      group.by = group_by
     ) +
     theme(
       legend.position = "right",
@@ -332,11 +416,14 @@ for(cluster_use in available_clusters){
   ## External Annotation
   if("external_annotation" %in% names(scrna@meta.data)){
     message("### Making umap with external annotation")
+    group_by <- "external_annotation"
+    col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
     plt <- DimPlot(
       object = scrna,
       reduction = umap_reduction,
       pt.size = 0.2,
-      group.by = "external_annotation"
+      cols=col_def,
+      group.by = group_by
     ) +
     theme(
       legend.position = "right",
