@@ -6,7 +6,7 @@ scrna <- readRDS(file = file.path(savedir, "scrna_rawdata.Rds"))
 Idents(object = scrna) <- "name"
 
 plt = VlnPlot(
-  object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo"),
+  object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo", "AmbientRNA"),
   ncol=2,
   cols = colours,
   pt.size=0
@@ -27,6 +27,8 @@ stSample <- meta %>%
     nCount.Median=median(nCount_RNA),
     nFeature.Mean=mean(nFeature_RNA),
     nFeature.Median=median(nFeature_RNA),
+    ambientRNA.Mean=mean(AmbientRNA),
+    ambientRNA.Median=median(AmbientRNA),
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
@@ -41,6 +43,8 @@ stCond <- meta %>%
     nCount.Median=median(nCount_RNA),
     nFeature.Mean=mean(nFeature_RNA),
     nFeature.Median=median(nFeature_RNA),
+    ambientRNA.Mean=mean(AmbientRNA),
+    ambientRNA.Median=median(AmbientRNA),
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
@@ -61,7 +65,7 @@ if(identical(cluster,"singleton")){
 Idents(object = scrna)<- "name"
 
 plt = VlnPlot(
-  object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo"),
+  object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo", "AmbientRNA"),
   ncol=2,
   cols = colours,
   pt.size=0
@@ -103,6 +107,8 @@ stSample <- meta %>%
     nCount.Median=median(nCount_RNA),
     nFeature.Mean=mean(nFeature_RNA),
     nFeature.Median=median(nFeature_RNA),
+    ambientRNA.Mean=mean(AmbientRNA),
+    ambientRNA.Median=median(AmbientRNA),
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
@@ -117,6 +123,8 @@ stCond <- meta %>%
     nCount.Median=median(nCount_RNA),
     nFeature.Mean=mean(nFeature_RNA),
     nFeature.Median=median(nFeature_RNA),
+    ambientRNA.Mean=mean(AmbientRNA),
+    ambientRNA.Median=median(AmbientRNA),
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
@@ -129,9 +137,10 @@ saveRDS(stCond,file.path(report_tables_folder,"stCond_postfilter.RDS"))
 # qc feature scatterplots
 p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.mt", cols=colours)
 p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.ribo",cols=colours)
-p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",cols=colours)
+p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="nFeature_RNA",cols=colours)
+p4 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="AmbientRNA",cols=colours)
 
-plt = patchwork::wrap_plots(list(p1, p2, p3), ncol=1)
+plt = patchwork::wrap_plots(list(p1, p2, p3, p4), ncol=1)
 
 save_ggplot_formats(
   plt=plt,
