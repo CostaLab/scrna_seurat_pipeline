@@ -299,6 +299,8 @@ suppressPackageStartupMessages(library(Hmisc))
 suppressPackageStartupMessages(library(foreach))
 suppressPackageStartupMessages(library(doParallel))
 suppressPackageStartupMessages(library(celda))
+suppressPackageStartupMessages(library(celda))
+suppressPackageStartupMessages(library(SoupX))
 
 
 registerDoParallel(cores=WORKER_NUM)
@@ -525,12 +527,12 @@ generate_scrna_ambient_rna <- function(scrna){
             # We add the estimated contamination and the decontaminated data to the SeuratObject
             scrna[["decontX"]] <- CreateAssayObject(counts = scrna.decont@assays@data$decontXcounts)
             scrna <- AddMetaData(object = scrna, metadata = scrna.decont$decontX_contamination,
-                                 col.name = "decontX_contamination")
+                                 col.name = "AmbientRNA")
             scrna <- AddMetaData(object = scrna, metadata = scrna.decont$decontX_clusters,
                                  col.name = "decontX_clusters")
 	    DefaultAssay(scrna) <- assay.used
             return(scrna)
-	    saveRDS(scrna, paste0(SAVE_DIR,"/scrna_ambientRNA.Rds"))
+	    #saveRDS(scrna, paste0(SAVE_DIR,"/scrna_ambientRNA.Rds"))
            },
 
             error = function(cond) {
