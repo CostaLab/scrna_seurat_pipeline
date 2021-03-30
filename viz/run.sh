@@ -2,7 +2,7 @@
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-PROJ="CALR_Adam"
+PROJ=$1
 SAVED_DATA="../save${PROJ}"
 
 FUNCS=(
