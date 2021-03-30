@@ -55,18 +55,21 @@ replicates_viridis_opt = ifelse(
   "C"
 )
 
+# FIXME: using colorBlindness vector/values themselves rather than calling the pkg functions
+# avoids having to install the package
+
 # divergent color for negative values
 neg_color = ifelse(
   any(grepl("neg_color",names(viz_conf),fixed = TRUE)),
   viz_conf[["neg_color"]],
-  colorBlindness::Blue2DarkOrange12Steps[2]
+  '#51C3CC' # colorBlindness::Blue2DarkOrange12Steps[2]
 )
 
 # divergent color for positive values
 pos_color = ifelse(
   any(grepl("pos_color",names(viz_conf),fixed = TRUE)),
   viz_conf[["pos_color"]],
-  rev(colorBlindness::Blue2DarkOrange12Steps)[2]
+  '#CC5800' #rev(colorBlindness::Blue2DarkOrange12Steps)[2]
 )
 
 # divergent color for base values
@@ -80,7 +83,8 @@ base_color = ifelse(
 neg_pos_divergent_palette = ifelse(
   any(grepl("neg_pos_divergent_palette",names(viz_conf),fixed = TRUE)),
   viz_conf[["neg_pos_divergent_palette"]],
-  colorBlindness::Blue2DarkOrange12Steps
+  # colorBlindness::Blue2DarkOrange12Steps
+  c('#1E8E99','#51C3CC','#99F9FF','#B2FCFF','#CCFEFF','#E5FFFF','#FFE5CC','#FFCA99','#FFAD65','#FF8E32','#CC5800','#993F00')
 )
 
 zero_pos_divergent_colors = c(base_color,pos_color)
