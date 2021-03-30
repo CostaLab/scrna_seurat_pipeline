@@ -4,12 +4,12 @@
 library(celda)
 library(ggplot2)
 # savedir <- "/home/grasshoff/labcluster/ambientRNA/results/"
-scrna <- readRDS(file = file.path(savedir, "scrna_phase_comparing.Rds"))
+scrna <- readRDS(file = file.path(savedir, "scrna_phase_preprocess.Rds"))
 plt <- list()
 
-plt[[1]] <- FeaturePlot(scrna, features = "decontX_contamination") + ggtitle(label = "Ambient RNA Contamintaion")
+plt[[1]] <- FeaturePlot(scrna, features = "AmbientRNA") + ggtitle(label = "Ambient RNA Contamintaion")
 
-plt[[2]] <- VlnPlot(object = scrna, features = "decontX_contamination", group.by = cluster)
+plt[[2]] <- VlnPlot(object = scrna, features = "AmbientRNA", group.by = "decontX_clusters")
 
 save_ggplot_formats(
   plt=plt[[1]],
