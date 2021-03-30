@@ -360,7 +360,7 @@ get_regressout_vector <- function(){
             "mito"       = "percent.mt",
             "ribo"       = "percent.ribo",
             "cellcycle"  = c("G2M.Score", "S.Score"),
-	    "AmbientRNA" = "AmbientRNA")
+	    "RNA" = "AmbientRNA")
 
     keep <- names(preprocess_regressout[preprocess_regressout==1])
     ro <- unlist(dic[keep])
@@ -373,9 +373,7 @@ get_output_name<- function(scrna, scrna_run_name){
     pconf <- configr::read.config("static/phase.ini")
     phases <- names(pconf)
 
-    if(scrna_run_name == "scrna_ambient_rna"){
-      return("scrna_ambient_rna")
-    } else if(scrna_run_name %in% paste0("scrna_", phases)){
+    if(scrna_run_name %in% paste0("scrna_", phases)){
       return(scrna_run_name)
     }else if(length(unique(scrna$name)) == 1){
       return("scrna_phase_singleton")
