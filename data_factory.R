@@ -360,7 +360,7 @@ get_regressout_vector <- function(){
             "mito"       = "percent.mt",
             "ribo"       = "percent.ribo",
             "cellcycle"  = c("G2M.Score", "S.Score"),
-	    "RNA" = "AmbientRNA")
+	    "AmbientRNA" = "AmbientRNA")
 
     keep <- names(preprocess_regressout[preprocess_regressout==1])
     ro <- unlist(dic[keep])
