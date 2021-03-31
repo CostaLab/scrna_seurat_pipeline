@@ -110,6 +110,17 @@ cluster_annotation <- c(
     "22" = "T-cells 3"
 )
 
+# Current options are the default option, you can change to your own
+viz_conf = list(
+  ## see: https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html#the-color-scales
+  # "magma" (or "A"), "inferno" (or "B"), "plasma" (or "C"), "viridis" (or "D") and "cividis" (or "E")
+  cluster_color_option = "D", ## R viridis, see above
+  replicate_color_option = "C", ## R viridis, see above
+  neg_color = "#51C3CC",#colorBlindness::Blue2DarkOrange12Steps[2],
+  pos_color = "#CC5800",#rev(colorBlindness::Blue2DarkOrange12Steps)[2],
+  base_color = "lightgrey",#"lightgrey",
+  neg_pos_divergent_palette = c('#1E8E99','#51C3CC','#99F9FF','#B2FCFF','#CCFEFF','#E5FFFF','#FFE5CC','#FFCA99','#FFAD65','#FF8E32','#CC5800','#993F00') #colorBlindness::Blue2DarkOrange12Steps
+)
 
 
 ### MCA annotation Reference

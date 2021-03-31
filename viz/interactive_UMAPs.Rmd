@@ -1,6 +1,5 @@
 ---
 title: "Interactive UMAPs"
-author: "Tiago Maié"
 date: '`r format(Sys.Date(), "%Y-%B-%d")`'
 output:
   html_document:
@@ -19,7 +18,8 @@ params:
     report_plots_folder: "folder with the plot elements"
     report_plots_folder_png: "folder with the png plot elements"
     report_plots_folder_pdf: "folder with the pdf plot elements"
-
+    author: "author of document"
+author: '`r params$author`'
 ---
 
 ```{r interactive_umap_setup, include=FALSE}
