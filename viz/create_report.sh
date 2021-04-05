@@ -161,9 +161,11 @@ FUNCS=(
   Clusters_seurat
   EXT_MARKERS
   DEGO
+  progeny
   hallmark
   KEGG
   Reactome
+  progeny_stage
   DEGO_stage
   hallmark_stage
   reactome_stage

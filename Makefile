@@ -1,5 +1,6 @@
 # DO NOT RUN, modify it with your own options
 submit_example_c1_c2:
+	mkdir -p logs
 	echo " Submitting EXAMPLE_PROJ - cond1 cond2 d1 d2 analysis"
 	sbatch run_example.sh EXAMPLE_PROJ_C1
 	sleep 5

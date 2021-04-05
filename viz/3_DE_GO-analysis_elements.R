@@ -36,6 +36,12 @@ if(any(grepl("Reactome",funcs,fixed=TRUE))){
     stop(glue("ERROR:reactome hasn't been calculated for cluster {cluster}\n Please run [scrna_reactome]!!!"))
   }
 }
+if(any(grepl("progeny",funcs,fixed=TRUE))){
+  progeny_cluster_name <- paste0("progeny_", cluster)
+  if(progeny_cluster_name %ni% names(scrna@tools)){
+    stop(glue("ERROR:progeny hasn't been calculated for cluster {cluster}\n Please run [scrna_progeny]!!!"))
+  }
+}
 
 # DE plots
 cluster_de <- scrna@tools[[de_cluster_name]]
@@ -160,6 +166,20 @@ for (i in names(cluster_de) ){
 #############################################################
 ## Term enrichment analysis (GO, hallmark, KEGG, Reactome) ##
 #############################################################
+progeny_df <- scrna@tools[[progeny_cluster_name]]
+plt <- ggplot(progeny_df, aes(y=pathway,x=CellType,fill=r))+
+        geom_tile()+
+        ggtitle(glue("{cluster} r effect size")) +
+        scale_fill_distiller(palette ="RdBu", direction = -1) +
+        theme_minimal()+
+        theme(strip.text.x = element_text(size=28, colour="black",hjust=0),
+            plot.caption = element_text(size=30, colour="black", hjust=0),
+            axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+save_ggplot_formats(plt=plt,
+         base_plot_dir=report_plots_folder,
+         plt_name= paste0("progeny_r_effect_heatmap-",cluster),
+         width=9, height=7)
 enrch_analysis_vec = go_cluster_name
 if(any(grepl("hallmark",funcs,fixed=TRUE))) enrch_analysis_vec = c(enrch_analysis_vec, hallmark_cluster_name)
 if(any(grepl("KEGG",funcs,fixed=TRUE))) enrch_analysis_vec = c(enrch_analysis_vec, kegg_cluster_name)
@@ -183,6 +203,8 @@ for(enrich_cluster_name in enrch_analysis_vec){
     else if(enrich_cluster_name == hallmark_cluster_name){scrna@tools[[hallmark_cluster_name]]$hallmarkdown}
     else if(enrich_cluster_name == kegg_cluster_name){scrna@tools[[kegg_cluster_name]]$keggdown}
     else if(enrich_cluster_name == reactome_cluster_name){scrna@tools[[reactome_cluster_name]]$reactomedown}
+
+
 
   for(term_direction in c("up","down")){
 

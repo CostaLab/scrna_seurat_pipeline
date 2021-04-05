@@ -26,7 +26,7 @@ parser.add_argument('-cf', '--config_file', default='conf/config.R', help='path 
 parser.add_argument('-o', '--output_dir', default='../', help='path to output dir')
 parser.add_argument('-s', '--save_dir', default='../', help='path to save dir')
 parser.add_argument('-p', '--proj_tag', default='', help='project name or tag')
-parser.add_argument('-l', '--executing_list', default='[QC]', help='executing list to viz')
+parser.add_argument('-l', '--executing_list', default='[]', help='executing list to viz')
 args = parser.parse_args()
 
 exe_list = [i.strip() for i in eval(args.executing_list)]
@@ -45,6 +45,7 @@ viz_dict = { "quality": ["QC"],
 
              "clustersVS": ["EXT_MARKERS",
                             "DEGO",
+                            "progeny",
                             "hallmark",
                             "KEGG",
                             "Reactome",
@@ -52,7 +53,8 @@ viz_dict = { "quality": ["QC"],
 
              "DEGOstageVS": ["DEGO_stage"],
 
-             "PWstageVS": ["hallmark_stage",
+             "PWstageVS": ["progeny_stage",
+                           "hallmark_stage",
                            "reactome_stage",
                            "kegg_stage"],
 
@@ -291,22 +293,42 @@ def generate_report_stageVS_kegg(out):
 #endf generate_groupVS
 
 
+def generate_report_stageVS_progeny(out):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/progeny-stageVS.template"))
+    tmpl = tfile.read()
+    today = datetime.date.today().strftime("%d%B%Y")
+    cc = 6
+
+    t = Template(tmpl)
+    r = t.render(
+        TODAY = today,
+        CC = cc,
+        lst_stage = lst_stages
+    )
+    fw = open(out, "w")
+    fw.write("%s\n\n" % r)
+#endf generate_groupVS
+
+
+
 
 
 
 
 def main():
 
-    out_dir = args.output_dir
-    generate_report_1v1("DE-GO-analysis-1v1.Rmd")
-    generate_report_1v1_hallmark("hallmark-1v1.Rmd")
-    generate_report_1v1_reactome("reactome-1v1.Rmd")
-    generate_report_1v1_kegg("kegg-1v1.Rmd")
-    generate_report_stagesVS("DE-GO-analysis-stagesVS.Rmd")
-    generate_report_stageVS_hallmark("hallmark-stageVS.Rmd")
-    generate_report_stageVS_reactome("reactome-stageVS.Rmd")
-    generate_report_stageVS_kegg("kegg-stageVS.Rmd")
 
+    out_dir = args.output_dir
+    viz_dir = os.path.dirname(__file__)
+    generate_report_1v1(os.path.join(viz_dir, "DE-GO-analysis-1v1.Rmd"))
+    generate_report_1v1_hallmark(os.path.join(viz_dir,"hallmark-1v1.Rmd"))
+    generate_report_1v1_reactome(os.path.join(viz_dir,"reactome-1v1.Rmd"))
+    generate_report_1v1_kegg(os.path.join(viz_dir,"kegg-1v1.Rmd"))
+    generate_report_stagesVS(os.path.join(viz_dir,"DE-GO-analysis-stagesVS.Rmd"))
+    generate_report_stageVS_hallmark(os.path.join(viz_dir,"hallmark-stageVS.Rmd"))
+    generate_report_stageVS_reactome(os.path.join(viz_dir,"reactome-stageVS.Rmd"))
+    generate_report_stageVS_kegg(os.path.join(viz_dir,"kegg-stageVS.Rmd"))
+    generate_report_stageVS_progeny(os.path.join(viz_dir,"progeny-stageVS.Rmd"))
     generate_md_idx(os.path.join(out_dir, "index.md"))
 
 #endf main

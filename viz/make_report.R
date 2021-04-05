@@ -76,6 +76,7 @@ for(i in FUNCS){
   if(grepl("EXT_MARKERS",i,fixed=TRUE)) render_func("viz/3_external_markers.Rmd","external_markers")
   if(grepl("DEGO",i,fixed=TRUE)) render_func("viz/3_DE_GO-analysis.Rmd","dego")
   if(grepl("KEGG",i,fixed=TRUE)) render_func("viz/3_KEGG.Rmd","KEGG")
+  if(grepl("progeny",i,fixed=TRUE)) render_func("viz/3_progeny.Rmd","progeny")
   if(grepl("hallmark",i,fixed=TRUE)) render_func("viz/3_hallmark.Rmd","hallmark")
   if(grepl("Reactome",i,fixed=TRUE)) render_func("viz/3_Reactome.Rmd","Reactome")
   if(grepl("DEGO_stage",i,fixed=TRUE)) render_func("viz/DE-GO-analysis-stagesVS.Rmd","gv")
@@ -85,6 +86,7 @@ for(i in FUNCS){
   if(grepl("kegg_1v1",i,fixed=TRUE)) render_func("viz/kegg-1v1.Rmd","kegg_1vs1")
   if(grepl("hallmark_stage",i,fixed=TRUE)) render_func("viz/hallmark-stageVS.Rmd","hallmark_stageVS")
   if(grepl("reactome_stage",i,fixed=TRUE)) render_func("viz/reactome-stageVS.Rmd","reactome_stageVS")
+  if(grepl("progeny_stage",i,fixed=TRUE)) render_func("viz/progeny-stageVS.Rmd","progeny_stageVS")
   if(grepl("kegg_stage",i,fixed=TRUE)) render_func("viz/kegg-stageVS.Rmd","kegg_stageVS")
   if(grepl("intUMAPs",i,fixed=TRUE)) render_func("viz/interactive_UMAPs.Rmd","interactive_UMAPs")
 }

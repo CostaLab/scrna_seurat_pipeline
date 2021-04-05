@@ -1,0 +1,78 @@
+---
+title: "Between conditions progeny analysis"
+date: "{{TODAY}}"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+params:
+    cluster: "clusters to analyse"
+    project: "name/tag of the project"
+    savedir: "directory where rds files were saved"
+    funcs: "analysis steps to be performed"
+    report_data_folder: "folder with the output tables"
+    report_tables_folder: "folder with the table elements"
+    report_plots_folder: "folder with the plot elements"
+    report_plots_folder_png: "folder with the png plot elements"
+    report_plots_folder_pdf: "folder with the pdf plot elements"
+    author: "author of document"
+author: '`r params$author`'
+---
+
+```{r Marker_genes, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
+#use former data coz the DE analysis takes too much time.
+library(ggplot2)
+library(gridExtra)
+library(cowplot)
+library(dplyr)
+library(openxlsx)
+library(WriteXLS)
+library(stringr)
+library(digest)
+library(plotly)
+library(Seurat)
+library(Hmisc)
+library(EnhancedVolcano)
+library(ComplexHeatmap)
+library(glue)
+`%ni%` <- Negate(`%in%`)
+
+
+scrna <- readRDS(file.path(params$savedir, "scrna_phase_comparing.Rds"))
+
+cluster_use <- params$cluster
+progeny_cond_stage <-paste0("progeny_stage_", cluster_use)
+if(progeny_cond_stage %ni% names(scrna@tools)){
+  stop(glue("ERORR:progeny stages comparing hasn't been calculated for cluster:{cluster_use}\n Please run [scrna_progeny_stage]!!!"))
+}
+
+all_progeny_list <-  scrna@tools[[progeny_cond_stage]]
+```
+
+{% for tX, tY in lst_stage %}
+
+## {{tX}} vs {{tY}}  PROGENy
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=9, fig.height=7}
+a_vs <- "{{tX}}.vs.{{tY}}"
+progeny_df <- all_progeny_list[[a_vs]]
+
+p <- ggplot(progeny_df, aes(y=pathway,x=CellType,fill=r))+
+        geom_tile()+
+        #geom_text(aes(y=pathway, x=CellType, label=tag),
+        #    position = position_dodge(width = 0),
+        #    hjust = 0.5, size = 7)+
+        ggtitle(glue("{a_vs} r effect size")) +
+        scale_fill_distiller(palette ="RdBu", direction = -1) +
+        theme_minimal()+
+        theme(strip.text.x = element_text(size=28, colour="black",hjust=0),
+            plot.caption = element_text(size=30, colour="black", hjust=0),
+            axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+print(p)
+
+
+```
+{% endfor %}

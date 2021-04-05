@@ -58,6 +58,10 @@
      - [GO-DOWN-excel](data/godown_{{cluster_use}}.xlsx)
 {% endif %}
 
+{% if "progeny" in executing_list %}
+ - progeny
+   - [progeny ](data/progeny.html)
+{% endif %}
 
 {% if "hallmark" in executing_list %}
  - Hallmark
@@ -108,6 +112,12 @@
 
 {% if intersect(viz_dict['PWstageVS'], executing_list) %}
 ## {{count}}. Pathway analysis (between groups)
+
+{% if "progeny_stage" in executing_list %}
+ - progeny
+   - [progeny stage](data/progeny_stageVS.html)
+{% endif %}
+
 
 {% if "hallmark_stage" in executing_list %}
  - Hallmark
