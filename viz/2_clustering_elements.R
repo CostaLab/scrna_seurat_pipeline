@@ -78,12 +78,23 @@ for(cluster_use in available_clusters){
     width=9, height=7
   )
 
+  tbl <- table(scrna$name, scrna@meta.data[, cluster_use])
+  rowsums <- rowSums(tbl)
+  tbl <- cbind(tbl, rowsums)
+  colsums <- colSums(tbl)
+  tbl <- rbind(tbl, colsums)
   saveRDS(
-    table(scrna$name, scrna@meta.data[, cluster_use]),
+    tbl,
     file.path(report_tables_folder, paste0("stSample_table_cluster_",cluster_use,".RDS"))
   )
+
+  tbl <- table(scrna$stage, scrna@meta.data[, cluster_use])
+  rowsums <- rowSums(tbl)
+  tbl <- cbind(tbl, rowsums)
+  colsums <- colSums(tbl)
+  tbl <- rbind(tbl, colsums)
   saveRDS(
-    table(scrna$stage, scrna@meta.data[, cluster_use]),
+    tbl,
     file.path(report_tables_folder, paste0("stCond_table_cluster_",cluster_use,".RDS"))
   )
 
