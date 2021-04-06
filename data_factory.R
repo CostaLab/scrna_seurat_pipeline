@@ -1741,7 +1741,12 @@ generate_scrna_progeny_stage <- function(scrna){
     ###
     res <- list()
     for(i in levels(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
-        a_sub = subset(scrna, cells=rownames(scrna@meta.data)[scrna@meta.data[, DEFUALT_CLUSTER_NAME]==i & (scrna@meta.data$stage %in% apair)])
+        cells1 <- which(scrna@meta.data[, DEFUALT_CLUSTER_NAME]==i & (scrna@meta.data$stage %in% vs1))
+        cells2 <- which(scrna@meta.data[, DEFUALT_CLUSTER_NAME]==i & (scrna@meta.data$stage %in% vs2))
+        if( length(cells1) < 2 | length(cells2) < 2){
+           next
+        }
+        a_sub = subset(scrna, cells=c(cells1, cells2))
         g <- as.character(a_sub@meta.data$stage)
         res[[i]] = scran::findMarkers(as.matrix(a_sub@assays$progeny@data), g)[[1]]
         res[[i]] <- as.data.frame(res[[i]])
