@@ -47,3 +47,10 @@ plt[[1]]
 ```{r fig.width=9, fig.height=7}
 plt[[2]]
 ```
+
+```{r postfilter_ambientRNA, echo=FALSE}
+stSample <- readRDS(file.path(params$report_tables_folder, "ambientRNA_postfilter.RDS"))
+stSample %>%
+  kable(caption = "Mean and median ambient RNA for each sample", align = 'c') %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
