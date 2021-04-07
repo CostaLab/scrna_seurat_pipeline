@@ -6,7 +6,10 @@ library(ggplot2)
 library(dplyr)
 library(Seurat)
 # savedir <- "/home/grasshoff/labcluster/ambientRNA/results/"
-scrna <- readRDS(file = file.path(savedir, "scrna_phase_preprocess.Rds"))
+  scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
+}else{
+  scrna <- readRDS(file = file.path(savedir, "scrna_phase_preprocess.Rds"))
+}
 plt <- list()
 
 plt[[1]] <- FeaturePlot(scrna, features = "AmbientRNA") + ggtitle(label = "Ambient RNA Contamintaion")
