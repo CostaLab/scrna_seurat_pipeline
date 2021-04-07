@@ -73,7 +73,7 @@ render_func = function(rmd_input_filename, output_filename){
 
 for(i in FUNCS){
   if(grepl("QC",i,fixed=TRUE)) render_func("viz/1_quality_report.Rmd","data_quality")
-  if(grepl("AmbientRNA",i,fixed=TRUE)) render_func("ambientRNA_viz.Rmd","ambient_rna")
+  if(grepl("AmbientRNA",i,fixed=TRUE)) render_func("viz/ambientRNA_viz.Rmd","ambient_rna")
   if(grepl("DEs",i,fixed=TRUE)) render_func("viz/2_clusters_DEs.Rmd","clusters_DEs")
   if(grepl("Clusters",i,fixed=TRUE) | grepl("Singleton",i,fixed=TRUE)) render_func("viz/2_clustering.Rmd","clusters")
   if(grepl("Clusters_harmony",i,fixed=TRUE)) render_func("viz/2_clustering_harmony.Rmd","clusters_harmony")
