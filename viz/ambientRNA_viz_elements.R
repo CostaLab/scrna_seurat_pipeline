@@ -3,6 +3,8 @@
 ####################################################
 library(celda)
 library(ggplot2)
+library(dplyr)
+library(Seurat)
 # savedir <- "/home/grasshoff/labcluster/ambientRNA/results/"
 scrna <- readRDS(file = file.path(savedir, "scrna_phase_preprocess.Rds"))
 plt <- list()
@@ -24,4 +26,12 @@ save_ggplot_formats(
   width=9, height=7
 )
 
+meta <- scrna@meta.data
+stSample <- meta %>%
+  group_by(name) %>%
+  summarise(
+    ambientRNA.Mean=mean(AmbientRNA),
+    ambientRNA.Median=median(AmbientRNA),
+  )
+saveRDS(stSample,file.path(report_tables_folder,"ambientRNA_postfilter.RDS"))
 
