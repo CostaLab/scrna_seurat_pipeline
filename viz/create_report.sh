@@ -155,6 +155,7 @@ NC='\033[0m' # No Color
 FUNCS=(
   #Singleton
   QC
+  AmbientRNA
   DEs
   Clusters
   Clusters_harmony
