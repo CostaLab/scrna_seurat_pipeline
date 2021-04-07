@@ -45,7 +45,7 @@ bioc_pkgs_to_install = c(
   "org.Mm.eg.db", "clusterProfiler",
   "org.Hs.eg.db", "ComplexHeatmap",
   "EnhancedVolcano","ReactomePA",
-  "msigdbr","limma", "celda"
+  "msigdbr","limma", "celda", "progeny", "scran"
 )
 
 github_pkgs_to_install = c(

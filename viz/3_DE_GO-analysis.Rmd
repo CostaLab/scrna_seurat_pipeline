@@ -1,6 +1,5 @@
 ---
 title: "Marker Genes DE & GO"
-author: "Mingbo Cheng"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
@@ -19,9 +18,17 @@ params:
     report_plots_folder: "folder with the plot elements"
     report_plots_folder_png: "folder with the png plot elements"
     report_plots_folder_pdf: "folder with the pdf plot elements"
+    author: "author of document"
+author: '`r params$author`'
 ---
 
 ## Cluster: `r colorize(params$cluster,"red")`
+
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(kableExtra)
+```
+
 
 ## top10 DE heatmaps
 ```{r heatmap_top10_de_genes, out.width="100%", echo=FALSE}
@@ -72,11 +79,17 @@ if(file.exists(fname)) knitr::include_graphics(fname)
 
 ```{r barplot_go_up, out.width="100%", echo=FALSE}
 ### up genes top 10
-fname=file.path(
-  params$report_plots_folder_png,
-  paste0("go_up_genes_barplot_cluster-",params$cluster,".png")
-)
-if(file.exists(fname)) knitr::include_graphics(fname)
+flist = stringr::str_sort(grep(
+  paste0("go_up_genes_barplot_cluster-", params$cluster),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+knitr::include_graphics(flist)
+
 ```
 
 ## GO down analysis
@@ -89,12 +102,19 @@ if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 
 ```{r barplot_go_down, out.width="100%", echo=FALSE}
-### up genes top 10
-fname=file.path(
-  params$report_plots_folder_png,
-  paste0("go_down_genes_barplot_cluster-",params$cluster,".png")
-)
-if(file.exists(fname)) knitr::include_graphics(fname)
+### down genes top 10
+
+flist = stringr::str_sort(grep(
+  paste0("go_down_genes_barplot_cluster-", params$cluster),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+knitr::include_graphics(flist)
+
 ```
 
 ## DE genes on UMAP plot
