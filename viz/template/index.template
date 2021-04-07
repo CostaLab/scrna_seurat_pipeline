@@ -6,7 +6,7 @@
 ## {{count}}. Data Quality Check
 
 - [Data quality](data/data_quality.html)
-- [ambient rna](data/ambient_rna.html)
+- [Ambient RNA](data/ambient_rna.html)
 
   {% set count = count + 1 %}
 {% endif %}
