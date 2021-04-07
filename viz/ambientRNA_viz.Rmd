@@ -30,22 +30,24 @@ savedir = params$savedir
 library(celda)
 library(ggplot2)
 #scrna.sce <- readRDS(file = file.path(savedir, "scrnasce_ambient_rna.Rds"))
-scrna <- readRDS(file = file.path(savedir, "/scrna_phase_preprocess.Rds"))
-plt <- list()
+#scrna <- readRDS(file = file.path(savedir, "/scrna_phase_preprocess.Rds"))
+#plt <- list()
 
-plt[[1]] <- FeaturePlot(scrna, features = "AmbientRNA") + ggtitle(label = "Ambient RNA Contamintaion")
+#plt[[1]] <- FeaturePlot(scrna, features = "AmbientRNA") + ggtitle(label = "Ambient RNA Contamintaion")
 
-plt[[2]] <- VlnPlot(object = scrna, features = "AmbientRNA", group.by = "decontX_clusters")
+#plt[[2]] <- VlnPlot(object = scrna, features = "AmbientRNA", group.by = "decontX_clusters")
 ```
 
 ## Ambient RNA
 ```{r fig.width=9, fig.height=7}
-plt[[1]]
+knitr::include_graphics(file.path(params$report_plots_folder_png,"ambient_rna.png"))
+#plt[[1]]
 ```
 
 ## Ambient RNA per cluster
 ```{r fig.width=9, fig.height=7}
-plt[[2]]
+knitr::include_graphics(file.path(params$report_plots_folder_png,"ambient_rna_vln.png"))
+#plt[[2]]
 ```
 
 ```{r postfilter_ambientRNA, echo=FALSE}
