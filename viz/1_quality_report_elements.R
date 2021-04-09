@@ -23,6 +23,7 @@ save_ggplot_formats(
 )
 
 meta <- scrna@meta.data
+meta$cells <- 1
 
 stSample <- meta %>%
   group_by(name) %>%
@@ -34,7 +35,8 @@ stSample <- meta %>%
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
-    pctRb.Median = median(percent.ribo)
+    pctRb.Median = median(percent.ribo),
+    Cells = sum(cells)
   )
 saveRDS(stSample,file.path(report_tables_folder,"stSample_prefilter.RDS"))
 
@@ -48,7 +50,8 @@ stCond <- meta %>%
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
-    pctRb.Median = median(percent.ribo)
+    pctRb.Median = median(percent.ribo),
+    Cells = sum(cells)
   )
 saveRDS(stCond,file.path(report_tables_folder,"stCond_prefilter.RDS"))
 
