@@ -38,7 +38,7 @@ packages_to_install = c(
   "rmarkdown", "reshape2", "circlize", "BiocManager",
   "kableExtra", "assertthat", "mclust", "shinythemes",
   "systemfonts", "igraph", "proj4", "Cairo", "ggalt",
-  "urltools", "downloadthis"
+  "urltools", "downloadthis", "jsonlite", "crayon"
 )
 
 bioc_pkgs_to_install = c(
