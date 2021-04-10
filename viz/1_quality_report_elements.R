@@ -5,7 +5,7 @@ scrna <- readRDS(file = file.path(savedir, "scrna_rawdata.Rds"))
 
 Idents(object = scrna) <- "name"
 
-feats_to_plot <- c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo", "AmbientRNA")
+feats_to_plot <- c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo")
 col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
 
 plt = VlnPlot(
