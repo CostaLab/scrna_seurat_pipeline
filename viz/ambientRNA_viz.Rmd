@@ -27,7 +27,7 @@ savedir = params$savedir
 ##TODO: sort cluster proport adviced by Johanes
 ```
 ```{r , include=FALSE}
-library(celda)
+#library(celda)
 library(ggplot2)
 #scrna.sce <- readRDS(file = file.path(savedir, "scrnasce_ambient_rna.Rds"))
 #scrna <- readRDS(file = file.path(savedir, "/scrna_phase_preprocess.Rds"))
