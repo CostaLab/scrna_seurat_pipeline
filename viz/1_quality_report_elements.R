@@ -31,8 +31,6 @@ stSample <- meta %>%
     nCount.Median=median(nCount_RNA),
     nFeature.Mean=mean(nFeature_RNA),
     nFeature.Median=median(nFeature_RNA),
-    ambientRNA.Mean=mean(AmbientRNA),
-    ambientRNA.Median=median(AmbientRNA),
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
@@ -47,8 +45,6 @@ stCond <- meta %>%
     nCount.Median=median(nCount_RNA),
     nFeature.Mean=mean(nFeature_RNA),
     nFeature.Median=median(nFeature_RNA),
-    ambientRNA.Mean=mean(AmbientRNA),
-    ambientRNA.Median=median(AmbientRNA),
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
@@ -117,8 +113,6 @@ stSample <- meta %>%
     nCount.Median=median(nCount_RNA),
     nFeature.Mean=mean(nFeature_RNA),
     nFeature.Median=median(nFeature_RNA),
-    ambientRNA.Mean=mean(AmbientRNA),
-    ambientRNA.Median=median(AmbientRNA),
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
@@ -133,8 +127,6 @@ stCond <- meta %>%
     nCount.Median=median(nCount_RNA),
     nFeature.Mean=mean(nFeature_RNA),
     nFeature.Median=median(nFeature_RNA),
-    ambientRNA.Mean=mean(AmbientRNA),
-    ambientRNA.Median=median(AmbientRNA),
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
@@ -149,9 +141,8 @@ col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(I
 p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.mt", cols=col_def)
 p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.ribo", cols=col_def)
 p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols=col_def)
-p4 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "AmbientRNA",cols=col_def)
 
-plt = patchwork::wrap_plots(list(p1, p2, p3, p4), ncol=1)
+plt = patchwork::wrap_plots(list(p1, p2, p3), ncol=1)
 
 save_ggplot_formats(
   plt=plt,
