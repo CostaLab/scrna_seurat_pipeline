@@ -138,8 +138,8 @@ saveRDS(stCond,file.path(report_tables_folder,"stCond_postfilter.RDS"))
 
 # qc feature scatterplots
 col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
-p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.mt", cols=col_def)
-p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.ribo", cols=col_def)
+p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.mt", cols=col_def)
+p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.ribo", cols=col_def)
 p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols=col_def)
 
 plt = patchwork::wrap_plots(list(p1, p2, p3), ncol=1)

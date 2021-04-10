@@ -10,6 +10,10 @@ AUTHOR = args[5]
 OUTPUT_DIR = args[6]
 FUNCS = args[-c(1:6)]
 
+library(Seurat)
+library(celda)
+library(ggplot2)
+
 # TODO better param processing
 if(grepl("--proj",PROJ,fixed=TRUE)) PROJ=gsub("--proj=","",PROJ,fixed=TRUE)
 if(grepl("--cluster",CLUSTER,fixed=TRUE)) CLUSTER=gsub("--cluster=","",CLUSTER,fixed=TRUE)
@@ -69,6 +73,7 @@ render_func = function(rmd_input_filename, output_filename){
 
 for(i in FUNCS){
   if(grepl("QC",i,fixed=TRUE)) render_func("viz/1_quality_report.Rmd","data_quality")
+  if(grepl("AmbientRNA",i,fixed=TRUE)) render_func("viz/ambientRNA_viz.Rmd","ambient_rna")
   if(grepl("DEs",i,fixed=TRUE)) render_func("viz/2_clusters_DEs.Rmd","clusters_DEs")
   if(grepl("Clusters",i,fixed=TRUE) | grepl("Singleton",i,fixed=TRUE)) render_func("viz/2_clustering.Rmd","clusters")
   if(grepl("Clusters_harmony",i,fixed=TRUE)) render_func("viz/2_clustering_harmony.Rmd","clusters_harmony")
