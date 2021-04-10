@@ -6,6 +6,7 @@ library(ggplot2)
 library(dplyr)
 library(Seurat)
 # savedir <- "/home/grasshoff/labcluster/ambientRNA/results/"
+if(identical(cluster,"singleton")){
   scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
 }else{
   scrna <- readRDS(file = file.path(savedir, "scrna_phase_preprocess.Rds"))
