@@ -300,7 +300,6 @@ suppressPackageStartupMessages(library(Hmisc))
 suppressPackageStartupMessages(library(foreach))
 suppressPackageStartupMessages(library(doParallel))
 suppressPackageStartupMessages(library(celda))
-suppressPackageStartupMessages(library(celda))
 suppressPackageStartupMessages(library(SoupX))
 
 
