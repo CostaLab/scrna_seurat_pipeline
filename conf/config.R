@@ -38,8 +38,7 @@ stage_lst = c(
 ## Phase_1, set 1 to regressout
 preprocess_regressout = c("mito"       = 1,
                           "ribo"       = 0,
-                          "cellcycle"  = 1,
-                          "AmbientRNA" = 0
+                          "cellcycle"  = 1
                          )
 
 
