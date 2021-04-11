@@ -5,12 +5,16 @@
 {% if intersect(viz_dict['quality'], executing_list) %}
 ## {{count}}. Data Quality Check
 
+{% if "QC" in executing_list %}
 - [Data quality](data/data_quality.html)
+{% endif %}
+
+{% if "AmbientRNA" in executing_list %}
+- [Ambient RNA](data/ambient_rna.html)
+{% endif %}
 
   {% set count = count + 1 %}
 {% endif %}
-
-
 
 
 {% if intersect(viz_dict['batch_clustering'], executing_list) %}

@@ -37,6 +37,7 @@ cluster="seurat_clusters"
 FUNCS=(
   #Singleton
  QC
+ AmbientRNA
  DEs
  Clusters
  Clusters_harmony
@@ -56,7 +57,7 @@ FUNCS=(
  hallmark_1v1
  reactome_1v1
  kegg_1v1
-  #intUMAPs
+ intUMAPs
   #GET_DATA
 )
 
@@ -65,7 +66,6 @@ join_str=`join_by '", "' ${FUNCS[@]}`
 json_exe_list="[\"${join_str}\"]"
 
 date
-ln -s ${data_path}/conf/config_${proj_name}.R ${data_path}/${proj_name}
 Rscript ./viz/create_report.R \
 	-a "Mingbo" \
 	-p ${proj_name} \
@@ -76,5 +76,6 @@ Rscript ./viz/create_report.R \
 	-r "${data_path}/${proj_name}/charts" \
 	-e ./external/Human_and_mouse_cell_markers-Markers.tsv \
     -d "$cluster" \
-    -j "${json_exe_list}"
+    -j "${json_exe_list}" \
+    -i "FALSE"
 date

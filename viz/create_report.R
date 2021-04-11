@@ -156,6 +156,11 @@ AllOptions <- function(){
                        help="generate single html file [default %default]",
                        metavar="character")
 
+  parser <- add_option(parser, c("-i", "--indexonly"), type="character", default="FALSE",
+                       help="only generate index.html [default %default]",
+                       metavar="character")
+
+
 
   return(parser)
 }
@@ -167,7 +172,7 @@ pa <- parse_args(parser)
 PROJECT           = pa$project
 AUTHOR            = pa$author
 MAKE_ELEMENT      = pa$make_element
-SAVE_DIR           = pa$savedir
+SAVE_DIR          = pa$savedir
 CONFIGFILE        = pa$configfile
 REPORTDIR         = pa$report_dir
 CHARTSDIR         = pa$charts_dir
@@ -175,6 +180,7 @@ EXTERNALFILE      = pa$externalfile
 DEFAULTCLUSTERS   = pa$defaultclsuters
 GEN_SINGLE_FILE   = pa$singlefile
 EXEC_PLAN         = jsonlite::fromJSON(pa$planOfreport)
+INDEX_ONLY        = pa$indexonly
 
 #REPORTDIR     = paste0(REPORTDIR, "_", PROJECT)
 #print(REPORTDIR)
@@ -211,6 +217,12 @@ code_generate_cmd=glue("python viz/code_generator.py ",
 run_shell(code_generate_cmd)
 ##3. generate index.html from template
 run_shell(glue("grip --export {REPORTDIR}/index.md"))
+
+#stop(INDEX_ONLY)
+if(INDEX_ONLY == "TRUE"){
+  cat(red("======Only generate index.html=====\n"))
+  quit(save='no')
+}
 
 report_data_folder  = file.path(REPORTDIR, "data")
 report_tables_folder = file.path(REPORTDIR,'tables')
@@ -295,6 +307,7 @@ ext_annot_fp = EXTERNALFILE
 
   # run necessary generators
   if("QC" %in% EXEC_PLAN) source("viz/1_quality_report_elements.R")
+  if(any(grepl("AmbientRNA",funcs,fixed=TRUE))) source("viz/ambientRNA_viz_elements.R")
   if("DEs"%in% EXEC_PLAN) source("viz/2_clusters_DEs_elements.R")
   if(any(grepl("Clusters_", EXEC_PLAN, fixed=T))) source("viz/2_batch_clustering_elements.R")
   if("Clusters" %in% EXEC_PLAN) source("viz/2_clustering_elements.R")
@@ -333,6 +346,7 @@ render_func = function(rmd_input_filename, output_filename){
 for(i in EXEC_PLAN){
   cat(paste(blue("Generating: "), red(i), "\n"))
   if(grepl("QC",i,fixed=TRUE)) render_func("viz/1_quality_report.Rmd","data_quality")
+  if(grepl("AmbientRNA",i,fixed=TRUE)) render_func("viz/ambientRNA_viz.Rmd","ambient_rna")
   if(grepl("DEs",i,fixed=TRUE)) render_func("viz/2_clusters_DEs.Rmd","clusters_DEs")
   if(grepl("Clusters",i,fixed=TRUE) | grepl("Singleton",i,fixed=TRUE)) render_func("viz/2_clustering.Rmd","clusters")
   if(grepl("Clusters_harmony",i,fixed=TRUE)) render_func("viz/2_clustering_harmony.Rmd","clusters_harmony")

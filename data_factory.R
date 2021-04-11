@@ -299,6 +299,8 @@ suppressPackageStartupMessages(library(stringr))
 suppressPackageStartupMessages(library(Hmisc))
 suppressPackageStartupMessages(library(foreach))
 suppressPackageStartupMessages(library(doParallel))
+suppressPackageStartupMessages(library(celda))
+suppressPackageStartupMessages(library(SoupX))
 
 
 registerDoParallel(cores=WORKER_NUM)
@@ -358,9 +360,9 @@ conf_main <- function(){
 
 get_regressout_vector <- function(){
     dic <- list(
-            "mito"      = "percent.mt",
-            "ribo"      = "percent.ribo",
-            "cellcycle" = c("G2M.Score", "S.Score") )
+            "mito"       = "percent.mt",
+            "ribo"       = "percent.ribo",
+            "cellcycle"  = c("G2M.Score", "S.Score"))
 
     keep <- names(preprocess_regressout[preprocess_regressout==1])
     ro <- unlist(dic[keep])
@@ -373,7 +375,7 @@ get_output_name<- function(scrna, scrna_run_name){
     pconf <- configr::read.config("static/phase.ini")
     phases <- names(pconf)
 
-    if (scrna_run_name %in% paste0("scrna_", phases)){
+    if(scrna_run_name %in% paste0("scrna_", phases)){
       return(scrna_run_name)
     }else if(length(unique(scrna$name)) == 1){
       return("scrna_phase_singleton")
@@ -500,6 +502,47 @@ generate_scrna_rawdata <- function(scrna){
            finally={
              rm(data.list)
              return(list(scrna, ret_code))
+           })
+  return(list(scrna, ret_code))
+}
+
+generate_scrna_ambient_rna <- function(scrna){
+  ret_code <- 0
+
+  tryCatch(
+           {
+            # We convert the input SeuratObject to a SingleCellExperiment object
+            # This is the require input for decontX
+            assay.used <- DefaultAssay(scrna)
+            DefaultAssay(scrna) <- "RNA"
+            scrna.sce <- as.SingleCellExperiment(scrna)
+
+            # Now, we estimate and correct the amount of ambient RNA.
+            # Since we have not given the function a clustering result,
+            # decontX will do the clustering for us.
+	    # Since contamination is dependent on the specific experiment, we provide the decontX function with
+	    # the batch	information. The contamination is then calculated per sample.
+            scrna.decont <- decontX(scrna.sce, batch = scrna$name)
+
+            # We add the estimated contamination and the decontaminated data to the SeuratObject
+            scrna[["decontX"]] <- CreateAssayObject(counts = scrna.decont@assays@data$decontXcounts)
+            scrna <- AddMetaData(object = scrna, metadata = scrna.decont$decontX_contamination,
+                                 col.name = "AmbientRNA")
+            scrna <- AddMetaData(object = scrna, metadata = scrna.decont$decontX_clusters,
+                                 col.name = "decontX_clusters")
+	    DefaultAssay(scrna) <- assay.used
+            return(scrna)
+	    #saveRDS(scrna, paste0(SAVE_DIR,"/scrna_ambientRNA.Rds"))
+           },
+
+            error = function(cond) {
+              ret_code <<- -1
+              logger.error(cond)
+              logger.error(traceback())
+           },
+	   
+            finally={
+              return(list(scrna, ret_code))
            })
   return(list(scrna, ret_code))
 }
@@ -1686,6 +1729,7 @@ generate_scrna_progeny <- function(scrna){
   for(i in levels(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
     g <- as.character(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
     g[!(g==i)] <- "others"
+    g <- factor(g, levels=c(i, "others"))
     res[[i]] = scran::findMarkers(as.matrix(scrna@assays$progeny@data), g)[[1]]
     res[[i]] <- as.data.frame(res[[i]])
     r <- sapply(pws, function(pw) rcompanion::wilcoxonR(as.vector(scrna@assays$progeny@data[pw,]), g))
@@ -1748,6 +1792,7 @@ generate_scrna_progeny_stage <- function(scrna){
         }
         a_sub = subset(scrna, cells=c(cells1, cells2))
         g <- as.character(a_sub@meta.data$stage)
+        g <- factor(g, levels=c(vs1, vs2))
         res[[i]] = scran::findMarkers(as.matrix(a_sub@assays$progeny@data), g)[[1]]
         res[[i]] <- as.data.frame(res[[i]])
         r <- sapply(pws, function(pw) rcompanion::wilcoxonR(as.vector(a_sub@assays$progeny@data[pw,]), g))

@@ -26,6 +26,8 @@ export PATH=/usr/bin:$PATH
 export PATH=/usr/local_host/bin:$PATH
 ################################################################
 module load scRNA
+#source ~/miniconda3/bin/activate
+#conda activate Seurat3
 ################################################################
 
 # could also define it here instead of taking it as an arg
@@ -33,11 +35,13 @@ proj_name="$1"
 # data dir (where your results will be saved)
 
 data_path="/data/EXAMPLE/exp/scRNA/some_project/scrna_seurat_pipeline_results"
+#data_path="/home/sz753404/data/test/pipelines/scrna_seurat_pipeline_unify"
 
 
 date
 ## 50 cores run, future memory
 mkdir -p ${data_path}/${proj_name}
+ln -s ${data_path}/conf/config_${proj_name}.R ${data_path}/${proj_name}
 Rscript data_factory.R -n 40 \
   --MaxMemMega=180000 \
   -c "./conf/config_${proj_name}.R" \
