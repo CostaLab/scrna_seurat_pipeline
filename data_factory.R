@@ -1729,6 +1729,7 @@ generate_scrna_progeny <- function(scrna){
   for(i in levels(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
     g <- as.character(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
     g[!(g==i)] <- "others"
+    g <- factor(g, levels=c(i, "others"))
     res[[i]] = scran::findMarkers(as.matrix(scrna@assays$progeny@data), g)[[1]]
     res[[i]] <- as.data.frame(res[[i]])
     r <- sapply(pws, function(pw) rcompanion::wilcoxonR(as.vector(scrna@assays$progeny@data[pw,]), g))
@@ -1791,6 +1792,7 @@ generate_scrna_progeny_stage <- function(scrna){
         }
         a_sub = subset(scrna, cells=c(cells1, cells2))
         g <- as.character(a_sub@meta.data$stage)
+        g <- factor(g, levels=c(vs1, vs2))
         res[[i]] = scran::findMarkers(as.matrix(a_sub@assays$progeny@data), g)[[1]]
         res[[i]] <- as.data.frame(res[[i]])
         r <- sapply(pws, function(pw) rcompanion::wilcoxonR(as.vector(a_sub@assays$progeny@data[pw,]), g))

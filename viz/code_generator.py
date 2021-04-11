@@ -36,7 +36,7 @@ print("==========PLOT LIST===============:\n",
         "\n".join(exe_list),
        "\n==================================\n")
 
-viz_dict = { "quality": ["QC"],
+viz_dict = { "quality": ["QC", "AmbientRNA"],
              "batch_clustering": ["Clusters_seurat",
                                   "Clusters_harmony",
                                   "DEs"],

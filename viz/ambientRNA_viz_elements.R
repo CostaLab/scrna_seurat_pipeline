@@ -14,7 +14,7 @@ plt <- list()
 
 plt[[1]] <- FeaturePlot(scrna, features = "AmbientRNA") + ggtitle(label = "Ambient RNA Contamintaion")
 
-plt[[2]] <- VlnPlot(object = scrna, features = "AmbientRNA", group.by = "decontX_clusters")
+plt[[2]] <- VlnPlot(object = scrna, features = "AmbientRNA", group.by = "decontX_clusters", pt.size=0.1)
 
 save_ggplot_formats(
   plt=plt[[1]],

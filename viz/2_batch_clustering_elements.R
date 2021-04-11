@@ -41,10 +41,8 @@ for(cluster_use in available_clusters){
 
   message("### Making umap resolution list")
   # UMAP resolution list
-  cluster_de_list <- scrna@tools$de_batch
   # FIXME should be the resolution vector the user defined right?
-  names(cluster_de_list) = as.character(seq(0.1, 0.8, 0.1))
-  nms <- names(cluster_de_list)
+  nms <- as.character(seq(0.1, 0.8, 0.1))
   plist <- list()
   for(nm in nms){
 

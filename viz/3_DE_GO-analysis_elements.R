@@ -167,6 +167,9 @@ for (i in names(cluster_de) ){
 ## Term enrichment analysis (GO, hallmark, KEGG, Reactome) ##
 #############################################################
 progeny_df <- scrna@tools[[progeny_cluster_name]]
+help_sort_func <- ifelse(all.is.numeric(unique(progeny_df$CellType)), as.numeric, function(x){x})
+progeny_df$CellType <- factor(progeny_df$CellType,
+                              levels= as.character(sort(unique(help_sort_func(progeny_df$CellType)))))
 plt <- ggplot(progeny_df, aes(y=pathway,x=CellType,fill=r))+
         geom_tile()+
         ggtitle(glue("{cluster} r effect size")) +
