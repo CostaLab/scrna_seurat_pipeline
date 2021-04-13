@@ -118,7 +118,7 @@ knitr::include_graphics(flist)
 ```
 
 ## DE genes on UMAP plot
-```{r umap_de_genes, out.width="100%", echo=FALSE}
+```{r umap_de_genes, out.width="100%", echo=FALSE, results = "asis"}
 flist = stringr::str_sort(grep(
   paste0("umap_featureplot_top10deg_cluster-",params$cluster),
   list.files(
@@ -128,5 +128,13 @@ flist = stringr::str_sort(grep(
   value=TRUE,
   fixed=TRUE
 ),numeric=TRUE)
-knitr::include_graphics(flist)
+
+for(afile in flist){
+
+  cluster_id = stringr::str_extract(basename(afile), "(?<=(id-))(.*)(?=\\.png)")
+  print(glue::glue("Cluster: {cluster_id}"))
+  cat(paste0("![](", afile, ")"), "\n")
+  knitr::include_graphics(afile)
+
+}
 ```
