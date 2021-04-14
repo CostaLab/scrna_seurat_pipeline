@@ -5,10 +5,14 @@ scrna <- readRDS(file = file.path(savedir, "scrna_rawdata.Rds"))
 
 Idents(object = scrna) <- "name"
 
+feats_to_plot <- c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo")
+col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
+
 plt = VlnPlot(
-  object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo"),
+  object = scrna,
+  features = feats_to_plot,
   ncol=2,
-  cols = colours,
+  cols = col_def,
   pt.size=0
 )
 save_ggplot_formats(
@@ -19,6 +23,7 @@ save_ggplot_formats(
 )
 
 meta <- scrna@meta.data
+meta$cells <- 1
 
 stSample <- meta %>%
   group_by(name) %>%
@@ -30,7 +35,8 @@ stSample <- meta %>%
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
-    pctRb.Median = median(percent.ribo)
+    pctRb.Median = median(percent.ribo),
+    Cells = sum(cells)
   )
 saveRDS(stSample,file.path(report_tables_folder,"stSample_prefilter.RDS"))
 
@@ -44,7 +50,8 @@ stCond <- meta %>%
     pctMt.Mean=mean(percent.mt),
     pctMt.Median=median(percent.mt),
     pctRb.Mean = mean(percent.ribo),
-    pctRb.Median = median(percent.ribo)
+    pctRb.Median = median(percent.ribo),
+    Cells = sum(cells)
   )
 saveRDS(stCond,file.path(report_tables_folder,"stCond_prefilter.RDS"))
 
@@ -60,10 +67,14 @@ if(identical(cluster,"singleton")){
 
 Idents(object = scrna)<- "name"
 
+feats_to_plot <- c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo")
+col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
+
 plt = VlnPlot(
-  object = scrna, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo"),
+  object = scrna,
+  features = feats_to_plot,
   ncol=2,
-  cols = colours,
+  cols = col_def,
   pt.size=0
 )
 save_ggplot_formats(
@@ -74,14 +85,16 @@ save_ggplot_formats(
 )
 
 
-features = c("G1.Score", "S.Score", "G2M.Score")
-ps <- lapply(features, function(fea){
-             VlnPlot(object = scrna,
-                  features = fea,
-                  group.by="name",
-                  cols = colours,
-                  pt.size=0) + NoLegend()
-
+feats_to_plot = c("G1.Score", "S.Score", "G2M.Score")
+col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
+ps <- lapply(feats_to_plot, function(fea){
+  VlnPlot(
+    object = scrna,
+    features = fea,
+    group.by="name",
+    cols = col_def,
+    pt.size=0
+  ) + NoLegend()
 })
 
 plt = plot_grid(plotlist=ps, ncol=2)
@@ -127,9 +140,10 @@ saveRDS(stCond,file.path(report_tables_folder,"stCond_postfilter.RDS"))
 
 
 # qc feature scatterplots
-p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.mt", cols=colours)
-p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 ="percent.ribo",cols=colours)
-p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",cols=colours)
+col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
+p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.mt", cols=col_def)
+p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.ribo", cols=col_def)
+p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols=col_def)
 
 plt = patchwork::wrap_plots(list(p1, p2, p3), ncol=1)
 
@@ -142,8 +156,9 @@ save_ggplot_formats(
 
 
 ## High variable genes
+col_def <- c(base_color,pos_color)
 top10 <- head(VariableFeatures(scrna), 10)
-plot1 <- VariableFeaturePlot(scrna)
+plot1 <- VariableFeaturePlot(scrna,cols = col_def)
 plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
 
 plt = patchwork::wrap_plots(list(plot1, plot2))
@@ -156,8 +171,14 @@ save_ggplot_formats(
 )
 
 ## Cellcycle scaling
+col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
+
 ### before
-plt = DimPlot(scrna, reduction="BCELLCYCLE_PCA")
+plt = DimPlot(
+  scrna,
+  reduction="BCELLCYCLE_PCA",
+  cols=col_def
+)
 
 save_ggplot_formats(
   plt=plt,
@@ -167,7 +188,11 @@ save_ggplot_formats(
 )
 
 ### after
-plt = DimPlot(scrna, reduction="CELLCYCLED_PCA")
+plt = DimPlot(
+  scrna,
+  reduction="CELLCYCLED_PCA",
+  cols=col_def
+)
 
 save_ggplot_formats(
   plt=plt,

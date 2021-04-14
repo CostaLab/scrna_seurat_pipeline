@@ -44,7 +44,7 @@ for (a_celltype in celltype_names){
   if (length(genes) == 0){
       next
   }
-
+  col_def = c(base_color,pos_color)
   for (i in seq(1, length(genes), by=4)){
     ni = min(i+3, length(genes))
     p1 <- FeaturePlot(
@@ -53,9 +53,10 @@ for (a_celltype in celltype_names){
       label=T,
       label.size=2,
       features = genes[i:ni],
-      reduction = "INTE_UMAP",
+      reduction = "DEFAULT_UMAP",
       order = T,
-      cols = c("lightgrey", "red"),
+      # cols = c("lightgrey", "red"),
+      cols = col_def,
       ncol = 2,
       max.cutoff = 'q95'
     )
@@ -82,13 +83,16 @@ for (a_celltype in celltype_names){
     width=9, height=7
   )
 
+  group_by <- cluster
+  col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
   for (i in seq(1, length(genes), by=9)){
     ni = min(i+8, length(genes))
     p3 <- VlnPlot(
       object = scrna,
       pt.size=0,
       features = genes[i:ni],
-      group.by = cluster
+      cols = col_def,
+      group.by = group_by
     )
     save_ggplot_formats(
       plt=p3,

@@ -1,5 +1,5 @@
 ---
-title: "Marker Genes DE for different resolutions"
+title: "PROGENy"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
@@ -21,32 +21,14 @@ params:
     author: "author of document"
 author: '`r params$author`'
 ---
-## Cluster Results
 
-## Plot the top 10 DE genes in each cluster.
-```{r clusterDE_genes_resolution, out.width="100%", echo=FALSE}
-flist = stringr::str_sort(grep(
-  "clusterDE_genes_resolution-",
-  list.files(
-    params$report_plots_folder_png,
-    full.names=TRUE
-  ),
-  value=TRUE,
-  fixed=TRUE
-),numeric=TRUE)
-knitr::include_graphics(flist)
-```
+## Cluster: `r colorize(params$cluster,"red")`
 
-## DE genes on heatmap
-```{r heatmapDE_genes_resolution, out.width="100%", echo=FALSE}
-flist = stringr::str_sort(grep(
-  "heatmapDE_genes_resolution-",
-  list.files(
-    params$report_plots_folder_png,
-    full.names=TRUE
-  ),
-  value=TRUE,
-  fixed=TRUE
-),numeric=TRUE)
-knitr::include_graphics(flist)
+## PROGENy r effect size analysis
+```{r heatmap_PROGENy_up , out.width="100%", echo=FALSE}
+fname=file.path(
+  params$report_plots_folder_png,
+  paste0("progeny_r_effect_heatmap-",params$cluster,".png")
+)
+if(file.exists(fname)) knitr::include_graphics(fname)
 ```

@@ -36,10 +36,18 @@ stage_lst = c(
 
 
 ## Phase_1, set 1 to regressout
-preprocess_regressout = c("mito"       = 1,
-                          "ribo"       = 0,
-                          "cellcycle"  = 1
-                         )
+preprocess_regressout = c("mito"      = 1,
+                          "ribo"      = 0,
+                          "cellcycle" = 1)
+
+
+
+## Existed clusters Robject to rename your slots
+existed_cluster_slots_map = c(
+        "meta.stage" = "stim",
+        "meta.name"  = "name",
+        "reduction.DEFAULT_UMAP"  = "umap"
+)
 
 
 #Analysis_phases
@@ -52,15 +60,15 @@ preprocess_regressout = c("mito"       = 1,
 
 ## 0. omit,     1. calc & save,      2. load
 conf = c(
-       scrna_phase_preprocess     = 1, ## quality check and preprocessing before integration
-       scrna_phase_clustering     = 1, ## integration & clustering
-       scrna_phase_comparing      = 1, ## DE GO pathway analysis etc. All rest calculating will be stored here
-       scrna_cluster_annotation   = 0, ## Annotate clusters according to `cluster_annotation`
-       scrna_clusterwise_xcell    = 0, ## remove cells of each cluster according distinct criterion
-       scrna_del_mitogenes        = 0, ## !!!DANGEROUS, once deleted, never recovered!!!
-       scrna_merge_clusters       = 0, ## merge clusters
-       scrna_remove_clusters      = 0, ## remove clusters
-       scrna_remove_recluster     = 0) ## remove clusters and recluster with default resolution
+       scrna_your_loading_file        = 2, ## a seurat object with name start with scrna_your_loading_file.Rds
+       scrna_phase_existed_clusters   = 1, ## integration & clustering
+       scrna_phase_comparing          = 1, ## DE GO pathway analysis etc. All rest calculating will be stored here
+       scrna_cluster_annotation       = 0, ## Annotate clusters according to `cluster_annotation`
+       scrna_clusterwise_xcell        = 0, ## remove cells of each cluster according distinct criterion
+       scrna_del_mitogenes            = 0, ## !!!DANGEROUS, once deleted, never recovered!!!
+       scrna_merge_clusters           = 0, ## merge clusters
+       scrna_remove_clusters          = 0, ## remove clusters
+       scrna_remove_recluster         = 0) ## remove clusters and recluster with default resolution
 
 ### ----------specific settings for some functions ----------------
 
@@ -111,17 +119,6 @@ cluster_annotation <- c(
     "22" = "T-cells 3"
 )
 
-# Current options are the default option, you can change to your own
-viz_conf = list(
-  ## see: https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html#the-color-scales
-  # "magma" (or "A"), "inferno" (or "B"), "plasma" (or "C"), "viridis" (or "D") and "cividis" (or "E")
-  cluster_color_option = "D", ## R viridis, see above
-  replicate_color_option = "C", ## R viridis, see above
-  neg_color = "#51C3CC",#colorBlindness::Blue2DarkOrange12Steps[2],
-  pos_color = "#CC5800",#rev(colorBlindness::Blue2DarkOrange12Steps)[2],
-  base_color = "lightgrey",#"lightgrey",
-  neg_pos_divergent_palette = c('#1E8E99','#51C3CC','#99F9FF','#B2FCFF','#CCFEFF','#E5FFFF','#FFE5CC','#FFCA99','#FFAD65','#FF8E32','#CC5800','#993F00') #colorBlindness::Blue2DarkOrange12Steps
-)
 
 
 ### MCA annotation Reference

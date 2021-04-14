@@ -288,6 +288,7 @@ plan_record(plan)
 # library roxygen2 -> to maintain documents
 
 suppressPackageStartupMessages(library(Seurat))
+suppressPackageStartupMessages(library(progeny))
 suppressPackageStartupMessages(library(glue))
 suppressPackageStartupMessages(library(future.apply))    ## parallel
 suppressPackageStartupMessages(library(WriteXLS))
@@ -298,6 +299,8 @@ suppressPackageStartupMessages(library(stringr))
 suppressPackageStartupMessages(library(Hmisc))
 suppressPackageStartupMessages(library(foreach))
 suppressPackageStartupMessages(library(doParallel))
+suppressPackageStartupMessages(library(celda))
+suppressPackageStartupMessages(library(SoupX))
 
 
 registerDoParallel(cores=WORKER_NUM)
@@ -338,6 +341,9 @@ conf_main <- function(){
           saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
           stop(glue("ERROR when run {key}"))
         }
+        if("meta_order" %ni% names(scrna@tools)){
+          scrna@tools[["meta_order"]] <- list(name = names(data_src), stage=unique(stage_lst))
+        }
         phase_name <- get_output_name(scrna, key) ### only first store, or second time
         saveRDS(scrna, file=file.path(SAVE_DIR, glue("{phase_name}.Rds")))
         logger.info(paste("finished", phase_name))
@@ -354,9 +360,9 @@ conf_main <- function(){
 
 get_regressout_vector <- function(){
     dic <- list(
-            "mito"      = "percent.mt",
-            "ribo"      = "percent.ribo",
-            "cellcycle" = c("G2M.Score", "S.Score") )
+            "mito"       = "percent.mt",
+            "ribo"       = "percent.ribo",
+            "cellcycle"  = c("G2M.Score", "S.Score"))
 
     keep <- names(preprocess_regressout[preprocess_regressout==1])
     ro <- unlist(dic[keep])
@@ -369,7 +375,7 @@ get_output_name<- function(scrna, scrna_run_name){
     pconf <- configr::read.config("static/phase.ini")
     phases <- names(pconf)
 
-    if (scrna_run_name %in% paste0("scrna_", phases)){
+    if(scrna_run_name %in% paste0("scrna_", phases)){
       return(scrna_run_name)
     }else if(length(unique(scrna$name)) == 1){
       return("scrna_phase_singleton")
@@ -500,6 +506,47 @@ generate_scrna_rawdata <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+generate_scrna_ambient_rna <- function(scrna){
+  ret_code <- 0
+
+  tryCatch(
+           {
+            # We convert the input SeuratObject to a SingleCellExperiment object
+            # This is the require input for decontX
+            assay.used <- DefaultAssay(scrna)
+            DefaultAssay(scrna) <- "RNA"
+            scrna.sce <- as.SingleCellExperiment(scrna)
+
+            # Now, we estimate and correct the amount of ambient RNA.
+            # Since we have not given the function a clustering result,
+            # decontX will do the clustering for us.
+	    # Since contamination is dependent on the specific experiment, we provide the decontX function with
+	    # the batch	information. The contamination is then calculated per sample.
+            scrna.decont <- decontX(scrna.sce, batch = scrna$name)
+
+            # We add the estimated contamination and the decontaminated data to the SeuratObject
+            scrna[["decontX"]] <- CreateAssayObject(counts = scrna.decont@assays@data$decontXcounts)
+            scrna <- AddMetaData(object = scrna, metadata = scrna.decont$decontX_contamination,
+                                 col.name = "AmbientRNA")
+            scrna <- AddMetaData(object = scrna, metadata = scrna.decont$decontX_clusters,
+                                 col.name = "decontX_clusters")
+	    DefaultAssay(scrna) <- assay.used
+            return(scrna)
+	    #saveRDS(scrna, paste0(SAVE_DIR,"/scrna_ambientRNA.Rds"))
+           },
+
+            error = function(cond) {
+              ret_code <<- -1
+              logger.error(cond)
+              logger.error(traceback())
+           },
+	   
+            finally={
+              return(list(scrna, ret_code))
+           })
+  return(list(scrna, ret_code))
+}
+
 generate_scrna_phase_singleton <- function(scrna){
   ret_code <- 0
   pconf <- configr::read.config("static/phase.ini")
@@ -584,6 +631,48 @@ generate_scrna_phase_clustering <- function(scrna){
    }
   return(list(scrna, ret_code))
 }
+
+
+generate_scrna_phase_existed_clusters <- function(scrna){
+  ret_code <- 0
+  pconf <- configr::read.config("static/phase.ini")
+  pconf <- pconf[["phase_existed_clusters"]]
+  pconf <- pconf[pconf== 1]
+
+  if(exists("existed_cluster_slots_map")){
+      nms <- names(existed_cluster_slots_map)
+      metas <- nms[startsWith(nms, "meta.")]
+      reductions <- nms[startsWith(nms, "reduction.")]
+      for(meta in metas){
+          assertthat::assert_that(existed_cluster_slots_map[meta] %in% names(scrna@meta.data))
+          meta_slot <- stringr::str_sub(meta, start=(nchar("meta.")+1))
+          scrna@meta.data[, meta_slot] <- scrna@meta.data[, existed_cluster_slots_map[meta]]
+      }
+      for(reduction in reductions){
+          assertthat::assert_that(existed_cluster_slots_map[reduction] %in% names(scrna@reductions))
+          reduction_slot <- stringr::str_sub(reduction, start=(nchar("reduction.")+1))
+          scrna[[reduction_slot]] <- scrna[[existed_cluster_slots_map[reduction]]]
+      }
+
+  }
+
+  for (key in names(pconf)){
+      f_name = paste("generate_", key, sep="")
+      f_call = paste(f_name, "(scrna)", sep="")
+      logger.info(paste("executing", f_name))
+      ret_list <-  eval(parse(text=f_call))
+      scrna  <- ret_list[[1]]
+      ret_code <- ret_list[[2]]
+      if(ret_code != 0){
+          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
+          stop(glue("ERROR when run {key}"))
+      }
+      logger.info(paste("finished", f_name))
+
+   }
+  return(list(scrna, ret_code))
+}
+
 
 generate_scrna_phase_comparing <- function(scrna){
   ret_code <- 0
@@ -703,6 +792,13 @@ generate_scrna_cellcycle <-function(scrna){
              scrna <- RunPCA(scrna, features = c(s.genes, g2m.genes), reduction.name="BCELLCYCLE_PCA")
              scrna <- CellCycleScoring(scrna, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
              scrna$G1.Score = 1 - scrna$S.Score - scrna$G2M.Score
+             scrna$CC.Difference <- scrna$S.Score - scrna$G2M.Score
+             if("percent.mt" %ni% names(scrna@meta.data)){ ## for existed clusters analysis
+                scrna[["percent.mt"]] <- PercentageFeatureSet(scrna, pattern = "^mt-|^MT-")
+             }
+             if("percent.ribo" %ni% names(scrna@meta.data)){
+                scrna[["percent.ribo"]] <- PercentageFeatureSet(scrna, pattern = "^Rpl|^Rps|^RPL|^RPS")
+             }
 
            },
            error=function(cond) {
@@ -1617,6 +1713,124 @@ generate_scrna_go <- function(scrna){
 
   return(list(scrna, ret_code))
 }
+
+
+generate_scrna_progeny <- function(scrna){
+  ret_code = 0
+  assertthat::assert_that(SPECIES == "Human" | SPECIES == "Mouse")
+  Idents(scrna) <- DEFUALT_CLUSTER_NAME
+  scrna <- progeny::progeny(scrna, scale=FALSE, organism=SPECIES, top=500, perm=1,return_assay = TRUE)
+
+  da <- DefaultAssay(scrna)
+  DefaultAssay(scrna) <-'progeny'
+  pws <- rownames(scrna@assays$progeny)
+  res <- list()
+  Idents(scrna) <- DEFUALT_CLUSTER_NAME
+  for(i in levels(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
+    g <- as.character(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
+    g[!(g==i)] <- "others"
+    g <- factor(g, levels=c(i, "others"))
+    res[[i]] = scran::findMarkers(as.matrix(scrna@assays$progeny@data), g)[[1]]
+    res[[i]] <- as.data.frame(res[[i]])
+    r <- sapply(pws, function(pw) rcompanion::wilcoxonR(as.vector(scrna@assays$progeny@data[pw,]), g))
+    nms <- sapply(stringr::str_split(names(r), "\\."), function(x)x[1])
+    names(r) <- nms
+    res[[i]][nms, "r"] <- r
+    res[[i]] <- res[[i]][nms, ]
+  }
+
+  for (cl in names(res)) {
+    res[[cl]]$pathway <- rownames(res[[cl]])
+    res[[cl]]$CellType <- cl
+    colnames(res[[cl]]) <-  c("Top","p.value","FDR", "summary.logFC","logFC","r","pathway","CellType")
+  }
+  res_df <- do.call("rbind", res)
+  res_df$tag <- sapply(res_df$FDR, function(pval) {
+      if(pval< 0.001) {
+      txt <- "***"
+      } else if (pval < 0.01) {
+      txt <- "**"
+      } else if (pval < 0.05) {
+      txt <- "*"
+      } else {
+      txt <- "ns"
+      }
+      return(txt)
+  })
+  scrna@tools[[glue("progeny_{DEFUALT_CLUSTER_NAME}")]] <- res_df
+  DefaultAssay(scrna) <- da
+  return(list(scrna, ret_code))
+}
+
+generate_scrna_progeny_stage <- function(scrna){
+
+  ret_code = 0
+  if("progeny" %ni% names(scrna@assays)){
+    scrna <- progeny::progeny(scrna, scale=FALSE, organism=SPECIES, top=500, perm=1,return_assay = TRUE)
+  }
+  conds <- scrna@tools$meta_order$stage
+  m <- combn(conds, 2)
+  n = length(m)/2
+  lst <- vector("list", n)
+  for (i in 1:n){
+    lst[[i]] <- m[1:2, i]
+  }
+  pws <- rownames(scrna@assays$progeny)
+  vs_df_list <- list()
+  for(apair in lst){
+    vs1 <- apair[1]
+    vs2 <- apair[2]
+
+    Idents(scrna) <- 'stage'
+    ###
+    res <- list()
+    for(i in levels(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
+        cells1 <- which(scrna@meta.data[, DEFUALT_CLUSTER_NAME]==i & (scrna@meta.data$stage %in% vs1))
+        cells2 <- which(scrna@meta.data[, DEFUALT_CLUSTER_NAME]==i & (scrna@meta.data$stage %in% vs2))
+        if( length(cells1) < 2 | length(cells2) < 2){
+           next
+        }
+        a_sub = subset(scrna, cells=c(cells1, cells2))
+        g <- as.character(a_sub@meta.data$stage)
+        g <- factor(g, levels=c(vs1, vs2))
+        res[[i]] = scran::findMarkers(as.matrix(a_sub@assays$progeny@data), g)[[1]]
+        res[[i]] <- as.data.frame(res[[i]])
+        r <- sapply(pws, function(pw) rcompanion::wilcoxonR(as.vector(a_sub@assays$progeny@data[pw,]), g))
+        nms <- sapply(stringr::str_split(names(r), "\\."), function(x)x[1])
+        names(r) <- nms
+        res[[i]][nms, "r"] <- r
+        res[[i]] <- res[[i]][nms, ]
+
+    }
+
+    for (cl in names(res)) {
+        res[[cl]]$pathway <- rownames(res[[cl]])
+        res[[cl]]$CellType <- cl
+        colnames(res[[cl]]) <-  c("Top","p.value","FDR", "summary.logFC","logFC","r","pathway","CellType")
+
+    }
+    res_df <- do.call("rbind", res)
+#    res_df$FDR <- p.adjust(res_df$p_val, method="fdr")
+    res_df$tag <- sapply(res_df$FDR, function(pval) {
+        if(pval< 0.001) {
+        txt <- "***"
+        } else if (pval < 0.01) {
+        txt <- "**"
+        } else if (pval < 0.05) {
+        txt <- "*"
+        } else {
+        txt <- "ns"
+        }
+        return(txt)
+    })
+
+    vs_df_list[[glue("{vs1}.vs.{vs2}")]] <- res_df
+
+  }
+  scrna@tools[[glue("progeny_stage_{DEFUALT_CLUSTER_NAME}")]] <- vs_df_list
+  return(list(scrna, ret_code))
+}
+
 
 generate_scrna_pathway_stage <- function(scrna){
   ret_list <- get_pathway_comparison(scrna, slot="stage")

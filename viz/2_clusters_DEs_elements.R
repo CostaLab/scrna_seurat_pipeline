@@ -59,10 +59,17 @@ for (resolution in seq(0.1, 0.8, 0.1)){
   cluster_de_top8_combine <- do.call(rbind, cluster_de_top8)
   genes <- unique(cluster_de_top8_combine$gene)
 
+  col_def <- rev(
+    viridis::viridis_pal(option = cluster_viridis_opt)(
+      length(unique(scrna@meta.data[,sprintf(paste0(col_string,"%.1f"), resolution)]))
+    )
+  )
+
   plt <- DoHeatmap(
     object = scrna,
     features = genes,
     group.by = sprintf(paste0(col_string,"%.1f"), resolution),
+    group.colors=col_def,
     disp.min = -2,
     disp.max = 2,
     slot = "scale.data",

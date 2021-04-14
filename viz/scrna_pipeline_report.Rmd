@@ -1,5 +1,4 @@
 ---
-author: ["Mingbo Cheng","Tiago Maié"]
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
@@ -21,6 +20,8 @@ params:
     report_plots_folder: "folder with the plot elements"
     report_plots_folder_png: "folder with the png plot elements"
     report_plots_folder_pdf: "folder with the pdf plot elements"
+    author: "author of document"
+author: '`r params$author`'
 always_allow_html: true
 
 ---
@@ -33,6 +34,10 @@ library(kableExtra)
 ```
 # Data Quality Check
 ```{r qc, child=if(any(grepl("QC",params$funcs,fixed=TRUE))) '1_quality_report.Rmd'}
+```
+
+# Ambient RNA
+```{r ambient_rna, child=if(any(grepl("AmbientRNA",params$funcs,fixed=TRUE))) 'ambientRNA_viz.Rmd'}
 ```
 
 # Clustering

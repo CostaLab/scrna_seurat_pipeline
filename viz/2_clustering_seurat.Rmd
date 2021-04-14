@@ -1,6 +1,5 @@
 ---
 title: "Clustering"
-author: "Mingbo Cheng"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
@@ -19,7 +18,14 @@ params:
     report_plots_folder: "folder with the plot elements"
     report_plots_folder_png: "folder with the png plot elements"
     report_plots_folder_pdf: "folder with the pdf plot elements"
+    author: "author of document"
+author: '`r params$author`'
 ---
+
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(kableExtra)
+```
 
 ```{r setup_clustering_seurat, include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
@@ -158,22 +164,20 @@ knitr::include_graphics(
 
 ### HCL annotation
 ```{r hcl_annotate_seurat, out.width="100%", echo=FALSE}
-knitr::include_graphics(
-  file.path(
+fname <- file.path(
     params$report_plots_folder_png,
     paste0("hcl_annotate_",fixed_cluster,".png")
   )
-)
+if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 
 ### MCA annotation
 ```{r mca_annotate_seurat, out.width="100%", echo=FALSE}
-knitr::include_graphics(
-  file.path(
+fname <- file.path(
     params$report_plots_folder_png,
     paste0("mca_annotate_",fixed_cluster,".png")
   )
-)
+if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 ```{r mca_annotate_hover_seurat, out.width="100%", echo=FALSE, eval=FALSE}
 plt = readRDS(
@@ -193,12 +197,11 @@ Seurat::HoverLocator(plot = plt, information = info)
 
 ### External Annotation
 ```{r external_annotation_seurat, out.width="100%", echo=FALSE}
-knitr::include_graphics(
-  file.path(
+fname <- file.path(
     params$report_plots_folder_png,
     paste0("external_annotation_",fixed_cluster,".png")
   )
-)
+if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 ```{r external_annotation_hover_seurat, out.width="100%", echo=FALSE, eval=FALSE}
 plt = readRDS(
