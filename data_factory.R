@@ -2415,7 +2415,7 @@ if(sanity_singles == FALSE){
 } else{
   # We have phase_singleton or one of the singleton steps.
   # So,	we remove the INTE_PCA and INTE_UMAP.
-  sanity_attributes <- sanity_attributes[!grepl("INTE", sanity_attributes[,1]),]
+  sanity_attributes <- sanity_attributes[!grepl("INTE|DEFAULT_UMAP", sanity_attributes[,1]),]
 }
 
 sanity_function <- function(scrna, key){
