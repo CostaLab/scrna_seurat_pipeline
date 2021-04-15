@@ -328,6 +328,7 @@ conf_main <- function(){
       scrna <- readRDS(file=file.path(SAVE_DIR, NRds))
       scrna@tools$parameter[[cur_time]] <- unlist(pa)
       scrna@tools$execution[[cur_time]] <- conf
+      scrna <- sanity_function(scrna, key)
       logger.info(paste("finished loading", NRds))
     }else if(val==1){
       func_name = paste("generate_", key, sep="")
@@ -337,6 +338,7 @@ conf_main <- function(){
         ret_list <-  eval(parse(text=func_call))
         scrna  <- ret_list[[1]]
         ret_code <- ret_list[[2]]
+	scrna <- sanity_function(scrna, key)
         if(ret_code != 0){
           saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
           stop(glue("ERROR when run {key}"))
@@ -532,7 +534,6 @@ generate_scrna_ambient_rna <- function(scrna){
                                  col.name = "decontX_clusters")
 	    DefaultAssay(scrna) <- assay.used
             return(scrna)
-	    #saveRDS(scrna, paste0(SAVE_DIR,"/scrna_ambientRNA.Rds"))
            },
 
             error = function(cond) {
@@ -561,6 +562,7 @@ generate_scrna_phase_singleton <- function(scrna){
       ret_list <-  eval(parse(text=f_call))
       scrna  <- ret_list[[1]]
       ret_code <- ret_list[[2]]
+      scrna <- sanity_function(scrna, key)
       if(ret_code != 0){
           saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
           stop(glue("ERROR when run {key}"))
@@ -593,6 +595,7 @@ generate_scrna_phase_preprocess <- function(scrna){
       ret_list <-  eval(parse(text=f_call))
       scrna  <- ret_list[[1]]
       ret_code <- ret_list[[2]]
+      scrna <- sanity_function(scrna, key)
       if(ret_code != 0){
           saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
           stop(glue("ERROR when run {key}"))
@@ -622,6 +625,7 @@ generate_scrna_phase_clustering <- function(scrna){
       ret_list <-  eval(parse(text=f_call))
       scrna  <- ret_list[[1]]
       ret_code <- ret_list[[2]]
+      scrna <- sanity_function(scrna, key)
       if(ret_code != 0){
           saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
           stop(glue("ERROR when run {key}"))
@@ -663,6 +667,7 @@ generate_scrna_phase_existed_clusters <- function(scrna){
       ret_list <-  eval(parse(text=f_call))
       scrna  <- ret_list[[1]]
       ret_code <- ret_list[[2]]
+      scrna <- sanity_function(scrna, key)
       if(ret_code != 0){
           saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
           stop(glue("ERROR when run {key}"))
@@ -686,6 +691,7 @@ generate_scrna_phase_comparing <- function(scrna){
       ret_list <-  eval(parse(text=f_call))
       scrna  <- ret_list[[1]]
       ret_code <- ret_list[[2]]
+      scrna <- sanity_function(scrna, key)
       if(ret_code != 0){
           saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
           stop(glue("ERROR when run {key}"))
@@ -2394,6 +2400,52 @@ get_pathway_comparison <- function(scrna, slot){
   return(list(scrna, ret_code))
 }
 
+# Sanity Function
+# This function is called every time a Seurat object is loaded or conf_main processes a new step.
+# Loading the relevant slots and attributes.
+sanity_attributes <- read.table("static/SlotsAttributes.csv", sep = ";", header = TRUE, stringsAsFactors = FALSE)
+
+# We have the singleton slots. When we run the pipeline for a single sample and use the comparing features, we need to check for these slots.
+# But we do not want to check for these slots if we use the comparing features for a set of samples, i.e. in the normal use.	
+# So, if conf does not contain scrna_phase_singleton, scrna_sltn_batch_clustering or scrna_singleton_clustering, we remove the singleton slots from the attributes
+sanity_singles <- c("scrna_phase_singleton|scrna_sltn_batch_clustering|scrna_singleton_clustering")
+sanity_singles <- any(grepl(sanity_singles, names(conf)))
+if(sanity_singles == FALSE){
+  sanity_attributes <- sanity_attributes[!grepl("SINGLE", sanity_attributes[,1]),]
+} else{
+  # We have phase_singleton or one of the singleton steps.
+  # So,	we remove the INTE_PCA and INTE_UMAP.
+  sanity_attributes <- sanity_attributes[!grepl("INTE|DEFAULT_UMAP", sanity_attributes[,1]),]
+}
+
+sanity_function <- function(scrna, key){
+  print(paste0("Checking slots for ", key))
+  sanity_type <- key
+  #sanity_slots_to_check <- grepl(sanity_type, sanity_attributes$type) | grepl("all", sanity_attributes$type)
+  #sanity_attributes_use <- sanity_attributes #sanity_attributes[sanity_slots_to_check,]
+
+  # We apply the check_attributes function below
+  sanity_attributes_result <- lapply(sanity_attributes[,1], check_attributes, scrna = scrna)
+  # We bind the results
+  sanity_attributes_result <- do.call("rbind", sanity_attributes_result)
+  scrna@misc[["sanity"]] <- sanity_attributes_result
+  colnames(scrna@misc$sanity) <- key
+  #scrna@misc[[paste0("sanity_", key)]] <- sanity_attributes_result
+  return(scrna)
+}
+check_attributes <- function(scrna, sanity_attribute){
+  result <- tryCatch(
+  {
+    sanity_test <- eval(parse(text = sanity_attribute))
+    sanity_result <- paste0("Present: ", sanity_attribute)
+  },
+  error = function(cond){
+    sanity_result <- paste0("Missing: ", sanity_attribute)
+  },
+  finally = {
+    #pass
+  })
+}
 
 if(!interactive()) {
   conf_main()
