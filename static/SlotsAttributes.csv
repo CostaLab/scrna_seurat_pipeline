@@ -1,0 +1,14 @@
+Name;type
+scrna@meta.data[, """name"""];all
+scrna@meta.data[, """stage"""];all
+scrna$decontX_clusters;all
+scrna$AmbientRNA;all
+scrna@reductions$RAW_PCA;all
+scrna@reductions$SINGLE_PCA;scrna_phase_singleton
+scrna@reductions$SINGLE_UMAP;scrna_phase_singleton
+scrna@reductions$BCELLCYCLE_PCA;scrna_phase_preprocess scrna_phase_clustering scrna_phase_existed_clusters scrna_phase_comparing scrna_phase_singleton
+scrna@reductions$CELLCYCLED_PCA;scrna_phase_preprocess scrna_phase_clustering scrna_phase_existed_clusters scrna_phase_comparing scrna_phase_singleton
+scrna@reductions$INTE_PCA;scrna_phase_clustering scrna_phase_existed_clusters scrna_phase_comparing
+scrna@reductions$INTE_UMAP;scrna_phase_clustering scrna_phase_existed_clusters scrna_phase_comparing
+scrna@reductions$DEFAULT_UMAP;scrna_phase_clustering scrna_phase_comparing scrna_phase_existed_clusters
+scrna$seurat_clusters;scrna_phase_clustering scrna_phase_comparing scrna_phase_singleton
