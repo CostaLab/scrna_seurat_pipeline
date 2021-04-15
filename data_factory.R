@@ -2412,6 +2412,10 @@ sanity_singles <- c("scrna_phase_singleton|scrna_sltn_batch_clustering|scrna_sin
 sanity_singles <- any(grepl(sanity_singles, names(conf)))
 if(sanity_singles == FALSE){
   sanity_attributes <- sanity_attributes[!grepl("SINGLE", sanity_attributes[,1]),]
+} else{
+  # We have phase_singleton or one of the singleton steps.
+  # So,	we remove the INTE_PCA and INTE_UMAP.
+  sanity_attributes <- sanity_attributes[!grepl("INTE", sanity_attributes[,1]),]
 }
 
 sanity_function <- function(scrna, key){
