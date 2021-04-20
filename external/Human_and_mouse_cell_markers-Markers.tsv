@@ -983,4 +983,8 @@ PCSK9	Pcsk9	Protein Coding	Thin ascending limb	Kidney	Clark et al, Kidney Int, 2
 	Upk1b		Transitional epithelium	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
 	Upk2		Transitional epithelium	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
 	Upk3a		Transitional epithelium	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
-	Upk3b		Transitional epithelium	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13	
+	Upk3b		Transitional epithelium	Kidney	Clark et al, Kidney Int, 2019 (PMID: 30826016)	Mingbo Chen	2020-02-13
+RGS5	Rgs5	Protein Coding	HSC	Liver		Mingbo Cheng	15/03/2021
+MYH11	Myh11	Protein Coding	VMC	Liver		Mingbo Cheng	15/03/2021
+PDGFRA	Pdgfra	Protein Coding	Myofibroblast	Liver		Mingbo Cheng	15/03/2021
+COL3A1	Col3a1	Protein Coding	Myofibroblast	Liver		Mingbo Cheng	15/03/2021
