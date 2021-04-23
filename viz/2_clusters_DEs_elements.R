@@ -17,7 +17,7 @@ for (resolution in seq(0.1, 0.8, 0.1)){
   cluster_de <- cluster_de_list[[as.character(resolution)]]
   cluster_de <- cluster_de[sapply(cluster_de, function(m) nrow(m) >0)]
   cluster_de_top10 <- lapply(cluster_de, function(x) {
-      x %>% top_n(10, avg_logFC) %>% arrange(-avg_logFC)
+      x %>% top_n(10, avg_log2FC) %>% arrange(-avg_log2FC)
   })
 
   plots = list()
@@ -25,7 +25,7 @@ for (resolution in seq(0.1, 0.8, 0.1)){
   for (id in sort(help_sort_func(names(cluster_de)))) {
     id = as.character(id)
     cluster_genes = cluster_de_top10[[id]]
-    x_lim = max(abs(cluster_de[[id]]$avg_logFC))
+    x_lim = max(abs(cluster_de[[id]]$avg_log2FC))
     x_lim = c(-x_lim, x_lim)
     plots[[id]] = GeneBarPlot(cluster_de[[id]], xlim = x_lim, main = id)
   }
@@ -45,7 +45,7 @@ for (resolution in seq(0.1, 0.8, 0.1)){
 
 ## DE genes on heatmap
 DefaultAssay(scrna) <- "RNA"
-scrna <- ScaleData(scrna,  rownames(scrna))
+scrna <- Seurat::ScaleData(scrna,  rownames(scrna))
 
 cluster_de_list <- scrna@tools$de_batch
 names(cluster_de_list) <- as.character(seq(0.1, 0.8, 0.1))
@@ -53,7 +53,7 @@ names(cluster_de_list) <- as.character(seq(0.1, 0.8, 0.1))
 for (resolution in seq(0.1, 0.8, 0.1)){
   #cluster.de <- cluster.de.list[[as.character(resolution)]]
   cluster_de_top8 <- lapply(cluster_de, function(x) {
-      x %>% top_n(8, avg_logFC) %>% arrange(-avg_logFC)
+      x %>% top_n(8, avg_log2FC) %>% arrange(-avg_log2FC)
   })
 
   cluster_de_top8_combine <- do.call(rbind, cluster_de_top8)

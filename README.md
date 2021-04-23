@@ -2,7 +2,7 @@
 
 ### 1. Overview
 
-This pipeline is a standard pipeline for scRNA analysis using Seurat 3. It enable us to run the analysis automatically.  With only tiny settings, the script will do everything for you.
+This pipeline is a standard pipeline for scRNA analysis using Seurat 4. It enable us to run the analysis automatically.  With only tiny settings, the script will do everything for you.
 
 The following is a brief introduction to the file:
 

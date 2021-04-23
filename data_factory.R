@@ -541,7 +541,7 @@ generate_scrna_ambient_rna <- function(scrna){
               logger.error(cond)
               logger.error(traceback())
            },
-	   
+
             finally={
               return(list(scrna, ret_code))
            })
@@ -1916,8 +1916,8 @@ get_go_up <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
-    genes = de.list[[id]]$gene[de.list[[id]]$avg_logFC > 0.25 & de.list[[id]]$p_val_adj < 0.05]
-    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_logFC > 0.25 & de.list[[id]]$p_val_adj < 0.05]
+    genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
+    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
 
     genes_e = NULL
@@ -1963,8 +1963,8 @@ get_go_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
-    genes = de.list[[id]]$gene[de.list[[id]]$avg_logFC < -0.25 & de.list[[id]]$p_val_adj < 0.05]
-    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_logFC < -0.25 & de.list[[id]]$p_val_adj < 0.05]
+    genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
+    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))
     genes_e = NULL
     genes.sorted = NULL
@@ -2016,8 +2016,8 @@ get_kegg_up <- function(de.list){
 
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
-    genes = de.list[[id]]$gene[de.list[[id]]$avg_logFC > 0.25 & de.list[[id]]$p_val_adj < 0.05]
-    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_logFC > 0.25 & de.list[[id]]$p_val_adj < 0.05]
+    genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
+    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
 
     genes_e = NULL
@@ -2074,8 +2074,8 @@ get_kegg_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
-    genes = de.list[[id]]$gene[de.list[[id]]$avg_logFC < -0.25 & de.list[[id]]$p_val_adj < 0.05]
-    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_logFC < -0.25 & de.list[[id]]$p_val_adj < 0.05]
+    genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
+    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))
     genes_e = NULL
     genes.sorted = NULL
@@ -2135,8 +2135,8 @@ get_reactome_up <- function(de.list){
 
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
-    genes = de.list[[id]]$gene[de.list[[id]]$avg_logFC > 0.25 & de.list[[id]]$p_val_adj < 0.05]
-    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_logFC > 0.25 & de.list[[id]]$p_val_adj < 0.05]
+    genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
+    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
 
     genes_e = NULL
@@ -2188,8 +2188,8 @@ get_reactome_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
-    genes = de.list[[id]]$gene[de.list[[id]]$avg_logFC < -0.25 & de.list[[id]]$p_val_adj < 0.05]
-    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_logFC < -0.25 & de.list[[id]]$p_val_adj < 0.05]
+    genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
+    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))
     genes_e = NULL
     genes.sorted = NULL
@@ -2246,8 +2246,8 @@ get_hallmark_up <- function(de.list){
 
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
-    genes = de.list[[id]]$gene[de.list[[id]]$avg_logFC > 0.25 & de.list[[id]]$p_val_adj < 0.05]
-    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_logFC > 0.25 & de.list[[id]]$p_val_adj < 0.05]
+    genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
+    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
 
     genes_e = NULL
@@ -2307,8 +2307,8 @@ get_hallmark_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
-    genes = de.list[[id]]$gene[de.list[[id]]$avg_logFC < -0.25 & de.list[[id]]$p_val_adj < 0.05]
-    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_logFC < -0.25 & de.list[[id]]$p_val_adj < 0.05]
+    genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
+    pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))
     genes_e = NULL
     genes.sorted = NULL
@@ -2406,7 +2406,7 @@ get_pathway_comparison <- function(scrna, slot){
 sanity_attributes <- read.table("static/SlotsAttributes.csv", sep = ";", header = TRUE, stringsAsFactors = FALSE)
 
 # We have the singleton slots. When we run the pipeline for a single sample and use the comparing features, we need to check for these slots.
-# But we do not want to check for these slots if we use the comparing features for a set of samples, i.e. in the normal use.	
+# But we do not want to check for these slots if we use the comparing features for a set of samples, i.e. in the normal use.
 # So, if conf does not contain scrna_phase_singleton, scrna_sltn_batch_clustering or scrna_singleton_clustering, we remove the singleton slots from the attributes
 sanity_singles <- c("scrna_phase_singleton|scrna_sltn_batch_clustering|scrna_singleton_clustering")
 sanity_singles <- any(grepl(sanity_singles, names(conf)))

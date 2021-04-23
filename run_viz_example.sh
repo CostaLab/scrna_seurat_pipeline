@@ -79,3 +79,50 @@ Rscript ./viz/create_report.R \
     -j "${json_exe_list}" \
     -i "FALSE"
 date
+
+
+######Options:############################################
+#	-h, --help
+#		Show this help message and exit
+#
+#	-a CHARACTER, --author=CHARACTER
+#		Author display in report [default Costalab]
+#
+#	-m CHARACTER, --make_element=CHARACTER
+#		make_element [default FALSE]
+#
+#	-s CHARACTER, --savedir=CHARACTER
+#		savedir [default save]
+#
+#	-c CHARACTER, --configfile=CHARACTER
+#		configfile [default conf/config.R]
+#
+#	-o CHARACTER, --report_dir=CHARACTER
+#		report_dir [default report]
+#
+#	-r CHARACTER, --charts_dir=CHARACTER
+#		charts_dir [default charts]
+#
+#	-p CHARACTER, --project=CHARACTER
+#		charts_dir [default ]
+#
+#	-e CHARACTER, --externalfile=CHARACTER
+#		report_dir [default ./external/Human_and_mouse_cell_markers-Markers.tsv]
+#
+#	-d CHARACTER, --defaultclsuters=CHARACTER
+#		cluster slots:
+#               removed_clusters
+#               remove_reclusters
+#               merged_clusters
+#               annotation
+#               singleton [default seurat_clusters]
+#
+#	-j CHARACTER, --planOfreport=CHARACTER
+#		plan of report [default c()]
+#
+#	-l CHARACTER, --singlefile=CHARACTER
+#		generate single html file [default FALSE]
+#
+#	-i CHARACTER, --indexonly=CHARACTER
+#		only generate index.html [default FALSE]
+

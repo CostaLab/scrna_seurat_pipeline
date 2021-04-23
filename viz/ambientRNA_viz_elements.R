@@ -1,10 +1,13 @@
 ####################################################
 # ambient RNA
 ####################################################
-library(celda)
-library(ggplot2)
-library(dplyr)
-library(Seurat)
+## if load celda here, Seurat methods would be replaced by old version
+#suppressPackageStartupMessages(library(celda))
+
+#suppressPackageStartupMessages(library(ggplot2))
+#suppressPackageStartupMessages(library(dplyr))
+#suppressPackageStartupMessages(library(Seurat))
+
 if(identical(cluster,"singleton")){
   scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
 }else{
