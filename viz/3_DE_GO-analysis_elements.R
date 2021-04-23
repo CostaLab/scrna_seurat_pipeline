@@ -48,7 +48,7 @@ cluster_de <- scrna@tools[[de_cluster_name]]
 cluster_de <- cluster_de[sapply(cluster_de, function(m) nrow(m) >0)]
 
 cluster_de_top10 <- lapply(cluster_de, function(x) {
-    x %>% top_n(10, avg_logFC) %>% arrange(-avg_logFC)
+    x %>% top_n(10, avg_log2FC) %>% arrange(-avg_log2FC)
 })
 
 
@@ -96,7 +96,7 @@ help_sort_func <- ifelse(all.is.numeric(names(cluster_de)), as.numeric, function
 for (id in sort(help_sort_func(names(cluster_de)))) {
   id = as.character(id)
   cluster_genes <- cluster_de_top10[[id]]
-  x_lim = max(abs(cluster_de[[id]]$avg_logFC))
+  x_lim = max(abs(cluster_de[[id]]$avg_log2FC))
   x_lim <- c(-x_lim, x_lim)
   plots[[id]] <- GeneBarPlot(cluster_de[[id]], xlim = x_lim, main = id)
 }
@@ -119,9 +119,10 @@ if(length(plots) > 0){
 help_sort_func <- ifelse(all.is.numeric(names(cluster_de)), as.numeric, function(x){x})
 
 for (id in sort(help_sort_func(names(cluster_de)))) {
+  message(id)
   id = as.character(id)
   a_de <- cluster_de[[id]]
-  a_de$log2FC <- a_de$avg_logFC / log(2)
+  a_de$log2FC <- a_de$avg_log2FC # / log(2)
   up <- nrow(a_de %>% filter(log2FC>= 1 & p_val_adj<=0.05) )
   down <- nrow(a_de %>% filter(log2FC <= -1 & p_val_adj<=0.05))
   plt <- EnhancedVolcano(
@@ -213,6 +214,9 @@ for(enrich_cluster_name in enrch_analysis_vec){
 
     term_direction_list = switch(term_direction, "up"=term_up_list, "down"=term_down_list)
 
+    if(length(term_direction_list)  == 0){
+        next
+    }
     df_list <- lapply(1:length(term_direction_list), function(x) term_direction_list[[x]]@result)
     names(df_list) <- names(term_direction_list)
     for(i in 1:length(df_list)){

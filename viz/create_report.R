@@ -4,7 +4,6 @@ suppressPackageStartupMessages(library(optparse))      ## Options
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(crayon))
 suppressPackageStartupMessages(library(glue))
-suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(Hmisc))
 suppressPackageStartupMessages(library(knitr))
 suppressPackageStartupMessages(library(kableExtra))
@@ -18,7 +17,7 @@ suppressPackageStartupMessages(library(stringr))
 suppressPackageStartupMessages(library(openxlsx))
 suppressPackageStartupMessages(library(ComplexHeatmap))
 suppressPackageStartupMessages(library(EnhancedVolcano))
-
+suppressPackageStartupMessages(library(Seurat))
 `%ni%` <- Negate(`%in%`)
 
 ###===================================FUNCTIONS BEGIN===================================================
@@ -53,18 +52,18 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
   #de.data = cluster.de[[id]]
   #de.data = plot_de
   if (any(colnames(de.data) == "cluster")) {
-    top5.up <- de.data %>% group_by(cluster) %>% top_n(10, avg_logFC) %>%filter(avg_logFC > 0) %>% arrange(-avg_logFC)
-    top5.dn <- de.data %>% group_by(cluster) %>% top_n(10, -avg_logFC) %>%filter(avg_logFC < 0) %>% arrange(-avg_logFC)
+    top5.up <- de.data %>% group_by(cluster) %>% top_n(10, avg_log2FC) %>%filter(avg_log2FC > 0) %>% arrange(-avg_log2FC)
+    top5.dn <- de.data %>% group_by(cluster) %>% top_n(10, -avg_log2FC) %>%filter(avg_log2FC < 0) %>% arrange(-avg_log2FC)
   } else {
-    top5.up <- de.data  %>% top_n(10, avg_logFC) %>%filter(avg_logFC > 0) %>% arrange(-avg_logFC)
-    top5.dn <- de.data  %>% top_n(10, -avg_logFC) %>%filter(avg_logFC < 0) %>% arrange(-avg_logFC)
+    top5.up <- de.data  %>% top_n(10, avg_log2FC) %>%filter(avg_log2FC > 0) %>% arrange(-avg_log2FC)
+    top5.dn <- de.data  %>% top_n(10, -avg_log2FC) %>%filter(avg_log2FC < 0) %>% arrange(-avg_log2FC)
   }
   top.up.dn <- rbind(top5.up, top5.dn)
   top.up.dn$gene <- make.unique(top.up.dn$gene)
-  top.up.dn$type = ifelse(top.up.dn$avg_logFC > 0, "positive", "negative")
+  top.up.dn$type = ifelse(top.up.dn$avg_log2FC > 0, "positive", "negative")
   top.up.dn$type <- factor(top.up.dn$type, levels = c("positive", "negative"))
   g <- ggplot(data = top.up.dn,
-              aes(x = gene, y = avg_logFC, fill = type)) +
+              aes(x = gene, y = avg_log2FC, fill = type)) +
     geom_bar(stat="identity") +
     scale_x_discrete(limits=rev(top.up.dn$gene)) +
     theme_minimal() +
@@ -187,30 +186,29 @@ INDEX_ONLY        = pa$indexonly
 dir.create(file.path(REPORTDIR, "data"), recursive=T)
 
 
-#print(EXEC_PLAN)
-
-
-
-py_exe_list = paste0(EXEC_PLAN, collapse="\\',\\'")
-py_exe_list = paste0("[\\'", py_exe_list, "\\']")
+py_exe_list = paste0(EXEC_PLAN, collapse="','")
+py_exe_list = paste0("['", py_exe_list, "']")
 ###===================================PARAMETERS END===================================================
-
-
-
 
 message("Project:", PROJECT)
 cat(paste("Use cluster slot", red(DEFAULTCLUSTERS), "\n"))
 ##1. copy excels to report/data
 message("copying excel files from ", CHARTSDIR, "\n")
 file.copy(file.path(CHARTSDIR, list.files(CHARTSDIR)), glue("{REPORTDIR}/data"), overwrite = T, copy.date=T)
+dir.create(glue("{REPORTDIR}/../viz"))
+file.copy(file.path(getwd(), "viz", list.files("viz")), glue("{REPORTDIR}/../viz"), overwrite = T, recursive=T, copy.date=T)
 
-code_generate_cmd=glue("python viz/code_generator.py ",
+code_gene_file <- file.path(REPORTDIR, "..", "viz/code_generator.py")
+
+viz_path <- file.path(REPORTDIR, "..", "viz")
+
+code_generate_cmd=glue("python {code_gene_file} ",
                        "-c {DEFAULTCLUSTERS} ",
                        "-cf '{CONFIGFILE}' ",
                        "--save_dir '{SAVE_DIR}' ",
                        "--output_dir '{REPORTDIR}' ",
                        "--proj_tag {PROJECT} ",
-                       "--executing_list {py_exe_list}")
+                       "--executing_list \"{py_exe_list}\"")
 
 
 ##2. code generate
@@ -306,18 +304,41 @@ ext_annot_fp = EXTERNALFILE
   dir.create(report_tables_folder, recursive = TRUE)
 
   # run necessary generators
-  if("QC" %in% EXEC_PLAN) source("viz/1_quality_report_elements.R")
-  if(any(grepl("AmbientRNA",funcs,fixed=TRUE))) source("viz/ambientRNA_viz_elements.R")
-  if("DEs"%in% EXEC_PLAN) source("viz/2_clusters_DEs_elements.R")
-  if(any(grepl("Clusters_", EXEC_PLAN, fixed=T))) source("viz/2_batch_clustering_elements.R")
-  if("Clusters" %in% EXEC_PLAN) source("viz/2_clustering_elements.R")
-  if("Singleton" %in% EXEC_PLAN){
-    source("viz/2_clustering_elements.R")
-    source("viz/2_clusters_DEs_elements.R")
+  if("QC" %in% EXEC_PLAN) {
+    cat(paste(date(), green(" Element: "), red("QC"), "\n"))
+    source(glue("{viz_path}/1_quality_report_elements.R"))
   }
-  if("EXT_MARKERS" %in% EXEC_PLAN) source("viz/3_external_markers_elements.R")
+  if(any(grepl("AmbientRNA",funcs,fixed=TRUE))){
+    cat(paste(date(), green(" Element: "), red("AmbientRNA"), "\n"))
+    source(glue("{viz_path}/ambientRNA_viz_elements.R"))
+  }
+  if("DEs"%in% EXEC_PLAN) {
+    cat(paste(date(), green(" Element: "), red("DEs"), "\n"))
+    source(glue("{viz_path}/2_clusters_DEs_elements.R"))
+  }
+  if(any(grepl("Clusters_", EXEC_PLAN, fixed=T))){
+    cat(paste(date(), green(" Element: "), red("Clusters_?"), "\n"))
+    source(glue("{viz_path}/2_batch_clustering_elements.R"))
+    source(glue("{viz_path}/2_clustering_elements.R"))
+  }
+  if("Clusters" %in% EXEC_PLAN){
+    cat(paste(date(), green(" Element: "), red("Clusters"), "\n"))
+    source(glue("{viz_path}/2_clustering_elements.R"))
+  }
+  if("Singleton" %in% EXEC_PLAN){
+    cat(paste(date(), green(" Element: "), red("Singleton"), "\n"))
+    source(glue("{viz_path}/2_clustering_elements.R"))
+    source(glue("{viz_path}/2_clusters_DEs_elements.R"))
+  }
+  if("EXT_MARKERS" %in% EXEC_PLAN){
+    cat(paste(date(), green(" Element: "), red("EXT_MARKERS"), "\n"))
+    source(glue("{viz_path}/3_external_markers_elements.R"))
+  }
   # FIXME possible problem where all term enrichment analysis is on the same place
-  if("DEGO" %in% EXEC_PLAN) source("viz/3_DE_GO-analysis_elements.R")
+  if("DEGO" %in% EXEC_PLAN){
+    cat(paste(date(), green(" Element: "), red("DEGO"), "\n"))
+    source(glue("{viz_path}/3_DE_GO-analysis_elements.R"))
+  }
 
 }
 
@@ -344,35 +365,36 @@ render_func = function(rmd_input_filename, output_filename){
 }
 
 for(i in EXEC_PLAN){
-  cat(paste(blue("Generating: "), red(i), "\n"))
-  if(grepl("QC",i,fixed=TRUE)) render_func("viz/1_quality_report.Rmd","data_quality")
-  if(grepl("AmbientRNA",i,fixed=TRUE)) render_func("viz/ambientRNA_viz.Rmd","ambient_rna")
-  if(grepl("DEs",i,fixed=TRUE)) render_func("viz/2_clusters_DEs.Rmd","clusters_DEs")
-  if(grepl("Clusters",i,fixed=TRUE) | grepl("Singleton",i,fixed=TRUE)) render_func("viz/2_clustering.Rmd","clusters")
-  if(grepl("Clusters_harmony",i,fixed=TRUE)) render_func("viz/2_clustering_harmony.Rmd","clusters_harmony")
-  if(grepl("Clusters_seurat",i,fixed=TRUE)) render_func("viz/2_clustering_seurat.Rmd","clusters_seurat")
-  if(grepl("EXT_MARKERS",i,fixed=TRUE)) render_func("viz/3_external_markers.Rmd","external_markers")
-  if(grepl("DEGO",i,fixed=TRUE)) render_func("viz/3_DE_GO-analysis.Rmd","dego")
-  if(grepl("KEGG",i,fixed=TRUE)) render_func("viz/3_KEGG.Rmd","KEGG")
-  if(grepl("progeny",i,fixed=TRUE)) render_func("viz/3_progeny.Rmd","progeny")
-  if(grepl("hallmark",i,fixed=TRUE)) render_func("viz/3_hallmark.Rmd","hallmark")
-  if(grepl("Reactome",i,fixed=TRUE)) render_func("viz/3_Reactome.Rmd","Reactome")
-  if(grepl("DEGO_stage",i,fixed=TRUE)) render_func("viz/DE-GO-analysis-stagesVS.Rmd","gv")
-  if(grepl("DEGO_1v1",i,fixed=TRUE)) render_func("viz/DE-GO-analysis-1v1.Rmd","1vs1")
-  if(grepl("hallmark_1v1",i,fixed=TRUE)) render_func("viz/hallmark-1v1.Rmd","hallmark_1vs1")
-  if(grepl("reactome_1v1",i,fixed=TRUE)) render_func("viz/reactome-1v1.Rmd","reactome_1vs1")
-  if(grepl("kegg_1v1",i,fixed=TRUE)) render_func("viz/kegg-1v1.Rmd","kegg_1vs1")
-  if(grepl("hallmark_stage",i,fixed=TRUE)) render_func("viz/hallmark-stageVS.Rmd","hallmark_stageVS")
-  if(grepl("reactome_stage",i,fixed=TRUE)) render_func("viz/reactome-stageVS.Rmd","reactome_stageVS")
-  if(grepl("progeny_stage",i,fixed=TRUE)) render_func("viz/progeny-stageVS.Rmd","progeny_stageVS")
-  if(grepl("kegg_stage",i,fixed=TRUE)) render_func("viz/kegg-stageVS.Rmd","kegg_stageVS")
-  if(grepl("intUMAPs",i,fixed=TRUE)) render_func("viz/interactive_UMAPs.Rmd","interactive_UMAPs")
+  cat(paste(date(), blue(" Generating: "), red(i), "\n"))
+
+  if(grepl("QC",i,fixed=TRUE)) render_func(glue("{viz_path}/1_quality_report.Rmd"),"data_quality")
+  if(grepl("AmbientRNA",i,fixed=TRUE)) render_func(glue("{viz_path}/ambientRNA_viz.Rmd"),"ambient_rna")
+  if(grepl("DEs",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clusters_DEs.Rmd"),"clusters_DEs")
+  if(grepl("Clusters",i,fixed=TRUE) | grepl("Singleton",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clustering.Rmd"),"clusters")
+  if(grepl("Clusters_harmony",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clustering_harmony.Rmd"),"clusters_harmony")
+  if(grepl("Clusters_seurat",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clustering_seurat.Rmd"),"clusters_seurat")
+  if(grepl("EXT_MARKERS",i,fixed=TRUE)) render_func(glue("{viz_path}/3_external_markers.Rmd"),"external_markers")
+  if(grepl("DEGO",i,fixed=TRUE)) render_func(glue("{viz_path}/3_DE_GO-analysis.Rmd"),"dego")
+  if(grepl("KEGG",i,fixed=TRUE)) render_func(glue("{viz_path}/3_KEGG.Rmd"),"KEGG")
+  if(grepl("progeny",i,fixed=TRUE)) render_func(glue("{viz_path}/3_progeny.Rmd"),"progeny")
+  if(grepl("hallmark",i,fixed=TRUE)) render_func(glue("{viz_path}/3_hallmark.Rmd"),"hallmark")
+  if(grepl("Reactome",i,fixed=TRUE)) render_func(glue("{viz_path}/3_Reactome.Rmd"),"Reactome")
+  if(grepl("DEGO_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/DE-GO-analysis-stagesVS.Rmd"),"gv")
+  if(grepl("DEGO_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/DE-GO-analysis-1v1.Rmd"),"1vs1")
+  if(grepl("hallmark_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/hallmark-1v1.Rmd"),"hallmark_1vs1")
+  if(grepl("reactome_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/reactome-1v1.Rmd"),"reactome_1vs1")
+  if(grepl("kegg_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/kegg-1v1.Rmd"),"kegg_1vs1")
+  if(grepl("hallmark_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/hallmark-stageVS.Rmd"),"hallmark_stageVS")
+  if(grepl("reactome_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/reactome-stageVS.Rmd"),"reactome_stageVS")
+  if(grepl("progeny_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/progeny-stageVS.Rmd"),"progeny_stageVS")
+  if(grepl("kegg_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/kegg-stageVS.Rmd"),"kegg_stageVS")
+  if(grepl("intUMAPs",i,fixed=TRUE)) render_func(glue("{viz_path}/interactive_UMAPs.Rmd"),"interactive_UMAPs")
 }
 
 if(GEN_SINGLE_FILE){
   # generate report including everything in a single file
   rmarkdown::render(
-    'viz/scrna_pipeline_report.Rmd',
+    glue('{viz_path}/scrna_pipeline_report.Rmd'),
     output_file=file.path(REPORTDIR,'scrna_report'),
     output_format=c("html_document"),
     clean=TRUE,
