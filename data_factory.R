@@ -507,7 +507,80 @@ generate_scrna_rawdata <- function(scrna){
            })
   return(list(scrna, ret_code))
 }
+generate_scrna_ambient_rna_soupx <- function(scrna){
+  ret_code <- 0
+  tryCatch(
+           {
+            # We apply SoupX to the data and get the most contaminated genes.
+              scs <- lapply(names(data_fil_unfil), scrna = scrna, function(x, scrnax){
+              scrna.subset <- subset(scrna, name == x)
+              DefaultAssay(scrna.subset) <- "RNA"
 
+              toc <- Read10X(data_fil_unfil[[x]][1])
+              tod <- Read10X(data_fil_unfil[[x]][2])
+
+              # We remove all cells not in the Seurat object.
+              cells <- colnames(scrna.subset)
+              # We remove the sample name, that has been added to the cell barcode.
+              cells <- gsub(".*_", "", cells)
+              cells <- cells[cells %in% colnames(toc)]
+              # Now, we subset the toc object
+              toc <- toc[,cells]
+
+              # We generate the sc object
+              sc <- SoupChannel(toc = toc, tod = tod)
+              sc <- setClusters(sc, scrna.subset$seurat_clusters)
+              sc <- autoEstCont(sc, doPlot = FALSE)
+              return(sc)
+            }
+           )
+           names(scs) <- names(data_fil_unfil)
+           # We add the estimated contamination to the Seurat object
+           outs <- lapply(scs, adjustCounts)
+           names(outs) <- names(data_fil_unfil)
+           olds <- lapply(scs, function(x) colSums(as.matrix(x$toc)))
+           names(olds) <- names(data_fil_unfil)
+           news <- lapply(outs, function(x) colSums(as.matrix(x)))
+           names(news) <- names(data_fil_unfil)
+           rel_change <- lapply(names(data_fil_unfil), function(x, old, new){
+                                                       change <- (old[[x]] - new[[x]])/old[[x]]
+                                                       return(change)
+                                                       }, old = olds, new = news)
+           names(rel_change) <- names(data_fil_unfil)
+           contamination <- unlist(rel_change)
+           names(contamination) <- gsub("\\.", "_", names(contamination))
+           # We make sure that the names contamination and the cells in the Seurat object are equal.
+           contamination <- contamination[colnames(scrna)]
+           scrna <- AddMetaData(object = scrna, metadata = contamination, col.name = "soupx_contamination")
+
+	   # We save the estimated background expression of all genes.
+           # This is saved in sc$soupProfile$est
+           background_estimation <- lapply(scs, function(x){
+                                                            result <- data.frame(gene = rownames(x$soupProfile),
+                                                                                 x$soupProfile)
+                                                            return(result)
+                                                           })
+           WriteXLS(
+                    background_estimation,
+                    file.path(CHARTS_DIR, "BackgroundEstimation.xlsx"),
+                    SheetNames = names(background_estimation)
+                   )
+          },
+
+          error=function(cond) {
+             ret_code <<- -1
+             logger.error(cond)
+             logger.error(traceback())
+           },
+
+           finally={
+             rm(data.list)
+             return(list(scrna, ret_code))
+           }
+          )
+  return(list(scrna,ret_code))
+}
+			  
 generate_scrna_ambient_rna <- function(scrna){
   ret_code <- 0
 
