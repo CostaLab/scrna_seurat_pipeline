@@ -597,7 +597,13 @@ generate_scrna_ambient_rna <- function(scrna){
             # decontX will do the clustering for us.
 	    # Since contamination is dependent on the specific experiment, we provide the decontX function with
 	    # the batch	information. The contamination is then calculated per sample.
-            scrna.decont <- decontX(scrna.sce, batch = scrna$name)
+	    # The clustering we use for the ambient RNA estimation. The better the clustering is, the better the estimation is.
+	    clustering <- scrna[[DEFUALT_CLUSTER_NAME]][,1]
+	    
+	    scrna.decont <- decontX(scrna.sce, batch = scrna$name, z = clustering)
+            
+	    # We also use the harmony clustering.
+            scrna_decont_harmony <- decontX(scrna.sce, batch = scrna$name, z = scrna[["harmony_inte_clusters"]][,1])
 
             # We add the estimated contamination and the decontaminated data to the SeuratObject
             scrna[["decontX"]] <- CreateAssayObject(counts = scrna.decont@assays@data$decontXcounts)
@@ -605,6 +611,10 @@ generate_scrna_ambient_rna <- function(scrna){
                                  col.name = "AmbientRNA")
             scrna <- AddMetaData(object = scrna, metadata = scrna.decont$decontX_clusters,
                                  col.name = "decontX_clusters")
+	    scrna <- AddMetaData(object = scrna, metadata = scrna_decont_harmony$decontX_contamination,
+                                 col.name = "AmbientRNA_Harmony")
+            scrna <- AddMetaData(object = scrna, metadata = scrna_decont_harmony$decontX_clusters,
+                                 col.name = "decontX_clusters_harmony")
 	    DefaultAssay(scrna) <- assay.used
             return(scrna)
            },
