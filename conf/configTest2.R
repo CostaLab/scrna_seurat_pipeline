@@ -18,25 +18,21 @@ ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
 
 data_src = c(
 	     PBMC_1K = "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_1K/filtered_feature_bc_matrix/",
-	     PBMC_4K = "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_4K/filtered_gene_bc_matrix/"#,
-#            PBMC_8K = "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_8K/filtered_gene_bc_matrix/"
+	     PBMC_4K = "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_4K/filtered_gene_bc_matrix/"
 	    )
 
 data_fil_unfil = list(
              "PBMC_1K" = c("/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_1K/filtered_feature_bc_matrix/",
 	                   "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_1K/raw_feature_bc_matrix/"),
              "PBMC_4K" = c("/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_4K/filtered_gene_bc_matrix/",
-	                   "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_4K/raw_gene_bc_matrix/")#,
-#            "PBMC_8K" = c("/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_8K/filtered_gene_bc_matrix/",
-#                          "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_8K/raw_gene_bc_matrix/"
+	                   "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_4K/raw_gene_bc_matrix/")
 
 )
 
 ##------------------ SET REPLICATE GROUP --------------
 stage_lst = c(
               PBMC_1K = "PBMC_1K",
-              PBMC_4K = "PBMC_4K"#,
-#              PBMC_8K = "PBMC_8K"
+              PBMC_4K = "PBMC_4K"
 	     )
 
 
