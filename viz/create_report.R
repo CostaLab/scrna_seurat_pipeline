@@ -308,12 +308,12 @@ ext_annot_fp = EXTERNALFILE
     cat(paste(date(), green(" Element: "), red("QC"), "\n"))
     source(glue("{viz_path}/1_quality_report_elements.R"))
   }
-  if(any(grepl("^AmbientRNA",funcs,fixed=TRUE))){
+  if("AmbientRNA" %in% EXEC_PLAN){
     cat(paste(date(), green(" Element: "), red("AmbientRNA"), "\n"))
     source(glue("{viz_path}/ambientRNA_viz_elements.R"))
   }
-  if(any(grepl("^soupxAmbientRNA",funcs,fixed=TRUE))){
-    cat(paste(date(), green(" Element: "), red("soupxAmbientRNA"), "\n"))
+  if("soupx" %in% EXEC_PLAN){
+    cat(paste(date(), green(" Element: "), red("soupx"), "\n"))
     source(glue("{viz_path}/ambientRNA_soupx_viz_elements.R"))
   }
   if("DEs"%in% EXEC_PLAN) {
@@ -373,7 +373,7 @@ for(i in EXEC_PLAN){
 
   if(grepl("QC",i,fixed=TRUE)) render_func(glue("{viz_path}/1_quality_report.Rmd"),"data_quality")
   if(grepl("AmbientRNA",i,fixed=TRUE)) render_func(glue("{viz_path}/ambientRNA_viz.Rmd"),"ambient_rna")
-  if(grepl("^soupxAmbientRNA",i,fixed=TRUE)) render_func(glue("{viz_path}/ambientRNA_soupx_viz.Rmd"),"ambient_rna_soupx")
+  if(grepl("soupx",i,fixed=TRUE)) render_func(glue("{viz_path}/ambientRNA_soupx_viz.Rmd"),"ambient_rna_soupx")
   if(grepl("DEs",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clusters_DEs.Rmd"),"clusters_DEs")
   if(grepl("Clusters",i,fixed=TRUE) | grepl("Singleton",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clustering.Rmd"),"clusters")
   if(grepl("Clusters_harmony",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clustering_harmony.Rmd"),"clusters_harmony")
