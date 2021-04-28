@@ -17,20 +17,21 @@ INTEGRATION_OPTION = "seurat" ### or harmony
 ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
 
 data_src = c(
-      A_MxCre    =   "data/A_MxCre",
-      B_MxCre    =   "data/B_MxCre",
-      C_Csnk     =   "data/C_Csnk",
-      D_Csnk     =   "data/D_Csnk"
+      PBMC_1K = "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_1K/filtered_feature_bc_matrix/",
+      PBMC_4K = "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_4K/filtered_gene_bc_matrix/"
 )
 
-
+data_fil_unfil = list(
+      "PBMC_1K" = c("/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_1K/filtered_feature_bc_matrix/",
+                    "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_1K/raw_feature_bc_matrix/"),
+      "PBMC_4K" = c("/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_4K/filtered_gene_bc_matrix/",
+                    "/data/scRNA/scrna_seurat_pipeline_test_data/PBMC_4K/raw_gene_bc_matrix/")
+)
 
 ##------------------ SET REPLICATE GROUP --------------
 stage_lst = c(
-        A_MxCre      =   "MxCre",
-        B_MxCre      =   "MxCre",
-        C_Csnk       =   "Csnk",
-        D_Csnk       =   "Csnk"
+      PBMC_1K = "PBMC_1K",
+      PBMC_4K = "PBMC_4K"
 )
 
 
