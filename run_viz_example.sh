@@ -37,7 +37,8 @@ cluster="seurat_clusters"
 FUNCS=(
   #Singleton
  QC
- AmbientRNA
+ #AmbientRNA
+ soupx
  DEs
  Clusters
  Clusters_harmony
