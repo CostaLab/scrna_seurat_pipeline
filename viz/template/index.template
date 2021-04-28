@@ -13,7 +13,7 @@
 - [Ambient RNA](data/ambient_rna.html)
 {% endif %}
 
-{% if "soupxAmbientRNA" in executing_list %}
+{% if "soupx" in executing_list %}
 - [Ambient RNA SoupX](data/ambient_rna_soupx.html)
 {% endif %}
 
