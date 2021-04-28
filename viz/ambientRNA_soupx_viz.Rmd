@@ -23,26 +23,44 @@ author: '`r params$author`'
 ---
 ```{r , include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
+```
+
+```{r echo=FALSE, include=FALSE}
 library(dplyr)
 library(kableExtra)
-savedir = params$savedir
-```
-```{r , include=FALSE}
-library(ggplot2)
+if(identical(cluster,"singleton")){
+  scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
+}else{
+  scrna <- readRDS(file = file.path(savedir, "scrna_phase_clustering.Rds"))
+}
+samples <- unique(scrna$name)
 ```
 
 ## Ambient RNA
-```{r fig.width=9, fig.height=7}
+
+```{r ambient_rna_soupx, out.width="100%", echo=FALSE}
 knitr::include_graphics(file.path(params$report_plots_folder_png,"ambient_rna_soupx.png"))
 ```
 
 ## Ambient RNA per cluster
-```{r fig.width=9, fig.height=7}
+
+```{r ambient_rna_soupx_vln, out.width="100%", echo=FALSE}
 knitr::include_graphics(file.path(params$report_plots_folder_png,"ambient_rna_soupx_vln.png"))
 ```
 
+## Background Genes
+
+```{r soupx_background, out.width="100%", echo=FALSE}
+for(i in 1:length(samples)){
+  knitr::include_graphics(file.path(params$report_plots_folder_png,paste0("soupx_background_", samples[i], ".png")))
+}
+flist <- stringr::str_sort(grep("soupx_background", list.files(params$report_plots_folder_png, full.names = TRUE),
+                           value = TRUE, fixed = TRUE), numeric = TRUE)
+knitr::include_graphics(flist)
+```
+
 ```{r postfilter_ambientRNA, echo=FALSE}
-stSample <- readRDS(file.path(params$report_tables_folder, "ambientRNA_soupx_postfilter.RDS"))
+stSample <- readRDS(file.path(params$report_tables_folder, "ambientRNA_soupx_postfilter.Rds"))
 stSample %>%
   kable(caption = "Mean and median ambient RNA for each sample", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
