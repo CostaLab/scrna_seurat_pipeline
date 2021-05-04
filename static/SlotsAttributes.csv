@@ -1,8 +1,9 @@
 Name;type
 scrna@meta.data[, """name"""];all
 scrna@meta.data[, """stage"""];all
-scrna$decontX_clusters;all
-scrna$AmbientRNA;all
+scrna$decontX_clusters;scrna_phase_singleton scrna_phase_clustering scrna_phase_comparing
+scrna$AmbientRNA;scrna_phase_singleton scrna_phase_clustering scrna_phase_comparing
+scrna$soupx_contamination;scrna_phase_singleton scrna_phase_clustering scrna_phase_comparing
 scrna@reductions$RAW_PCA;all
 scrna@reductions$SINGLE_PCA;scrna_phase_singleton
 scrna@reductions$SINGLE_UMAP;scrna_phase_singleton
