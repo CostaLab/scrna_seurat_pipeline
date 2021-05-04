@@ -52,18 +52,18 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
   #de.data = cluster.de[[id]]
   #de.data = plot_de
   if (any(colnames(de.data) == "cluster")) {
-    top5.up <- de.data %>% group_by(cluster) %>% top_n(10, avg_logFC) %>%filter(avg_logFC > 0) %>% arrange(-avg_logFC)
-    top5.dn <- de.data %>% group_by(cluster) %>% top_n(10, -avg_logFC) %>%filter(avg_logFC < 0) %>% arrange(-avg_logFC)
+    top5.up <- de.data %>% group_by(cluster) %>% top_n(10, avg_log2FC) %>%filter(avg_log2FC > 0) %>% arrange(-avg_log2FC)
+    top5.dn <- de.data %>% group_by(cluster) %>% top_n(10, -avg_log2FC) %>%filter(avg_log2FC < 0) %>% arrange(-avg_log2FC)
   } else {
-    top5.up <- de.data  %>% top_n(10, avg_logFC) %>%filter(avg_logFC > 0) %>% arrange(-avg_logFC)
-    top5.dn <- de.data  %>% top_n(10, -avg_logFC) %>%filter(avg_logFC < 0) %>% arrange(-avg_logFC)
+    top5.up <- de.data  %>% top_n(10, avg_log2FC) %>%filter(avg_log2FC > 0) %>% arrange(-avg_log2FC)
+    top5.dn <- de.data  %>% top_n(10, -avg_log2FC) %>%filter(avg_log2FC < 0) %>% arrange(-avg_log2FC)
   }
   top.up.dn <- rbind(top5.up, top5.dn)
   top.up.dn$gene <- make.unique(top.up.dn$gene)
-  top.up.dn$type = ifelse(top.up.dn$avg_logFC > 0, "positive", "negative")
+  top.up.dn$type = ifelse(top.up.dn$avg_log2FC > 0, "positive", "negative")
   top.up.dn$type <- factor(top.up.dn$type, levels = c("positive", "negative"))
   g <- ggplot(data = top.up.dn,
-              aes(x = gene, y = avg_logFC, fill = type)) +
+              aes(x = gene, y = avg_log2FC, fill = type)) +
     geom_bar(stat="identity") +
     scale_x_discrete(limits=rev(top.up.dn$gene)) +
     theme_minimal() +
