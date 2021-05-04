@@ -512,7 +512,7 @@ generate_scrna_ambient_rna_soupx <- function(scrna){
   tryCatch(
            {
             # We apply SoupX to the data and get the most contaminated genes.
-              scs <- lapply(names(data_fil_unfil), scrna = scrna, function(x, scrnax){
+            scs <- lapply(names(data_fil_unfil), scrna = scrna, function(x, scrnax){
               scrna.subset <- subset(scrna, name == x)
               DefaultAssay(scrna.subset) <- "RNA"
 
@@ -530,11 +530,28 @@ generate_scrna_ambient_rna_soupx <- function(scrna){
               # We generate the sc object
               sc <- SoupChannel(toc = toc, tod = tod)
               sc <- setClusters(sc, scrna.subset$seurat_clusters)
-              sc <- autoEstCont(sc, doPlot = FALSE)
+              sc <- autoEstCont(sc, doPlot = FALSE, maxMarkers = 75)
               return(sc)
             }
            )
            names(scs) <- names(data_fil_unfil)
+		   
+           # We save the genes used per cluster to estimate the background.
+           mrks_list <- list()
+           for(i in 1:length(scs)){
+             mrks_list[[i]] <- quickMarkers(scs[[i]]$toc,scs[[i]]$metaData$clusters,N=Inf)
+             mrks_list[[i]] <- mrks_list[[i]][order(mrks_list[[i]]$gene,-mrks_list[[i]]$tfidf),]
+             mrks_list[[i]] <- mrks_list[[i]][!duplicated(mrks_list[[i]]$gene),]
+             mrks_list[[i]] = mrks_list[[i]][order(-mrks_list[[i]]$tfidf),]
+             mrks_list[[i]] = mrks_list[[i]][mrks_list[[i]]$tfidf > 1,]
+           }
+           names(mrks_list) <- names(data_fil_unfil)
+           WriteXLS(
+                    mrks_list,
+                    file.path(CHARTS_DIR, "SoupX_MarkerGenes.xlsx"),
+                    SheetNames = names(mrks_list)
+                   )
+
            # We add the estimated contamination to the Seurat object
            outs <- lapply(scs, adjustCounts)
            names(outs) <- names(data_fil_unfil)
