@@ -22,6 +22,8 @@ plt[[1]] <- FeaturePlot(scrna, features = "soupx_contamination") + ggtitle(label
 
 plt[[2]] <- VlnPlot(object = scrna, features = "soupx_contamination", group.by = cluster, pt.size=0.1)
 
+plt[[3]] <- VlnPlot(object = scrna, features = "soupx_contamination", group.by = "name", pt.size=0.1)
+
 save_ggplot_formats(
   plt=plt[[1]],
   base_plot_dir=report_plots_folder,
@@ -32,6 +34,12 @@ save_ggplot_formats(
   plt=plt[[2]],
   base_plot_dir=report_plots_folder,
   plt_name="ambient_rna_soupx_vln",
+  width=9, height=7
+)
+save_ggplot_formats(
+  plt=plt[[3]],
+  base_plot_dir=report_plots_folder,
+  plt_name="ambient_rna_soupx_sample_vln",
   width=9, height=7
 )
 
