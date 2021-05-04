@@ -48,6 +48,12 @@ knitr::include_graphics(file.path(params$report_plots_folder_png,"ambient_rna_so
 knitr::include_graphics(file.path(params$report_plots_folder_png,"ambient_rna_soupx_vln.png"))
 ```
 
+## Ambient RNA per sample
+
+```{r ambient_rna_soupx_samplewise_vln, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path(params$report_plots_folder_png,"ambient_rna_soupx_sample_vln.png"))
+```
+
 ## Background Genes
 
 ```{r soupx_background, out.width="100%", echo=FALSE}
@@ -58,6 +64,8 @@ flist <- stringr::str_sort(grep("soupx_background", list.files(params$report_plo
                            value = TRUE, fixed = TRUE), numeric = TRUE)
 knitr::include_graphics(flist)
 ```
+
+## Mean and median estimated background
 
 ```{r postfilter_ambientRNA, echo=FALSE}
 stSample <- readRDS(file.path(params$report_tables_folder, "ambientRNA_soupx_postfilter.Rds"))
