@@ -18,6 +18,9 @@ suppressPackageStartupMessages(library(openxlsx))
 suppressPackageStartupMessages(library(ComplexHeatmap))
 suppressPackageStartupMessages(library(EnhancedVolcano))
 suppressPackageStartupMessages(library(Seurat))
+suppressPackageStartupMessages(library(ggridges))
+suppressPackageStartupMessages(library(reshape2))
+
 `%ni%` <- Negate(`%in%`)
 
 ###===================================FUNCTIONS BEGIN===================================================
@@ -335,7 +338,7 @@ ext_annot_fp = EXTERNALFILE
     source(glue("{viz_path}/3_external_markers_elements.R"))
   }
   # FIXME possible problem where all term enrichment analysis is on the same place
-  if("DEGO" %in% EXEC_PLAN){
+  if("DEGO" %in% EXEC_PLAN | "Genesets" %in% EXEC_PLAN ){
     cat(paste(date(), green(" Element: "), red("DEGO"), "\n"))
     source(glue("{viz_path}/3_DE_GO-analysis_elements.R"))
   }
@@ -367,28 +370,31 @@ render_func = function(rmd_input_filename, output_filename){
 for(i in EXEC_PLAN){
   cat(paste(date(), blue(" Generating: "), red(i), "\n"))
 
-  if(grepl("QC",i,fixed=TRUE)) render_func(glue("{viz_path}/1_quality_report.Rmd"),"data_quality")
-  if(grepl("AmbientRNA",i,fixed=TRUE)) render_func(glue("{viz_path}/ambientRNA_viz.Rmd"),"ambient_rna")
-  if(grepl("DEs",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clusters_DEs.Rmd"),"clusters_DEs")
-  if(grepl("Clusters",i,fixed=TRUE) | grepl("Singleton",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clustering.Rmd"),"clusters")
-  if(grepl("Clusters_harmony",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clustering_harmony.Rmd"),"clusters_harmony")
-  if(grepl("Clusters_seurat",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clustering_seurat.Rmd"),"clusters_seurat")
-  if(grepl("EXT_MARKERS",i,fixed=TRUE)) render_func(glue("{viz_path}/3_external_markers.Rmd"),"external_markers")
-  if(grepl("DEGO",i,fixed=TRUE)) render_func(glue("{viz_path}/3_DE_GO-analysis.Rmd"),"dego")
-  if(grepl("KEGG",i,fixed=TRUE)) render_func(glue("{viz_path}/3_KEGG.Rmd"),"KEGG")
-  if(grepl("progeny",i,fixed=TRUE)) render_func(glue("{viz_path}/3_progeny.Rmd"),"progeny")
-  if(grepl("hallmark",i,fixed=TRUE)) render_func(glue("{viz_path}/3_hallmark.Rmd"),"hallmark")
-  if(grepl("Reactome",i,fixed=TRUE)) render_func(glue("{viz_path}/3_Reactome.Rmd"),"Reactome")
-  if(grepl("DEGO_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/DE-GO-analysis-stagesVS.Rmd"),"gv")
-  if(grepl("DEGO_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/DE-GO-analysis-1v1.Rmd"),"1vs1")
-  if(grepl("hallmark_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/hallmark-1v1.Rmd"),"hallmark_1vs1")
-  if(grepl("reactome_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/reactome-1v1.Rmd"),"reactome_1vs1")
-  if(grepl("kegg_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/kegg-1v1.Rmd"),"kegg_1vs1")
-  if(grepl("hallmark_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/hallmark-stageVS.Rmd"),"hallmark_stageVS")
-  if(grepl("reactome_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/reactome-stageVS.Rmd"),"reactome_stageVS")
-  if(grepl("progeny_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/progeny-stageVS.Rmd"),"progeny_stageVS")
-  if(grepl("kegg_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/kegg-stageVS.Rmd"),"kegg_stageVS")
-  if(grepl("intUMAPs",i,fixed=TRUE)) render_func(glue("{viz_path}/interactive_UMAPs.Rmd"),"interactive_UMAPs")
+  if("QC" == i) render_func(glue("{viz_path}/1_quality_report.Rmd"),"data_quality")
+  if("AmbientRNA" == i) render_func(glue("{viz_path}/ambientRNA_viz.Rmd"),"ambient_rna")
+  if("DEs" == i) render_func(glue("{viz_path}/2_clusters_DEs.Rmd"),"clusters_DEs")
+  if("Clusters" == i | "Singleton" == i) render_func(glue("{viz_path}/2_clustering.Rmd"),"clusters")
+  if("Clusters_harmony" == i) render_func(glue("{viz_path}/2_clustering_harmony.Rmd"),"clusters_harmony")
+  if("Clusters_seurat" == i) render_func(glue("{viz_path}/2_clustering_seurat.Rmd"),"clusters_seurat")
+  if("EXT_MARKERS" == i) render_func(glue("{viz_path}/3_external_markers.Rmd"),"external_markers")
+  if("DEGO" == i) render_func(glue("{viz_path}/3_DE_GO-analysis.Rmd"),"dego")
+  if("KEGG" == i) render_func(glue("{viz_path}/3_KEGG.Rmd"),"KEGG")
+  if("progeny" == i) render_func(glue("{viz_path}/3_progeny.Rmd"),"progeny")
+  if("Genesets" == i) render_func(glue("{viz_path}/3_Genesets.Rmd"),"Genesets")
+  if("hallmark" == i) render_func(glue("{viz_path}/3_hallmark.Rmd"),"hallmark")
+  if("Reactome" == i) render_func(glue("{viz_path}/3_Reactome.Rmd"),"Reactome")
+  if("DEGO_stage" == i) render_func(glue("{viz_path}/DE-GO-analysis-stagesVS.Rmd"),"gv")
+  if("Genesets_1v1" == i) render_func(glue("{viz_path}/Genesets-1v1.Rmd"),"Genesets_1vs1")
+  if("DEGO_1v1" == i) render_func(glue("{viz_path}/DE-GO-analysis-1v1.Rmd"),"1vs1")
+  if("hallmark_1v1" == i) render_func(glue("{viz_path}/hallmark-1v1.Rmd"),"hallmark_1vs1")
+  if("reactome_1v1" == i) render_func(glue("{viz_path}/reactome-1v1.Rmd"),"reactome_1vs1")
+  if("kegg_1v1" == i) render_func(glue("{viz_path}/kegg-1v1.Rmd"),"kegg_1vs1")
+  if("hallmark_stage" == i) render_func(glue("{viz_path}/hallmark-stageVS.Rmd"),"hallmark_stageVS")
+  if("Genesets_stage" == i) render_func(glue("{viz_path}/Genesets-stageVS.Rmd"),"Genesets_stageVS")
+  if("reactome_stage" == i) render_func(glue("{viz_path}/reactome-stageVS.Rmd"),"reactome_stageVS")
+  if("progeny_stage" == i) render_func(glue("{viz_path}/progeny-stageVS.Rmd"),"progeny_stageVS")
+  if("kegg_stage" == i) render_func(glue("{viz_path}/kegg-stageVS.Rmd"),"kegg_stageVS")
+  if("intUMAPs" == i) render_func(glue("{viz_path}/interactive_UMAPs.Rmd"),"interactive_UMAPs")
 }
 
 if(GEN_SINGLE_FILE){

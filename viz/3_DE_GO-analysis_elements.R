@@ -167,6 +167,69 @@ for (i in names(cluster_de) ){
 #############################################################
 ## Term enrichment analysis (GO, hallmark, KEGG, Reactome) ##
 #############################################################
+#### Genesets
+
+for(nm in scrna@tools$genesets){
+  message("nm: ", nm, "\n")
+  df <- data.frame(
+    nm = scrna@meta.data[, nm],
+    Cluster = as.character(scrna@meta.data[, cluster]),
+    stringsAsFactors=F)
+
+
+  df.s <- melt(df)
+  df.s[df.s == -Inf] <- 0
+
+  min_x <- min(df.s$value)
+  max_x <- max(df.s$value)
+
+  ## ridges
+  plt <- ggplot(df.s, aes(x=value, y=Cluster, color=Cluster, point_color=Cluster, fill=Cluster)) +
+                geom_density_ridges(jittered_points=FALSE, scale = .95, rel_min_height = .01, alpha=0.5) +
+                scale_y_discrete(expand = c(.01, 0)) +
+                scale_x_continuous(expand = c(0, 0), name = "Expression") +
+                scale_fill_manual(values = col_def) +
+                scale_color_manual(values = col_def, guide = "none") +
+                scale_discrete_manual("point_color", values = col_def, guide = "none") +
+                theme_ridges(center = TRUE) +
+                xlim(min_x, max_x) + ylab("") + ggtitle(glue("{nm}")) +
+                theme(
+                  plot.title = element_text(hjust = 0.5),
+                  plot.subtitle = element_text(hjust = 0.5)
+                )
+  save_ggplot_formats(plt=plt,
+         base_plot_dir=report_plots_folder,
+         plt_name= paste0("Genesets_ridges_", nm, "-", cluster),
+         width=9, height=7)
+
+
+  ## Vln
+  plt <- VlnPlot(scrna, features = nm,
+               pt.size = 0,
+               group.by="seurat_clusters",
+               cols = col_def) + ggtitle(nm)
+
+  save_ggplot_formats(plt=plt,
+         base_plot_dir=report_plots_folder,
+         plt_name= paste0("Genesets_violin_", nm, "-", cluster),
+         width=9, height=7)
+
+
+## feature
+  plt <- FeaturePlot(scrna, features = nm,
+               reduction = "DEFAULT_UMAP",
+               cols = c("lightgrey", "red")) + ggtitle(nm)
+  save_ggplot_formats(plt=plt,
+         base_plot_dir=report_plots_folder,
+         plt_name= paste0("Genesets_feature_", nm, "-", cluster),
+         width=9, height=7)
+
+
+}
+
+
+
+
 progeny_df <- scrna@tools[[progeny_cluster_name]]
 help_sort_func <- ifelse(all.is.numeric(unique(progeny_df$CellType)), as.numeric, function(x){x})
 progeny_df$CellType <- factor(progeny_df$CellType,

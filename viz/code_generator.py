@@ -45,6 +45,7 @@ viz_dict = { "quality": ["QC", "AmbientRNA"],
 
              "clustersVS": ["EXT_MARKERS",
                             "DEGO",
+                            "Genesets",
                             "progeny",
                             "hallmark",
                             "KEGG",
@@ -53,16 +54,18 @@ viz_dict = { "quality": ["QC", "AmbientRNA"],
 
              "DEGOstageVS": ["DEGO_stage"],
 
-             "PWstageVS": ["progeny_stage",
+             "PWstageVS": ["Genesets_stage",
+                           "progeny_stage",
                            "hallmark_stage",
                            "reactome_stage",
                            "kegg_stage"],
 
              "DEGOsampleVS":["DEGO_1v1"],
 
-             "PWsampleVS": ["hallmark_1v1",
-                           "reactome_1v1",
-                           "kegg_1v1"]
+             "PWsampleVS": ["Genesets_1v1",
+                            "hallmark_1v1",
+                            "reactome_1v1",
+                            "kegg_1v1"]
 }
 
 
@@ -73,6 +76,7 @@ names = robjects.r("names(data_src)")
 lst_1v1 = list(combinations(names, 2))
 stages = robjects.r("stage_lst")
 project_name = robjects.r("PROJECT")
+genesets_names = robjects.r("MSigDB_Geneset_names")
 
 
 seen = set()
@@ -206,6 +210,24 @@ def generate_report_1v1_hallmark(out):
     fw.write("%s\n\n" % r)
 #endf generate_groupVS
 
+def generate_report_stageVS_Genesets(out):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/Genesets-stageVS.template"))
+    tmpl = tfile.read()
+    today = datetime.date.today().strftime("%d%B%Y")
+    cc = 6
+
+    t = Template(tmpl)
+    r = t.render(
+        TODAY = today,
+        CC = cc,
+        lst_stage = lst_stages
+    )
+    fw = open(out, "w")
+    fw.write("%s\n\n" % r)
+#endf generate_groupVS
+
+
+
 
 def generate_report_stageVS_hallmark(out):
     tfile = open(os.path.join(os.path.dirname(__file__),"template/hallmark-stageVS.template"))
@@ -258,6 +280,24 @@ def generate_report_stageVS_reactome(out):
 
 
 
+def generate_report_1v1_Genesets(out):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/Genesets-1v1.template"))
+    tmpl = tfile.read()
+    today = datetime.date.today().strftime("%d%B%Y")
+    cc = 6
+
+    t = Template(tmpl)
+    r = t.render(
+        TODAY = today,
+        CC = cc,
+        lst_1v1 = lst_1v1
+    )
+    fw = open(out, "w")
+    fw.write("%s\n\n" % r)
+#endf generate_1v1
+
+
+
 
 def generate_report_1v1_kegg(out):
     tfile = open(os.path.join(os.path.dirname(__file__),"template/kegg-1v1.template"))
@@ -273,7 +313,7 @@ def generate_report_1v1_kegg(out):
     )
     fw = open(out, "w")
     fw.write("%s\n\n" % r)
-#endf generate_groupVS
+#endf generate_1v1
 
 
 def generate_report_stageVS_kegg(out):
@@ -321,6 +361,7 @@ def main():
     out_dir = args.output_dir
     viz_dir = os.path.dirname(__file__)
     generate_report_1v1(os.path.join(viz_dir, "DE-GO-analysis-1v1.Rmd"))
+    generate_report_1v1_Genesets(os.path.join(viz_dir,"Genesets-1v1.Rmd"))
     generate_report_1v1_hallmark(os.path.join(viz_dir,"hallmark-1v1.Rmd"))
     generate_report_1v1_reactome(os.path.join(viz_dir,"reactome-1v1.Rmd"))
     generate_report_1v1_kegg(os.path.join(viz_dir,"kegg-1v1.Rmd"))
@@ -329,6 +370,7 @@ def main():
     generate_report_stageVS_reactome(os.path.join(viz_dir,"reactome-stageVS.Rmd"))
     generate_report_stageVS_kegg(os.path.join(viz_dir,"kegg-stageVS.Rmd"))
     generate_report_stageVS_progeny(os.path.join(viz_dir,"progeny-stageVS.Rmd"))
+    generate_report_stageVS_Genesets(os.path.join(viz_dir,"Genesets-stageVS.Rmd"))
     generate_md_idx(os.path.join(out_dir, "index.md"))
 
 #endf main
