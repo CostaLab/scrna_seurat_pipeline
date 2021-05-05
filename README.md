@@ -72,6 +72,9 @@ INTEGRATION_OPTION = "seurat" ### or harmony
 ### -------------- Data SRC-----------------------------
 ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
 
+## If genesets you need are not included, please attach your geneset to the gmt.gz file.
+MSigDB_GENESET_HUMAN_GMT_FILE  = "external/Human_msigdb.v7.2.symbols.gmt.gz"
+
 data_src = c(
       A_MxCre    =   "data/A_MxCre",
       B_MxCre    =   "data/B_MxCre",
@@ -94,6 +97,20 @@ preprocess_regressout = c("mito"      = 1,
                           "ribo"      = 0,
                           "cellcycle" = 1)
 
+
+## Genesets candidate names please check external/MSigDB_names.txt
+MSigDB_Geneset_names <- c(
+    "NABA_COLLAGENS",
+    "NABA_SECRETED_FACTORS",
+    "NABA_ECM_GLYCOPROTEINS",
+    "NABA_CORE_MATRISOME",
+    "NABA_ECM_REGULATORS",
+    "NABA_MATRISOME_ASSOCIATED",
+    "NABA_ECM_AFFILIATED",
+    "NABA_BASEMENT_MEMBRANES",
+    "NABA_PROTEOGLYCANS",
+    "NABA_MATRISOME"
+)
 
 
 ### -------------- RUN PARAMETERS-----------------------------
