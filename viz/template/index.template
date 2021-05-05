@@ -75,15 +75,15 @@
 {% if "hallmark" in executing_list %}
  - Hallmark
    - [hallmark ](data/hallmark.html)
-    - [Hallmark-UP-excel](data/hallmarkup_{{cluster_use}}.xlsx)
-    - [Hallmark-DOWN-excel](data/hallmarkdown_{{cluster_use}}.xlsx)
+     - [Hallmark-UP-excel](data/hallmarkup_{{cluster_use}}.xlsx)
+     - [Hallmark-DOWN-excel](data/hallmarkdown_{{cluster_use}}.xlsx)
 {% endif %}
 
 {% if "KEGG" in executing_list %}
  - KEGG
    - [KEGG ](data/KEGG.html)
-    - [KEGG-UP-excel](data/keggup_{{cluster_use}}.xlsx)
-    - [KEGG-DOWN-excel](data/keggdown_{{cluster_use}}.xlsx)
+     - [KEGG-UP-excel](data/keggup_{{cluster_use}}.xlsx)
+     - [KEGG-DOWN-excel](data/keggdown_{{cluster_use}}.xlsx)
 {% endif %}
 
 {% if "Reactome" in executing_list %}
