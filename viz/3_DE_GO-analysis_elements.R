@@ -171,6 +171,9 @@ for (i in names(cluster_de) ){
 
 for(nm in scrna@tools$genesets){
   message("nm: ", nm, "\n")
+  if(nm %ni% names(scrna@meta.data)){
+    next
+  }
   df <- data.frame(
     nm = scrna@meta.data[, nm],
     Cluster = as.character(scrna@meta.data[, cluster]),
@@ -247,6 +250,25 @@ save_ggplot_formats(plt=plt,
          base_plot_dir=report_plots_folder,
          plt_name= paste0("progeny_r_effect_heatmap-",cluster),
          width=9, height=7)
+
+
+plt <- ggplot(progeny_df, aes(y=pathway,x=CellType,fill=r))+
+        geom_tile()+
+        geom_text(aes(y=pathway, x=CellType, label=tag),
+               position = position_dodge(width = 0),
+               hjust = 0.5, size = 4)+
+        ggtitle(glue("{cluster} r effect size")) +
+        scale_fill_distiller(palette ="RdBu", direction = -1) +
+        theme_minimal()+
+        theme(strip.text.x = element_text(size=28, colour="black",hjust=0),
+            plot.caption = element_text(size=30, colour="black", hjust=0),
+            axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+save_ggplot_formats(plt=plt,
+         base_plot_dir=report_plots_folder,
+         plt_name= paste0("progeny_r_effect_text_heatmap-",cluster),
+         width=9, height=7)
+
 enrch_analysis_vec = go_cluster_name
 if(any(grepl("hallmark",funcs,fixed=TRUE))) enrch_analysis_vec = c(enrch_analysis_vec, hallmark_cluster_name)
 if(any(grepl("KEGG",funcs,fixed=TRUE))) enrch_analysis_vec = c(enrch_analysis_vec, kegg_cluster_name)
