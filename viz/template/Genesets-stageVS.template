@@ -107,7 +107,7 @@ for(nm in scrna@tools$genesets){
                 cols = col_def,
                 split.plot = TRUE,
                 split.by = "stage",
-                group.by="seurat_clusters")
+                group.by=cluster_use)
  print(plt)
 
 }

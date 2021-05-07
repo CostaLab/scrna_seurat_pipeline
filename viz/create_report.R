@@ -54,6 +54,9 @@ save_ggplot_formats = function(
 GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
   #de.data = cluster.de[[id]]
   #de.data = plot_de
+  if("avg_logFC" %in% names(de.data)){ ## compatible for seurat3
+    de.data$avg_log2FC <- de.data$avg_logFC/log(2)
+  }
   if (any(colnames(de.data) == "cluster")) {
     top5.up <- de.data %>% group_by(cluster) %>% top_n(10, avg_log2FC) %>%filter(avg_log2FC > 0) %>% arrange(-avg_log2FC)
     top5.dn <- de.data %>% group_by(cluster) %>% top_n(10, -avg_log2FC) %>%filter(avg_log2FC < 0) %>% arrange(-avg_log2FC)

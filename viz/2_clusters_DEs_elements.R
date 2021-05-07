@@ -7,6 +7,9 @@ if(identical(cluster,"singleton")){
 }else{
   scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
   col_string = "integrated_snn_res."
+  if(INTEGRATION_OPTION=="harmony"){
+    col_string = "RNA_snn_res."
+  }
 }
 cluster_de_list <- scrna@tools$de_batch
 
@@ -17,6 +20,9 @@ for (resolution in seq(0.1, 0.8, 0.1)){
   cluster_de <- cluster_de_list[[as.character(resolution)]]
   cluster_de <- cluster_de[sapply(cluster_de, function(m) nrow(m) >0)]
   cluster_de_top10 <- lapply(cluster_de, function(x) {
+      if("avg_logFC" %in% names(x)){ ## compatible for seurat3
+        x$avg_log2FC <- x$avg_logFC/log(2)
+      }
       x %>% top_n(10, avg_log2FC) %>% arrange(-avg_log2FC)
   })
 
@@ -25,6 +31,9 @@ for (resolution in seq(0.1, 0.8, 0.1)){
   for (id in sort(help_sort_func(names(cluster_de)))) {
     id = as.character(id)
     cluster_genes = cluster_de_top10[[id]]
+    if("avg_logFC" %in% names(cluster_de[[id]])){## compatible for seurat3
+      cluster_de[[id]]$avg_log2FC <-cluster_de[[id]]$avg_logFC/log(2)
+    }
     x_lim = max(abs(cluster_de[[id]]$avg_log2FC))
     x_lim = c(-x_lim, x_lim)
     plots[[id]] = GeneBarPlot(cluster_de[[id]], xlim = x_lim, main = id)
@@ -53,6 +62,9 @@ names(cluster_de_list) <- as.character(seq(0.1, 0.8, 0.1))
 for (resolution in seq(0.1, 0.8, 0.1)){
   #cluster.de <- cluster.de.list[[as.character(resolution)]]
   cluster_de_top8 <- lapply(cluster_de, function(x) {
+      if("avg_logFC" %in% names(x)){## compatible for seurat3
+        x$avg_log2FC <- x$avg_logFC/log(2)
+      }
       x %>% top_n(8, avg_log2FC) %>% arrange(-avg_log2FC)
   })
 

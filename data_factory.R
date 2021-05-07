@@ -1414,9 +1414,12 @@ generate_scrna_batch_markergenes <- function(scrna){
              len <- length(CLUSTER_RESOLUTION_RANGE)
              cluster.de.list <- vector("list", length = len)
              names(cluster.de.list) <- as.character(CLUSTER_RESOLUTION_RANGE)
+             DefaultAssay(scrna) <- "RNA"
              cluster.de.list <- foreach(i=CLUSTER_RESOLUTION_RANGE) %do%{
-               DefaultAssay(scrna) <- "RNA"
                cluster_name <- sprintf("integrated_snn_res.%s", i)
+               if(INTEGRATION_OPTION == "harmony"){
+                 cluster_name <- sprintf("RNA_snn_res.%s", i)
+               }
                Idents(scrna) <- cluster_name
                de.df = FindAllMarkers(scrna, logfc.threshold=0)
                cluster.de <- split(de.df, de.df$cluster)

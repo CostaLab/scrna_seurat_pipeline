@@ -48,6 +48,9 @@ cluster_de <- scrna@tools[[de_cluster_name]]
 cluster_de <- cluster_de[sapply(cluster_de, function(m) nrow(m) >0)]
 
 cluster_de_top10 <- lapply(cluster_de, function(x) {
+    if("avg_logFC" %in% names(x)){ ## compatible for seurat3
+      x$avg_log2FC <- x$avg_logFC/log(2)
+    }
     x %>% top_n(10, avg_log2FC) %>% arrange(-avg_log2FC)
 })
 
@@ -96,6 +99,9 @@ help_sort_func <- ifelse(all.is.numeric(names(cluster_de)), as.numeric, function
 for (id in sort(help_sort_func(names(cluster_de)))) {
   id = as.character(id)
   cluster_genes <- cluster_de_top10[[id]]
+  if("avg_logFC" %in% names(cluster_de[[id]])){ ## compatible for seurat3
+    cluster_de[[id]]$avg_log2FC <- cluster_de[[id]]$avg_logFC/log(2)
+  }
   x_lim = max(abs(cluster_de[[id]]$avg_log2FC))
   x_lim <- c(-x_lim, x_lim)
   plots[[id]] <- GeneBarPlot(cluster_de[[id]], xlim = x_lim, main = id)
@@ -122,6 +128,9 @@ for (id in sort(help_sort_func(names(cluster_de)))) {
   message(id)
   id = as.character(id)
   a_de <- cluster_de[[id]]
+  if("avg_logFC" %in% names(a_de)){ ## compatible for seurat3
+    a_de$avg_log2FC <- a_de$avg_logFC/log(2)
+  }
   a_de$log2FC <- a_de$avg_log2FC # / log(2)
   up <- nrow(a_de %>% filter(log2FC>= 1 & p_val_adj<=0.05) )
   down <- nrow(a_de %>% filter(log2FC <= -1 & p_val_adj<=0.05))
@@ -209,7 +218,7 @@ for(nm in scrna@tools$genesets){
   ## Vln
   plt <- VlnPlot(scrna, features = nm,
                pt.size = 0,
-               group.by="seurat_clusters",
+               group.by=cluster,
                cols = col_def) + ggtitle(nm)
 
   save_ggplot_formats(plt=plt,
