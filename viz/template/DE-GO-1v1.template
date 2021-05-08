@@ -10,6 +10,7 @@ output:
     toc_depth: '3'
 params:
     cluster: "clusters to analyse"
+    cluster_info: "cluster info"
     project: "name/tag of the project"
     savedir: "directory where rds files were saved"
     funcs: "analysis steps to be performed"
@@ -111,7 +112,7 @@ all_godown_list <-  scrna@tools[[dego_sample_name]]$godown
 
 par(mar = c(0,0,0,0))
 plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
-text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_use),
+text(x = 0.5, y = 0.5, paste("Cluster: ", cluster_info),
      cex = 1.6, col = "red")
 
 ```

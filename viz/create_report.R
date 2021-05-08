@@ -51,6 +51,28 @@ save_ggplot_formats = function(
   }
 }
 
+build_cluster_info <- function(scrna){
+  if(is.null(scrna)){
+    return(DEFAULTCLUSTERS)
+  }
+  #INTEGRATION_OPTION
+  if(DEFAULTCLUSTERS == "seurat_clusters"){
+    len <- length(scrna@tools$parameter)
+    resol <- scrna@tools$parameter[[len]][["clusterresolution"]]
+    #message(resol)
+    #INTEGRATION_OPTION
+    #message(DEFAULTCLUSTERS)
+    #message(INTEGRATION_OPTION)
+    st <- glue("{DEFAULTCLUSTERS}, resolution: {resol}, integration option: {INTEGRATION_OPTION}")
+    return(st)
+  }else{
+    st <- glue("{DEFAULTCLUSTERS}, integration option: {INTEGRATION_OPTION}")
+    return(st)
+  }
+  return(DEFAULTCLUSTERS)
+}
+
+
 GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
   #de.data = cluster.de[[id]]
   #de.data = plot_de
@@ -242,8 +264,8 @@ ext_annot_fp = EXTERNALFILE
 
 
 ##4. Make_report element
-  if (MAKE_ELEMENT == "TRUE"){
-  source(CONFIGFILE)
+source(CONFIGFILE)
+if (MAKE_ELEMENT == "TRUE"){
   cluster_viridis_opt = ifelse(
     any(grepl("cluster_color_option",names(viz_conf),fixed = TRUE)),
     viz_conf[["cluster_color_option"]], # Config option
@@ -345,8 +367,15 @@ ext_annot_fp = EXTERNALFILE
     cat(paste(date(), green(" Element: "), red("DEGO"), "\n"))
     source(glue("{viz_path}/3_DE_GO-analysis_elements.R"))
   }
-
 }
+
+scrna <- NULL
+if(identical(cluster,"singleton")){
+  scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
+}else{
+  scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
+}
+cluster_info <-  build_cluster_info(scrna)
 
 ##5. Produce Report
 render_func = function(rmd_input_filename, output_filename){
@@ -357,6 +386,7 @@ render_func = function(rmd_input_filename, output_filename){
     clean=TRUE,
     params=list(
       cluster=DEFAULTCLUSTERS,
+      cluster_info=cluster_info,
       project=PROJECT,
       savedir=SAVE_DIR,
       funcs=EXEC_PLAN,
@@ -369,6 +399,7 @@ render_func = function(rmd_input_filename, output_filename){
     )
   )
 }
+
 
 for(i in EXEC_PLAN){
   cat(paste(date(), blue(" Generating: "), red(i), "\n"))

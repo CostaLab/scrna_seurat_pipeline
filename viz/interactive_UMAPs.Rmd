@@ -10,6 +10,7 @@ output:
     toc_depth: '3'
 params:
     cluster: "clusters to analyse"
+    cluster_info: "cluster info"
     project: "name/tag of the project"
     savedir: "directory where rds files were saved"
     funcs: "analysis steps to be performed"
@@ -25,7 +26,7 @@ author: '`r params$author`'
 ```{r interactive_umap_setup, include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F, echo = T)
 ```
-## Cluster: `r colorize(params$cluster,"red")`
+## Cluster: `r colorize(params$cluster_info,"red")`
 
 ### HCL annotation
 ```{r hcl_interactive, out.width="100%", echo=FALSE, eval=TRUE}

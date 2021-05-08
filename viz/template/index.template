@@ -28,7 +28,7 @@
 {% endif %}
 
 {% if "DEs" in executing_list %}
-- [marker genes with different resolutions](data/clusters_DEs.html)
+- [Marker genes with different resolutions - Integration: {{integr_option}}](data/clusters_DEs.html)
 {% endif %}
 
   {% set count = count + 1 %}
@@ -39,7 +39,7 @@
 {% if intersect(viz_dict['clustering'], executing_list) %}
 ## {{count}}. Final Clustering Results
 {% if "Clusters" in executing_list %}
-- [clusters](data/clusters.html)
+- [clusters - Integration: {{integr_option}}](data/clusters.html)
 {% endif %}
 
   {% set count = count + 1 %}
