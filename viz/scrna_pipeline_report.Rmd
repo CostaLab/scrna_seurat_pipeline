@@ -11,6 +11,7 @@ output:
     toc_depth: 3
     number_sections: true
 params:
+    scrna: 'scrna object'
     cluster: "clusters to analyse"
     cluster_info: "cluster info"
     project: "name/tag of the project"

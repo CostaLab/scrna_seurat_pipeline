@@ -9,6 +9,7 @@ output:
     toc: yes
     toc_depth: '3'
 params:
+    scrna: 'scrna object'
     cluster: "clusters to analyse"
     cluster_info: "cluster info"
     project: "name/tag of the project"
@@ -27,20 +28,21 @@ author: '`r params$author`'
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
 #use former data coz the DE analysis takes too much time.
-library(ggplot2)
-library(gridExtra)
-library(cowplot)
-library(dplyr)
-library(openxlsx)
-library(WriteXLS)
-library(stringr)
-library(digest)
-library(plotly)
-library(Seurat)
-library(Hmisc)
-library(ComplexHeatmap)
-library(EnhancedVolcano)
-library(glue)
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(gridExtra))
+suppressPackageStartupMessages(library(cowplot))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(openxlsx))
+suppressPackageStartupMessages(library(WriteXLS))
+suppressPackageStartupMessages(library(stringr))
+suppressPackageStartupMessages(library(digest))
+suppressPackageStartupMessages(library(plotly))
+suppressPackageStartupMessages(library(Seurat))
+suppressPackageStartupMessages(library(Hmisc))
+suppressPackageStartupMessages(library(ComplexHeatmap))
+suppressPackageStartupMessages(library(EnhancedVolcano))
+suppressPackageStartupMessages(library(glue))
+suppressPackageStartupMessages(library(DOSE))
 `%ni%` <- Negate(`%in%`)
 
 
@@ -94,7 +96,7 @@ is_contigous_true_df <- function(is_sigs){
 
 #savedir <- "save/save-{{CC}}"
 savedir = params$savedir
-scrna <- readRDS(file.path(savedir, "scrna_phase_comparing.Rds"))
+
 
 cluster_use <- params$cluster
 dego_stage_name <-paste0("dego_stage_", cluster_use)
