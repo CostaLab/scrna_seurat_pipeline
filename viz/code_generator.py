@@ -77,14 +77,14 @@ lst_1v1 = list(combinations(names, 2))
 stages = robjects.r("stage_lst")
 project_name = robjects.r("PROJECT")
 genesets_names = robjects.r("MSigDB_Geneset_names")
-
+integration_option = robjects.r("INTEGRATION_OPTION")[0]
 
 seen = set()
 u_stages = [x for x in stages if x not in seen and not seen.add(x)]  ##remove dup
 lst_stages = list(combinations(u_stages, 2))
 
 # FIXME should 'cluster_use' be redefined here?
-cluster_use = "seurat_clusters"
+#cluster_use = "seurat_clusters"
 # savedir = os.path.join(DATADIR, "save"+args.proj_tag)#robjects.r("SAVE_DIR")[0]
 savedir = args.save_dir
 
@@ -150,6 +150,7 @@ def generate_md_idx(out):
                   viz_dict=viz_dict,
                   list_1v1=lst_1v1,
                   list_stages=lst_stages,
+                  integr_option=integration_option,
                   project_name=project_name[0],
                   cluster_use=args.cluster_use)
 
