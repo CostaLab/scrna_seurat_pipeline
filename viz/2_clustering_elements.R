@@ -356,10 +356,12 @@ clustering_elements <- function(scrna){
     ## MCA annotation
     if("MCA_annotate" %in% names(scrna@meta.data)){
       message("### Making umap with MCA annotation")
+      tmp_scrna <- CreateSeuratObject(counts=scrna@assays$RNA@counts, meta.data = scrna@meta.data)
+      tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "MCA_annotate"
-      col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
+      col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
       plt <- DimPlot(
-        object = scrna,
+        object = tmp_scrna,
         reduction = umap_reduction,
         pt.size = 0.2,
         cols=col_def,
@@ -381,7 +383,7 @@ clustering_elements <- function(scrna){
       message("### Saving MCA annotation data to produce plotly in report")
       saveRDS(plt,file.path(savedir,paste0("mca_annotate_plt_",cluster_use,".RDS")))
       saveRDS(
-        FetchData(object = scrna, vars = c("MCA_annotate", cluster_use)),
+        FetchData(object = tmp_scrna, vars = c("MCA_annotate", cluster_use)),
         file.path(savedir,paste0("mca_annotate_info_",cluster_use,".RDS"))
       )
     }
@@ -389,10 +391,12 @@ clustering_elements <- function(scrna){
     ## HCL annotation
     if("HCL_annotate" %in% names(scrna@meta.data)){
       message("### Making umap with HCL annotation")
+      tmp_scrna <- CreateSeuratObject(counts=scrna@assays$RNA@counts, meta.data = scrna@meta.data)
+      tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "HCL_annotate"
-      col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
+      col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
       plt <- DimPlot(
-        object = scrna,
+        object = tmp_scrna,
         reduction = umap_reduction,
         pt.size = 0.2,
         cols=col_def,
@@ -414,7 +418,7 @@ clustering_elements <- function(scrna){
       message("### Saving HCL annotation data to produce plotly in report")
       saveRDS(plt,file.path(savedir,paste0("hcl_annotate_plt_",cluster_use,".RDS")))
       saveRDS(
-        FetchData(object = scrna, vars = c("HCL_annotate", cluster_use)),
+        FetchData(object = tmp_scrna, vars = c("HCL_annotate", cluster_use)),
         file.path(savedir,paste0("hcl_annotate_info_",cluster_use,".RDS"))
       )
     }
@@ -422,10 +426,12 @@ clustering_elements <- function(scrna){
     ## External Annotation
     if("external_annotation" %in% names(scrna@meta.data)){
       message("### Making umap with external annotation")
+      tmp_scrna <- CreateSeuratObject(counts=scrna@assays$RNA@counts, meta.data = scrna@meta.data)
+      tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "external_annotation"
-      col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
+      col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
       plt <- DimPlot(
-        object = scrna,
+        object = tmp_scrna,
         reduction = umap_reduction,
         pt.size = 0.2,
         cols=col_def,
@@ -445,7 +451,7 @@ clustering_elements <- function(scrna){
       message("### Saving external annotation data to produce plotly in report")
       saveRDS(plt,file.path(savedir,paste0("external_annotation_plt_",cluster_use,".RDS")))
       saveRDS(
-        FetchData(object = scrna, vars = c("external_annotation", cluster_use)),
+        FetchData(object = tmp_scrna, vars = c("external_annotation", cluster_use)),
         file.path(savedir,paste0("external_annotation_info_",cluster_use,".RDS"))
       )
     }
