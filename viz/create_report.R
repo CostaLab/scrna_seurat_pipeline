@@ -371,7 +371,7 @@ if (MAKE_ELEMENT == "TRUE"){
     clusters_DEs_elements(scrna)
   }
   if(any(grepl("Clusters_", EXEC_PLAN, fixed=T))){
-    cat(paste(date(), green(" Element: "), red("Clusters_?"), "\n"))
+    cat(paste(date(), green(" Element: "), red("Clusters_integration..."), "\n"))
     batch_clustering_elements(scrna)
   }
   if("Clusters" %in% EXEC_PLAN){
@@ -388,7 +388,7 @@ if (MAKE_ELEMENT == "TRUE"){
     external_markers_elements(scrna)
   }
   # FIXME possible problem where all term enrichment analysis is on the same place
-  if("DEGO" %in% EXEC_PLAN | "Genesets" %in% EXEC_PLAN ){
+  if(length(intersect(c("DEGO","Genesets","progeny","hallmark","KEGG","Reactome"), EXEC_PLAN) > 0)){
     cat(paste(date(), green(" Element: "), red("DEGO"), "\n"))
     DE_GO_analysis_elements(scrna)
   }

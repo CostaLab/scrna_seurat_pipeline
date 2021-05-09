@@ -80,7 +80,6 @@ p <- ggplot(progeny_df, aes(y=pathway,x=CellType,fill=r))+
             position = position_dodge(width = 0),
             hjust = 0.5, size = 7)+
         ggtitle(glue("{a_vs} r effect size")) +
-        scale_fill_distiller(palette ="RdBu", direction = -1) +
         scale_fill_gradient2(low="blue", mid="white",high="red", limits = range(minr, maxr)) +
         theme_minimal()+
         theme(strip.text.x = element_text(size=28, colour="black",hjust=0),
@@ -94,7 +93,6 @@ p <- ggplot(progeny_df, aes(y=pathway,x=CellType,fill=r))+
         #    position = position_dodge(width = 0),
         #    hjust = 0.5, size = 7)+
         ggtitle(glue("{a_vs} r effect size")) +
-        scale_fill_distiller(palette ="RdBu", direction = -1) +
         scale_fill_gradient2(low="blue", mid="white",high="red", limits = range(minr, maxr)) +
         theme_minimal()+
         theme(strip.text.x = element_text(size=28, colour="black",hjust=0),

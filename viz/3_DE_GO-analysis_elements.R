@@ -125,7 +125,6 @@ DE_GO_analysis_elements <- function(scrna){
   help_sort_func <- ifelse(all.is.numeric(names(cluster_de)), as.numeric, function(x){x})
 
   for (id in sort(help_sort_func(names(cluster_de)))) {
-    message(id)
     id = as.character(id)
     a_de <- cluster_de[[id]]
     if("avg_logFC" %in% names(a_de)){ ## compatible for seurat3
@@ -179,7 +178,7 @@ DE_GO_analysis_elements <- function(scrna){
   #### Genesets
 
   for(nm in scrna@tools$genesets){
-    message("nm: ", nm, "\n")
+    message("nm: ", nm, "    ", appendLF=F)
     if(nm %ni% names(scrna@meta.data)){
       next
     }
@@ -189,7 +188,7 @@ DE_GO_analysis_elements <- function(scrna){
       stringsAsFactors=F)
 
 
-    df.s <- melt(df)
+    df.s <- melt(df, id.vars = c("Cluster"))
     df.s[df.s == -Inf] <- 0
 
     min_x <- min(df.s$value)
@@ -199,7 +198,6 @@ DE_GO_analysis_elements <- function(scrna){
     plt <- ggplot(df.s, aes(x=value, y=Cluster, color=Cluster, point_color=Cluster, fill=Cluster)) +
                   geom_density_ridges(jittered_points=FALSE, scale = .95, rel_min_height = .01, alpha=0.5) +
                   scale_y_discrete(expand = c(.01, 0)) +
-                  scale_x_continuous(expand = c(0, 0), name = "Expression") +
                   scale_fill_manual(values = col_def) +
                   scale_color_manual(values = col_def, guide = "none") +
                   scale_discrete_manual("point_color", values = col_def, guide = "none") +
@@ -363,7 +361,7 @@ DE_GO_analysis_elements <- function(scrna){
         pmdf <- mdf[, c("Description", "name", "p.adjust")]
         pmdf$name <- factor(pmdf$name, levels=names(df_list))
 
-        pmtx <- reshape2::dcast(pmdf,  Description ~ name)
+        pmtx <- reshape2::dcast(pmdf,  Description ~ name, value.var = "p.adjust")
 
         rownames(pmtx) <- pmtx$Description
         pmtx$Description <- NULL

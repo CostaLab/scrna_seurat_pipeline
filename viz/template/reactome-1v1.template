@@ -140,7 +140,7 @@ if(length(filtered_term) > 5){
   pmdf <- mdf[, c("Description", "name", "p.adjust")]
   pmdf$name <- factor(pmdf$name, levels=names(df_list))
 
-  pmtx <- reshape2::dcast(pmdf,  Description ~ name)
+  pmtx <- reshape2::dcast(pmdf,  Description ~ name, value.var = "p.adjust")
 
   rownames(pmtx) <- pmtx$Description
   pmtx$Description <- NULL
@@ -294,7 +294,7 @@ if(length(filtered_term) > 5){
   pmdf <- mdf[, c("Description", "name", "p.adjust")]
   pmdf$name <- factor(pmdf$name, levels=names(df_list))
 
-  pmtx <- reshape2::dcast(pmdf,  Description ~ name)
+  pmtx <- reshape2::dcast(pmdf,  Description ~ name, value.var = "p.adjust")
 
   rownames(pmtx) <- pmtx$Description
   pmtx$Description <- NULL
