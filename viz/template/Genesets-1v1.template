@@ -72,7 +72,7 @@ for(nm in scrna@tools$genesets){
   min_x <- min(df.s$value)
   max_x <- max(df.s$value)
   print(str(df.s))
-  col_def <- viridis::viridis_pal(option = "C")(length(unique(scrna@meta.data[, "name"])))
+  col_def <- ggsci_pal(option = "futurama")(length(unique(scrna@meta.data[, "name"])))
   plt <- ggplot(df.s, aes(x=value, y=Cluster, color=name, point_color=name, fill=name)) +
          geom_density_ridges(jittered_points=FALSE, scale = .95, rel_min_height = .01, alpha=0.5) +
          scale_y_discrete(expand = c(.01, 0)) +

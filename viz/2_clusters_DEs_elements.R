@@ -69,7 +69,7 @@ clusters_DEs_elements <- function(scrna){
     genes <- unique(cluster_de_top8_combine$gene)
 
     col_def <- rev(
-      viridis::viridis_pal(option = cluster_viridis_opt)(
+      ggsci_pal(option = cluster_viridis_opt)(
         length(unique(scrna@meta.data[,sprintf(paste0(col_string,"%.1f"), resolution)]))
       )
     )

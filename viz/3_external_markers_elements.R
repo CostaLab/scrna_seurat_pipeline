@@ -83,7 +83,7 @@ external_markers_elements <- function(scrna){
     )
 
     group_by <- cluster
-    col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
+    col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
     for (i in seq(1, length(genes), by=9)){
       ni = min(i+8, length(genes))
       p3 <- VlnPlot(
