@@ -7,7 +7,7 @@ quality_report_elements <- function(){
   Idents(object = scrna) <- "name"
 
   feats_to_plot <- c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo")
-  col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
+  col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
 
   plt = VlnPlot(
     object = scrna,
@@ -69,7 +69,7 @@ quality_report_elements <- function(){
   Idents(object = scrna)<- "name"
 
   feats_to_plot <- c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo")
-  col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
+  col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
 
   plt = VlnPlot(
     object = scrna,
@@ -87,7 +87,7 @@ quality_report_elements <- function(){
 
 
   feats_to_plot = c("G1.Score", "S.Score", "G2M.Score")
-  col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
+  col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
   ps <- lapply(feats_to_plot, function(fea){
     VlnPlot(
       object = scrna,
@@ -144,7 +144,7 @@ quality_report_elements <- function(){
 
 
   # qc feature scatterplots
-  col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
+  col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
   p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.mt", cols=col_def)
   p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.ribo", cols=col_def)
   p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols=col_def)
@@ -175,7 +175,7 @@ quality_report_elements <- function(){
   )
 
   ## Cellcycle scaling
-  col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
+  col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
 
   ### before
   plt = DimPlot(

@@ -20,6 +20,8 @@ suppressPackageStartupMessages(library(EnhancedVolcano))
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(ggridges))
 suppressPackageStartupMessages(library(reshape2))
+suppressPackageStartupMessages(library(ggsci))
+
 
 `%ni%` <- Negate(`%in%`)
 
@@ -144,6 +146,28 @@ colorize <- function(x, color) {
   } else x
 }
 
+
+ggsci_pal <- function(option, ...){
+ func_name = glue("pal_{option}")
+ func_call = glue('{func_name}(...)')
+ assertthat::assert_that(func_name %in% ls("package:ggsci"))
+ return(eval(parse(text=func_call)))
+}
+
+ggsci_scale_color <- function(option, ...){
+ func_name = glue("scale_color_{option}")
+ func_call = glue('{func_name}(...)')
+ assertthat::assert_that(func_name %in% ls("package:ggsci"))
+ return(eval(parse(text=func_call)))
+}
+ggsci_scale_fill <- function(option, ...){
+ func_name = glue("scale_fill_{option}")
+ func_call = glue('{func_name}(...)')
+ assertthat::assert_that(func_name %in% ls("package:ggsci"))
+ return(eval(parse(text=func_call)))
+}
+
+
 ###===================================FUNCTIONS END===================================================
 
 ###===================================PARAMETERS BEGIN===================================================
@@ -226,6 +250,7 @@ file.copy(file.path(CHARTSDIR, list.files(CHARTSDIR)), glue("{REPORTDIR}/data"),
 dir.create(glue("{REPORTDIR}/../viz"))
 file.copy(file.path(getwd(), "viz", list.files("viz")), glue("{REPORTDIR}/../viz"), overwrite = T, recursive=T, copy.date=T)
 
+
 code_gene_file <- file.path(REPORTDIR, "..", "viz/code_generator.py")
 
 viz_path <- file.path(REPORTDIR, "..", "viz")
@@ -282,14 +307,14 @@ if (MAKE_ELEMENT == "TRUE"){
   cluster_viridis_opt = ifelse(
     any(grepl("cluster_color_option",names(viz_conf),fixed = TRUE)),
     viz_conf[["cluster_color_option"]], # Config option
-    "D" # Default
+    "d3" # Default
   )
 
   # replicate_colors
   replicates_viridis_opt = ifelse(
     any(grepl("replicate_color_option",names(viz_conf),fixed = TRUE)),
     viz_conf[["replicate_color_option"]],
-    "C"
+    "futurama"
   )
   neg_color = ifelse(
     any(grepl("neg_color",names(viz_conf),fixed = TRUE)),

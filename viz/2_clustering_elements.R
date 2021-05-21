@@ -24,7 +24,7 @@ clustering_elements <- function(scrna){
 
     message("### Making umap grouped by name")
     group_by <- "name"
-    col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
+    col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
     ## Clusters
     plt = DimPlot(
       scrna,
@@ -41,7 +41,7 @@ clustering_elements <- function(scrna){
     )
     message("### Making umap grouped by clusters")
     group_by <- cluster_use
-    col_def <- rev(viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by]))))
+    col_def <- rev(ggsci_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by]))))
     plt = DimPlot(
       scrna,
       reduction = umap_reduction,
@@ -59,7 +59,7 @@ clustering_elements <- function(scrna){
 
     message("### Making umap grouped by stage")
     group_by <- "stage"
-    col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
+    col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
     plt = DimPlot(
       scrna,
       reduction = umap_reduction,
@@ -120,7 +120,7 @@ clustering_elements <- function(scrna){
               return(ret)
       }
 
-      col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(df$Cluster)))
+      col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(df$Cluster)))
       colnames(df) <- sapply(colnames(df), wrapp_invalid_name)
 
       if(length(table(scrna$stage))<=2){
@@ -219,7 +219,7 @@ clustering_elements <- function(scrna){
         decreasing=TRUE
       ),]
 
-      col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(name_len)
+      col_def <- ggsci_pal(option = replicates_viridis_opt)(name_len)
 
       # barplot uses default graphic device hence we use the std functions to save it
       png(
@@ -263,7 +263,7 @@ clustering_elements <- function(scrna){
       message("### Making sample amount distribution barplot")
       #myel <- SetAllIdent(scrna, "name")
 
-      col_def <- viridis::viridis_pal(option = replicates_viridis_opt)(length(unique(scrna@meta.data[,"name"])))
+      col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(scrna@meta.data[,"name"])))
 
       plt = BarPlot(
         scrna@meta.data[, cluster_use], fill = scrna$name, xlab = "Cluster",
@@ -282,7 +282,7 @@ clustering_elements <- function(scrna){
     message("### Making cellcycle phases umap")
 
     group_by <- "Phase"
-    col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
+    col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
 
     plt = DimPlot(
       scrna,
@@ -336,7 +336,7 @@ clustering_elements <- function(scrna){
       "percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA",
       "CC.Difference", "G1.Score", "S.Score", "G2M.Score"
     )
-    col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
+    col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
     plt = VlnPlot(
       scrna,
       features = feats_to_plot,
@@ -359,7 +359,7 @@ clustering_elements <- function(scrna){
       tmp_scrna <- CreateSeuratObject(counts=scrna@assays$RNA@counts, meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "MCA_annotate"
-      col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
+      col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
       plt <- DimPlot(
         object = tmp_scrna,
         reduction = umap_reduction,
@@ -394,7 +394,7 @@ clustering_elements <- function(scrna){
       tmp_scrna <- CreateSeuratObject(counts=scrna@assays$RNA@counts, meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "HCL_annotate"
-      col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
+      col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
       plt <- DimPlot(
         object = tmp_scrna,
         reduction = umap_reduction,
@@ -429,7 +429,7 @@ clustering_elements <- function(scrna){
       tmp_scrna <- CreateSeuratObject(counts=scrna@assays$RNA@counts, meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "external_annotation"
-      col_def <- viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
+      col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
       plt <- DimPlot(
         object = tmp_scrna,
         reduction = umap_reduction,

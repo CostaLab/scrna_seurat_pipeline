@@ -137,10 +137,14 @@ cluster_annotation <- c(
 
 # Current options are the default option, you can change to your own
 viz_conf = list(
-  ## see: https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html#the-color-scales
-  # "magma" (or "A"), "inferno" (or "B"), "plasma" (or "C"), "viridis" (or "D") and "cividis" (or "E")
-  cluster_color_option = "D", ## R viridis, see above
-  replicate_color_option = "C", ## R viridis, see above
+  ## https://github.com/nanxstats/ggsci
+  ##ggsci colorcode:
+                # "aaas" "d3" "futurama" "gsea" "igv"
+                # "jama" "jco" "lancet" "locuszoom" "material"
+                # "nejm" "npg" "rickandmorty" "simpsons" "startrek"
+                # "tron" "uchicago" "ucscgb"
+  cluster_color_option = "d3", ## ggsci, see above
+  replicate_color_option = "futurama", ## ggsci, see above
   neg_color = "#51C3CC",#colorBlindness::Blue2DarkOrange12Steps[2],
   pos_color = "#CC5800",#rev(colorBlindness::Blue2DarkOrange12Steps)[2],
   base_color = "lightgrey",#"lightgrey",

@@ -65,7 +65,7 @@ DE_GO_analysis_elements <- function(scrna){
   )
 
   scrna@meta.data[, cluster] <- help_sort_func(scrna@meta.data[, cluster])
-  col_def <- rev(viridis::viridis_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,cluster]))))
+  col_def <- rev(ggsci_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,cluster]))))
 
   plthm = DoHeatmap(
     scrna,

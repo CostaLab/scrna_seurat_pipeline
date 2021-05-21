@@ -49,7 +49,7 @@ batch_clustering_elements <- function(scrna){
     for(nm in nms){
 
       col_def <- rev(
-        viridis::viridis_pal(option = cluster_viridis_opt)(
+        ggsci_pal(option = cluster_viridis_opt)(
           length(unique(scrna@meta.data[,paste0(pref_def, nm)]))
         )
       )
