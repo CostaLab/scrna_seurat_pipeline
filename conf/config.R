@@ -138,11 +138,12 @@ cluster_annotation <- c(
 # Current options are the default option, you can change to your own
 viz_conf = list(
   ## https://github.com/nanxstats/ggsci
-  ##ggsci colorcode:
-                # "aaas" "d3" "futurama" "gsea" "igv"
-                # "jama" "jco" "lancet" "locuszoom" "material"
-                # "nejm" "npg" "rickandmorty" "simpsons" "startrek"
-                # "tron" "uchicago" "ucscgb"
+  ##ggsci colorcode & availble colors:
+                # "aaas":10 "d3":10 "futurama":12 "gsea":12 "igv":51
+                # "jama":7 "jco":10 "lancet":9 "locuszoom":7 "material":10
+                # "nejm":8 "npg":10 "rickandmorty":12 "simpsons":16 "startrek":7
+                # "tron":7 "uchicago":9 "ucscgb":26
+
   cluster_color_option = "d3", ## ggsci, see above
   replicate_color_option = "futurama", ## ggsci, see above
   neg_color = "#51C3CC",#colorBlindness::Blue2DarkOrange12Steps[2],
