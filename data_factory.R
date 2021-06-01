@@ -516,8 +516,9 @@ generate_scrna_ambient_rna_soupx <- function(scrna){
               scrna.subset <- subset(scrna, name == x)
               DefaultAssay(scrna.subset) <- "RNA"
 
-              toc <- Read10X(data_fil_unfil[[x]][1])
-              tod <- Read10X(data_fil_unfil[[x]][2])
+              read_func <- ifelse(CM_FORMAT == "10X", Read10X, Read10X_h5)
+              toc <- read_func(data_fil_unfil[[x]][1])
+              tod <- read_func(data_fil_unfil[[x]][2])
 
               # We remove all cells not in the Seurat object.
               cells <- colnames(scrna.subset)
