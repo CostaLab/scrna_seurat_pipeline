@@ -137,7 +137,7 @@ DE_GO_analysis_elements <- function(scrna){
       a_de,
       x="log2FC",
       y = "p_val_adj",
-      lab=rownames(a_de),
+      lab=a_de$gene,
       pointSize = 1.0,
       pCutoff = 0.05,
       title=glue("Volcano {id}"),
