@@ -1958,6 +1958,9 @@ get_go_up <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
@@ -2005,6 +2008,9 @@ get_go_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))
@@ -2058,6 +2064,9 @@ get_kegg_up <- function(de.list){
 
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
@@ -2116,6 +2125,9 @@ get_kegg_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))
@@ -2177,6 +2189,9 @@ get_reactome_up <- function(de.list){
 
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
@@ -2230,6 +2245,9 @@ get_reactome_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))
@@ -2288,6 +2306,9 @@ get_hallmark_up <- function(de.list){
 
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
@@ -2349,6 +2370,9 @@ get_hallmark_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))
