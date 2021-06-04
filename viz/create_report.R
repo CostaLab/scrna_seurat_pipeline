@@ -167,6 +167,18 @@ ggsci_scale_fill <- function(option, ...){
  return(eval(parse(text=func_call)))
 }
 
+URLencode_escape <-function(string){
+  string <- URLencode(string, reserved=T)
+  string <- stringr::str_replace_all(string, "%", "::::")
+  return(string)
+}
+
+URLdecode_escape <-function(string){
+  string <- stringr::str_replace_all(string, "::::", "%")
+  string <- URLdecode(string)
+  return(string)
+}
+
 
 ###===================================FUNCTIONS END===================================================
 

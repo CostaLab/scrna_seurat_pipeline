@@ -1774,6 +1774,15 @@ generate_scrna_progeny <- function(scrna){
   pws <- rownames(scrna@assays$progeny)
   res <- list()
   Idents(scrna) <- DEFUALT_CLUSTER_NAME
+  if (is.factor(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
+    scrna@meta.data[, DEFUALT_CLUSTER_NAME] <- droplevels(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
+  }else{
+    c_names <-unique(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
+    help_sort_func <- ifelse(all.is.numeric(c_names), as.numeric, function(x){x})
+    scrna@meta.data[, DEFUALT_CLUSTER_NAME] <- factor(scrna@meta.data[, DEFUALT_CLUSTER_NAME],
+                                                      levels=sort(help_sort_func(c_names)))
+  }
+
   for(i in levels(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
     g <- as.character(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
     g[!(g==i)] <- "others"
@@ -1823,6 +1832,15 @@ generate_scrna_progeny_stage <- function(scrna){
   for (i in 1:n){
     lst[[i]] <- m[1:2, i]
   }
+  if (is.factor(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
+    scrna@meta.data[, DEFUALT_CLUSTER_NAME] <- droplevels(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
+  }else{
+    c_names <-unique(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
+    help_sort_func <- ifelse(all.is.numeric(c_names), as.numeric, function(x){x})
+    scrna@meta.data[, DEFUALT_CLUSTER_NAME] <- factor(scrna@meta.data[, DEFUALT_CLUSTER_NAME],
+                                                      levels=sort(help_sort_func(c_names)))
+  }
+
   pws <- rownames(scrna@assays$progeny)
   vs_df_list <- list()
   for(apair in lst){

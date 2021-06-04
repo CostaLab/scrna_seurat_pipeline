@@ -146,7 +146,7 @@ DE_GO_analysis_elements <- function(scrna){
     save_ggplot_formats(
       plt=plt,
       base_plot_dir=report_plots_folder,
-      plt_name=paste0("volcanoplot_deg_cluster-",cluster,"_id-",id),
+      plt_name=paste0("volcanoplot_deg_cluster-",cluster,"_id-",URLencode_escape(id)),
       width=8, height=8
     )
   }
@@ -167,7 +167,7 @@ DE_GO_analysis_elements <- function(scrna){
     save_ggplot_formats(
       plt=ps,
       base_plot_dir=report_plots_folder,
-      plt_name=paste0("umap_featureplot_top10deg_cluster-",cluster,"_id-",i),
+      plt_name=paste0("umap_featureplot_top10deg_cluster-",cluster,"_id-",URLencode_escape(i)),
       width=13, height=10
     )
   }
