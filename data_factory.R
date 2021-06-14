@@ -343,9 +343,9 @@ conf_main <- function(){
           saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
           stop(glue("ERROR when run {key}"))
         }
-        if("meta_order" %ni% names(scrna@tools)){
-          scrna@tools[["meta_order"]] <- list(name = names(data_src), stage=unique(stage_lst))
-        }
+        #if("meta_order" %ni% names(scrna@tools)){
+        scrna@tools[["meta_order"]] <- list(name = names(data_src), stage=unique(stage_lst))
+        #}
         phase_name <- get_output_name(scrna, key) ### only first store, or second time
         saveRDS(scrna, file=file.path(SAVE_DIR, glue("{phase_name}.Rds")))
         logger.info(paste("finished", phase_name))
