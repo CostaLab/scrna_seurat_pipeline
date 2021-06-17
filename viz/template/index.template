@@ -32,7 +32,7 @@
 {% endif %}
 
 {% if "DEs" in executing_list %}
-- [marker genes with different resolutions](data/clusters_DEs.html)
+- [Marker genes with different resolutions - Integration: {{integr_option}}](data/clusters_DEs.html)
 {% endif %}
 
   {% set count = count + 1 %}
@@ -43,7 +43,7 @@
 {% if intersect(viz_dict['clustering'], executing_list) %}
 ## {{count}}. Final Clustering Results
 {% if "Clusters" in executing_list %}
-- [clusters](data/clusters.html)
+- [clusters - Integration: {{integr_option}}](data/clusters.html)
 {% endif %}
 
   {% set count = count + 1 %}
@@ -66,6 +66,11 @@
      - [GO-DOWN-excel](data/godown_{{cluster_use}}.xlsx)
 {% endif %}
 
+{% if "Genesets" in executing_list %}
+ - Genesets
+   - [Genesets ](data/Genesets.html)
+{% endif %}
+
 {% if "progeny" in executing_list %}
  - progeny
    - [progeny ](data/progeny.html)
@@ -74,15 +79,15 @@
 {% if "hallmark" in executing_list %}
  - Hallmark
    - [hallmark ](data/hallmark.html)
-    - [Hallmark-UP-excel](data/hallmarkup_{{cluster_use}}.xlsx)
-    - [Hallmark-DOWN-excel](data/hallmarkdown_{{cluster_use}}.xlsx)
+     - [Hallmark-UP-excel](data/hallmarkup_{{cluster_use}}.xlsx)
+     - [Hallmark-DOWN-excel](data/hallmarkdown_{{cluster_use}}.xlsx)
 {% endif %}
 
 {% if "KEGG" in executing_list %}
  - KEGG
    - [KEGG ](data/KEGG.html)
-    - [KEGG-UP-excel](data/keggup_{{cluster_use}}.xlsx)
-    - [KEGG-DOWN-excel](data/keggdown_{{cluster_use}}.xlsx)
+     - [KEGG-UP-excel](data/keggup_{{cluster_use}}.xlsx)
+     - [KEGG-DOWN-excel](data/keggdown_{{cluster_use}}.xlsx)
 {% endif %}
 
 {% if "Reactome" in executing_list %}
@@ -120,6 +125,12 @@
 
 {% if intersect(viz_dict['PWstageVS'], executing_list) %}
 ## {{count}}. Pathway analysis (between groups)
+
+{% if "Genesets_stage" in executing_list %}
+ - Genesets
+   - [Genesets stage](data/Genesets_stageVS.html)
+{% endif %}
+
 
 {% if "progeny_stage" in executing_list %}
  - progeny
@@ -185,7 +196,10 @@
 {% if intersect(viz_dict['PWsampleVS'], executing_list) %}
 ## {{count}}. Pathway analysis (between samples)
 
-
+{% if "Genesets_1v1" in executing_list %}
+- Genesets
+   - [Genesets 1v1](data/Genesets_1vs1.html)
+{% endif %}
 
 {% if "hallmark_1v1" in executing_list %}
 - Hallmark

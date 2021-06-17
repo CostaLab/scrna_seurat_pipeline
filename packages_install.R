@@ -39,14 +39,15 @@ packages_to_install = c(
   "kableExtra", "assertthat", "mclust", "shinythemes",
   "systemfonts", "igraph", "proj4", "Cairo", "ggalt",
   "urltools", "downloadthis", "jsonlite", "crayon", "SoupX",
-  "rcompanion"
+  "rcompanion", "ggridges", "ggsci"
 )
 
 bioc_pkgs_to_install = c(
   "org.Mm.eg.db", "clusterProfiler",
   "org.Hs.eg.db", "ComplexHeatmap",
   "EnhancedVolcano","ReactomePA",
-  "msigdbr","limma", "celda", "progeny", "scran"
+  "msigdbr","limma", "celda", "progeny",
+  "scran", "GSEABase"
 )
 
 github_pkgs_to_install = c(

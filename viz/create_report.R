@@ -18,6 +18,11 @@ suppressPackageStartupMessages(library(openxlsx))
 suppressPackageStartupMessages(library(ComplexHeatmap))
 suppressPackageStartupMessages(library(EnhancedVolcano))
 suppressPackageStartupMessages(library(Seurat))
+suppressPackageStartupMessages(library(ggridges))
+suppressPackageStartupMessages(library(reshape2))
+suppressPackageStartupMessages(library(ggsci))
+
+
 `%ni%` <- Negate(`%in%`)
 
 ###===================================FUNCTIONS BEGIN===================================================
@@ -48,9 +53,34 @@ save_ggplot_formats = function(
   }
 }
 
+build_cluster_info <- function(scrna){
+  if(is.null(scrna)){
+    return(DEFAULTCLUSTERS)
+  }
+  #INTEGRATION_OPTION
+  if(DEFAULTCLUSTERS == "seurat_clusters"){
+    len <- length(scrna@tools$parameter)
+    resol <- scrna@tools$parameter[[len]][["clusterresolution"]]
+    #message(resol)
+    #INTEGRATION_OPTION
+    #message(DEFAULTCLUSTERS)
+    #message(INTEGRATION_OPTION)
+    st <- glue("{DEFAULTCLUSTERS}, resolution: {resol}, integration option: {INTEGRATION_OPTION}")
+    return(st)
+  }else{
+    st <- glue("{DEFAULTCLUSTERS}, integration option: {INTEGRATION_OPTION}")
+    return(st)
+  }
+  return(DEFAULTCLUSTERS)
+}
+
+
 GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
   #de.data = cluster.de[[id]]
   #de.data = plot_de
+  if("avg_logFC" %in% names(de.data)){ ## compatible for seurat3
+    de.data$avg_log2FC <- de.data$avg_logFC/log(2)
+  }
   if (any(colnames(de.data) == "cluster")) {
     top5.up <- de.data %>% group_by(cluster) %>% top_n(10, avg_logFC) %>%filter(avg_logFC > 0) %>% arrange(-avg_logFC)
     top5.dn <- de.data %>% group_by(cluster) %>% top_n(10, -avg_logFC) %>%filter(avg_logFC < 0) %>% arrange(-avg_logFC)
@@ -115,6 +145,40 @@ colorize <- function(x, color) {
       x)
   } else x
 }
+
+
+ggsci_pal <- function(option, ...){
+ func_name = glue("pal_{option}")
+ func_call = glue('{func_name}(...)')
+ assertthat::assert_that(func_name %in% ls("package:ggsci"))
+ return(eval(parse(text=func_call)))
+}
+
+ggsci_scale_color <- function(option, ...){
+ func_name = glue("scale_color_{option}")
+ func_call = glue('{func_name}(...)')
+ assertthat::assert_that(func_name %in% ls("package:ggsci"))
+ return(eval(parse(text=func_call)))
+}
+ggsci_scale_fill <- function(option, ...){
+ func_name = glue("scale_fill_{option}")
+ func_call = glue('{func_name}(...)')
+ assertthat::assert_that(func_name %in% ls("package:ggsci"))
+ return(eval(parse(text=func_call)))
+}
+
+URLencode_escape <-function(string){
+  string <- URLencode(string, reserved=T)
+  string <- stringr::str_replace_all(string, "%", "::::")
+  return(string)
+}
+
+URLdecode_escape <-function(string){
+  string <- stringr::str_replace_all(string, "::::", "%")
+  string <- URLdecode(string)
+  return(string)
+}
+
 
 ###===================================FUNCTIONS END===================================================
 
@@ -198,6 +262,7 @@ file.copy(file.path(CHARTSDIR, list.files(CHARTSDIR)), glue("{REPORTDIR}/data"),
 dir.create(glue("{REPORTDIR}/../viz"))
 file.copy(file.path(getwd(), "viz", list.files("viz")), glue("{REPORTDIR}/../viz"), overwrite = T, recursive=T, copy.date=T)
 
+
 code_gene_file <- file.path(REPORTDIR, "..", "viz/code_generator.py")
 
 viz_path <- file.path(REPORTDIR, "..", "viz")
@@ -236,19 +301,32 @@ ext_annot_fp = EXTERNALFILE
 
 
 ##4. Make_report element
-  if (MAKE_ELEMENT == "TRUE"){
-  source(CONFIGFILE)
+source(CONFIGFILE)
+
+scrna <- NULL
+if(identical(cluster,"singleton")){
+  cat(paste(date(), blue(" loading: "), red("scrna_phase_singleton.Rds"), "\n"))
+  scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
+  cat(paste(date(), blue(" loaded: "), red("scrna_phase_singleton.Rds"), "\n"))
+}else{
+  cat(paste(date(), blue(" loading: "), red("scrna_phase_comparing.Rds"), "\n"))
+  scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
+  cat(paste(date(), blue(" loaded: "), red("scrna_phase_comparing.Rds"), "\n"))
+}
+
+
+if (MAKE_ELEMENT == "TRUE"){
   cluster_viridis_opt = ifelse(
     any(grepl("cluster_color_option",names(viz_conf),fixed = TRUE)),
     viz_conf[["cluster_color_option"]], # Config option
-    "D" # Default
+    "d3" # Default
   )
 
   # replicate_colors
   replicates_viridis_opt = ifelse(
     any(grepl("replicate_color_option",names(viz_conf),fixed = TRUE)),
     viz_conf[["replicate_color_option"]],
-    "C"
+    "futurama"
   )
   neg_color = ifelse(
     any(grepl("neg_color",names(viz_conf),fixed = TRUE)),
@@ -303,10 +381,22 @@ ext_annot_fp = EXTERNALFILE
   dir.create(report_plots_folder_pdf, recursive = TRUE)
   dir.create(report_tables_folder, recursive = TRUE)
 
-  # run necessary generators
+
+  source(glue("{viz_path}/1_quality_report_elements.R"))
+  source(glue("{viz_path}/ambientRNA_viz_elements.R"))
+  source(glue("{viz_path}/2_clusters_DEs_elements.R"))
+  source(glue("{viz_path}/2_batch_clustering_elements.R"))
+  source(glue("{viz_path}/2_clustering_elements.R"))
+  source(glue("{viz_path}/2_clustering_elements.R"))
+  source(glue("{viz_path}/2_clustering_elements.R"))
+  source(glue("{viz_path}/2_clusters_DEs_elements.R"))
+  source(glue("{viz_path}/3_external_markers_elements.R"))
+  source(glue("{viz_path}/3_DE_GO-analysis_elements.R"))
+
+# run necessary generators
   if("QC" %in% EXEC_PLAN) {
     cat(paste(date(), green(" Element: "), red("QC"), "\n"))
-    source(glue("{viz_path}/1_quality_report_elements.R"))
+    quality_report_elements() ## load scrna innner the function
   }
   if("AmbientRNA" %in% EXEC_PLAN){
     cat(paste(date(), green(" Element: "), red("AmbientRNA"), "\n"))
@@ -318,33 +408,33 @@ ext_annot_fp = EXTERNALFILE
   }
   if("DEs"%in% EXEC_PLAN) {
     cat(paste(date(), green(" Element: "), red("DEs"), "\n"))
-    source(glue("{viz_path}/2_clusters_DEs_elements.R"))
+    clusters_DEs_elements(scrna)
   }
   if(any(grepl("Clusters_", EXEC_PLAN, fixed=T))){
-    cat(paste(date(), green(" Element: "), red("Clusters_?"), "\n"))
-    source(glue("{viz_path}/2_batch_clustering_elements.R"))
-    source(glue("{viz_path}/2_clustering_elements.R"))
+    cat(paste(date(), green(" Element: "), red("Clusters_integration..."), "\n"))
+    batch_clustering_elements(scrna)
   }
   if("Clusters" %in% EXEC_PLAN){
     cat(paste(date(), green(" Element: "), red("Clusters"), "\n"))
-    source(glue("{viz_path}/2_clustering_elements.R"))
+    clustering_elements(scrna)
   }
   if("Singleton" %in% EXEC_PLAN){
     cat(paste(date(), green(" Element: "), red("Singleton"), "\n"))
-    source(glue("{viz_path}/2_clustering_elements.R"))
-    source(glue("{viz_path}/2_clusters_DEs_elements.R"))
+    clustering_elements(scrna)
+    clusters_DEs_elements(scrna)
   }
   if("EXT_MARKERS" %in% EXEC_PLAN){
     cat(paste(date(), green(" Element: "), red("EXT_MARKERS"), "\n"))
-    source(glue("{viz_path}/3_external_markers_elements.R"))
+    external_markers_elements(scrna)
   }
   # FIXME possible problem where all term enrichment analysis is on the same place
-  if("DEGO" %in% EXEC_PLAN){
+  if(length(intersect(c("DEGO","Genesets","progeny","hallmark","KEGG","Reactome"), EXEC_PLAN) > 0)){
     cat(paste(date(), green(" Element: "), red("DEGO"), "\n"))
-    source(glue("{viz_path}/3_DE_GO-analysis_elements.R"))
+    DE_GO_analysis_elements(scrna)
   }
-
 }
+
+cluster_info <-  build_cluster_info(scrna)
 
 ##5. Produce Report
 render_func = function(rmd_input_filename, output_filename){
@@ -352,9 +442,12 @@ render_func = function(rmd_input_filename, output_filename){
     rmd_input_filename,
     output_file=file.path(REPORTDIR,"data",output_filename),
     output_format=c("html_document"),
+    quiet=TRUE,
     clean=TRUE,
     params=list(
+      scrna=scrna,
       cluster=DEFAULTCLUSTERS,
+      cluster_info=cluster_info,
       project=PROJECT,
       savedir=SAVE_DIR,
       funcs=EXEC_PLAN,
@@ -368,32 +461,47 @@ render_func = function(rmd_input_filename, output_filename){
   )
 }
 
+dic_Rmd_n_Output <- list(
+        "QC"                  =     c(glue("{viz_path}/1_quality_report.Rmd"),        "data_quality"),
+        "AmbientRNA"          =     c(glue("{viz_path}/ambientRNA_viz.Rmd"),          "ambient_rna"),
+        "DEs"                 =     c(glue("{viz_path}/2_clusters_DEs.Rmd"),          "clusters_DEs"),
+        "Clusters"            =     c(glue("{viz_path}/2_clustering.Rmd"),            "clusters"),
+        "Singleton"           =     c(glue("{viz_path}/2_clustering.Rmd"),            "clusters"),
+        "Clusters_harmony"    =     c(glue("{viz_path}/2_clustering_harmony.Rmd"),    "clusters_harmony"),
+        "Clusters_seurat"     =     c(glue("{viz_path}/2_clustering_seurat.Rmd"),     "clusters_seurat"),
+        "EXT_MARKERS"         =     c(glue("{viz_path}/3_external_markers.Rmd"),      "external_markers"),
+        "DEGO"                =     c(glue("{viz_path}/3_DE_GO-analysis.Rmd"),        "dego"),
+        "KEGG"                =     c(glue("{viz_path}/3_KEGG.Rmd"),                  "KEGG"),
+        "progeny"             =     c(glue("{viz_path}/3_progeny.Rmd"),               "progeny"),
+        "Genesets"            =     c(glue("{viz_path}/3_Genesets.Rmd"),              "Genesets"),
+        "hallmark"            =     c(glue("{viz_path}/3_hallmark.Rmd"),              "hallmark"),
+        "Reactome"            =     c(glue("{viz_path}/3_Reactome.Rmd"),              "Reactome"),
+        "DEGO_stage"          =     c(glue("{viz_path}/DE-GO-analysis-stagesVS.Rmd"), "gv"),
+        "Genesets_1v1"        =     c(glue("{viz_path}/Genesets-1v1.Rmd"),            "Genesets_1vs1"),
+        "DEGO_1v1"            =     c(glue("{viz_path}/DE-GO-analysis-1v1.Rmd"),      "1vs1"),
+        "hallmark_1v1"        =     c(glue("{viz_path}/hallmark-1v1.Rmd"),            "hallmark_1vs1"),
+        "reactome_1v1"        =     c(glue("{viz_path}/reactome-1v1.Rmd"),            "reactome_1vs1"),
+        "kegg_1v1"            =     c(glue("{viz_path}/kegg-1v1.Rmd"),                "kegg_1vs1"),
+        "hallmark_stage"      =     c(glue("{viz_path}/hallmark-stageVS.Rmd"),        "hallmark_stageVS"),
+        "Genesets_stage"      =     c(glue("{viz_path}/Genesets-stageVS.Rmd"),        "Genesets_stageVS"),
+        "reactome_stage"      =     c(glue("{viz_path}/reactome-stageVS.Rmd"),        "reactome_stageVS"),
+        "progeny_stage"       =     c(glue("{viz_path}/progeny-stageVS.Rmd"),         "progeny_stageVS"),
+        "kegg_stage"          =     c(glue("{viz_path}/kegg-stageVS.Rmd"),            "kegg_stageVS"),
+        "intUMAPs"            =     c(glue("{viz_path}/interactive_UMAPs.Rmd"),       "interactive_UMAPs")
+)
+
+
+
 for(i in EXEC_PLAN){
   cat(paste(date(), blue(" Generating: "), red(i), "\n"))
-
-  if(grepl("QC",i,fixed=TRUE)) render_func(glue("{viz_path}/1_quality_report.Rmd"),"data_quality")
-  if(grepl("AmbientRNA",i,fixed=TRUE)) render_func(glue("{viz_path}/ambientRNA_viz.Rmd"),"ambient_rna")
-  if(grepl("soupx",i,fixed=TRUE)) render_func(glue("{viz_path}/ambientRNA_soupx_viz.Rmd"),"ambient_rna_soupx")
-  if(grepl("DEs",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clusters_DEs.Rmd"),"clusters_DEs")
-  if(grepl("Clusters",i,fixed=TRUE) | grepl("Singleton",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clustering.Rmd"),"clusters")
-  if(grepl("Clusters_harmony",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clustering_harmony.Rmd"),"clusters_harmony")
-  if(grepl("Clusters_seurat",i,fixed=TRUE)) render_func(glue("{viz_path}/2_clustering_seurat.Rmd"),"clusters_seurat")
-  if(grepl("EXT_MARKERS",i,fixed=TRUE)) render_func(glue("{viz_path}/3_external_markers.Rmd"),"external_markers")
-  if(grepl("DEGO",i,fixed=TRUE)) render_func(glue("{viz_path}/3_DE_GO-analysis.Rmd"),"dego")
-  if(grepl("KEGG",i,fixed=TRUE)) render_func(glue("{viz_path}/3_KEGG.Rmd"),"KEGG")
-  if(grepl("progeny",i,fixed=TRUE)) render_func(glue("{viz_path}/3_progeny.Rmd"),"progeny")
-  if(grepl("hallmark",i,fixed=TRUE)) render_func(glue("{viz_path}/3_hallmark.Rmd"),"hallmark")
-  if(grepl("Reactome",i,fixed=TRUE)) render_func(glue("{viz_path}/3_Reactome.Rmd"),"Reactome")
-  if(grepl("DEGO_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/DE-GO-analysis-stagesVS.Rmd"),"gv")
-  if(grepl("DEGO_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/DE-GO-analysis-1v1.Rmd"),"1vs1")
-  if(grepl("hallmark_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/hallmark-1v1.Rmd"),"hallmark_1vs1")
-  if(grepl("reactome_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/reactome-1v1.Rmd"),"reactome_1vs1")
-  if(grepl("kegg_1v1",i,fixed=TRUE)) render_func(glue("{viz_path}/kegg-1v1.Rmd"),"kegg_1vs1")
-  if(grepl("hallmark_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/hallmark-stageVS.Rmd"),"hallmark_stageVS")
-  if(grepl("reactome_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/reactome-stageVS.Rmd"),"reactome_stageVS")
-  if(grepl("progeny_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/progeny-stageVS.Rmd"),"progeny_stageVS")
-  if(grepl("kegg_stage",i,fixed=TRUE)) render_func(glue("{viz_path}/kegg-stageVS.Rmd"),"kegg_stageVS")
-  if(grepl("intUMAPs",i,fixed=TRUE)) render_func(glue("{viz_path}/interactive_UMAPs.Rmd"),"interactive_UMAPs")
+  if(i %ni% names(dic_Rmd_n_Output)){
+    message("viz ", i, " is not implemented!!")
+    next
+  }
+  rmd_n_output <- dic_Rmd_n_Output[[i]]
+  rmd <- rmd_n_output[1]
+  output <- rmd_n_output[2]
+  render_func(rmd, output)
 }
 
 if(GEN_SINGLE_FILE){

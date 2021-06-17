@@ -343,9 +343,9 @@ conf_main <- function(){
           saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
           stop(glue("ERROR when run {key}"))
         }
-        if("meta_order" %ni% names(scrna@tools)){
-          scrna@tools[["meta_order"]] <- list(name = names(data_src), stage=unique(stage_lst))
-        }
+        #if("meta_order" %ni% names(scrna@tools)){
+        scrna@tools[["meta_order"]] <- list(name = names(data_src), stage=unique(stage_lst))
+        #}
         phase_name <- get_output_name(scrna, key) ### only first store, or second time
         saveRDS(scrna, file=file.path(SAVE_DIR, glue("{phase_name}.Rds")))
         logger.info(paste("finished", phase_name))
@@ -1517,9 +1517,12 @@ generate_scrna_batch_markergenes <- function(scrna){
              len <- length(CLUSTER_RESOLUTION_RANGE)
              cluster.de.list <- vector("list", length = len)
              names(cluster.de.list) <- as.character(CLUSTER_RESOLUTION_RANGE)
+             DefaultAssay(scrna) <- "RNA"
              cluster.de.list <- foreach(i=CLUSTER_RESOLUTION_RANGE) %do%{
-               DefaultAssay(scrna) <- "RNA"
                cluster_name <- sprintf("integrated_snn_res.%s", i)
+               if(INTEGRATION_OPTION == "harmony"){
+                 cluster_name <- sprintf("RNA_snn_res.%s", i)
+               }
                Idents(scrna) <- cluster_name
                de.df = FindAllMarkers(scrna, logfc.threshold=0)
                cluster.de <- split(de.df, de.df$cluster)
@@ -1823,6 +1826,45 @@ generate_scrna_go <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+generate_scrna_MSigDB_geneset <- function(scrna){
+    #http://www.gsea-msigdb.org/gsea/msigdb/download_file.jsp?filePath=/msigdb/release/7.4/msigdb.v7.4.symbols.gmt
+  ret_code = 0
+  suppressPackageStartupMessages(require(GSEABase))
+  tryCatch(
+           {
+             HS_Gmt <- getGmt(gzfile(MSigDB_GENESET_HUMAN_GMT_FILE))
+             Gmt <- HS_Gmt
+             if(SPECIES == "Mouse"){
+               all_mappings <- read.csv(file="external/Human2Mouse_mappings.tsv", sep="\t")
+               for(idx in 1:length(HS_Gmt)){
+                  geneIds <- HS_Gmt[[idx]]@geneIds
+                  mm_geneIds <-all_mappings[which(all_mappings$HGNC.symbol %in% geneIds), "MGI.symbol"]
+                  Gmt[[idx]]@geneIds <- mm_geneIds
+               }
+             }
+             assertthat::assert_that(all(MSigDB_Geneset_names %in% names(Gmt)))
+             subGmt <- Gmt[MSigDB_Geneset_names]
+
+             for(nm in names(subGmt)){
+                 geneIds <- subGmt[[nm]]@geneIds
+                 geneIds <- intersect(geneIds, rownames(scrna))
+                 ## scrna@assays$RNA@data
+                 scrna <- AddModuleScore(object = scrna, features = list(geneIds), name = nm, assay="RNA")
+                 scrna@meta.data[, nm] <- scrna@meta.data[, paste0(nm, 1)]
+                 scrna@meta.data[, paste0(nm, 1)] <- NULL
+             }
+             scrna@tools$genesets <- names(subGmt)
+           },
+           error=function(cond) {
+             ret_code <<- -1
+             logger.error(cond)
+             logger.error(traceback())
+           },
+           finally={
+             return(list(scrna, ret_code))
+           })
+  return(list(scrna, ret_code))
+}
 
 generate_scrna_progeny <- function(scrna){
   ret_code = 0
@@ -1835,6 +1877,15 @@ generate_scrna_progeny <- function(scrna){
   pws <- rownames(scrna@assays$progeny)
   res <- list()
   Idents(scrna) <- DEFUALT_CLUSTER_NAME
+  if (is.factor(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
+    scrna@meta.data[, DEFUALT_CLUSTER_NAME] <- droplevels(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
+  }else{
+    c_names <-unique(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
+    help_sort_func <- ifelse(all.is.numeric(c_names), as.numeric, function(x){x})
+    scrna@meta.data[, DEFUALT_CLUSTER_NAME] <- factor(scrna@meta.data[, DEFUALT_CLUSTER_NAME],
+                                                      levels=sort(help_sort_func(c_names)))
+  }
+
   for(i in levels(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
     g <- as.character(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
     g[!(g==i)] <- "others"
@@ -1884,6 +1935,15 @@ generate_scrna_progeny_stage <- function(scrna){
   for (i in 1:n){
     lst[[i]] <- m[1:2, i]
   }
+  if (is.factor(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
+    scrna@meta.data[, DEFUALT_CLUSTER_NAME] <- droplevels(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
+  }else{
+    c_names <-unique(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
+    help_sort_func <- ifelse(all.is.numeric(c_names), as.numeric, function(x){x})
+    scrna@meta.data[, DEFUALT_CLUSTER_NAME] <- factor(scrna@meta.data[, DEFUALT_CLUSTER_NAME],
+                                                      levels=sort(help_sort_func(c_names)))
+  }
+
   pws <- rownames(scrna@assays$progeny)
   vs_df_list <- list()
   for(apair in lst){
@@ -2019,6 +2079,9 @@ get_go_up <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
@@ -2066,6 +2129,9 @@ get_go_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))
@@ -2119,6 +2185,9 @@ get_kegg_up <- function(de.list){
 
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
@@ -2177,6 +2246,9 @@ get_kegg_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))
@@ -2238,6 +2310,9 @@ get_reactome_up <- function(de.list){
 
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
@@ -2291,6 +2366,9 @@ get_reactome_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))
@@ -2349,6 +2427,9 @@ get_hallmark_up <- function(de.list){
 
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC > 0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id,  date()))
@@ -2410,6 +2491,9 @@ get_hallmark_down <- function(de.list){
   }
   for (id in sort(help_sort_func(names(de.list)))) {
     id <- as.character(id)
+    if("avg_logFC" %in% names(de.list[[id]])){ ## compatible for seurat3
+        de.list[[id]]$avg_log2FC <- de.list[[id]]$avg_logFC/log(2)
+    }
     genes = de.list[[id]]$gene[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     pvals = de.list[[id]]$p_val_adj[de.list[[id]]$avg_log2FC < -0.36 & de.list[[id]]$p_val_adj < 0.05]
     logger.info(paste("cluster: ", id, date()))

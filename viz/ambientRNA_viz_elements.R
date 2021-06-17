@@ -51,4 +51,3 @@ stSample <- meta %>%
     ambientRNA.Harmony.Median=median(AmbientRNA_Harmony)
   )
 saveRDS(stSample,file.path(report_tables_folder,"ambientRNA_postfilter.RDS"))
-

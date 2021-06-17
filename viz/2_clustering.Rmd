@@ -9,7 +9,9 @@ output:
     toc: yes
     toc_depth: '3'
 params:
+    scrna: 'scrna object'
     cluster: "clusters to analyse"
+    cluster_info: "cluster info"
     project: "name/tag of the project"
     savedir: "directory where rds files were saved"
     funcs: "analysis steps to be performed"
@@ -31,7 +33,7 @@ library(dplyr)
 library(kableExtra)
 ```
 
-## Cluster: `r colorize(params$cluster,"red")`
+## Cluster: `r colorize(params$cluster_info,"red")`
 
 ### Clusters
 ```{r umap_groupby_name, out.width="100%", echo=FALSE}

@@ -25,8 +25,7 @@ proj_name="$1"
 # the way it is set up below -o for output will also save your report
 # on that same directory path
 data_path="/data/EXAMPLE/exp/scRNA/some_project/scrna_seurat_pipeline_results"
-#data_path="/home/sz753404/data/test/pipelines/scrna_seurat_pipeline_unify"
-
+data_path=`pwd`
 #cluster="removed_clusters"
 #cluster="remove_recluster"
 #cluster="merged_clusters"
@@ -45,15 +44,18 @@ FUNCS=(
  Clusters_seurat
  EXT_MARKERS
  DEGO
+ Genesets
  progeny
  hallmark
  KEGG
  Reactome
+ Genesets_stage
  progeny_stage
  DEGO_stage
  hallmark_stage
  reactome_stage
  kegg_stage
+ Genesets_1v1
  DEGO_1v1
  hallmark_1v1
  reactome_1v1

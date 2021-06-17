@@ -9,7 +9,9 @@ output:
     toc: yes
     toc_depth: '3'
 params:
+    scrna: 'scrna object'
     cluster: "clusters to analyse"
+    cluster_info: "cluster info"
     project: "name/tag of the project"
     savedir: "directory where rds files were saved"
     funcs: "analysis steps to be performed"
@@ -24,24 +26,24 @@ author: '`r params$author`'
 
 ```{r Marker_genes, echo=FALSE, warning=FALSE, message=FALSE, results='hide' }
 #use former data coz the DE analysis takes too much time.
-library(ggplot2)
-library(gridExtra)
-library(cowplot)
-library(dplyr)
-library(openxlsx)
-library(WriteXLS)
-library(stringr)
-library(digest)
-library(plotly)
-library(Seurat)
-library(Hmisc)
-library(EnhancedVolcano)
-library(ComplexHeatmap)
-library(glue)
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(gridExtra))
+suppressPackageStartupMessages(library(cowplot))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(openxlsx))
+suppressPackageStartupMessages(library(WriteXLS))
+suppressPackageStartupMessages(library(stringr))
+suppressPackageStartupMessages(library(digest))
+suppressPackageStartupMessages(library(plotly))
+suppressPackageStartupMessages(library(Seurat))
+suppressPackageStartupMessages(library(Hmisc))
+suppressPackageStartupMessages(library(EnhancedVolcano))
+suppressPackageStartupMessages(library(ComplexHeatmap))
+suppressPackageStartupMessages(library(glue))
 `%ni%` <- Negate(`%in%`)
 
 
-scrna <- readRDS(file.path(params$savedir, "scrna_phase_comparing.Rds"))
+
 
 cluster_use <- params$cluster
 progeny_cond_stage <-paste0("progeny_stage_", cluster_use)
@@ -59,6 +61,10 @@ maxr <- max(sapply(all_progeny_list, function(x) max(x$r)))
 
 ## {{tX}} vs {{tY}}  PROGENy
 
+
+
+$***:\quad \text{pval}<0.001\\\\**:\quad \text{pval}<0.01\\\\*:\quad \text{pval}<0.05\\\\\text{ns}:\quad\text{ not significant}$
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=9, fig.height=7}
 a_vs <- "{{tX}}.vs.{{tY}}"
 progeny_df <- all_progeny_list[[a_vs]]
@@ -67,18 +73,32 @@ progeny_df$CellType <- factor(progeny_df$CellType,
                               levels= as.character(sort(unique(help_sort_func(progeny_df$CellType)))))
 
 
+
 p <- ggplot(progeny_df, aes(y=pathway,x=CellType,fill=r))+
         geom_tile()+
-        #geom_text(aes(y=pathway, x=CellType, label=tag),
-        #    position = position_dodge(width = 0),
-        #    hjust = 0.5, size = 7)+
+        geom_text(aes(y=pathway, x=CellType, label=tag),
+            position = position_dodge(width = 0),
+            hjust = 0.5, size = 7)+
         ggtitle(glue("{a_vs} r effect size")) +
-        scale_fill_distiller(palette ="RdBu", direction = -1) +
         scale_fill_gradient2(low="blue", mid="white",high="red", limits = range(minr, maxr)) +
         theme_minimal()+
         theme(strip.text.x = element_text(size=28, colour="black",hjust=0),
             plot.caption = element_text(size=30, colour="black", hjust=0),
             axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 print(p)
+
+p <- ggplot(progeny_df, aes(y=pathway,x=CellType,fill=r))+
+        geom_tile()+
+        #geom_text(aes(y=pathway, x=CellType, label=tag),
+        #    position = position_dodge(width = 0),
+        #    hjust = 0.5, size = 7)+
+        ggtitle(glue("{a_vs} r effect size")) +
+        scale_fill_gradient2(low="blue", mid="white",high="red", limits = range(minr, maxr)) +
+        theme_minimal()+
+        theme(strip.text.x = element_text(size=28, colour="black",hjust=0),
+            plot.caption = element_text(size=30, colour="black", hjust=0),
+            axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+print(p)
+
 ```
 {% endfor %}
