@@ -530,6 +530,8 @@ generate_scrna_ambient_rna_soupx <- function(scrna){
 
               # We generate the sc object
               sc <- SoupChannel(toc = toc, tod = tod)
+	      sc_clusters <- as.character(scrna.subset$seurat_clusters)
+	      names(sc_clusters) <- names(scrna.subset$seurat_clusters)
               sc <- setClusters(sc, scrna.subset$seurat_clusters)
               sc <- autoEstCont(sc, doPlot = FALSE, maxMarkers = 75)
               return(sc)
