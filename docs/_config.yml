@@ -9,15 +9,15 @@ collections:
     permalink: /:path/
 
 # Title
-name: Costalab: Single Cell Pipeline Documentation
+name: Single Cell Pipeline Documentation
 subtitle: This page is dedicated to store all all features used in the single cell pipeline protocol used in ICG - CostaLab
 
 # When using this template with a project page set the baseurl to '/project-name'
 # For user/organization pages set this to an empty string
 # When working locally use jekyll serve --baseurl '' so that you can view everything at localhost:4000
 # See http://jekyllrb.com/docs/github-pages/ for more info
-#baseurl: ''
-baseurl: '/scrna_seurat_pipeline/docs'
+baseurl: ''
+#baseurl: '/scrna_seurat_pipeline/docs'
 
 # Author/Organization info to be displayed in the templates
 author:
