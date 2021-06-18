@@ -17,7 +17,7 @@ subtitle: This page is dedicated to store all all features used in the single ce
 # When working locally use jekyll serve --baseurl '' so that you can view everything at localhost:4000
 # See http://jekyllrb.com/docs/github-pages/ for more info
 #baseurl: ''
-baseurl: '/docs'
+baseurl: '/scrna_seurat_pipeline/docs'
 
 # Author/Organization info to be displayed in the templates
 author:
