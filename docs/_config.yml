@@ -16,7 +16,7 @@ subtitle: This page is dedicated to store all all features used in the single ce
 # For user/organization pages set this to an empty string
 # When working locally use jekyll serve --baseurl '' so that you can view everything at localhost:4000
 # See http://jekyllrb.com/docs/github-pages/ for more info
-baseurl: '/scrna_seurat_pipeline/docs'
+baseurl: '/scrna_seurat_pipeline/'
 #baseurl: '/scrna_seurat_pipeline/docs'
 
 # Author/Organization info to be displayed in the templates
@@ -54,5 +54,3 @@ brand_color: "#2cb34a"
 # Offline caching
 offline_cache: false
 cache_name: DOCter-v1.1
-
-theme: jekyll-theme-cayman
