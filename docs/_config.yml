@@ -21,8 +21,8 @@ baseurl: '/scrna_seurat_pipeline/'
 
 # Author/Organization info to be displayed in the templates
 author:
-  name: Name
-  url: http://localhost:4000
+  name: CostaLab
+  url: https://www.costalab.org/
 
 # Point the logo URL at a file in your repo or hosted elsewhere by your organization
 logourl:
@@ -30,12 +30,15 @@ logoalt:
 
 # Navigation
 # List links that should appear in the site sidebar here
-navigation:
+navigation: ## To add new pages insert here and create a markdown in _pages folder
 - text: Home
   url: ./
   internal: true
 - text: Example Page
   url: example_page/
+  internal: true
+- text: Preprocessing Step ##Example
+  url: Pre-processing/
   internal: true
 - text: DOCter Repo
   url: https://github.com/cfpb/DOCter
