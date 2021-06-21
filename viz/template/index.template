@@ -171,8 +171,10 @@
 
 {% if intersect(viz_dict['DEGOsampleVS'], executing_list) %}
 ## {{count}}. Differential Expression & GO analysis(between samples)
- - [DE&GO](data/1vs1.html)
-
+ - DE&GO pages
+    {% for x, y in list_1v1 %}
+	- [{{x}}.vs.{{y}}](data/1vs1_{{requote_uri(x)}}.vs.{{requote_uri(y)}}.html )
+    {% endfor %}
  - DE FILES
     {% for x, y in list_1v1 %}
 	- [DE {{x}}.vs.{{y}}.xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.de_{{cluster_use}}.xlsx )
