@@ -56,7 +56,7 @@ save_ggplot_formats = function(
         }
       }else
         if(fmt == "png"){
-          png(filename=f_path_fmt,units = units,width = width,height = height)
+          png(filename=f_path_fmt,units = units,width = width,height = height, type=type)
           draw(plt, ...)
           dev.off()
         }else{

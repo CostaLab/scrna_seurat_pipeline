@@ -17,6 +17,7 @@ DEGO_1v1_elements <- function(scrna){
     tY = apair[2]
     a_vs <- glue("{tX}.vs.{tY}")
 
+    message(sprintf("vs %s %s", tX, tY))
     de.list <- all_de_list[[a_vs]]
     de.list <- lapply(de.list, subset, subset = p_val_adj < 0.05)
     plots <- list()
@@ -194,7 +195,6 @@ DEGO_1v1_elements <- function(scrna){
       if(nrow(cluster.de.top10[[i]]) == 0) {
         next
       }
-      print(sprintf("Cluster %s", i))
       plt<- FeaturePlot(scrna, features = cluster.de.top10[[i]]$gene,
                        cols = c("lightgrey", "red"),
                        reduction = "DEFAULT_UMAP")
