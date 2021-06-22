@@ -118,26 +118,30 @@ def generate_md_idx(out):
 #endf generate_md_idx
 
 
-def generate_report_stagesVS(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-stagesVS.template"))
+
+
+
+def generate_report_stagesVS(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-vs.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
 
     t = Template(tmpl)
-    r = t.render(
-        TODAY=today,
-        CC=cc,
-        savedir=savedir,
-        lst_stages=lst_stages
-    )
-    fw = open(out, "w")
-    fw.write("%s\n\n" % r)
+    for x, y in lst_stages:
+        r = t.render(
+            tX = x,
+            tY = y,
+            group="Stages"
+        )
+        fw = open(f"{viz_path}/4_DE_GO_{x}.vs.{y}_stageVS.Rmd", "w")
+        fw.write("%s\n\n" % r)
+        fw.close()
+    #end for
 #endf generate_groupVS
 
 
 def generate_report_1v1(viz_path):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-1v1.template"))
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-vs.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
 
@@ -145,7 +149,8 @@ def generate_report_1v1(viz_path):
     for x, y in lst_1v1:
         r = t.render(
             tX = x,
-            tY = y
+            tY = y,
+            group="Samples"
         )
         fw = open(f"{viz_path}/4_DE_GO_{x}.vs.{y}_1v1.Rmd", "w")
         fw.write("%s\n\n" % r)
@@ -321,11 +326,11 @@ def main():
     out_dir = args.output_dir
     viz_dir = os.path.dirname(__file__)
     generate_report_1v1(viz_dir)
+    generate_report_stagesVS(viz_dir)
     generate_report_1v1_Genesets(os.path.join(viz_dir,"Genesets-1v1.Rmd"))
     generate_report_1v1_hallmark(os.path.join(viz_dir,"hallmark-1v1.Rmd"))
     generate_report_1v1_reactome(os.path.join(viz_dir,"reactome-1v1.Rmd"))
     generate_report_1v1_kegg(os.path.join(viz_dir,"kegg-1v1.Rmd"))
-    generate_report_stagesVS(os.path.join(viz_dir,"DE-GO-analysis-stagesVS.Rmd"))
     generate_report_stageVS_hallmark(os.path.join(viz_dir,"hallmark-stageVS.Rmd"))
     generate_report_stageVS_reactome(os.path.join(viz_dir,"reactome-stageVS.Rmd"))
     generate_report_stageVS_kegg(os.path.join(viz_dir,"kegg-stageVS.Rmd"))

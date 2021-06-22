@@ -550,6 +550,7 @@ if (MAKE_ELEMENT == "TRUE"){
   source(glue("{viz_path}/3_external_markers_elements.R"))
   source(glue("{viz_path}/3_DE_GO-analysis_elements.R"))
   source(glue("{viz_path}/4_DE_GO_1v1_elements.R"))
+  source(glue("{viz_path}/4_DE_GO_stageVS_elements.R"))
 
 # run necessary generators
   if("QC" %in% EXEC_PLAN) {
@@ -591,6 +592,11 @@ if (MAKE_ELEMENT == "TRUE"){
     cat(paste(date(), green(" Element: "), red("DEGO_1v1"), "\n"))
     DEGO_1v1_elements(scrna)
   }
+  if("DEGO_stage" %in% EXEC_PLAN){
+    cat(paste(date(), green(" Element: "), red("DEGO_stage"), "\n"))
+    DEGO_stageVS_elements(scrna)
+  }
+
 }
 
 cluster_info <-  build_cluster_info(scrna)
@@ -635,9 +641,9 @@ dic_Rmd_n_Output <- list(
         "Genesets"            =     c(glue("{viz_path}/3_Genesets.Rmd"),              "Genesets"),
         "hallmark"            =     c(glue("{viz_path}/3_hallmark.Rmd"),              "hallmark"),
         "Reactome"            =     c(glue("{viz_path}/3_Reactome.Rmd"),              "Reactome"),
-        "DEGO_stage"          =     c(glue("{viz_path}/DE-GO-analysis-stagesVS.Rmd"), "gv"),
+        "DEGO_stage"          =     c(glue("{viz_path}/4_DE_GO_%s.vs.%s_stageVS.Rmd"),"gv"),
+        "DEGO_1v1"            =     c(glue("{viz_path}/4_DE_GO_%s.vs.%s_1v1.Rmd"),    "1vs1"),
         "Genesets_1v1"        =     c(glue("{viz_path}/Genesets-1v1.Rmd"),            "Genesets_1vs1"),
-        "DEGO_1v1"            =     c(glue("{viz_path}/4_DE_GO_%s.vs.%s_1v1.Rmd"),        "1vs1"),
         "hallmark_1v1"        =     c(glue("{viz_path}/hallmark-1v1.Rmd"),            "hallmark_1vs1"),
         "reactome_1v1"        =     c(glue("{viz_path}/reactome-1v1.Rmd"),            "reactome_1vs1"),
         "kegg_1v1"            =     c(glue("{viz_path}/kegg-1v1.Rmd"),                "kegg_1vs1"),
@@ -661,12 +667,16 @@ for(i in EXEC_PLAN){
   rmd_n_output <- dic_Rmd_n_Output[[i]]
   rmd <- rmd_n_output[1]
   output <- rmd_n_output[2]
-  if(output != "1vs1"){
-    render_func(rmd, output)
-  }else{
+  if(output == "1vs1"){
     for(apair in comb_list(names(data_src))){
-      render_func(sprintf(rmd, apair[1], apair[2]), glue("{output}_{apair[1]}.vs.{apair[2]}"))
+      render_func(sprintf(rmd, apair[1], apair[2]), glue("{output}_{apair[1]}.vs.{apair[2]}.html"))
     }
+  }else if(output == "gv"){
+    for(apair in comb_list(unique(stage_lst))){
+      render_func(sprintf(rmd, apair[1], apair[2]), glue("{output}_{apair[1]}.vs.{apair[2]}.html"))
+    }
+  }else{
+    render_func(rmd, output)
   }
 
 }

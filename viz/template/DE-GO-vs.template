@@ -1,5 +1,5 @@
 ---
-title: "Between Samples DE & GO analysis"
+title: "Between {{group}} DE & GO analysis"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:

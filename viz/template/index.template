@@ -104,7 +104,11 @@
 
 {% if intersect(viz_dict['DEGOstageVS'], executing_list) %}
 ## {{count}}. Differential Expression & GO analysis(between groups)
- - [DE&GO](data/gv.html)
+ - DE&GO pages
+    {% for x, y in list_stages %}
+	- [{{x}}.vs.{{y}}](data/gv_{{requote_uri(x)}}.vs.{{requote_uri(y)}}.html )
+    {% endfor %}
+
  - DE FILES
     {% for x, y in list_stages %}
    - [DE {{x}}.vs.{{y}}.xlsx](data/{{requote_uri(x)}}.vs.{{requote_uri(y)}}.de_{{cluster_use}}.xlsx )
