@@ -144,8 +144,8 @@ viz_conf = list(
                 # "nejm":8 "npg":10 "rickandmorty":12 "simpsons":16 "startrek":7
                 # "tron":7 "uchicago":9 "ucscgb":26
 
-  cluster_color_option = "d3", ## ggsci, see above
-  replicate_color_option = "futurama", ## ggsci, see above
+  cluster_color_option = "igv", ## ggsci, see above
+  replicate_color_option = "simpsons", ## ggsci, see above
   neg_color = "#51C3CC",#colorBlindness::Blue2DarkOrange12Steps[2],
   pos_color = "#CC5800",#rev(colorBlindness::Blue2DarkOrange12Steps)[2],
   base_color = "lightgrey",#"lightgrey",
