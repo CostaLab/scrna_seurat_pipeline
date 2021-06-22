@@ -98,47 +98,6 @@ savedir = args.save_dir
 #         cluster_use = value
 #         print("cluster use:", cluster_use)
 
-def generate_1v1(out):
-
-    fw = open(out, 'w')
-
-
-    thead = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),"template/head.template"))
-    tmplth = thead.read()
-    t = Template(tmplth)
-    today = datetime.date.today().strftime("%d%B%Y")
-    head = t.render(today = today,
-                    svdir = savedir)
-
-    fw.write("%s\n" %head)
-
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-1v1.template"))
-    tmpltr = tfile.read()
-    for x,y in lst_1v1:
-        vs = "%s vs %s" % (x, y)
-        fde =  "%s.vs.%s.de.Rdata" % (x, y)
-        fgoup = "%s.vs.%s.goup.Rdata" % (x, y)
-        fgodown = "%s.vs.%s.godown.Rdata" % (x, y)
-        xlsup = "Go.UP.%s.vs.%s.xlsx" % (x, y)
-        xlsdown = "Go.Down.%s.vs.%s.xlsx" % (x, y)
-
-        t = Template(tmpltr)
-
-        one_plots = t.render(Versus= vs,
-                             de_file= fde,
-                             goup_file= fgoup,
-                             goup_xlsx= xlsup,
-                             godown_file= fgodown,
-                             godown_xlsx= xlsdown,
-                             tX = x,
-                             tY = y)
-
-
-        fw.write("%s\n" %one_plots)
-
-#endf generate_1v1
-
-
 
 def generate_md_idx(out):
     tfile = open(os.path.join(os.path.dirname(__file__),"template/index.template"))
@@ -159,39 +118,44 @@ def generate_md_idx(out):
 #endf generate_md_idx
 
 
-def generate_report_stagesVS(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-stagesVS.template"))
+
+
+
+def generate_report_stagesVS(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-vs.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
 
     t = Template(tmpl)
-    r = t.render(
-        TODAY=today,
-        CC=cc,
-        savedir=savedir,
-        lst_stages=lst_stages
-    )
-    fw = open(out, "w")
-    fw.write("%s\n\n" % r)
+    for x, y in lst_stages:
+        r = t.render(
+            tX = x,
+            tY = y,
+            group="Stages"
+        )
+        fw = open(f"{viz_path}/4_DE_GO_{x}.vs.{y}_stageVS.Rmd", "w")
+        fw.write("%s\n\n" % r)
+        fw.close()
+    #end for
 #endf generate_groupVS
 
 
-def generate_report_1v1(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-1v1.template"))
+def generate_report_1v1(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-vs.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
 
     t = Template(tmpl)
-    r = t.render(
-        TODAY=today,
-        CC=cc,
-        savedir=savedir,
-        lst_1v1=lst_1v1
-    )
-    fw = open(out, "w")
-    fw.write("%s\n\n" % r)
+    for x, y in lst_1v1:
+        r = t.render(
+            tX = x,
+            tY = y,
+            group="Samples"
+        )
+        fw = open(f"{viz_path}/4_DE_GO_{x}.vs.{y}_1v1.Rmd", "w")
+        fw.write("%s\n\n" % r)
+        fw.close()
+    #end for
 #endf generate_groupVS
 
 
@@ -361,12 +325,12 @@ def main():
 
     out_dir = args.output_dir
     viz_dir = os.path.dirname(__file__)
-    generate_report_1v1(os.path.join(viz_dir, "DE-GO-analysis-1v1.Rmd"))
+    generate_report_1v1(viz_dir)
+    generate_report_stagesVS(viz_dir)
     generate_report_1v1_Genesets(os.path.join(viz_dir,"Genesets-1v1.Rmd"))
     generate_report_1v1_hallmark(os.path.join(viz_dir,"hallmark-1v1.Rmd"))
     generate_report_1v1_reactome(os.path.join(viz_dir,"reactome-1v1.Rmd"))
     generate_report_1v1_kegg(os.path.join(viz_dir,"kegg-1v1.Rmd"))
-    generate_report_stagesVS(os.path.join(viz_dir,"DE-GO-analysis-stagesVS.Rmd"))
     generate_report_stageVS_hallmark(os.path.join(viz_dir,"hallmark-stageVS.Rmd"))
     generate_report_stageVS_reactome(os.path.join(viz_dir,"reactome-stageVS.Rmd"))
     generate_report_stageVS_kegg(os.path.join(viz_dir,"kegg-stageVS.Rmd"))

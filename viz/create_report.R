@@ -1,7 +1,6 @@
 #!/usr/bin/Rscript
 
 suppressPackageStartupMessages(library(optparse))      ## Options
-suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(crayon))
 suppressPackageStartupMessages(library(glue))
 suppressPackageStartupMessages(library(Hmisc))
@@ -21,6 +20,11 @@ suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(ggridges))
 suppressPackageStartupMessages(library(reshape2))
 suppressPackageStartupMessages(library(ggsci))
+suppressPackageStartupMessages(library(gridExtra))
+suppressPackageStartupMessages(library(WriteXLS))
+suppressPackageStartupMessages(library(digest))
+suppressPackageStartupMessages(library(plotly))
+suppressPackageStartupMessages(library(DOSE))
 
 
 `%ni%` <- Negate(`%in%`)
@@ -34,6 +38,7 @@ save_ggplot_formats = function(
   plt, base_plot_dir, plt_name, create_plot_subdir=TRUE,
   formats=c("png","pdf"), units="in", width=20, height=20,
   type="cairo",
+  plot_obj="ggplot",
   ...
 ){
   # if theres a plot and basedir
@@ -43,12 +48,22 @@ save_ggplot_formats = function(
       f_path_fmt = file.path(base_plot_dir,paste0(plt_name,".",fmt))
       if(create_plot_subdir) dir.create(file.path(base_plot_dir,fmt),recursive=TRUE,showWarnings=FALSE)
       if(dir.exists(file.path(base_plot_dir,fmt))) f_path_fmt = file.path(base_plot_dir,fmt,paste0(plt_name,".",fmt))
-      if(fmt == "png"){
-        ggplot2::ggsave(filename=f_path_fmt,plot = plt,device = fmt,units = units,width = width,height = height,type=type,...)
-      }else{
-        ggplot2::ggsave(filename=f_path_fmt,plot = plt,device = fmt,units = units,width = width,height = height,...)
-      }
-
+      if(plot_obj == "ggplot"){
+        if(fmt == "png"){
+          ggplot2::ggsave(filename=f_path_fmt,plot = plt,device = fmt,units = units,width = width,height = height,type=type,...)
+        }else{
+          ggplot2::ggsave(filename=f_path_fmt,plot = plt,device = fmt,units = units,width = width,height = height,...)
+        }
+      }else
+        if(fmt == "png"){
+          png(filename=f_path_fmt,units = units,width = width,height = height, type=type)
+          draw(plt, ...)
+          dev.off()
+        }else{
+          pdf(file=f_path_fmt, width = width,height = height)
+          draw(plt, ...)
+          dev.off()
+        }
     }
   }
 }
@@ -137,6 +152,148 @@ BarPlot <- function(x, fill, xlab = NULL, ylab = "Cells", legend.title = NULL,
     }
     return(p)
 }
+
+is_contigous_true_df <- function(is_sigs){
+  ret_df <- data.frame(keep=FALSE, avgIdx=-1)
+  if(any(is_sigs) & table(is_sigs)['TRUE'] == 1){
+        ret_df$keep=TRUE
+        ret_df$avgIdx = which(is_sigs == TRUE)
+        return(ret_df)
+  }
+  return(ret_df)
+}
+
+pw_bar_plots <- function(pw_list){
+  term_plot_list = lapply(
+                          pw_list,
+                          function(x){
+                            df = x@result
+                            if (is.list(df) && length(df)==0){
+                              log_m = as.data.frame(list())
+                              return(log_m)
+                            }
+                            log_m = as.data.frame(-log10(df$p.adjust))
+                            log_m$names = as.factor(sapply(df$Description, function(y){
+                                                             y <- as.character(trimws(y))
+                                                             return(y) }))
+                            log_m$show_names = as.factor(sapply(df$Description, function(y){
+                                                                  y <- as.character(trimws(y))
+                                                                  y <- ifelse(nchar(y)<=33,  y, paste0(substr(y, 1, 30), "..."))
+                                                                  return(y) }))
+                            log_m <- log_m[order(log_m[,1],decreasing = TRUE),]
+                            showCatetermry = min(length(log_m[,1]), 10)
+                            log_m <- log_m[1:showCatetermry, ]
+                            log_m <- log_m[order(log_m[,1],decreasing = FALSE),]
+                            return(log_m)
+                          }
+  )
+
+  ### direction genes plot
+  plots <- lapply(
+                  seq_along(term_plot_list),
+                  function(y, i) {
+                    col <- y[[i]]
+                    if(length(col) == 0)
+                      return(NULL)
+                    ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) +
+                      #ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) +
+                      geom_bar(stat="identity", fill="#3399CC", color="grey50") +
+                      ggtitle(paste(names(y)[i])) +
+                      theme_minimal() +
+                      theme(axis.text.y  = element_text(size=20), axis.title.y=element_blank(),axis.ticks.y=element_blank()) +
+                      labs(y = "") +
+                      scale_y_continuous(name="-log10(p-value)") +
+                      scale_x_discrete(breaks = col[,2], labels = col[,3]) +
+                      coord_flip()
+                  },
+                  y=term_plot_list
+  )
+  plots <-Filter(Negate(is.null), plots)
+  return(plots)
+}
+
+
+
+pw_mtx_create <- function(df_list){
+  union_TermID <- Reduce(union, lapply(df_list, function(x) x$ID))
+
+  union_df <- do.call(rbind, df_list)
+  union_df$GeneRatio <- 0
+  union_df$BgRatio <- 0
+  union_df$pvalue <- 1
+  union_df$p.adjust <- 1
+  union_df$qvalue <- 1
+  union_df$geneID <- ""
+  union_df$Count <- 0
+
+  union_df <- union_df[!duplicated(union_df$ID), ]
+  rownames(union_df) <- union_df$ID
+  for(x in 1:length(df_list)){
+    rest_ids <- setdiff(rownames(union_df), rownames(df_list[[x]]))
+    df_list[[x]] <- rbind(df_list[[x]], union_df[rest_ids, ])
+  }
+  #rest_ids[1:10]
+  filtered_term <- c()
+
+  avgIdx <- list()
+  for(TermID in  union_TermID){
+    is_sigs <- sapply(df_list, function(x)x[x$ID==TermID,]$p.adjust < 0.05)
+    is_true_df <- is_contigous_true_df(is_sigs)
+    if(is_true_df$keep){
+      filtered_term <- c(filtered_term, TermID)
+      avgIdx[[ union_df[union_df$ID==TermID,]$Description ]] <- is_true_df$avgIdx
+    }
+
+  }
+  if(length(filtered_term) > 5){
+    df_list <- lapply(df_list, function(x) x %>% filter(ID %in% filtered_term) )
+
+    nms <- names(df_list)
+    df_list <- lapply(names(df_list), function(x) df_list[[x]] %>% mutate(name=x))
+    names(df_list) <- nms
+
+    df_list_select <- lapply(1:length(df_list), function(x) df_list[[x]] %>%
+                             filter(p.adjust < 0.05) %>%
+                             top_n(wt=-log10(p.adjust), n=5) %>%
+                             arrange(+log10(p.adjust)))
+    df_list_select <- lapply(df_list_select, function(x)x[1:min(5, nrow(x)), ])
+
+    all_names <- as.vector(unlist(sapply(1:length(df_list_select), function(x) (df_list_select[[x]]$ID))))
+    pdf_list <- lapply(1:length(df_list), function(x) subset(df_list[[x]], ID %in%all_names))
+    mdf <- do.call(rbind, pdf_list)
+    pmdf <- mdf[, c("Description", "name", "p.adjust")]
+    pmdf$name <- factor(pmdf$name, levels=names(df_list))
+
+    pmtx <- reshape2::dcast(pmdf,  Description ~ name, value.var = "p.adjust")
+
+    rownames(pmtx) <- pmtx$Description
+    pmtx$Description <- NULL
+    help_mtx <- pmtx
+    help_mtx[help_mtx >= 0.05] = 1000
+    help_mtx[help_mtx < 0.05] = 1
+    help_mtx <- help_mtx[do.call(order, help_mtx),]
+    #matrix_list[[pw]] <- pmtx[rownames(help_mtx), ]
+    pmtx <- -log10(pmtx)
+    pmtx[pmtx>2] = 2
+    pmtx <- pmtx[rownames(help_mtx), ]
+    ret_mtx <- as.matrix(pmtx)[order(unlist(avgIdx[rownames(help_mtx)])), ]
+    return(ret_mtx)
+  }
+}
+
+
+comb_list <- function(nm){
+  m <- combn(nm, 2)
+  n <- length(m)/2
+  lst <- vector("list", n)
+
+  for (i in 1:n){
+    lst[[i]] <- m[1:2, i]
+  }
+  return(lst)
+}
+
+
 colorize <- function(x, color) {
   if (knitr::is_latex_output()) {
     sprintf("\\textcolor{%s}{%s}", color, x)
@@ -212,7 +369,7 @@ AllOptions <- function(){
   parser <- add_option(parser, c("-d", "--defaultclsuters"), type="character", default="seurat_clusters",
                        help="cluster slots: \nremoved_clusters\nremove_reclusters\nmerged_clusters\nannotation\nsingleton [default %default]",
                        metavar="character")
-  parser <- add_option(parser, c("-j", "--planOfreport"), type="character", default="c()",
+  parser <- add_option(parser, c("-j", "--planOfreport"), type="character", default="[\"DEGO_1v1\"]",
                        help="plan of report [default %default]",
                        metavar="character")
   parser <- add_option(parser, c("-l", "--singlefile"), type="character", default="FALSE",
@@ -392,6 +549,8 @@ if (MAKE_ELEMENT == "TRUE"){
   source(glue("{viz_path}/2_clusters_DEs_elements.R"))
   source(glue("{viz_path}/3_external_markers_elements.R"))
   source(glue("{viz_path}/3_DE_GO-analysis_elements.R"))
+  source(glue("{viz_path}/4_DE_GO_1v1_elements.R"))
+  source(glue("{viz_path}/4_DE_GO_stageVS_elements.R"))
 
 # run necessary generators
   if("QC" %in% EXEC_PLAN) {
@@ -429,6 +588,15 @@ if (MAKE_ELEMENT == "TRUE"){
     cat(paste(date(), green(" Element: "), red("DEGO"), "\n"))
     DE_GO_analysis_elements(scrna)
   }
+  if("DEGO_1v1" %in% EXEC_PLAN){
+    cat(paste(date(), green(" Element: "), red("DEGO_1v1"), "\n"))
+    DEGO_1v1_elements(scrna)
+  }
+  if("DEGO_stage" %in% EXEC_PLAN){
+    cat(paste(date(), green(" Element: "), red("DEGO_stage"), "\n"))
+    DEGO_stageVS_elements(scrna)
+  }
+
 }
 
 cluster_info <-  build_cluster_info(scrna)
@@ -473,9 +641,9 @@ dic_Rmd_n_Output <- list(
         "Genesets"            =     c(glue("{viz_path}/3_Genesets.Rmd"),              "Genesets"),
         "hallmark"            =     c(glue("{viz_path}/3_hallmark.Rmd"),              "hallmark"),
         "Reactome"            =     c(glue("{viz_path}/3_Reactome.Rmd"),              "Reactome"),
-        "DEGO_stage"          =     c(glue("{viz_path}/DE-GO-analysis-stagesVS.Rmd"), "gv"),
+        "DEGO_stage"          =     c(glue("{viz_path}/4_DE_GO_%s.vs.%s_stageVS.Rmd"),"gv"),
+        "DEGO_1v1"            =     c(glue("{viz_path}/4_DE_GO_%s.vs.%s_1v1.Rmd"),    "1vs1"),
         "Genesets_1v1"        =     c(glue("{viz_path}/Genesets-1v1.Rmd"),            "Genesets_1vs1"),
-        "DEGO_1v1"            =     c(glue("{viz_path}/DE-GO-analysis-1v1.Rmd"),      "1vs1"),
         "hallmark_1v1"        =     c(glue("{viz_path}/hallmark-1v1.Rmd"),            "hallmark_1vs1"),
         "reactome_1v1"        =     c(glue("{viz_path}/reactome-1v1.Rmd"),            "reactome_1vs1"),
         "kegg_1v1"            =     c(glue("{viz_path}/kegg-1v1.Rmd"),                "kegg_1vs1"),
@@ -489,6 +657,7 @@ dic_Rmd_n_Output <- list(
 
 
 
+
 for(i in EXEC_PLAN){
   cat(paste(date(), blue(" Generating: "), red(i), "\n"))
   if(i %ni% names(dic_Rmd_n_Output)){
@@ -498,7 +667,18 @@ for(i in EXEC_PLAN){
   rmd_n_output <- dic_Rmd_n_Output[[i]]
   rmd <- rmd_n_output[1]
   output <- rmd_n_output[2]
-  render_func(rmd, output)
+  if(output == "1vs1"){
+    for(apair in comb_list(names(data_src))){
+      render_func(sprintf(rmd, apair[1], apair[2]), glue("{output}_{apair[1]}.vs.{apair[2]}.html"))
+    }
+  }else if(output == "gv"){
+    for(apair in comb_list(unique(stage_lst))){
+      render_func(sprintf(rmd, apair[1], apair[2]), glue("{output}_{apair[1]}.vs.{apair[2]}.html"))
+    }
+  }else{
+    render_func(rmd, output)
+  }
+
 }
 
 if(GEN_SINGLE_FILE){
