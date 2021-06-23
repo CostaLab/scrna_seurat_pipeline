@@ -40,11 +40,7 @@ navigation: ## To add new pages insert here and create a markdown in _pages fold
 - text: Tutorial
   url: Tutorial/
   internal: true
-- text: Documentation ##Example
-      subfolderitems:
-        - text: Pre-Processing
-          url: Pre-processing/
-          internal: true
+
 
 
 
