@@ -42,7 +42,7 @@ navigation: ## To add new pages insert here and create a markdown in _pages fold
   internal: true
 - text: Documentation ##Example
       subfolderitems:
-        - page: Pre-Processing
+        - text: Pre-Processing
           url: Pre-processing/
           internal: true
 
