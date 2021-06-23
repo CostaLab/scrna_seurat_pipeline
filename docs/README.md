@@ -1,73 +1,100 @@
-# DOCter
+# jekyll-rtd-theme
 
-DOCter is a [Jekyll](http://jekyllrb.com/) template for quickly building out project pages and documentation.
+![CI](https://github.com/rundocs/jekyll-rtd-theme/workflows/CI/badge.svg?branch=develop)
+![jsDelivr](https://data.jsdelivr.com/v1/package/gh/rundocs/jekyll-rtd-theme/badge)
 
-![DOCter Screenshot](https://github.com/ascott1/DOCter/blob/gh-pages/assets/img/screenshot.png?raw=true)
+Just another documentation theme compatible with GitHub Pages
 
-[See the demo](http://cfpb.github.io/DOCter/)
+## What it does?
 
-## To run DOCter locally
+This theme is inspired by [sphinx-rtd-theme](https://github.com/readthedocs/sphinx_rtd_theme) and refactored with:
 
-DOCter needs Jekyll and other dependencies to run locally. These can be installed with Bundler by running the following commands.
+- [@primer/css](https://github.com/primer/css)
+- [github-pages](https://github.com/github/pages-gem) ([dependency versions](https://pages.github.com/versions/))
 
-```
-gem install bundler
-bundle install
-```
+## Quick start
 
-Fork and clone the repo:
-
-```
-git clone git@github.com:cfpb/DOCter.git
-cd DOCter
-```
-Run Jekyll:
-
-```
-bundle exec jekyll serve --watch --baseurl ''
+```yml
+remote_theme: rundocs/jekyll-rtd-theme
 ```
 
-Open it up in your browser: <http://localhost:4000/>
+You can [generate](https://github.com/rundocs/starter-slim/generate) with the same files and folders from [rundocs/starter-slim](https://github.com/rundocs/starter-slim/)
 
+## Usage
 
-## `_config.yml`
+Documentation that can guide how to create with Github pages, please refer to [rundocs.io](https://rundocs.io) for details
 
-Options within the `_config.yml` file allow you to control the site's title, subtitle, logo, author information, and the left column navigation.
+## Features
 
+- Shortcodes (Toasts card, mermaid)
+- Pages Plugins (emoji, gist, avatar, mentions)
+- Auto generate sidebar
+- [Attribute List Definitions](https://kramdown.gettalong.org/syntax.html#attribute-list-definitions) (Primer/css utilities, Font Awesome 4)
+- Service worker (caches)
+- SEO (404, robots.txt, sitemap.xml)
+- Canonical Link (Open Graph, Twitter Card, Schema data)
 
-### Project Page URL Structure
+## Options
 
-**This is an excerpt from the [Jekyll docs](http://jekyllrb.com/docs/github-pages/) on configuring your URL for Project Pages.**
+| name          | default value        | description       |
+| ------------- | -------------------- | ----------------- |
+| `title`       | repo name            |                   |
+| `description` | repo description     |                   |
+| `url`         | user domain or cname |                   |
+| `baseurl`     | repo name            |                   |
+| `lang`        | `en`                 |                   |
+| `direction`   | `auto`               | `ltr` or `rtl`    |
+| `highlighter` | `rouge`              | Cannot be changed |
 
-Sometimes it's nice to preview your Jekyll site before you push your `gh-pages` branch to GitHub. However, the subdirectory-like URL structure GitHub uses for Project Pages complicates the proper resolution of URLs. Here is an approach to utilizing the GitHub Project Page URL structure (`username.github.io/project-name/`) whilst maintaining the ability to preview your Jekyll site locally.
+```yml
+# folders sort
+readme_index:
+  with_frontmatter: true
 
-1. In `_config.yml`, set the `baseurl` option to `/project-name` -- note the leading slash and the **absence** of a trailing slash.
-2. When referencing JS or CSS files, do it like this: `{{ site.baseurl }}/path/to/css.css` -- note the slash immediately following the variable (just before "path").
-3. When doing permalinks or internal links, do it like this: `{{ site.baseurl }}{{ post.url }}` -- note that there is **no** slash between the two variables.
-4. Finally, if you'd like to preview your site before committing/deploying using `jekyll serve`, be sure to pass an **empty string** to the `--baseurl` option, so that you can view everything at `localhost:4000` normally (without `/project-name` at the beginning): `jekyll serve --baseurl ''`
+meta:
+  key1: value1
+  key2: value2
+  .
+  .
+  .
 
-This way, you can preview your site locally from the site root on localhost, but when GitHub generates your pages from the gh-pages branch all the URLs will start with `/project-name` and resolve properly.
+google:
+  gtag:
+  adsense:
 
+mathjax: # this will prased to json, default: {}
 
-## Offline support
+mermaid:
+  custom:     # mermaid link
+  initialize: # this will prased to json, default: {}
 
-DOCter provides optional offline support via a [Service Worker](http://www.html5rocks.com/en/tutorials/service-worker/introduction/). This means that, when enabled, after an initial load of your DOCter site, a cached version will be available offline in some modern browsers.
+scss:   # also _includes/extra/styles.scss
+script: # also _includes/extra/script.js
 
-**To enable offline caching:**
+translate:
+  # shortcodes
+  danger:
+  note:
+  tip:
+  warning:
+  # 404
+  not_found:
+  # copyright
+  revision:
+  # search
+  searching:
+  search:
+  search_docs:
+  search_results:
+  search_results_found: # the "#" in this translate will replaced with results size!
+  search_results_not_found:
 
-in `_config.yml`: set `offline_cache` to `true` (defaults to `false`)
+plugins:
+  - jemoji
+  - jekyll-avatar
+  - jekyll-mentions
+```
 
-**To update the cached version of your site:**
+## The license
 
-in `_config.yml`: change the value of `cache_name` (this should be done with every significant update to the site)
-
-**To add additional files to the cache:**
-
-in `sw.js`: update the `filesToCache` array
-
-
-## License
-
-The project is in the public domain, and all contributions to it will be released as such. By submitting a pull request, you are agreeing to waive all rights to your contribution under the terms of the [CC0 Public Domain Dedication](http://creativecommons.org/publicdomain/zero/1.0/).
-
-If you contribute the open source work of others, please mark it clearly in your pull request.
+The theme is available as open source under the terms of the MIT License

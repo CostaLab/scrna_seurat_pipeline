@@ -1,56 +1,31 @@
-# Base configuration
-exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
-markdown: kramdown
-highlighter: rouge
+title: jekyll-rtd-theme
+description: Just another documentation theme compatible with GitHub Pages
 
-collections:
-  pages:
-    output: true
-    permalink: /:path/
+theme: null
 
-# Title
-name: Single Cell Pipeline Documentation
-subtitle: This page is dedicated to store all features used in the single cell pipeline protocol used in ICG - CostaLab
+# debug:
+#   compress: true
+#   dist: false
+#   shortcodes: true
 
-# When using this template with a project page set the baseurl to '/project-name'
-# For user/organization pages set this to an empty string
-# When working locally use jekyll serve --baseurl '' so that you can view everything at localhost:4000
-# See http://jekyllrb.com/docs/github-pages/ for more info
-baseurl: '/scrna_seurat_pipeline/'
-#baseurl: '/scrna_seurat_pipeline/docs'
+readme_index:
+  with_frontmatter: true
 
-# Author/Organization info to be displayed in the templates
-author:
-  name: CostaLab
-  url: https://www.costalab.org/
+plugins:
+  - jemoji
+  - jekyll-avatar
+  - jekyll-mentions
 
-# Point the logo URL at a file in your repo or hosted elsewhere by your organization
-logourl:
-logoalt:
-
-# Navigation
-# List links that should appear in the site sidebar here
-navigation: ## To add new pages insert here and create a markdown in _pages folder
-- text: Home
-  url: ./
-  internal: true
-- text: About me
-  url: About/
-  internal: true
-- text: Tutorial
-  url: Tutorial/
-  internal: true
-
-
-
-
-- text: DOCter Repo
-  url: https://github.com/cfpb/DOCter
-  internal: false
-
-# Style Variables
-brand_color: "#2cb34a"
-
-# Offline caching
-offline_cache: false
-cache_name: DOCter-v1.1
+exclude:
+  - Makefile
+  - CNAME
+  - LICENSE
+  - update.sh
+  - Gemfile
+  - Gemfile.lock
+  - requirements.txt
+  - node_modules
+  - package.json
+  - package-lock.json
+  - webpack.config.js
+  - jekyll-rtd-theme.gemspec
