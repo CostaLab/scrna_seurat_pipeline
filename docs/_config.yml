@@ -10,7 +10,7 @@ collections:
 
 # Title
 name: Single Cell Pipeline Documentation
-subtitle: This page is dedicated to store all all features used in the single cell pipeline protocol used in ICG - CostaLab
+subtitle: This page is dedicated to store all features used in the single cell pipeline protocol used in ICG - CostaLab
 
 # When using this template with a project page set the baseurl to '/project-name'
 # For user/organization pages set this to an empty string
@@ -34,22 +34,21 @@ navigation: ## To add new pages insert here and create a markdown in _pages fold
 - text: Home
   url: ./
   internal: true
-- text: Example Page
-  url: example_page/
+- text: About me
+  url: About/
   internal: true
-- text: Preprocessing Step ##Example
-  url: Pre-processing/
+- text: Tutorial
+  url: Tutorial/
   internal: true
+- text: Documentation ##Example
+      subfolderitems:
+        - page: Pre-Processing
+          url: Pro-processing/
+
+
 - text: DOCter Repo
   url: https://github.com/cfpb/DOCter
   internal: false
-
-# Repo list
-# List repos that you would like to appear on the homepage here
-repos:
-- name: DOCter
-  description: Jekyll template for docs
-  url: https://github.com/cfpb/DOCter
 
 # Style Variables
 brand_color: "#2cb34a"
