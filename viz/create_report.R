@@ -460,24 +460,23 @@ ext_annot_fp = EXTERNALFILE
 
 ##4. Make_report element
 source(CONFIGFILE)
-
 scrna <- NULL
-if(identical(cluster,"singleton")){
-  cat(paste(date(), blue(" loading: "), red("scrna_phase_singleton.Rds"), "\n"))
-  scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
-  cat(paste(date(), blue(" loaded: "), red("scrna_phase_singleton.Rds"), "\n"))
-}else{
-  cat(paste(date(), blue(" loading: "), red("scrna_phase_comparing.Rds"), "\n"))
-  scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
-  cat(paste(date(), blue(" loaded: "), red("scrna_phase_comparing.Rds"), "\n"))
-}
-scrna$name <- factor(scrna$name, levels=names(data_src))
-scrna$stage <- factor(scrna$stage, levels=unique(stage_lst))
-
-
 
 
 if (MAKE_ELEMENT == "TRUE"){
+
+  if(identical(cluster,"singleton")){
+    cat(paste(date(), blue(" loading: "), red("scrna_phase_singleton.Rds"), "\n"))
+    scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
+    cat(paste(date(), blue(" loaded: "), red("scrna_phase_singleton.Rds"), "\n"))
+  }else{
+    cat(paste(date(), blue(" loading: "), red("scrna_phase_comparing.Rds"), "\n"))
+    scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
+    cat(paste(date(), blue(" loaded: "), red("scrna_phase_comparing.Rds"), "\n"))
+  }
+
+  scrna$name <- factor(scrna$name, levels=names(data_src))
+  scrna$stage <- factor(scrna$stage, levels=unique(stage_lst))
   cluster_viridis_opt = ifelse(
     any(grepl("cluster_color_option",names(viz_conf),fixed = TRUE)),
     viz_conf[["cluster_color_option"]], # Config option
@@ -558,6 +557,8 @@ if (MAKE_ELEMENT == "TRUE"){
   source(glue("{viz_path}/4_DE_GO_stageVS_elements.R"))
   source(glue("{viz_path}/4_pathway_1v1_elements.R"))
   source(glue("{viz_path}/4_pathway_stageVS_elements.R"))
+  source(glue("{viz_path}/4_Genesets_1v1_elements.R"))
+  source(glue("{viz_path}/4_Genesets_stageVS_elements.R"))
 
 # run necessary generators
   if("QC" %in% EXEC_PLAN) {
@@ -611,6 +612,17 @@ if (MAKE_ELEMENT == "TRUE"){
     cat(paste(date(), green(" Element: "), red("pathway_stage"), "\n"))
     pathway_stage_elements(scrna)
   }
+  if(length(intersect(c("Genesets_stage"), EXEC_PLAN) > 0)){
+    cat(paste(date(), green(" Element: "), red("Genesets_stage"), "\n"))
+    Genesets_stageVS_elements(scrna)
+  }
+  if(length(intersect(c("Genesets_1v1"), EXEC_PLAN) > 0)){
+    cat(paste(date(), green(" Element: "), red("Genesets_1v1"), "\n"))
+    Genesets_1v1_elements(scrna)
+  }
+
+
+
 
 }
 
@@ -664,8 +676,8 @@ dic_Rmd_n_Output <- list(
         "hallmark_stage"      =     c(glue("{viz_path}/4_hallmark_stageVS.Rmd"),      "hallmark_stageVS"),
         "reactome_stage"      =     c(glue("{viz_path}/4_reactome_stageVS.Rmd"),      "reactome_stageVS"),
         "kegg_stage"          =     c(glue("{viz_path}/4_kegg_stageVS.Rmd"),          "kegg_stageVS"),
-        "Genesets_1v1"        =     c(glue("{viz_path}/Genesets-1v1.Rmd"),            "Genesets_1vs1"),
-        "Genesets_stage"      =     c(glue("{viz_path}/Genesets-stageVS.Rmd"),        "Genesets_stageVS"),
+        "Genesets_1v1"        =     c(glue("{viz_path}/4_Genesets_1v1.Rmd"),          "Genesets_1vs1"),
+        "Genesets_stage"      =     c(glue("{viz_path}/4_Genesets_stageVS.Rmd"),      "Genesets_stageVS"),
         "intUMAPs"            =     c(glue("{viz_path}/interactive_UMAPs.Rmd"),       "interactive_UMAPs")
 )
 

@@ -190,49 +190,47 @@ def generate_report_1v1_pw(viz_path):
 #endf generate_report_1v1_pw
 
 
-def generate_report_1v1_Genesets(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/Genesets-1v1.template"))
+
+def generate_report_1v1_Genesets(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/Genesets-vs.template"))
     tmpl = tfile.read()
-    today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
 
     t = Template(tmpl)
     r = t.render(
-        TODAY = today,
-        CC = cc,
-        lst_1v1 = lst_1v1
+            group="1v1",
+            lst_group=lst_1v1
     )
-    fw = open(out, "w")
+    fw = open(f"{viz_path}/4_Genesets_1v1.Rmd", "w")
     fw.write("%s\n\n" % r)
+    fw.close()
 #endf generate_1v1
 
 
-def generate_report_stageVS_Genesets(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/Genesets-stageVS.template"))
+def generate_report_stageVS_Genesets(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/Genesets-vs.template"))
     tmpl = tfile.read()
-    today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
 
     t = Template(tmpl)
     r = t.render(
-        TODAY = today,
-        CC = cc,
-        lst_stage = lst_stages
+            group="1v1",
+            lst_group=lst_stages
     )
-    fw = open(out, "w")
+    fw = open(f"{viz_path}/4_Genesets_stageVS.Rmd", "w")
     fw.write("%s\n\n" % r)
-#endf generate_groupVS
+    fw.close()
+#endf generate_stageVS
+
+
 
 def generate_report_stageVS_progeny(out):
     tfile = open(os.path.join(os.path.dirname(__file__),"template/progeny-stageVS.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
+
 
     t = Template(tmpl)
     r = t.render(
         TODAY = today,
-        CC = cc,
         lst_stage = lst_stages
     )
     fw = open(out, "w")
@@ -252,13 +250,12 @@ def main():
     generate_report_1v1_pw(viz_dir)
     generate_report_stagesVS_pw(viz_dir)
 
-    generate_report_1v1_Genesets(os.path.join(viz_dir,"Genesets-1v1.Rmd"))
+    generate_report_1v1_Genesets(viz_dir)
+    generate_report_stageVS_Genesets(viz_dir)
+
     generate_report_stageVS_progeny(os.path.join(viz_dir,"progeny-stageVS.Rmd"))
-    generate_report_stageVS_Genesets(os.path.join(viz_dir,"Genesets-stageVS.Rmd"))
     generate_md_idx(os.path.join(out_dir, "index.md"))
-
 #endf main
-
 
 if __name__ == "__main__":
     main()
