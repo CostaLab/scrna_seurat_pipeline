@@ -279,6 +279,7 @@ pw_mtx_create <- function(df_list){
     ret_mtx <- as.matrix(pmtx)[order(unlist(avgIdx[rownames(help_mtx)])), ]
     return(ret_mtx)
   }
+  return(NULL)
 }
 
 
@@ -555,6 +556,8 @@ if (MAKE_ELEMENT == "TRUE"){
   source(glue("{viz_path}/3_DE_GO-analysis_elements.R"))
   source(glue("{viz_path}/4_DE_GO_1v1_elements.R"))
   source(glue("{viz_path}/4_DE_GO_stageVS_elements.R"))
+  source(glue("{viz_path}/4_pathway_1v1_elements.R"))
+  source(glue("{viz_path}/4_pathway_stageVS_elements.R"))
 
 # run necessary generators
   if("QC" %in% EXEC_PLAN) {
@@ -599,6 +602,14 @@ if (MAKE_ELEMENT == "TRUE"){
   if("DEGO_stage" %in% EXEC_PLAN){
     cat(paste(date(), green(" Element: "), red("DEGO_stage"), "\n"))
     DEGO_stageVS_elements(scrna)
+  }
+  if(length(intersect(c("hallmark_1v1","reactome_1v1","kegg_1v1"), EXEC_PLAN) > 0)){
+    cat(paste(date(), green(" Element: "), red("pathway_1v1"), "\n"))
+    pathway_1v1_elements(scrna)
+  }
+  if(length(intersect(c("hallmark_stage","reactome_stage","kegg_stage"), EXEC_PLAN) > 0)){
+    cat(paste(date(), green(" Element: "), red("pathway_stage"), "\n"))
+    pathway_stage_elements(scrna)
   }
 
 }
@@ -647,15 +658,14 @@ dic_Rmd_n_Output <- list(
         "Reactome"            =     c(glue("{viz_path}/3_Reactome.Rmd"),              "Reactome"),
         "DEGO_stage"          =     c(glue("{viz_path}/4_DE_GO_%s.vs.%s_stageVS.Rmd"),"gv"),
         "DEGO_1v1"            =     c(glue("{viz_path}/4_DE_GO_%s.vs.%s_1v1.Rmd"),    "1vs1"),
+        "hallmark_1v1"        =     c(glue("{viz_path}/4_hallmark_1v1.Rmd"),          "hallmark_1vs1"),
+        "reactome_1v1"        =     c(glue("{viz_path}/4_reactome_1v1.Rmd"),          "reactome_1vs1"),
+        "kegg_1v1"            =     c(glue("{viz_path}/4_kegg_1v1.Rmd"),              "kegg_1vs1"),
+        "hallmark_stage"      =     c(glue("{viz_path}/4_hallmark_stageVS.Rmd"),      "hallmark_stageVS"),
+        "reactome_stage"      =     c(glue("{viz_path}/4_reactome_stageVS.Rmd"),      "reactome_stageVS"),
+        "kegg_stage"          =     c(glue("{viz_path}/4_kegg_stageVS.Rmd"),          "kegg_stageVS"),
         "Genesets_1v1"        =     c(glue("{viz_path}/Genesets-1v1.Rmd"),            "Genesets_1vs1"),
-        "hallmark_1v1"        =     c(glue("{viz_path}/hallmark-1v1.Rmd"),            "hallmark_1vs1"),
-        "reactome_1v1"        =     c(glue("{viz_path}/reactome-1v1.Rmd"),            "reactome_1vs1"),
-        "kegg_1v1"            =     c(glue("{viz_path}/kegg-1v1.Rmd"),                "kegg_1vs1"),
-        "hallmark_stage"      =     c(glue("{viz_path}/hallmark-stageVS.Rmd"),        "hallmark_stageVS"),
         "Genesets_stage"      =     c(glue("{viz_path}/Genesets-stageVS.Rmd"),        "Genesets_stageVS"),
-        "reactome_stage"      =     c(glue("{viz_path}/reactome-stageVS.Rmd"),        "reactome_stageVS"),
-        "progeny_stage"       =     c(glue("{viz_path}/progeny-stageVS.Rmd"),         "progeny_stageVS"),
-        "kegg_stage"          =     c(glue("{viz_path}/kegg-stageVS.Rmd"),            "kegg_stageVS"),
         "intUMAPs"            =     c(glue("{viz_path}/interactive_UMAPs.Rmd"),       "interactive_UMAPs")
 )
 
