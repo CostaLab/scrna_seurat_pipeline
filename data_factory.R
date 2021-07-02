@@ -301,6 +301,7 @@ suppressPackageStartupMessages(library(foreach))
 suppressPackageStartupMessages(library(doParallel))
 suppressPackageStartupMessages(library(celda))
 suppressPackageStartupMessages(library(SoupX))
+suppressPackageStartupMessages(library(Rmagic))
 
 
 registerDoParallel(cores=WORKER_NUM)
@@ -645,17 +646,19 @@ generate_scrna_phase_existed_clusters <- function(scrna){
 
   if(exists("existed_cluster_slots_map")){
       nms <- names(existed_cluster_slots_map)
-      metas <- nms[startsWith(nms, "meta.")]
-      reductions <- nms[startsWith(nms, "reduction.")]
-      for(meta in metas){
-          assertthat::assert_that(existed_cluster_slots_map[meta] %in% names(scrna@meta.data))
-          meta_slot <- stringr::str_sub(meta, start=(nchar("meta.")+1))
-          scrna@meta.data[, meta_slot] <- scrna@meta.data[, existed_cluster_slots_map[meta]]
-      }
-      for(reduction in reductions){
-          assertthat::assert_that(existed_cluster_slots_map[reduction] %in% names(scrna@reductions))
-          reduction_slot <- stringr::str_sub(reduction, start=(nchar("reduction.")+1))
-          scrna[[reduction_slot]] <- scrna[[existed_cluster_slots_map[reduction]]]
+      if (length(nms) > 0){
+          metas <- nms[startsWith(nms, "meta.")]
+          reductions <- nms[startsWith(nms, "reduction.")]
+          for(meta in metas){
+              assertthat::assert_that(existed_cluster_slots_map[meta] %in% names(scrna@meta.data))
+              meta_slot <- stringr::str_sub(meta, start=(nchar("meta.")+1))
+              scrna@meta.data[, meta_slot] <- scrna@meta.data[, existed_cluster_slots_map[meta]]
+          }
+          for(reduction in reductions){
+              assertthat::assert_that(existed_cluster_slots_map[reduction] %in% names(scrna@reductions))
+              reduction_slot <- stringr::str_sub(reduction, start=(nchar("reduction.")+1))
+              scrna[[reduction_slot]] <- scrna[[existed_cluster_slots_map[reduction]]]
+          }
       }
 
   }
@@ -1191,6 +1194,9 @@ generate_scrna_fishertest_clusters <- function(scrna){
   CLUSTER_TO_TEST <- DEFUALT_CLUSTER_NAME
   STAGE_TO_TEST <- "stage"
   stages <- scrna@tools[["meta_order"]][[STAGE_TO_TEST]]
+  assertthat::assert_that(CLUSTER_TO_TEST %in% names(scrna@meta.data))
+  assertthat::assert_that(STAGE_TO_TEST %in% names(scrna@meta.data))
+
 
   ## to avoid matrix still a table
   count.matrix <- as.matrix(Matrix(table(scrna@meta.data[, CLUSTER_TO_TEST], scrna@meta.data[, STAGE_TO_TEST])))
@@ -1240,6 +1246,9 @@ generate_scrna_remove_clusters <- function(scrna){
   keeps <- setdiff(unique(scrna$seurat_clusters), scrna_remove_clusters)
   scrna <- subset(scrna, idents= keeps)
   scrna$removed_clusters <- scrna$seurat_clusters
+  if(is.factor(scrna$removed_clusters)){
+    scrna$removed_clusters = droplevels(scrna$removed_clusters)
+  }
   return(list(scrna, ret_code))
 }
 
@@ -1277,23 +1286,41 @@ generate_scrna_remove_recluster <- function(scrna){
   Idents(scrna) <- "seurat_clusters"
   keeps <- setdiff(unique(scrna$seurat_clusters), scrna_remove_clusters)
   scrna <- subset(scrna, idents= keeps)
-  ret_list <- generate_scrna_integration_seurat(scrna)
-  scrna <- ret_list[[1]]
-  ret_code <- ret_list[[2]]
-  if(ret_code != 0){
-    return(list(scrna, ret_code))
-  }
 
-  ret_list <- generate_scrna_ScaleIntegration(scrna)
-  scrna <- ret_list[[1]]
-  ret_code <- ret_list[[2]]
-  if(ret_code != 0){
-    return(list(scrna, ret_code))
+  execution_vec = c(
+        "generate_scrna_integration_seurat(scrna)",
+        "generate_scrna_integration_harmony(scrna)",
+        "generate_scrna_clustering(scrna)"
+  )
+  for(func_call in execution_vec){
+    logger.info(paste("executing ", func_call))
+    ret_list <- eval(parse(text=func_call))
+    scrna <- ret_list[[1]]
+    ret_code <- ret_list[[2]]
+    if(ret_code != 0){
+     return(list(scrna, ret_code))
+    }
   }
-
-  scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM)
-  scrna <- FindClusters(scrna, resolution = CLUSTER_RESOLUTION_RANGE) ##
   scrna$remove_recluster <- scrna$seurat_clusters
+  if(is.factor(scrna$remove_recluster)){
+    scrna$remove_recluster = droplevels(scrna$remove_recluster)
+  }
+  ## recluster, need to redo everything related to clusterwise
+  execution_vec = c(
+        "generate_scrna_fishertest_clusters(scrna)",
+        "generate_scrna_MCAannotate(scrna)",
+        "generate_scrna_ExternalAnnotation(scrna)",
+        "generate_scrna_HCLannotate(scrna)"
+  )
+  for(func_call in execution_vec){
+    logger.info(paste("executing ", func_call))
+    ret_list <- eval(parse(text=func_call))
+    scrna <- ret_list[[1]]
+    ret_code <- ret_list[[2]]
+    if(ret_code != 0){
+     return(list(scrna, ret_code))
+    }
+  }
   return(list(scrna, ret_code))
 }
 
@@ -1330,6 +1357,15 @@ generate_scrna_HCLannotate <- function(scrna){
   Idents(object=scrna) <- "name"
   return(list(scrna, ret_code))
 }
+
+generate_scrna_MAGIC <- function(scrna){
+  ret_code = 0
+  DefaultAssay(scrna) <- "RNA"
+  all_genes <- rownames(scrna)
+  scrna <- magic(scrna, genes=all_genes)
+  return(list(scrna, ret_code))
+}
+
 
 generate_scrna_ExternalAnnotation <- function(scrna){
   ret_code = 0

@@ -134,7 +134,7 @@ flist = stringr::str_sort(grep(
 for(afile in flist){
 
   cluster_id = stringr::str_extract(basename(afile), "(?<=(id-))(.*)(?=\\.png)")
-  print(glue::glue("Cluster: {URLdecode_escape(cluster_id)}"))
+  cat(paste0("\n\n### Cluster:", URLdecode_escape(cluster_id),"  \n\n"))
   cat(paste0("![](", afile, ")"), "\n")
   knitr::include_graphics(afile)
 

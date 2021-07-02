@@ -470,6 +470,10 @@ if(identical(cluster,"singleton")){
   scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
   cat(paste(date(), blue(" loaded: "), red("scrna_phase_comparing.Rds"), "\n"))
 }
+scrna$name <- factor(scrna$name, levels=names(data_src))
+scrna$stage <- factor(scrna$stage, levels=unique(stage_lst))
+
+
 
 
 if (MAKE_ELEMENT == "TRUE"){
