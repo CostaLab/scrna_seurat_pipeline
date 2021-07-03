@@ -32,13 +32,13 @@ Genesets_stageVS_elements <- function(scrna){
 
       save_ggplot_formats(plt=plt,
                     base_plot_dir=report_plots_folder,
-                    plt_name=glue("Geneset_ridges_vs_1v1_{nm}_cluster-{cluster_use}"),
+                    plt_name=glue("Geneset_ridges_vs_stagesVS_{nm}_cluster-{cluster_use}"),
                     width=9, height=7)
   }
   sample_stages <- scrna@tools$meta_order$stage
-  list_1v1 = comb_list(sample_stages)
+  list_stagesVS = comb_list(sample_stages)
   scrna$stage <- as.character(scrna$stage)
-  for(apair in list_1v1){
+  for(apair in list_stagesVS){
     tX = apair[1]
     tY = apair[2]
     a_vs <- glue("{tX}.vs.{tY}")

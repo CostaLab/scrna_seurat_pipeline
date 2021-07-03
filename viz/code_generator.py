@@ -212,7 +212,7 @@ def generate_report_stageVS_Genesets(viz_path):
 
     t = Template(tmpl)
     r = t.render(
-            group="1v1",
+            group="stageVS",
             lst_group=lst_stages
     )
     fw = open(f"{viz_path}/4_Genesets_stageVS.Rmd", "w")
@@ -222,18 +222,17 @@ def generate_report_stageVS_Genesets(viz_path):
 
 
 
-def generate_report_stageVS_progeny(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/progeny-stageVS.template"))
+def generate_report_stageVS_progeny(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/progeny-vs.template"))
     tmpl = tfile.read()
-    today = datetime.date.today().strftime("%d%B%Y")
-
 
     t = Template(tmpl)
     r = t.render(
-        TODAY = today,
-        lst_stage = lst_stages
+        group = "stageVS",
+        lst_group = lst_stages
     )
-    fw = open(out, "w")
+
+    fw = open(os.path.join(viz_path,"4_progeny_stageVS.Rmd"), "w")
     fw.write("%s\n\n" % r)
 #endf generate_groupVS
 
@@ -253,7 +252,8 @@ def main():
     generate_report_1v1_Genesets(viz_dir)
     generate_report_stageVS_Genesets(viz_dir)
 
-    generate_report_stageVS_progeny(os.path.join(viz_dir,"progeny-stageVS.Rmd"))
+    generate_report_stageVS_progeny(viz_dir)
+
     generate_md_idx(os.path.join(out_dir, "index.md"))
 #endf main
 

@@ -83,4 +83,3 @@ pathway_stage_elements <- function(scrna){
     }
   }
 }
-

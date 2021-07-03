@@ -559,6 +559,7 @@ if (MAKE_ELEMENT == "TRUE"){
   source(glue("{viz_path}/4_pathway_stageVS_elements.R"))
   source(glue("{viz_path}/4_Genesets_1v1_elements.R"))
   source(glue("{viz_path}/4_Genesets_stageVS_elements.R"))
+  source(glue("{viz_path}/4_progeny-stageVS_elements.R"))
 
 # run necessary generators
   if("QC" %in% EXEC_PLAN) {
@@ -620,10 +621,10 @@ if (MAKE_ELEMENT == "TRUE"){
     cat(paste(date(), green(" Element: "), red("Genesets_1v1"), "\n"))
     Genesets_1v1_elements(scrna)
   }
-
-
-
-
+  if(length(intersect(c("progeny_stage"), EXEC_PLAN) > 0)){
+    cat(paste(date(), green(" Element: "), red("progeny_stage"), "\n"))
+    progeny_stageVS_elements(scrna)
+  }
 }
 
 cluster_info <-  build_cluster_info(scrna)
@@ -678,6 +679,7 @@ dic_Rmd_n_Output <- list(
         "kegg_stage"          =     c(glue("{viz_path}/4_kegg_stageVS.Rmd"),          "kegg_stageVS"),
         "Genesets_1v1"        =     c(glue("{viz_path}/4_Genesets_1v1.Rmd"),          "Genesets_1vs1"),
         "Genesets_stage"      =     c(glue("{viz_path}/4_Genesets_stageVS.Rmd"),      "Genesets_stageVS"),
+        "progeny_stage"      =     c(glue("{viz_path}/4_progeny_stageVS.Rmd"),        "progeny_stageVS"),
         "intUMAPs"            =     c(glue("{viz_path}/interactive_UMAPs.Rmd"),       "interactive_UMAPs")
 )
 

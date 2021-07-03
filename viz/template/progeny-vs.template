@@ -1,5 +1,5 @@
 ---
-title: "Between {{group}} {{pathway}} analysis"
+title: "Between {{group}} progeny analysis"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
@@ -24,38 +24,26 @@ params:
 author: '`r params$author`'
 ---
 
-## Cluster: `r colorize(params$cluster_info,"red")`
-
-## ridges
-```{r, out.width="100%", echo=FALSE}
-flist = stringr::str_sort(grep(
-  glue("Geneset_ridges_vs_{{group}}_.*_cluster-{params$cluster}.png"),
-  list.files(
-    params$report_plots_folder_png,
-    full.names=TRUE
-  ),
-  value=TRUE,
-  #fixed=TRUE
-),numeric=TRUE)
-knitr::include_graphics(flist)
-```
-
 {% for tX, tY in lst_group %}
 
-## {{tX}} vs {{tY}}
-```{r, out.width="100%", echo=FALSE}
+## {{tX}} vs {{tY}}  PROGENy
+$***:\quad \text{pval}<0.001\\\\**:\quad \text{pval}<0.01\\\\*:\quad \text{pval}<0.05$
 
-#Geneset_violin_vs_{{tX}}.vs.{{tY}}_.*_cluster-seurat_clusters.png
-flist = stringr::str_sort(grep(
-  glue("Geneset_violin_vs_{{tX}}.vs.{{tY}}_.*_cluster-seurat_clusters.png"),
-  list.files(
-    params$report_plots_folder_png,
-    full.names=TRUE
-  ),
-  value=TRUE,
-  #fixed=TRUE
-),numeric=TRUE)
-knitr::include_graphics(flist)
+## {{tX}} vs {{tY}}  {{pathway}} {{direction}}
+
+```{r, out.width="100%", echo=FALSE}
+fname=file.path(
+  params$report_plots_folder_png,
+  glue("progeny_heatmap_stars_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}.png")
+)
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+
+```{r, out.width="100%", echo=FALSE}
+fname=file.path(
+  params$report_plots_folder_png,
+  glue("progeny_heatmap_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}.png")
+)
+if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 {% endfor %}
-
