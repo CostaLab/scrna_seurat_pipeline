@@ -33,6 +33,7 @@ external_markers_elements <- function(scrna){
   ## External markers
   message(paste0("### ","External markers"))
   Idents(scrna) <- cluster
+  DefaultAssay(scrna) <- "MAGIC_RNA"
   o_genes <- rownames(scrna)
   for (a_celltype in celltype_names){
 

@@ -1,5 +1,5 @@
 ---
-title: "external marker genes"
+title: "external marker genes imputated by MAGIC"
 date: '`r format(Sys.Date(), "%Y-%B-%d")`'
 output:
   html_document:

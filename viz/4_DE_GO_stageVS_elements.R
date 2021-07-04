@@ -94,21 +94,23 @@ DEGO_stageVS_elements <- function(scrna){
 
       names(df_list) <- names(go_ups)
       pw_mtx <- pw_mtx_create(df_list)
-      col_fun <-  circlize::colorRamp2(c(0, 0.5, 2), c("purple", "black", "yellow"))
-      plt <- Heatmap(pw_mtx,
-                     name = glue("-log10(padjust)"),
-                     cluster_columns = F,
-                     cluster_rows = F,
-                     show_row_names=T,
-                     col=col_fun,
-                     heatmap_legend_param = list(direction = "horizontal")
-      )
-      save_ggplot_formats(plt=plt,
-                          units="px",
-                          base_plot_dir=report_plots_folder,
-                          plt_name=glue("go_up_genes_heatmap_vs_{a_vs}_cluster-{cluster_use}"),
-                          plot_obj="ComplexHeatmap",
-                          width=1200, height=1800, heatmap_legend_side = "top")
+      if (!is.null(pw_mtx)){
+        col_fun <-  circlize::colorRamp2(c(0, 0.5, 2), c("purple", "black", "yellow"))
+        plt <- Heatmap(pw_mtx,
+                       name = glue("-log10(padjust)"),
+                       cluster_columns = F,
+                       cluster_rows = F,
+                       show_row_names=T,
+                       col=col_fun,
+                       heatmap_legend_param = list(direction = "horizontal")
+        )
+        save_ggplot_formats(plt=plt,
+                            units="px",
+                            base_plot_dir=report_plots_folder,
+                            plt_name=glue("go_up_genes_heatmap_vs_{a_vs}_cluster-{cluster_use}"),
+                            plot_obj="ComplexHeatmap",
+                            width=1200, height=1800, heatmap_legend_side = "top")
+        }
 
     }
 
@@ -149,21 +151,23 @@ DEGO_stageVS_elements <- function(scrna){
       names(df_list) <- names(go_downs)
       col_fun <-  circlize::colorRamp2(c(0, 0.5, 2), c("purple", "black", "yellow"))
       pw_mtx <- pw_mtx_create(df_list)
-      plt <- Heatmap(pw_mtx,
-                     name = glue("-log10(padjust)"),
-                     cluster_columns = F,
-                     cluster_rows = F,
-                     show_row_names=T,
-                     col=col_fun,
-                     heatmap_legend_param = list(direction = "horizontal")
-      )
-      save_ggplot_formats(plt=plt,
-                          units="px",
-                          base_plot_dir=report_plots_folder,
-                          plt_name=glue("go_down_genes_heatmap_vs_{a_vs}_cluster-{cluster_use}"),
-                          plot_obj="ComplexHeatmap",
-                          width=1200, height=1800, heatmap_legend_side = "top")
+      if(!(is.null(pw_mtx))){
+        plt <- Heatmap(pw_mtx,
+                       name = glue("-log10(padjust)"),
+                       cluster_columns = F,
+                       cluster_rows = F,
+                       show_row_names=T,
+                       col=col_fun,
+                       heatmap_legend_param = list(direction = "horizontal")
+        )
+        save_ggplot_formats(plt=plt,
+                            units="px",
+                            base_plot_dir=report_plots_folder,
+                            plt_name=glue("go_down_genes_heatmap_vs_{a_vs}_cluster-{cluster_use}"),
+                            plot_obj="ComplexHeatmap",
+                            width=1200, height=1800, heatmap_legend_side = "top")
 
+        }
     }
 
 
