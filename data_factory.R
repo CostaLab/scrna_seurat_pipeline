@@ -1921,7 +1921,7 @@ generate_scrna_progeny_stage <- function(scrna){
         } else if (pval < 0.05) {
         txt <- "*"
         } else {
-        txt <- "ns"
+        txt <- ""
         }
         return(txt)
     })
