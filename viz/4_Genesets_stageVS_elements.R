@@ -32,7 +32,7 @@ Genesets_stageVS_elements <- function(scrna){
 
       save_ggplot_formats(plt=plt,
                     base_plot_dir=report_plots_folder,
-                    plt_name=glue("Geneset_ridges_vs_stagesVS_{nm}_cluster-{cluster_use}"),
+                    plt_name=glue("Geneset_ridges_vs_stageVS_{nm}_cluster-{cluster_use}"),
                     width=9, height=7)
   }
   sample_stages <- scrna@tools$meta_order$stage
