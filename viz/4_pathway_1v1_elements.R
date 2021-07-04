@@ -41,7 +41,7 @@ pathway_1v1_elements <- function(scrna){
             assertthat::assert_that( all(rownames(df_list[[i]]) == df_list[[i]]$ID))
           }
 
-
+          col_fun <-  circlize::colorRamp2(c(0, 0.5, 2), c("purple", "black", "yellow"))
           names(df_list) <- names(pw_directions)
           pw_mtx <- pw_mtx_create(df_list)
           if(!(is.null(pw_mtx))){

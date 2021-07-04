@@ -559,7 +559,7 @@ if (MAKE_ELEMENT == "TRUE"){
   source(glue("{viz_path}/4_pathway_stageVS_elements.R"))
   source(glue("{viz_path}/4_Genesets_1v1_elements.R"))
   source(glue("{viz_path}/4_Genesets_stageVS_elements.R"))
-  source(glue("{viz_path}/4_progeny-stageVS_elements.R"))
+  source(glue("{viz_path}/4_progeny_stageVS_elements.R"))
 
 # run necessary generators
   if("QC" %in% EXEC_PLAN) {
