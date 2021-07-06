@@ -13,3 +13,7 @@ DecontX needs the batch information per sample and determines the clustering per
 The contamination and DEcontX clustering are then added as meta data to the Seurat object. 
 A new assay with the decontamintated counts is added to the Seurat object, but is not used for the rest of the pipeline. 
 We do not use the decontaminated reads for the pipeline, since the decontamination is not necessary reliable. 
+
+```
+This is the final element on the page and there should be no margin below this.
+```
