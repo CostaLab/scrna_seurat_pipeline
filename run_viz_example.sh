@@ -5,7 +5,8 @@
 #SBATCH -o logs/%j_job.log
 #SBATCH -e logs/%j_job.log
 
-### Time your job needs to execute, e. g. 15 min 30 sec #SBATCH -t 24:00:00
+### Time your job needs to execute, e. g. 15 min 30 sec 
+#SBATCH -t 24:00:00
 ### Memory your job needs per node, e. g. 1 GB
 #SBATCH --mem=48G
 
