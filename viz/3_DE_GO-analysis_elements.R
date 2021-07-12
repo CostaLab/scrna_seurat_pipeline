@@ -60,7 +60,7 @@ DE_GO_analysis_elements <- function(scrna){
   scrna <- ScaleData(scrna, rownames(scrna))
   help_sort_func <- ifelse(
     all.is.numeric(unique(scrna@meta.data[, cluster])),
-    function(x) as.numeric(x)-1,
+    function(x) as.numeric(as.character(x)),
     as.character
   )
 
@@ -241,7 +241,7 @@ DE_GO_analysis_elements <- function(scrna){
 
 
   progeny_df <- scrna@tools[[progeny_cluster_name]]
-  help_sort_func <- ifelse(all.is.numeric(unique(progeny_df$CellType)), as.numeric, function(x){x})
+  help_sort_func <- ifelse(all.is.numeric(unique(progeny_df$CellType)), function(x) as.numeric(as.character(x)), function(x){x})
   progeny_df$CellType <- factor(progeny_df$CellType,
                                 levels= as.character(sort(unique(help_sort_func(progeny_df$CellType)))))
   plt <- ggplot(progeny_df, aes(y=pathway,x=CellType,fill=r))+

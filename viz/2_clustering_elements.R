@@ -206,7 +206,7 @@ clustering_elements <- function(scrna){
       name_len <- length(table(scrna@meta.data$name))
       help_sort_func <- ifelse(
         all.is.numeric(unique(scrna@meta.data[, cluster_use])),
-        function(x) as.numeric(x) - 1,
+        function(x) as.numeric(as.character(x)),
         as.character
       )
       scrna@meta.data[,cluster_use] <- help_sort_func(scrna@meta.data[,cluster_use])
