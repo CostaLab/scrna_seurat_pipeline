@@ -11,4 +11,4 @@ sort: 1
 {% include list.liquid all=true %}
 
 
-![overview]({{site.url}}}/assets/images/overview/scrna_pipeline_overview1.png)
+![overview]({{ site.baseurl }}/assets/images/overview/scrna_pipeline_overview1.png)

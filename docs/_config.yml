@@ -8,6 +8,7 @@ theme: null
 #   dist: false
 #   shortcodes: true
 
+baseurl: /scrna_seurat_pipeline
 readme_index:
   with_frontmatter: true
 
