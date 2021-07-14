@@ -38,14 +38,16 @@ packages_to_install = c(
   "rmarkdown", "reshape2", "circlize", "BiocManager",
   "kableExtra", "assertthat", "mclust", "shinythemes",
   "systemfonts", "igraph", "proj4", "Cairo", "ggalt",
-  "urltools", "downloadthis", "jsonlite", "crayon", "SoupX"
+  "urltools", "downloadthis", "jsonlite", "crayon", "SoupX",
+  "rcompanion", "ggridges", "ggsci", "Rmagic"
 )
 
 bioc_pkgs_to_install = c(
   "org.Mm.eg.db", "clusterProfiler",
   "org.Hs.eg.db", "ComplexHeatmap",
   "EnhancedVolcano","ReactomePA",
-  "msigdbr","limma", "celda", "progeny", "scran"
+  "msigdbr","limma", "celda", "progeny",
+  "scran", "GSEABase"
 )
 
 github_pkgs_to_install = c(
@@ -106,6 +108,10 @@ if (ret != 0) system("pip show grip")
 
 ret <- system("pip install Jinja2")
 if (ret != 0) system("pip show Jinja2")
+
+ret <- system("pip install magic-impute")
+if (ret != 0) system("pip show magic-impute")
+
 
 
 failed_to_install = packages_to_install[!(packages_to_install %in% installed.packages()[,"Package"])]

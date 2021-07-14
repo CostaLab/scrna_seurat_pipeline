@@ -1,5 +1,5 @@
 ---
-title: "external marker genes"
+title: "external marker genes imputated by MAGIC"
 date: '`r format(Sys.Date(), "%Y-%B-%d")`'
 output:
   html_document:
@@ -9,7 +9,9 @@ output:
     toc: yes
     toc_depth: '3'
 params:
+    scrna: 'scrna object'
     cluster: "clusters to analyse"
+    cluster_info: "cluster info"
     project: "name/tag of the project"
     savedir: "directory where rds files were saved"
     funcs: "analysis steps to be performed"
@@ -31,7 +33,7 @@ celltype_names = readRDS(file.path(params$report_tables_folder, "ext_annot_cellt
 ```{r ext_markers, results="asis", out.width="100%", echo=FALSE}
 for (a_celltype in celltype_names){
   cat('\n')
-  cat(paste0(a_celltype,"\n"))
+  cat("  \n###",  glue::glue("{a_celltype}"),"   \n")
   cat('\n')
   flist = grep(
     paste0("extmarkers_inte_umap_featureplot_",a_celltype),

@@ -13,7 +13,6 @@ from requests.utils import requote_uri
 def intersect(a, b):
     return set(a).intersection(b)
 
-
 ## GENERATE  R markdown and md according to the config file:
 #1.  dego 1v1
 #2. dego stages vs
@@ -45,6 +44,7 @@ viz_dict = { "quality": ["QC", "AmbientRNA"],
 
              "clustersVS": ["EXT_MARKERS",
                             "DEGO",
+                            "Genesets",
                             "progeny",
                             "hallmark",
                             "KEGG",
@@ -53,16 +53,18 @@ viz_dict = { "quality": ["QC", "AmbientRNA"],
 
              "DEGOstageVS": ["DEGO_stage"],
 
-             "PWstageVS": ["progeny_stage",
+             "PWstageVS": ["Genesets_stage",
+                           "progeny_stage",
                            "hallmark_stage",
                            "reactome_stage",
                            "kegg_stage"],
 
              "DEGOsampleVS":["DEGO_1v1"],
 
-             "PWsampleVS": ["hallmark_1v1",
-                           "reactome_1v1",
-                           "kegg_1v1"]
+             "PWsampleVS": ["Genesets_1v1",
+                            "hallmark_1v1",
+                            "reactome_1v1",
+                            "kegg_1v1"]
 }
 
 
@@ -73,14 +75,15 @@ names = robjects.r("names(data_src)")
 lst_1v1 = list(combinations(names, 2))
 stages = robjects.r("stage_lst")
 project_name = robjects.r("PROJECT")
-
+genesets_names = robjects.r("MSigDB_Geneset_names")
+integration_option = robjects.r("INTEGRATION_OPTION")[0]
 
 seen = set()
 u_stages = [x for x in stages if x not in seen and not seen.add(x)]  ##remove dup
 lst_stages = list(combinations(u_stages, 2))
 
 # FIXME should 'cluster_use' be redefined here?
-cluster_use = "seurat_clusters"
+#cluster_use = "seurat_clusters"
 # savedir = os.path.join(DATADIR, "save"+args.proj_tag)#robjects.r("SAVE_DIR")[0]
 savedir = args.save_dir
 
@@ -94,47 +97,6 @@ savedir = args.save_dir
 #         cluster_use = value
 #         print("cluster use:", cluster_use)
 
-def generate_1v1(out):
-
-    fw = open(out, 'w')
-
-
-    thead = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),"template/head.template"))
-    tmplth = thead.read()
-    t = Template(tmplth)
-    today = datetime.date.today().strftime("%d%B%Y")
-    head = t.render(today = today,
-                    svdir = savedir)
-
-    fw.write("%s\n" %head)
-
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-1v1.template"))
-    tmpltr = tfile.read()
-    for x,y in lst_1v1:
-        vs = "%s vs %s" % (x, y)
-        fde =  "%s.vs.%s.de.Rdata" % (x, y)
-        fgoup = "%s.vs.%s.goup.Rdata" % (x, y)
-        fgodown = "%s.vs.%s.godown.Rdata" % (x, y)
-        xlsup = "Go.UP.%s.vs.%s.xlsx" % (x, y)
-        xlsdown = "Go.Down.%s.vs.%s.xlsx" % (x, y)
-
-        t = Template(tmpltr)
-
-        one_plots = t.render(Versus= vs,
-                             de_file= fde,
-                             goup_file= fgoup,
-                             goup_xlsx= xlsup,
-                             godown_file= fgodown,
-                             godown_xlsx= xlsdown,
-                             tX = x,
-                             tY = y)
-
-
-        fw.write("%s\n" %one_plots)
-
-#endf generate_1v1
-
-
 
 def generate_md_idx(out):
     tfile = open(os.path.join(os.path.dirname(__file__),"template/index.template"))
@@ -146,6 +108,7 @@ def generate_md_idx(out):
                   viz_dict=viz_dict,
                   list_1v1=lst_1v1,
                   list_stages=lst_stages,
+                  integr_option=integration_option,
                   project_name=project_name[0],
                   cluster_use=args.cluster_use)
 
@@ -154,165 +117,124 @@ def generate_md_idx(out):
 #endf generate_md_idx
 
 
-def generate_report_stagesVS(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-stagesVS.template"))
+def generate_report_stagesVS(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-vs.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
 
     t = Template(tmpl)
-    r = t.render(
-        TODAY=today,
-        CC=cc,
-        savedir=savedir,
-        lst_stages=lst_stages
-    )
-    fw = open(out, "w")
-    fw.write("%s\n\n" % r)
+    for x, y in lst_stages:
+        r = t.render(
+            tX = x,
+            tY = y,
+            group="Stages"
+        )
+        fw = open(f"{viz_path}/4_DE_GO_{x}.vs.{y}_stageVS.Rmd", "w")
+        fw.write("%s\n\n" % r)
+        fw.close()
+    #end for
 #endf generate_groupVS
 
 
-def generate_report_1v1(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-1v1.template"))
+def generate_report_1v1(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/DE-GO-vs.template"))
     tmpl = tfile.read()
     today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
+
+    t = Template(tmpl)
+    for x, y in lst_1v1:
+        r = t.render(
+            tX = x,
+            tY = y,
+            group="Samples"
+        )
+        fw = open(f"{viz_path}/4_DE_GO_{x}.vs.{y}_1v1.Rmd", "w")
+        fw.write("%s\n\n" % r)
+        fw.close()
+    #end for
+#endf generate_report_1v1
+
+
+def generate_report_stagesVS_pw(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/pathway_vs.template"))
+    tmpl = tfile.read()
+
+    for pw in ["hallmark", "kegg", "reactome"]:
+        t = Template(tmpl)
+        r = t.render(
+            pathway = pw,
+            group="Stages",
+            lst_group=lst_stages
+        )
+        fw = open(f"{viz_path}/4_{pw}_stageVS.Rmd", "w")
+        fw.write("%s\n\n" % r)
+        fw.close()
+    #endfor
+#endf generate_groupVS
+
+def generate_report_1v1_pw(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/pathway_vs.template"))
+    tmpl = tfile.read()
+
+    for pw in ["hallmark", "kegg", "reactome"]:
+        t = Template(tmpl)
+        r = t.render(
+            pathway = pw,
+            group="1v1",
+            lst_group=lst_1v1
+        )
+        fw = open(f"{viz_path}/4_{pw}_1v1.Rmd", "w")
+        fw.write("%s\n\n" % r)
+        fw.close()
+    #endfor
+#endf generate_report_1v1_pw
+
+
+
+def generate_report_1v1_Genesets(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/Genesets-vs.template"))
+    tmpl = tfile.read()
 
     t = Template(tmpl)
     r = t.render(
-        TODAY=today,
-        CC=cc,
-        savedir=savedir,
-        lst_1v1=lst_1v1
+            group="1v1",
+            lst_group=lst_1v1
     )
-    fw = open(out, "w")
+    fw = open(f"{viz_path}/4_Genesets_1v1.Rmd", "w")
     fw.write("%s\n\n" % r)
-#endf generate_groupVS
+    fw.close()
+#endf generate_1v1
 
 
-def generate_report_1v1_hallmark(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/hallmark-1v1.template"))
+def generate_report_stageVS_Genesets(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/Genesets-vs.template"))
     tmpl = tfile.read()
-    today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
 
     t = Template(tmpl)
     r = t.render(
-        TODAY = today,
-        CC = cc,
-        lst_1v1 = lst_1v1
+            group="stageVS",
+            lst_group=lst_stages
     )
-    fw = open(out, "w")
+    fw = open(f"{viz_path}/4_Genesets_stageVS.Rmd", "w")
     fw.write("%s\n\n" % r)
-#endf generate_groupVS
+    fw.close()
+#endf generate_stageVS
 
 
-def generate_report_stageVS_hallmark(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/hallmark-stageVS.template"))
+
+def generate_report_stageVS_progeny(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__),"template/progeny-vs.template"))
     tmpl = tfile.read()
-    today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
 
     t = Template(tmpl)
     r = t.render(
-        TODAY = today,
-        CC = cc,
-        lst_stage = lst_stages
+        group = "stageVS",
+        lst_group = lst_stages
     )
-    fw = open(out, "w")
+
+    fw = open(os.path.join(viz_path,"4_progeny_stageVS.Rmd"), "w")
     fw.write("%s\n\n" % r)
 #endf generate_groupVS
-
-
-def generate_report_1v1_reactome(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/reactome-1v1.template"))
-    tmpl = tfile.read()
-    today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
-
-    t = Template(tmpl)
-    r = t.render(
-        TODAY = today,
-        CC = cc,
-        lst_1v1 = lst_1v1
-    )
-    fw = open(out, "w")
-    fw.write("%s\n\n" % r)
-#endf generate_groupVS
-
-def generate_report_stageVS_reactome(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/reactome-stageVS.template"))
-    tmpl = tfile.read()
-    today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
-
-    t = Template(tmpl)
-    r = t.render(
-        TODAY = today,
-        CC = cc,
-        lst_stage = lst_stages
-    )
-    fw = open(out, "w")
-    fw.write("%s\n\n" % r)
-#endf generate_groupVS
-
-
-
-
-def generate_report_1v1_kegg(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/kegg-1v1.template"))
-    tmpl = tfile.read()
-    today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
-
-    t = Template(tmpl)
-    r = t.render(
-        TODAY = today,
-        CC = cc,
-        lst_1v1 = lst_1v1
-    )
-    fw = open(out, "w")
-    fw.write("%s\n\n" % r)
-#endf generate_groupVS
-
-
-def generate_report_stageVS_kegg(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/kegg-stageVS.template"))
-    tmpl = tfile.read()
-    today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
-
-    t = Template(tmpl)
-    r = t.render(
-        TODAY = today,
-        CC = cc,
-        lst_stage = lst_stages
-    )
-    fw = open(out, "w")
-    fw.write("%s\n\n" % r)
-#endf generate_groupVS
-
-
-def generate_report_stageVS_progeny(out):
-    tfile = open(os.path.join(os.path.dirname(__file__),"template/progeny-stageVS.template"))
-    tmpl = tfile.read()
-    today = datetime.date.today().strftime("%d%B%Y")
-    cc = 6
-
-    t = Template(tmpl)
-    r = t.render(
-        TODAY = today,
-        CC = cc,
-        lst_stage = lst_stages
-    )
-    fw = open(out, "w")
-    fw.write("%s\n\n" % r)
-#endf generate_groupVS
-
-
-
-
-
 
 
 def main():
@@ -320,19 +242,20 @@ def main():
 
     out_dir = args.output_dir
     viz_dir = os.path.dirname(__file__)
-    generate_report_1v1(os.path.join(viz_dir, "DE-GO-analysis-1v1.Rmd"))
-    generate_report_1v1_hallmark(os.path.join(viz_dir,"hallmark-1v1.Rmd"))
-    generate_report_1v1_reactome(os.path.join(viz_dir,"reactome-1v1.Rmd"))
-    generate_report_1v1_kegg(os.path.join(viz_dir,"kegg-1v1.Rmd"))
-    generate_report_stagesVS(os.path.join(viz_dir,"DE-GO-analysis-stagesVS.Rmd"))
-    generate_report_stageVS_hallmark(os.path.join(viz_dir,"hallmark-stageVS.Rmd"))
-    generate_report_stageVS_reactome(os.path.join(viz_dir,"reactome-stageVS.Rmd"))
-    generate_report_stageVS_kegg(os.path.join(viz_dir,"kegg-stageVS.Rmd"))
-    generate_report_stageVS_progeny(os.path.join(viz_dir,"progeny-stageVS.Rmd"))
+
+    generate_report_1v1(viz_dir)
+    generate_report_stagesVS(viz_dir)
+
+    generate_report_1v1_pw(viz_dir)
+    generate_report_stagesVS_pw(viz_dir)
+
+    generate_report_1v1_Genesets(viz_dir)
+    generate_report_stageVS_Genesets(viz_dir)
+
+    generate_report_stageVS_progeny(viz_dir)
+
     generate_md_idx(os.path.join(out_dir, "index.md"))
-
 #endf main
-
 
 if __name__ == "__main__":
     main()
