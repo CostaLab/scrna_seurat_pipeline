@@ -2,177 +2,179 @@
 sort: 2
 ---
 
-# Markdown Elements
+# Pipeline basics
 
-Text can be **bold**, _italic_, or ~~strikethrough~~. [Links](https://github.com) should be blue with no underlines (unless hovered over).
+## Overview
 
-There should be whitespace between paragraphs. There should be whitespace between paragraphs. There should be whitespace between paragraphs. There should be whitespace between paragraphs.
+The pipeline consists of two steps: `data producing` and `visualization`. Basically the `data producing` prepares all analyses and store the results in a **SeuratObject**. This step can take really long time(hours or days). The `visualization` loads the **SeuratObject** and generates a report and plots in png&pdf format.
 
-There should be whitespace between paragraphs. There should be whitespace between paragraphs. There should be whitespace between paragraphs. There should be whitespace between paragraphs.
+<img src="{{ site.baseurl }}/images/overview/scrna_pipeline_overview1.png">
 
-> There should be no margin above this first sentence.
->
-> Blockquotes should be a lighter gray with a gray border along the left side.
->
-> There should be no margin below this final sentence.
 
-# Header 1
+## Settings
+It is worth notice that the configuration file is the most important thing before you are about to run the pipeline.
 
-This is a normal paragraph following a header. Bacon ipsum dolor sit amet t-bone doner shank drumstick, pork belly porchetta chuck sausage brisket ham hock rump pig. Chuck kielbasa leberkas, pork bresaola ham hock filet mignon cow shoulder short ribs biltong.
+1. Give a name of your experiments
 
-## Header 2
+Assume your experiment name is `experiment1`, please:
 
-> This is a blockquote following a header. Bacon ipsum dolor sit amet t-bone doner shank drumstick, pork belly porchetta chuck sausage brisket ham hock rump pig. Chuck kielbasa leberkas, pork bresaola ham hock filet mignon cow shoulder short ribs biltong.
+   a) create `conf/conf_experiment1.R`.
 
-### Header 3
+   b) copy `run_example.sh` and `run_viz_example.sh` to `run_experiment1.sh` and `run_viz_experiment1.sh`
 
-```
-This is a code block following a header.
-```
+2. Adjust `conf/conf_experiment1.R` to your experiment. Please note this step is important.
 
-#### Header 4
+### settings - initial info
+*ORGAN* is related a celltype gene markers file, so that only a few of organs are available for now.
 
-- This is an unordered list following a header.
-- This is an unordered list following a header.
-- This is an unordered list following a header.
+*MCA_NAME* and *HCL_NAME* are related to Mouse Cell Atlas and Human Cell Landscape respectively. The pipeline utilize them to annotate celltypes for each cell.
 
-##### Header 5
+*MINCELLS* and *MINGENES* are just preliminary filtering threshold. The pipeline also set other filterings, please find help by run `Rscript data_factory --help` to get more detail.
 
-1. This is an ordered list following a header.
-2. This is an ordered list following a header.
-3. This is an ordered list following a header.
+*INTEGRATION_OPTION*: you can choose either `seurat` or `harmony` to integrate different tissues.
 
-###### Header 6
+```R
+### --------------Initial info----------------------------
+PROJECT = "Mouse Blood project" ## set project name
+ORGAN = 'Blood'           #For external annotation. Options: Blood, Heart, Intestine, Kidney
+SPECIES = "Mouse"         #For external annotation. Options: Human, Mouse
+MCA_NAME = "Bone-Marrow" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
+HCL_NAME = "Adult-Bone-Marrow-CD34P" #For HCL annotation.
 
-| What    | Follows  |
-| ------- | -------- |
-| A table | A header |
-| A table | A header |
-| A table | A header |
+# filtering params when create seurat object
+MINCELLS  = 5
+MINGENES  = 50
 
----
-
-There's a horizontal rule above and below this.
-
----
-
-Here is an unordered list:
-
-- Salt-n-Pepa
-- Bel Biv DeVoe
-- Kid 'N Play
-
-And an ordered list:
-
-1. Michael Jackson
-2. Michael Bolton
-3. Michael Bublé
-
-And an unordered task list:
-
-- [x] Create a sample markdown document
-- [x] Add task lists to it
-- [ ] Take a vacation
-
-And a "mixed" task list:
-
-- [ ] Steal underpants
-- ?
-- [ ] Profit!
-
-And a nested list:
-
-- Jackson 5
-  - Michael
-  - Tito
-  - Jackie
-  - Marlon
-  - Jermaine
-- TMNT
-  - Leonardo
-  - Michelangelo
-  - Donatello
-  - Raphael
-
-Definition lists can be used with HTML syntax. Definition terms are bold and italic.
-
-<dl>
-    <dt>Name</dt>
-    <dd>Godzilla</dd>
-    <dt>Born</dt>
-    <dd>1952</dd>
-    <dt>Birthplace</dt>
-    <dd>Japan</dd>
-    <dt>Color</dt>
-    <dd>Green</dd>
-</dl>
-
----
-
-Tables should have bold headings and alternating shaded rows.
-
-| Artist          | Album          | Year |
-| --------------- | -------------- | ---- |
-| Michael Jackson | Thriller       | 1982 |
-| Prince          | Purple Rain    | 1984 |
-| Beastie Boys    | License to Ill | 1986 |
-
-If a table is too wide, it should condense down and/or scroll horizontally.
-
-<!-- prettier-ignore-start -->
-
-| Artist            | Album           | Year | Label       | Awards   | Songs     |
-|-------------------|-----------------|------|-------------|----------|-----------|
-| Michael Jackson   | Thriller        | 1982 | Epic Records | Grammy Award for Album of the Year, American Music Award for Favorite Pop/Rock Album, American Music Award for Favorite Soul/R&B Album, Brit Award for Best Selling Album, Grammy Award for Best Engineered Album, Non-Classical | Wanna Be Startin' Somethin', Baby Be Mine, The Girl Is Mine, Thriller, Beat It, Billie Jean, Human Nature, P.Y.T. (Pretty Young Thing), The Lady in My Life |
-| Prince            | Purple Rain     | 1984 | Warner Brothers Records | Grammy Award for Best Score Soundtrack for Visual Media, American Music Award for Favorite Pop/Rock Album, American Music Award for Favorite Soul/R&B Album, Brit Award for Best Soundtrack/Cast Recording, Grammy Award for Best Rock Performance by a Duo or Group with Vocal | Let's Go Crazy, Take Me With U, The Beautiful Ones, Computer Blue, Darling Nikki, When Doves Cry, I Would Die 4 U, Baby I'm a Star, Purple Rain |
-| Beastie Boys      | License to Ill  | 1986 | Mercury Records | noawardsbutthistablecelliswide | Rhymin & Stealin, The New Style, She's Crafty, Posse in Effect, Slow Ride, Girls, (You Gotta) Fight for Your Right, No Sleep Till Brooklyn, Paul Revere, Hold It Now, Hit It, Brass Monkey, Slow and Low, Time to Get Ill |
-
-<!-- prettier-ignore-end -->
-
----
-
-Code snippets like `var foo = "bar";` can be shown inline.
-
-Also, `this should vertically align` ~~`with this`~~ ~~and this~~.
-
-Code can also be shown in a block element.
-
-```
-var foo = "bar";
+INTEGRATION_OPTION = "seurat" ### or harmony
 ```
 
-Code can also use syntax highlighting.
+### settings - data source
 
-```javascript
-var foo = "bar";
+*ANNOTATION_EXTERNAL_FILE* is the celltype gene markers file aforementioned. You can add more markers as long as the format is consistent.
+
+*MSigDB_GENESET_HUMAN_GMT_FILE* is genesets collected by [GSEA](https://www.gsea-msigdb.org), since it is a gmt file, you can also append more genesets or specify another gmt.gz file.
+
+*data_src* keeps the input count matrix. Supported format is **10X** and **10X_h5**. Left side names are the name of the sample, right side values is the 10X directories or  h5 file names.
+
+
+```R
+### -------------- Data SRC-----------------------------
+ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
+
+## If genesets you need are not included, please attach your geneset to the gmt.gz file.
+MSigDB_GENESET_HUMAN_GMT_FILE  = "external/Human_msigdb.v7.2.symbols.gmt.gz"
+
+data_src = c(
+      A_MxCre    =   "data/A_MxCre",
+      B_MxCre    =   "data/B_MxCre",
+      C_Csnk     =   "data/C_Csnk",
+      D_Csnk     =   "data/D_Csnk"
+)
 ```
 
+
+### setttings - replicate group
+
+*stage_lst* keeps the groups of samples, left side names are samples' names, right side values are group names. If there's no replicates, or you don't need to group samples, you can set each group name the exact sample name.
+
+```R
+stage_lst = c(
+        A_MxCre      =   "MxCre",
+        B_MxCre      =   "MxCre",
+        C_Csnk       =   "Csnk",
+        D_Csnk       =   "Csnk"
+)
 ```
-Long, single-line code blocks should not wrap. They should horizontally scroll if they are too long. This line should be long enough to demonstrate this.
-```
 
-```javascript
-var foo =
-  "The same thing is true for code with syntax highlighting. A single line of code should horizontally scroll if it is really long.";
-```
+### settings - variables to regressout
 
-Inline code inside table cells should still be distinguishable.
+*preprocess_regressout* indicate which variables to be regressout for integration. Please set to `0` if you don't want to regressout during the integrating.
 
-| Language   | Code               |
-| ---------- | ------------------ |
-| Javascript | `var foo = "bar";` |
-| Ruby       | `foo = "bar"`      |
-
----
-
-Small images should be shown at their actual size.
-
-![Octocat](https://github.githubassets.com/images/icons/emoji/octocat.png)
-
-Large images should always scale down and fit in the content container.
-
-![Branching](https://guides.github.com/activities/hello-world/branching.png)
+```R
+preprocess_regressout = c("mito"       = 1,
+                          "ribo"       = 0,
+                          "cellcycle"  = 1
+                         )
 
 ```
-This is the final element on the page and there should be no margin below this.
+
+
+### settings - genesets
+
+*MSigDB_Geneset_names* select the geneset names in *MSigDB_GENESET_HUMAN_GMT_FILE*.
+
+```R
+MSigDB_Geneset_names <- c(
+    "NABA_COLLAGENS",
+    "NABA_SECRETED_FACTORS",
+    "NABA_ECM_GLYCOPROTEINS",
+    "NABA_CORE_MATRISOME",
+    "NABA_ECM_REGULATORS",
+    "NABA_MATRISOME_ASSOCIATED",
+    "NABA_ECM_AFFILIATED",
+    "NABA_BASEMENT_MEMBRANES",
+    "NABA_PROTEOGLYCANS",
+    "NABA_MATRISOME"
+)
 ```
+
+### settings - execution plan
+
+Execution plan `conf` is almost the most important setting that you need to modify frequently. It defines how to run your pipeline `data producing`. The pipeline `data producing` includes 3 main steps:
+
+1. scrna_phase_preprocess: load data, filter cells, regressout variables and ambient RNA detection.
+2. scrna_phase_clustering: integration, clustering, MCA, HCL annotation etc.
+3. scrna_phase_comparing: DE, GO, pathways, genesets analyses etc.
+
+Each step will accumulately store the result into a SeuratObject with corresponding name, e.g. **scrna_phase_preprocess** will store to **scrna_phase_preprocess.Rds** when this step is done. All rest functions like **scrna_merge_clusters** will store to **scrna_phase_comparing.Rds**.
+
+
+If you have produced **scrna_phase_preprocess**, and need to redo the integration and clustering, just set **scrna_phase_preprocess** to **2**. If you have already got a SeuratObject, just named it as **scrna_whatever_xxx.Rds**, add an option **scrna_whatever_xxx=2**, the pipeline will load this file and perform the rest plans that you set to **1**.
+
+
+Please note that, the pipeline can also perform clusters removal or merging. Which are connected to variables like *scrna_merge_clusters*, *scrna_remove_clusters* and *scrna_remove_recluster*.
+
+
+```R
+### -------------- RUN PARAMETERS-----------------------------
+
+## 0. omit,     1. calc & save,      2. load
+conf = c(
+       scrna_phase_preprocess     = 1, ## quality check and preprocessing before integration
+       scrna_phase_clustering     = 1, ## integration & clustering
+       scrna_phase_comparing      = 1, ## DE GO pathway analysis etc. All rest calculating will be stored here
+       scrna_cluster_annotation   = 0, ## Annotate clusters according to `cluster_annotation`
+       scrna_clusterwise_xcell    = 0, ## remove cells of each cluster according distinct criterion
+       scrna_del_mitogenes        = 0, ## !!!DANGEROUS, once deleted, never recovered!!!
+       scrna_merge_clusters       = 0, ## merge clusters
+       scrna_remove_clusters      = 0, ## remove clusters
+       scrna_remove_recluster     = 0) ## remove clusters and recluster with default resolution
+
+```
+
+### settings - colors
+
+This *viz_conf* list indicate how to display colors of a variaty of plots. The frequent elements to be changed are **cluster_color_option** and **replicate_color_option**. Please note that some colorcodes only include less than 10 colors, choose colorcode that fit your dataset.
+
+
+```R
+viz_conf = list(
+  ## https://github.com/nanxstats/ggsci
+  ##ggsci colorcode & availble colors:
+                # "aaas":10 "d3":10 "futurama":12 "gsea":12 "igv":51
+                # "jama":7 "jco":10 "lancet":9 "locuszoom":7 "material":10
+                # "nejm":8 "npg":10 "rickandmorty":12 "simpsons":16 "startrek":7
+                # "tron":7 "uchicago":9 "ucscgb":26
+
+  cluster_color_option = "igv", ## ggsci, see above
+  replicate_color_option = "simpsons", ## ggsci, see above
+  neg_color = "#51C3CC",#colorBlindness::Blue2DarkOrange12Steps[2],
+  pos_color = "#CC5800",#rev(colorBlindness::Blue2DarkOrange12Steps)[2],
+  base_color = "lightgrey",#"lightgrey",
+  neg_pos_divergent_palette = c('#1E8E99','#51C3CC','#99F9FF','#B2FCFF','#CCFEFF','#E5FFFF','#FFE5CC','#FFCA99','#FFAD65','#FF8E32','#CC5800','#993F00') #colorBlindness::Blue2DarkOrange12Steps
+)
+```
+
+
+
+

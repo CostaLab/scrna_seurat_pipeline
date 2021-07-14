@@ -11,4 +11,3 @@ sort: 1
 {% include list.liquid all=true %}
 
 
-<img src="{{ site.baseurl }}/images/overview/scrna_pipeline_overview1.png">
