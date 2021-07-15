@@ -11,10 +11,9 @@ The pipeline consists of two steps: `data producing` and `visualization`. Basica
 <img src="{{ site.baseurl }}/images/overview/scrna_pipeline_overview1.png">
 
 
-## Settings
-It is worth notice that the configuration file is the most important thing before you are about to run the pipeline.
+## General steps
 
-1. Give a name of your experiments
+1. Give a name to your experiment
 
 Assume your experiment name is `experiment1`, please:
 
@@ -23,6 +22,16 @@ Assume your experiment name is `experiment1`, please:
    b) copy `run_example.sh` and `run_viz_example.sh` to `run_experiment1.sh` and `run_viz_experiment1.sh`
 
 2. Adjust `conf/conf_experiment1.R` to your experiment. Please note this step is important.
+
+3. `sh run_experiment1.sh experiment1` to run the `data producing`.
+
+4. `sh run_viz_experiment1.sh experiment1` to run the visualization if there's no error of `data producing`
+
+5. Open the file `experiment1/report/index.html` to check the report.
+
+## Settings
+
+It is worth notice that checking the configuration file is the most important thing before you are about to run the pipeline.
 
 ### settings - initial info
 *ORGAN* is related a celltype gene markers file, so that only a few of organs are available for now.
@@ -174,6 +183,9 @@ viz_conf = list(
   neg_pos_divergent_palette = c('#1E8E99','#51C3CC','#99F9FF','#B2FCFF','#CCFEFF','#E5FFFF','#FFE5CC','#FFCA99','#FFAD65','#FF8E32','#CC5800','#993F00') #colorBlindness::Blue2DarkOrange12Steps
 )
 ```
+
+## Run `data producing`
+
 
 
 
