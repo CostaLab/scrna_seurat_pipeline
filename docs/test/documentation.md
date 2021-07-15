@@ -16,9 +16,8 @@ The pipeline consists of two steps: `data producing` and `visualization`. Basica
 1. Give a name to your experiment
 
 Assume your experiment name is `experiment1`, please:
-
+>
    a) create `conf/conf_experiment1.R`.
-
    b) copy `run_example.sh` and `run_viz_example.sh` to `run_experiment1.sh` and `run_viz_experiment1.sh`
 
 2. Adjust `conf/conf_experiment1.R` to your experiment. Please note this step is important.
@@ -141,7 +140,7 @@ Each step will accumulately store the result into a SeuratObject with correspond
 If you have produced **scrna_phase_preprocess**, and need to redo the integration and clustering, just set **scrna_phase_preprocess** to **2**. If you have already got a SeuratObject, just named it as **scrna_whatever_xxx.Rds**, add an option **scrna_whatever_xxx=2**, the pipeline will load this file and perform the rest plans that you set to **1**.
 
 
-Please note that, the pipeline can also perform clusters removal or merging. Which are connected to variables like *scrna_merge_clusters*, *scrna_remove_clusters* and *scrna_remove_recluster*.
+Please note that, the pipeline can also perform clusters removal or merging. Which are connected to settings like *scrna_merge_clusters*, *scrna_remove_clusters* and *scrna_remove_recluster*.
 
 
 ```R
@@ -187,6 +186,7 @@ viz_conf = list(
 ## Run `data producing`
 
 
+## Run `visualization`
 
 
 
