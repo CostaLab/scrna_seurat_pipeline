@@ -15,6 +15,7 @@ The pipeline consists of two steps: `data producing` and `visualization`. Basica
 
 1. Give a name to your experiment. Assume your experiment name is `experiment1`, please:
 > a) create `conf/conf_experiment1.R`.
+
 > b) copy `run_example.sh` and `run_viz_example.sh` to `run_experiment1.sh` and `run_viz_experiment1.sh`
 
 2. Adjust `conf/conf_experiment1.R` to your experiment. Please note this step is important.
