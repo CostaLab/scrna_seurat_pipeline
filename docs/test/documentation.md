@@ -160,7 +160,7 @@ conf = c(
 
 ### settings - colors
 
-This *viz_conf* list indicate how to display colors of a variaty of plots. The frequent elements to be changed are **cluster_color_option** and **replicate_color_option**. Please note that some colorcodes only include less than 10 colors, choose colorcode that fit your dataset.
+This *viz_conf* list indicate how to display colors of a variaty of plots. The frequent options to be changed are **cluster_color_option** and **replicate_color_option**. Please note that some colorcodes only include less than 10 colors, choose colorcode that fit your dataset.
 
 
 ```R
