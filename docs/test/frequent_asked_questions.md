@@ -1,5 +1,5 @@
 ---
-sort: 5
+sort: 3
 ---
 
 # Frequent asked questions
