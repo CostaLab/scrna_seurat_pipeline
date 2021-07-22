@@ -160,6 +160,8 @@ DE_GO_analysis_elements <- function(scrna){
       scrna,
       features = cluster_de_top10[[as.character(i)]]$gene,
       label=T,
+      max.cutoff = 'q95',
+      order = T,
       label.size=2,
       cols = c("lightgrey", "red"),
       reduction = "DEFAULT_UMAP"
@@ -228,6 +230,8 @@ DE_GO_analysis_elements <- function(scrna){
   ## feature
     plt <- FeaturePlot(scrna, features = nm,
                  reduction = "DEFAULT_UMAP",
+                 max.cutoff = 'q95',
+                 order = T,
                  cols = c("lightgrey", "red")) + ggtitle(nm)
     save_ggplot_formats(plt=plt,
            base_plot_dir=report_plots_folder,
