@@ -12,7 +12,7 @@
 ambientRNA_elements <- function(scrna){
   plt <- list()
 
-  plt[[1]] <- FeaturePlot(scrna, features = "AmbientRNA") + ggtitle(label = "Ambient RNA Contamintaion")
+  plt[[1]] <- FeaturePlot(scrna, features = "AmbientRNA", order=T) + ggtitle(label = "Ambient RNA Contamintaion")
 
   plt[[2]] <- VlnPlot(object = scrna, features = "AmbientRNA", group.by = "decontX_clusters", pt.size=0.1)
 

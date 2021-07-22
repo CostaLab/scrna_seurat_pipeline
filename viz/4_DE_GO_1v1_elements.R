@@ -198,6 +198,8 @@ DEGO_1v1_elements <- function(scrna){
         next
       }
       plt<- FeaturePlot(scrna, features = cluster.de.top10[[i]]$gene,
+                       order = T,
+                       max.cutoff = 'q95',
                        cols = c("lightgrey", "red"),
                        reduction = "DEFAULT_UMAP")
 

@@ -304,6 +304,7 @@ clustering_elements <- function(scrna){
       scrna,
       features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA"),
       cols = col_def,
+      order = T,
       reduction=umap_reduction,
       ncol = 2
     )
@@ -318,6 +319,7 @@ clustering_elements <- function(scrna){
       scrna,
       features = c("CC.Difference","G1.Score", "S.Score", "G2M.Score"),
       cols = col_def,
+      order = T,
       reduction=umap_reduction,
       ncol = 2
     )
