@@ -37,6 +37,35 @@ stage_lst = c(
 )
 
 
+##------------------ Number of Cells for Doublet Detection --------------
+# You have to set two variables.
+# doublet_switch: This variable controls, if you want to detect doublets.
+# Values:
+# on      --> Detect doublets and remove them from the data set.
+# off     --> Do not detect doublets.
+# display --> Detect doublets, but do not remove them.
+doublet_switch <- "on"
+
+# This variable controls how you want to remove the doublets. If you set doublet_switch=off, you can ignore this variable.
+# The percentage of doublets you expect
+# You have the following options:
+# Use one set value, e.g. 0.05. This is the percentage of doublets, you want to remove from each sample.
+# Example: doublet_lst <- 0.05
+# A list of values. This can be 1 of three options:
+# The list to the CellRanger output file metrics_summary.csv. We need the
+doublet_lst <- c()
+# You have to set the number of cells per sample. This number is used to remove doublets.
+# Please see DoubletEstimation10X.csv for the percentage of doublets expected.
+# You can either give the number of cells recovered (cells_recovered) or loaded (cells_loaded).
+# If you define cells_loaded, it will be used even if you define cells_recovered.
+# If you define neither, the number of cells per sample in the current Seurat object are used.
+cells_recovered = c(
+  A_MxCre = "MxCre",
+  B_MxCre = "MxCre",
+  C_Csnk  = "Csnk",
+  D_Csnk  = "Csnk"
+)
+
 
 ## Phase_1, set 1 to regressout
 preprocess_regressout = c("mito"       = 1,
