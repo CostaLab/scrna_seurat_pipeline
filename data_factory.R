@@ -951,8 +951,14 @@ generate_scrna_integration_seurat <- function(scrna){
                                    x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)})
 
              ## scale = False to use previous scaled data
-             anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=F)## THIS IS CCA DIMENSIONS
-             scrna_inte <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM) ## THIS IS PCA DIMENSION
+	     ## If the number of cells is < 200 for a sample, we need to reduce the default values.
+	     ## If the number of cells is < 200 for any sample, we set the k.filter and k.weight values to this new minimum.
+	     ## This way, we can still integrate very small data sets. 
+	     k.filter <- min(table(scrna$name))
+             k.filter <- ifelse(k.filter < 200, k.filter, 200)
+             anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=F,
+					       k.filter = k.filter)## THIS IS CCA DIMENSIONS
+             scrna_inte <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM, k.weight = k.filter) ## THIS IS PCA DIMENSION
              ## keep the order of integration obj
              scrna_inte <- scrna_inte[, colnames(scrna)]
              scrna[['integrated']] <- scrna_inte[['integrated']]
