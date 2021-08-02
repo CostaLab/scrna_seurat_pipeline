@@ -76,19 +76,30 @@ doublet_switch <- "on"
 #   D_Csnk  = "/path/to/D_Csnk/metrics_summary.csv"
 # )
 
-doublet_lst <- c()
-# You have to set the number of cells per sample. This number is used to remove doublets.
-# Please see DoubletEstimation10X.csv for the percentage of doublets expected.
-# You can either give the number of cells recovered (cells_recovered) or loaded (cells_loaded).
-# If you define cells_loaded, it will be used even if you define cells_recovered.
-# If you define neither, the number of cells per sample in the current Seurat object are used.
-cells_recovered = c(
-  A_MxCre = "MxCre",
-  B_MxCre = "MxCre",
-  C_Csnk  = "Csnk",
-  D_Csnk  = "Csnk"
-)
+# 5) Set the number of cells, you want to use to calculate the proportion of doublets.
+# Example:
+# doublet_lst = c(
+#   A_MxCre = 1024,
+#   B_MxCre = 2048,
+#   C_Csnk  = 4096,
+#   D_Csnk  = 8192
+# )
 
+# 6) You can combine several options. 
+# Example:
+# doublet_lst = c(
+#   A_MxCre = "/path/to/A_MxCre/metrics_summary.csv", --> For this sample, we will use the number of cells after filtering by CellRanger.
+#   B_MxCre = NULL, ------------------------------------> For this sample, we will use the number of cells in the current Seurat object. 
+#   C_Csnk  = 0.05, ------------------------------------> For this sample, we will simply remove 5% of the cells.
+#   D_Csnk  = 1024 -------------------------------------> For this sample, we use this many cells to estimate the proportion of doublets.
+# )
+
+doublet_lst = c(
+  A_MxCre = "/data/mg000001/git_projects/20210721_scrna_seurat_pipeline/data/A_MxCre/metrics_summary.csv", 
+  B_MxCre = NULL, 
+  C_Csnk  = 0.05, 
+  D_Csnk  = 1024 
+)
 
 ## Phase_1, set 1 to regressout
 preprocess_regressout = c("mito"       = 1,
