@@ -441,6 +441,7 @@ DE_GO_analysis_elements <- function(scrna){
           ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) +
           #ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) +
           geom_bar(stat="identity", fill="#3399CC", color="grey50") +
+          geom_hline(yintercept=-log10(0.05),linetype = 2,size=1) +
           ggtitle(paste(enrich_type,term_direction,",", names(y)[i])) +
           theme_minimal() +
           theme(axis.text.y  = element_text(size=20), axis.title.y=element_blank(), axis.ticks.y=element_blank()) +
