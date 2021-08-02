@@ -47,12 +47,35 @@ stage_lst = c(
 doublet_switch <- "on"
 
 # This variable controls how you want to remove the doublets. If you set doublet_switch=off, you can ignore this variable.
-# The percentage of doublets you expect
-# You have the following options:
-# Use one set value, e.g. 0.05. This is the percentage of doublets, you want to remove from each sample.
+# The percentage of doublets you expect depends on the number of cells you have. The more cells, the higher the percentage of doublets.
+# 10X provides a table of the expected percentage of doublets and the number of loaded or recovered cells. 
+# The table is provided in static/DoubletEstimation10X.csv
+# In this pipeline, you have the following options:
+# 1) Use one set value, e.g. 0.05. This is the percentage of doublets, you want to remove from each sample.
 # Example: doublet_lst <- 0.05
-# A list of values. This can be 1 of three options:
-# The list to the CellRanger output file metrics_summary.csv. We need the
+
+# 2) Use the number of cells in the Seurat object. The pipeline then uses the number of cells for each sample to estimate the proportion of doublets. 
+# Example: doublet_lst <- NULL
+
+# 3) Set the percentage to be removed for each sample seperately. 
+# Example: 
+# doublet_lst = c(
+#   A_MxCre = 0.05,
+#   B_MxCre = 0.1,
+#   C_Csnk  = 0.075,
+#   D_Csnk  = 0.5
+# )
+
+# 4) Use the number of cells found by CellRanger for this sample.
+# Then you have to provide the path to the CellRanger output file metrics_summary.csv.
+# Example: 
+# doublet_lst = c(
+#   A_MxCre = "/path/to/A_MxCre/metrics_summary.csv",
+#   B_MxCre = "/path/to/B_MxCre/metrics_summary.csv",
+#   C_Csnk  = "/path/to/C_Csnk/metrics_summary.csv",
+#   D_Csnk  = "/path/to/D_Csnk/metrics_summary.csv"
+# )
+
 doublet_lst <- c()
 # You have to set the number of cells per sample. This number is used to remove doublets.
 # Please see DoubletEstimation10X.csv for the percentage of doublets expected.
