@@ -95,7 +95,7 @@ doublet_switch <- "on"
 # )
 
 doublet_lst = list(
-  A_MxCre = "/data/mg000001/git_projects/20210721_scrna_seurat_pipeline/data/A_MxCre/metrics_summary.csv", 
+  A_MxCre = "data/A_MxCre/metrics_summary.csv", 
   B_MxCre = NULL, 
   C_Csnk  = 0.05, 
   D_Csnk  = 1024 
