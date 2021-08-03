@@ -1,0 +1,149 @@
+---
+title: "Between {{group}} DE & GO analysis"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+params:
+    scrna: 'scrna object'
+    cluster: "clusters to analyse"
+    cluster_info: "cluster info"
+    project: "name/tag of the project"
+    savedir: "directory where rds files were saved"
+    funcs: "analysis steps to be performed"
+    report_data_folder: "folder with the output tables"
+    report_tables_folder: "folder with the table elements"
+    report_plots_folder: "folder with the plot elements"
+    report_plots_folder_png: "folder with the png plot elements"
+    report_plots_folder_pdf: "folder with the pdf plot elements"
+    author: "author of document"
+author: '`r params$author`'
+---
+
+## Cluster: `r colorize(params$cluster_info,"red")`
+
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(kableExtra)
+```
+
+## DE
+
+## Plot {{tX}} vs {{tY}}
+```{r heatmap_de, out.width="100%", echo=FALSE}
+flist = stringr::str_sort(grep(
+  glue("top10-deg-vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}_p"),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+
+if(length(flist)>0){
+  knitr::include_graphics(flist)
+}
+```
+
+## Volcano
+```{r volcano, out.width="100%", echo=FALSE}
+flist = stringr::str_sort(grep(
+  glue("volcanoplot_deg_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}_id-"),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+knitr::include_graphics(flist)
+```
+
+```{r volcanoplots_cluster, out.width="100%", echo=FALSE}
+flist = stringr::str_sort(grep(
+  paste0("volcanoplot_deg_cluster-",params$cluster),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+knitr::include_graphics(flist)
+```
+
+## GO up analysis
+```{r heatmap_go_up , out.width="100%", echo=FALSE}
+fname=file.path(
+  params$report_plots_folder_png,
+  glue("go_up_genes_heatmap_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}.png")
+)
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+
+
+```{r barplot_go_up, out.width="100%", echo=FALSE}
+### up genes top 10
+flist = stringr::str_sort(grep(
+  glue("top10-goup_bar_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}_p"),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+knitr::include_graphics(flist)
+
+```
+
+## GO down analysis
+```{r heatmap_go_down, out.width="100%", echo=FALSE}
+fname=file.path(
+  params$report_plots_folder_png,
+  glue("go_down_genes_heatmap_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}.png")
+)
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+
+```{r barplot_go_down, out.width="100%", echo=FALSE}
+### down genes top 10
+flist = stringr::str_sort(grep(
+  glue("top10-godown_bar_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}_p"),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+knitr::include_graphics(flist)
+
+```
+
+## DE genes on UMAP plot
+```{r umap_de_genes, out.width="100%", echo=FALSE, results = "asis"}
+flist = stringr::str_sort(grep(
+  glue("featureplot_top10_deg_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}_id-"),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+
+for(afile in flist){
+
+  cluster_id = stringr::str_extract(basename(afile), "(?<=(id-))(.*)(?=\\.png)")
+  cat("  \n###",  glue::glue("Cluster: {URLdecode_escape(cluster_id)}"),"   \n")
+  cat(paste0("![](", afile, ")"), "\n")
+  knitr::include_graphics(afile)
+
+}
+```

@@ -31,7 +31,7 @@ module load scRNA
 ################################################################
 
 # could also define it here instead of taking it as an arg
-proj_name="$1"
+proj_name="TEST"
 # data dir (where your results will be saved)
 
 data_path="/data/EXAMPLE/exp/scRNA/some_project/scrna_seurat_pipeline_results"
@@ -42,8 +42,8 @@ date
 ## 50 cores run, future memory
 mkdir -p ${data_path}/${proj_name}
 ln -s ${data_path}/conf/config_${proj_name}.R ${data_path}/${proj_name}
-Rscript data_factory.R -n 40 \
-  --MaxMemMega=180000 \
+Rscript data_factory.R -n 7 \
+  --MaxMemMega=6000 \
   -c "./conf/config_${proj_name}.R" \
   -s "${data_path}/${proj_name}/save" \
   -e "${data_path}/${proj_name}/charts" \

@@ -1,0 +1,1400 @@
+INFO [2021-08-03 11:39:34] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-03 11:39:34] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-03 11:39:34] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-03 11:39:34] samples summary: 
+INFO [2021-08-03 11:39:34] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-03 11:39:34] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-03 11:39:34] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-03 11:39:34] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-03 11:39:34] The executing plan is: 
+INFO [2021-08-03 11:39:34] 			calculating: scrna_phase_preprocess
+INFO [2021-08-03 11:39:34] 			calculating: scrna_phase_clustering
+INFO [2021-08-03 11:39:34] 			calculating: scrna_phase_comparing
+INFO [2021-08-03 11:39:39] executing generate_scrna_phase_preprocess
+INFO [2021-08-03 11:39:39] executing generate_scrna_rawdata
+INFO [2021-08-03 11:39:50] finished generate_scrna_rawdata
+INFO [2021-08-03 11:39:50] executing generate_scrna_ambient_rna
+INFO [2021-08-03 11:40:39] finished generate_scrna_ambient_rna
+INFO [2021-08-03 11:40:39] executing generate_scrna_filter
+INFO [2021-08-03 11:40:39] finished generate_scrna_filter
+INFO [2021-08-03 11:40:39] executing generate_generate_scrna_doublet_proportions
+INFO [2021-08-03 11:42:56] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-03 11:42:56] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-03 11:42:56] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-03 11:42:56] samples summary: 
+INFO [2021-08-03 11:42:56] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-03 11:42:56] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-03 11:42:56] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-03 11:42:56] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-03 11:42:56] The executing plan is: 
+INFO [2021-08-03 11:42:56] 			calculating: scrna_phase_preprocess
+INFO [2021-08-03 11:42:56] 			calculating: scrna_phase_clustering
+INFO [2021-08-03 11:42:56] 			calculating: scrna_phase_comparing
+INFO [2021-08-03 11:43:01] executing generate_scrna_phase_preprocess
+INFO [2021-08-03 11:43:01] executing generate_scrna_rawdata
+INFO [2021-08-03 11:43:12] finished generate_scrna_rawdata
+INFO [2021-08-03 11:43:12] executing generate_scrna_ambient_rna
+INFO [2021-08-03 11:43:29] finished generate_scrna_ambient_rna
+INFO [2021-08-03 11:43:29] executing generate_scrna_filter
+INFO [2021-08-03 11:43:29] finished generate_scrna_filter
+INFO [2021-08-03 11:43:29] executing generate_scrna_doublet_proportions
+INFO [2021-08-03 11:43:39] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-03 11:43:39] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-03 11:43:39] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-03 11:43:39] samples summary: 
+INFO [2021-08-03 11:43:39] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-03 11:43:39] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-03 11:43:39] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-03 11:43:39] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-03 11:43:39] The executing plan is: 
+INFO [2021-08-03 11:43:39] 			calculating: scrna_phase_preprocess
+INFO [2021-08-03 11:43:39] 			calculating: scrna_phase_clustering
+INFO [2021-08-03 11:43:39] 			calculating: scrna_phase_comparing
+INFO [2021-08-03 11:43:44] executing generate_scrna_phase_preprocess
+INFO [2021-08-03 11:43:44] executing generate_scrna_rawdata
+INFO [2021-08-03 11:43:55] finished generate_scrna_rawdata
+INFO [2021-08-03 11:43:55] executing generate_scrna_ambient_rna
+INFO [2021-08-03 11:44:43] finished generate_scrna_ambient_rna
+INFO [2021-08-03 11:44:43] executing generate_scrna_filter
+INFO [2021-08-03 11:44:43] finished generate_scrna_filter
+INFO [2021-08-03 11:44:43] executing generate_scrna_doublet_proportions
+INFO [2021-08-03 11:45:45] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-03 11:45:45] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-03 11:45:45] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-03 11:45:45] samples summary: 
+INFO [2021-08-03 11:45:45] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-03 11:45:45] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-03 11:45:45] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-03 11:45:45] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-03 11:45:45] The executing plan is: 
+INFO [2021-08-03 11:45:45] 			calculating: scrna_phase_preprocess
+INFO [2021-08-03 11:45:45] 			calculating: scrna_phase_clustering
+INFO [2021-08-03 11:45:45] 			calculating: scrna_phase_comparing
+INFO [2021-08-03 11:45:50] executing generate_scrna_phase_preprocess
+INFO [2021-08-03 11:45:50] executing generate_scrna_rawdata
+INFO [2021-08-03 11:46:01] finished generate_scrna_rawdata
+INFO [2021-08-03 11:46:01] executing generate_scrna_ambient_rna
+INFO [2021-08-03 11:46:48] finished generate_scrna_ambient_rna
+INFO [2021-08-03 11:46:48] executing generate_scrna_filter
+INFO [2021-08-03 11:46:48] finished generate_scrna_filter
+INFO [2021-08-03 11:46:48] executing generate_scrna_doublet_proportions
+INFO [2021-08-03 12:10:03] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-03 12:10:03] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-03 12:10:03] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-03 12:10:03] samples summary: 
+INFO [2021-08-03 12:10:03] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-03 12:10:03] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-03 12:10:03] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-03 12:10:03] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-03 12:10:03] The executing plan is: 
+INFO [2021-08-03 12:10:03] 			calculating: scrna_phase_preprocess
+INFO [2021-08-03 12:10:03] 			calculating: scrna_phase_clustering
+INFO [2021-08-03 12:10:03] 			calculating: scrna_phase_comparing
+INFO [2021-08-03 12:10:07] executing generate_scrna_phase_preprocess
+INFO [2021-08-03 12:10:07] executing generate_scrna_rawdata
+INFO [2021-08-03 12:10:18] finished generate_scrna_rawdata
+INFO [2021-08-03 12:10:18] executing generate_scrna_ambient_rna
+INFO [2021-08-03 12:11:07] finished generate_scrna_ambient_rna
+INFO [2021-08-03 12:11:07] executing generate_scrna_filter
+INFO [2021-08-03 12:11:07] finished generate_scrna_filter
+INFO [2021-08-03 12:11:07] executing generate_scrna_doublet_proportions
+INFO [2021-08-03 12:22:43] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-03 12:22:43] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-03 12:22:43] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-03 12:22:43] samples summary: 
+INFO [2021-08-03 12:22:43] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-03 12:22:43] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-03 12:22:43] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-03 12:22:43] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-03 12:22:43] The executing plan is: 
+INFO [2021-08-03 12:22:43] 			calculating: scrna_phase_preprocess
+INFO [2021-08-03 12:22:43] 			calculating: scrna_phase_clustering
+INFO [2021-08-03 12:22:43] 			calculating: scrna_phase_comparing
+INFO [2021-08-03 12:22:48] executing generate_scrna_phase_preprocess
+INFO [2021-08-03 12:22:48] executing generate_scrna_rawdata
+INFO [2021-08-03 12:22:59] finished generate_scrna_rawdata
+INFO [2021-08-03 12:22:59] executing generate_scrna_ambient_rna
+INFO [2021-08-03 12:23:48] finished generate_scrna_ambient_rna
+INFO [2021-08-03 12:23:48] executing generate_scrna_filter
+INFO [2021-08-03 12:23:48] finished generate_scrna_filter
+INFO [2021-08-03 12:23:48] executing generate_scrna_doublet_proportions
+INFO [2021-08-03 12:28:16] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-03 12:28:16] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-03 12:28:16] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-03 12:28:16] samples summary: 
+INFO [2021-08-03 12:28:16] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-03 12:28:16] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-03 12:28:16] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-03 12:28:16] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-03 12:28:16] The executing plan is: 
+INFO [2021-08-03 12:28:16] 			calculating: scrna_phase_preprocess
+INFO [2021-08-03 12:28:16] 			calculating: scrna_phase_clustering
+INFO [2021-08-03 12:28:16] 			calculating: scrna_phase_comparing
+INFO [2021-08-03 12:28:21] executing generate_scrna_phase_preprocess
+INFO [2021-08-03 12:28:21] executing generate_scrna_rawdata
+INFO [2021-08-03 12:28:32] finished generate_scrna_rawdata
+INFO [2021-08-03 12:28:32] executing generate_scrna_ambient_rna
+INFO [2021-08-03 12:29:20] finished generate_scrna_ambient_rna
+INFO [2021-08-03 12:29:20] executing generate_scrna_filter
+INFO [2021-08-03 12:29:20] finished generate_scrna_filter
+INFO [2021-08-03 12:29:20] executing generate_scrna_doublet_proportions
+INFO [2021-08-03 12:37:42] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-03 12:37:42] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-03 12:37:42] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-03 12:37:42] samples summary: 
+INFO [2021-08-03 12:37:42] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-03 12:37:42] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-03 12:37:42] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-03 12:37:42] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-03 12:37:42] The executing plan is: 
+INFO [2021-08-03 12:37:42] 			calculating: scrna_phase_preprocess
+INFO [2021-08-03 12:37:42] 			calculating: scrna_phase_clustering
+INFO [2021-08-03 12:37:42] 			calculating: scrna_phase_comparing
+INFO [2021-08-03 12:37:46] executing generate_scrna_phase_preprocess
+INFO [2021-08-03 12:37:46] executing generate_scrna_rawdata
+INFO [2021-08-03 12:37:57] finished generate_scrna_rawdata
+INFO [2021-08-03 12:37:57] executing generate_scrna_ambient_rna
+INFO [2021-08-03 12:38:47] finished generate_scrna_ambient_rna
+INFO [2021-08-03 12:38:47] executing generate_scrna_filter
+INFO [2021-08-03 12:38:47] finished generate_scrna_filter
+INFO [2021-08-03 12:38:47] executing generate_scrna_doublet_proportions
+INFO [2021-08-03 12:40:55] finished generate_scrna_doublet_proportions
+INFO [2021-08-03 12:40:55] executing generate_scrna_preprocess
+INFO [2021-08-03 12:41:01] finished generate_scrna_preprocess
+INFO [2021-08-03 12:41:01] executing generate_scrna_cellcycle
+INFO [2021-08-03 12:41:03] finished generate_scrna_cellcycle
+INFO [2021-08-03 12:41:03] executing generate_scrna_cycleRegressOut
+INFO [2021-08-03 12:41:26] finished generate_scrna_cycleRegressOut
+INFO [2021-08-03 12:41:26] executing generate_scrna_regressOut
+INFO [2021-08-03 12:41:53] finished generate_scrna_regressOut
+INFO [2021-08-03 12:42:21] finished scrna_phase_preprocess
+INFO [2021-08-03 12:42:21] executing generate_scrna_phase_clustering
+INFO [2021-08-03 12:42:21] executing generate_scrna_integration_harmony
+INFO [2021-08-03 12:42:30] finished generate_scrna_integration_harmony
+INFO [2021-08-03 12:42:30] executing generate_scrna_integration_seurat
+INFO [2021-08-03 12:43:11] finished generate_scrna_integration_seurat
+INFO [2021-08-03 12:43:12] executing generate_scrna_batchclustering
+INFO [2021-08-03 12:43:15] finished generate_scrna_batchclustering
+INFO [2021-08-03 12:43:15] executing generate_scrna_batch_markergenes
+INFO [2021-08-03 13:04:43] finished generate_scrna_batch_markergenes
+INFO [2021-08-03 13:04:43] executing generate_scrna_clustering
+INFO [2021-08-03 13:04:44] finished generate_scrna_clustering
+INFO [2021-08-03 13:04:44] executing generate_scrna_fishertest_inte_clusters
+INFO [2021-08-03 13:04:49] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-03 13:04:49] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-03 13:04:49] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-03 13:04:49] samples summary: 
+INFO [2021-08-03 13:04:49] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-03 13:04:49] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-03 13:04:49] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-03 13:04:49] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-03 13:04:49] The executing plan is: 
+INFO [2021-08-03 13:04:49] 			calculating: scrna_phase_preprocess
+INFO [2021-08-03 13:04:49] 			calculating: scrna_phase_clustering
+INFO [2021-08-03 13:04:49] 			calculating: scrna_phase_comparing
+INFO [2021-08-03 13:04:54] executing generate_scrna_phase_preprocess
+INFO [2021-08-03 13:04:54] executing generate_scrna_rawdata
+INFO [2021-08-03 13:05:05] finished generate_scrna_rawdata
+INFO [2021-08-03 13:05:05] executing generate_scrna_ambient_rna
+INFO [2021-08-03 13:05:53] finished generate_scrna_ambient_rna
+INFO [2021-08-03 13:05:53] executing generate_scrna_filter
+INFO [2021-08-03 13:05:54] finished generate_scrna_filter
+INFO [2021-08-03 13:05:54] executing generate_scrna_doublet_proportions
+INFO [2021-08-03 13:18:33] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-03 13:18:33] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-03 13:18:33] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-03 13:18:33] samples summary: 
+INFO [2021-08-03 13:18:33] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-03 13:18:33] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-03 13:18:33] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-03 13:18:33] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-03 13:18:33] The executing plan is: 
+INFO [2021-08-03 13:18:33] 			calculating: scrna_phase_preprocess
+INFO [2021-08-03 13:18:33] 			calculating: scrna_phase_clustering
+INFO [2021-08-03 13:18:33] 			calculating: scrna_phase_comparing
+INFO [2021-08-03 13:18:38] executing generate_scrna_phase_preprocess
+INFO [2021-08-03 13:18:38] executing generate_scrna_rawdata
+INFO [2021-08-03 13:18:49] finished generate_scrna_rawdata
+INFO [2021-08-03 13:18:49] executing generate_scrna_ambient_rna
+INFO [2021-08-03 13:19:38] finished generate_scrna_ambient_rna
+INFO [2021-08-03 13:19:38] executing generate_scrna_filter
+INFO [2021-08-03 13:19:38] finished generate_scrna_filter
+INFO [2021-08-03 13:19:38] executing generate_scrna_doublet_proportions
+INFO [2021-08-03 13:22:37] finished generate_scrna_doublet_proportions
+INFO [2021-08-03 13:22:37] executing generate_scrna_preprocess
+INFO [2021-08-03 13:22:42] finished generate_scrna_preprocess
+INFO [2021-08-03 13:22:42] executing generate_scrna_cellcycle
+INFO [2021-08-03 13:22:43] finished generate_scrna_cellcycle
+INFO [2021-08-03 13:22:43] executing generate_scrna_cycleRegressOut
+INFO [2021-08-03 13:23:05] finished generate_scrna_cycleRegressOut
+INFO [2021-08-03 13:23:05] executing generate_scrna_regressOut
+INFO [2021-08-03 13:23:33] finished generate_scrna_regressOut
+INFO [2021-08-03 13:24:03] finished scrna_phase_preprocess
+INFO [2021-08-03 13:24:03] executing generate_scrna_phase_clustering
+INFO [2021-08-03 13:24:03] executing generate_scrna_integration_harmony
+INFO [2021-08-03 13:24:12] finished generate_scrna_integration_harmony
+INFO [2021-08-03 13:24:12] executing generate_scrna_integration_seurat
+INFO [2021-08-03 13:24:55] finished generate_scrna_integration_seurat
+INFO [2021-08-03 13:24:55] executing generate_scrna_batchclustering
+INFO [2021-08-03 13:24:58] finished generate_scrna_batchclustering
+INFO [2021-08-03 13:24:58] executing generate_scrna_batch_markergenes
+INFO [2021-08-03 13:56:43] finished generate_scrna_batch_markergenes
+INFO [2021-08-03 13:56:43] executing generate_scrna_clustering
+INFO [2021-08-03 13:56:45] finished generate_scrna_clustering
+INFO [2021-08-03 13:56:45] executing generate_scrna_fishertest_inte_clusters
+INFO [2021-08-03 13:56:46] finished generate_scrna_fishertest_inte_clusters
+INFO [2021-08-03 13:56:46] executing generate_scrna_MCAannotate
+INFO [2021-08-03 13:57:25] finished generate_scrna_MCAannotate
+INFO [2021-08-03 13:57:25] executing generate_scrna_ExternalAnnotation
+INFO [2021-08-03 13:57:32] finished generate_scrna_ExternalAnnotation
+INFO [2021-08-03 13:57:32] executing generate_scrna_HCLannotate
+INFO [2021-08-03 13:57:36] finished generate_scrna_HCLannotate
+INFO [2021-08-03 13:57:36] executing generate_scrna_MAGIC
+INFO [2021-08-03 14:05:48] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-03 14:05:48] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-03 14:05:48] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-03 14:05:48] samples summary: 
+INFO [2021-08-03 14:05:48] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-03 14:05:48] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-03 14:05:48] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-03 14:05:48] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-03 14:05:48] The executing plan is: 
+INFO [2021-08-03 14:05:48] 			loading: scrna_phase_preprocess
+INFO [2021-08-03 14:05:48] 			calculating: scrna_phase_clustering
+INFO [2021-08-03 14:05:48] 			calculating: scrna_phase_comparing
+INFO [2021-08-03 14:05:51] loading scrna_phase_preprocess.Rds
+INFO [2021-08-03 14:05:55] finished loading scrna_phase_preprocess.Rds
+INFO [2021-08-03 14:05:55] executing generate_scrna_phase_clustering
+INFO [2021-08-03 14:05:55] executing generate_scrna_integration_harmony
+INFO [2021-08-03 14:06:03] finished generate_scrna_integration_harmony
+INFO [2021-08-03 14:06:03] executing generate_scrna_integration_seurat
+INFO [2021-08-03 14:06:42] finished generate_scrna_integration_seurat
+INFO [2021-08-03 14:06:42] executing generate_scrna_batchclustering
+INFO [2021-08-03 14:06:45] finished generate_scrna_batchclustering
+INFO [2021-08-03 14:06:45] executing generate_scrna_batch_markergenes
+INFO [2021-08-03 14:39:21] finished generate_scrna_batch_markergenes
+INFO [2021-08-03 14:39:21] executing generate_scrna_clustering
+INFO [2021-08-03 14:39:24] finished generate_scrna_clustering
+INFO [2021-08-03 14:39:24] executing generate_scrna_fishertest_inte_clusters
+INFO [2021-08-03 14:39:24] finished generate_scrna_fishertest_inte_clusters
+INFO [2021-08-03 14:39:24] executing generate_scrna_MCAannotate
+INFO [2021-08-03 14:40:03] finished generate_scrna_MCAannotate
+INFO [2021-08-03 14:40:03] executing generate_scrna_ExternalAnnotation
+INFO [2021-08-03 14:40:10] finished generate_scrna_ExternalAnnotation
+INFO [2021-08-03 14:40:10] executing generate_scrna_HCLannotate
+INFO [2021-08-03 14:40:14] finished generate_scrna_HCLannotate
+INFO [2021-08-03 14:40:14] executing generate_scrna_MAGIC
+INFO [2021-08-03 14:40:50] finished generate_scrna_MAGIC
+INFO [2021-08-03 14:41:35] finished scrna_phase_clustering
+INFO [2021-08-03 14:41:35] executing generate_scrna_phase_comparing
+INFO [2021-08-03 14:41:35] executing generate_scrna_MSigDB_geneset
+INFO [2021-08-03 14:44:07] finished generate_scrna_MSigDB_geneset
+INFO [2021-08-03 14:44:07] executing generate_scrna_fishertest_clusters
+INFO [2021-08-03 14:44:07] finished generate_scrna_fishertest_clusters
+INFO [2021-08-03 14:44:07] executing generate_scrna_markergenes
+INFO [2021-08-03 14:48:31] finished generate_scrna_markergenes
+INFO [2021-08-03 14:48:31] executing generate_scrna_go
+INFO [2021-08-03 14:48:32] cluster:  0 Tue Aug  3 14:48:32 2021
+INFO [2021-08-03 14:49:20] cluster:  1 Tue Aug  3 14:49:20 2021
+INFO [2021-08-03 14:49:42] cluster:  2 Tue Aug  3 14:49:42 2021
+INFO [2021-08-03 14:50:03] cluster:  3 Tue Aug  3 14:50:03 2021
+INFO [2021-08-03 14:50:28] cluster:  4 Tue Aug  3 14:50:28 2021
+INFO [2021-08-03 14:50:50] cluster:  5 Tue Aug  3 14:50:50 2021
+INFO [2021-08-03 14:51:14] cluster:  6 Tue Aug  3 14:51:14 2021
+INFO [2021-08-03 14:51:36] cluster:  7 Tue Aug  3 14:51:36 2021
+INFO [2021-08-03 14:52:00] cluster:  0 Tue Aug  3 14:52:00 2021
+INFO [2021-08-03 14:52:23] cluster:  1 Tue Aug  3 14:52:23 2021
+INFO [2021-08-03 14:52:46] cluster:  2 Tue Aug  3 14:52:46 2021
+INFO [2021-08-03 14:53:08] cluster:  3 Tue Aug  3 14:53:08 2021
+INFO [2021-08-03 14:53:30] cluster:  4 Tue Aug  3 14:53:30 2021
+INFO [2021-08-03 14:53:53] cluster:  5 Tue Aug  3 14:53:53 2021
+INFO [2021-08-03 14:54:13] cluster:  6 Tue Aug  3 14:54:13 2021
+WARN [2021-08-03 14:54:14] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 14:54:14] cluster:  7 Tue Aug  3 14:54:14 2021
+INFO [2021-08-03 14:54:45] finished generate_scrna_go
+INFO [2021-08-03 14:54:45] executing generate_scrna_progeny
+INFO [2021-08-03 14:54:54] finished generate_scrna_progeny
+INFO [2021-08-03 14:54:54] executing generate_scrna_genesorteR
+INFO [2021-08-03 14:55:05] finished generate_scrna_genesorteR
+INFO [2021-08-03 14:55:05] executing generate_scrna_kegg
+INFO [2021-08-03 14:55:05] cluster:  0 Tue Aug  3 14:55:05 2021
+INFO [2021-08-03 14:55:12] cluster:  1 Tue Aug  3 14:55:12 2021
+INFO [2021-08-03 14:55:12] cluster:  2 Tue Aug  3 14:55:12 2021
+INFO [2021-08-03 14:55:13] cluster:  3 Tue Aug  3 14:55:13 2021
+INFO [2021-08-03 14:55:13] cluster:  4 Tue Aug  3 14:55:13 2021
+INFO [2021-08-03 14:55:13] cluster:  5 Tue Aug  3 14:55:13 2021
+INFO [2021-08-03 14:55:14] cluster:  6 Tue Aug  3 14:55:14 2021
+INFO [2021-08-03 14:55:14] cluster:  7 Tue Aug  3 14:55:14 2021
+INFO [2021-08-03 14:55:14] cluster:  0 Tue Aug  3 14:55:14 2021
+INFO [2021-08-03 14:55:15] cluster:  1 Tue Aug  3 14:55:15 2021
+INFO [2021-08-03 14:55:15] cluster:  2 Tue Aug  3 14:55:15 2021
+INFO [2021-08-03 14:55:15] cluster:  3 Tue Aug  3 14:55:15 2021
+INFO [2021-08-03 14:55:16] cluster:  4 Tue Aug  3 14:55:16 2021
+INFO [2021-08-03 14:55:16] cluster:  5 Tue Aug  3 14:55:16 2021
+INFO [2021-08-03 14:55:16] cluster:  6 Tue Aug  3 14:55:16 2021
+WARN [2021-08-03 14:55:16] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 14:55:16] cluster:  7 Tue Aug  3 14:55:16 2021
+INFO [2021-08-03 14:55:18] finished generate_scrna_kegg
+INFO [2021-08-03 14:55:18] executing generate_scrna_reactome
+INFO [2021-08-03 14:55:18] cluster:  0 Tue Aug  3 14:55:18 2021
+INFO [2021-08-03 14:55:24] cluster:  1 Tue Aug  3 14:55:24 2021
+INFO [2021-08-03 14:55:31] cluster:  2 Tue Aug  3 14:55:31 2021
+INFO [2021-08-03 14:55:38] cluster:  3 Tue Aug  3 14:55:38 2021
+INFO [2021-08-03 14:55:44] cluster:  4 Tue Aug  3 14:55:44 2021
+INFO [2021-08-03 14:55:50] cluster:  5 Tue Aug  3 14:55:50 2021
+INFO [2021-08-03 14:55:56] cluster:  6 Tue Aug  3 14:55:56 2021
+INFO [2021-08-03 14:56:02] cluster:  7 Tue Aug  3 14:56:02 2021
+INFO [2021-08-03 14:56:08] cluster:  0 Tue Aug  3 14:56:08 2021
+INFO [2021-08-03 14:56:14] cluster:  1 Tue Aug  3 14:56:14 2021
+INFO [2021-08-03 14:56:20] cluster:  2 Tue Aug  3 14:56:20 2021
+INFO [2021-08-03 14:56:26] cluster:  3 Tue Aug  3 14:56:26 2021
+INFO [2021-08-03 14:56:32] cluster:  4 Tue Aug  3 14:56:32 2021
+INFO [2021-08-03 14:56:38] cluster:  5 Tue Aug  3 14:56:38 2021
+INFO [2021-08-03 14:56:44] cluster:  6 Tue Aug  3 14:56:44 2021
+WARN [2021-08-03 14:56:44] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 14:56:44] cluster:  7 Tue Aug  3 14:56:44 2021
+INFO [2021-08-03 14:56:51] finished generate_scrna_reactome
+INFO [2021-08-03 14:56:51] executing generate_scrna_hallmark
+INFO [2021-08-03 14:56:51] cluster:  0 Tue Aug  3 14:56:51 2021
+INFO [2021-08-03 14:56:53] cluster:  1 Tue Aug  3 14:56:53 2021
+INFO [2021-08-03 14:56:54] cluster:  2 Tue Aug  3 14:56:54 2021
+INFO [2021-08-03 14:56:55] cluster:  3 Tue Aug  3 14:56:55 2021
+INFO [2021-08-03 14:56:55] cluster:  4 Tue Aug  3 14:56:55 2021
+INFO [2021-08-03 14:56:56] cluster:  5 Tue Aug  3 14:56:56 2021
+INFO [2021-08-03 14:56:56] cluster:  6 Tue Aug  3 14:56:56 2021
+INFO [2021-08-03 14:56:57] cluster:  7 Tue Aug  3 14:56:57 2021
+INFO [2021-08-03 14:56:58] cluster:  0 Tue Aug  3 14:56:58 2021
+INFO [2021-08-03 14:56:58] cluster:  1 Tue Aug  3 14:56:58 2021
+INFO [2021-08-03 14:56:59] cluster:  2 Tue Aug  3 14:56:59 2021
+INFO [2021-08-03 14:57:00] cluster:  3 Tue Aug  3 14:57:00 2021
+INFO [2021-08-03 14:57:00] cluster:  4 Tue Aug  3 14:57:00 2021
+INFO [2021-08-03 14:57:01] cluster:  5 Tue Aug  3 14:57:01 2021
+INFO [2021-08-03 14:57:01] cluster:  6 Tue Aug  3 14:57:01 2021
+WARN [2021-08-03 14:57:02] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 14:57:02] cluster:  7 Tue Aug  3 14:57:02 2021
+INFO [2021-08-03 14:57:03] finished generate_scrna_hallmark
+INFO [2021-08-03 14:57:03] executing generate_scrna_progeny_stage
+INFO [2021-08-03 14:57:20] finished generate_scrna_progeny_stage
+INFO [2021-08-03 14:57:20] executing generate_scrna_dego_name
+INFO [2021-08-03 14:57:20] ****processing A_MxCre vs B_MxCre
+INFO [2021-08-03 14:57:22] processing cluster 0
+INFO [2021-08-03 14:57:33] processing cluster 1
+INFO [2021-08-03 14:57:41] processing cluster 2
+INFO [2021-08-03 14:57:46] processing cluster 3
+INFO [2021-08-03 14:57:51] processing cluster 4
+INFO [2021-08-03 14:57:55] processing cluster 5
+INFO [2021-08-03 14:57:59] processing cluster 6
+INFO [2021-08-03 14:58:03] processing cluster 7
+INFO [2021-08-03 14:58:06] ****processing A_MxCre vs C_Csnk
+INFO [2021-08-03 14:58:08] processing cluster 0
+INFO [2021-08-03 14:58:17] processing cluster 1
+INFO [2021-08-03 14:58:27] processing cluster 2
+INFO [2021-08-03 14:58:32] processing cluster 3
+INFO [2021-08-03 14:58:36] processing cluster 4
+INFO [2021-08-03 14:58:41] processing cluster 5
+INFO [2021-08-03 14:58:45] processing cluster 6
+INFO [2021-08-03 14:58:49] processing cluster 7
+INFO [2021-08-03 14:58:52] ****processing A_MxCre vs D_Csnk
+INFO [2021-08-03 14:58:55] processing cluster 0
+INFO [2021-08-03 14:59:02] processing cluster 1
+INFO [2021-08-03 14:59:10] processing cluster 2
+INFO [2021-08-03 14:59:15] processing cluster 3
+INFO [2021-08-03 14:59:19] processing cluster 4
+INFO [2021-08-03 14:59:23] processing cluster 5
+INFO [2021-08-03 14:59:27] processing cluster 6
+INFO [2021-08-03 14:59:31] processing cluster 7
+INFO [2021-08-03 14:59:35] ****processing B_MxCre vs C_Csnk
+INFO [2021-08-03 14:59:37] processing cluster 0
+INFO [2021-08-03 14:59:48] processing cluster 1
+INFO [2021-08-03 14:59:52] processing cluster 2
+INFO [2021-08-03 14:59:57] processing cluster 3
+INFO [2021-08-03 15:00:02] processing cluster 4
+INFO [2021-08-03 15:00:06] processing cluster 5
+INFO [2021-08-03 15:00:10] processing cluster 6
+INFO [2021-08-03 15:00:14] processing cluster 7
+INFO [2021-08-03 15:00:17] ****processing B_MxCre vs D_Csnk
+INFO [2021-08-03 15:00:19] processing cluster 0
+INFO [2021-08-03 15:00:31] processing cluster 1
+INFO [2021-08-03 15:00:35] processing cluster 2
+INFO [2021-08-03 15:00:40] processing cluster 3
+INFO [2021-08-03 15:00:48] processing cluster 4
+INFO [2021-08-03 15:00:53] processing cluster 5
+INFO [2021-08-03 15:00:57] processing cluster 6
+INFO [2021-08-03 15:01:01] processing cluster 7
+INFO [2021-08-03 15:01:04] ****processing C_Csnk vs D_Csnk
+INFO [2021-08-03 15:01:07] processing cluster 0
+INFO [2021-08-03 15:01:15] processing cluster 1
+INFO [2021-08-03 15:01:19] processing cluster 2
+INFO [2021-08-03 15:01:24] processing cluster 3
+INFO [2021-08-03 15:01:28] processing cluster 4
+INFO [2021-08-03 15:01:32] processing cluster 5
+INFO [2021-08-03 15:01:36] processing cluster 6
+INFO [2021-08-03 15:01:40] processing cluster 7
+INFO [2021-08-03 15:01:43] ****processing go up&down A_MxCre.vs.B_MxCre
+INFO [2021-08-03 15:01:43] cluster:  0 Tue Aug  3 15:01:43 2021
+INFO [2021-08-03 15:02:07] cluster:  1 Tue Aug  3 15:02:07 2021
+INFO [2021-08-03 15:02:33] cluster:  2 Tue Aug  3 15:02:33 2021
+INFO [2021-08-03 15:02:55] cluster:  3 Tue Aug  3 15:02:55 2021
+INFO [2021-08-03 15:03:14] cluster:  4 Tue Aug  3 15:03:14 2021
+WARN [2021-08-03 15:03:15] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:03:15] cluster:  5 Tue Aug  3 15:03:15 2021
+INFO [2021-08-03 15:03:36] cluster:  6 Tue Aug  3 15:03:36 2021
+WARN [2021-08-03 15:03:36] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:03:36] cluster:  7 Tue Aug  3 15:03:36 2021
+WARN [2021-08-03 15:03:36] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:03:36] cluster:  0 Tue Aug  3 15:03:36 2021
+INFO [2021-08-03 15:03:57] cluster:  1 Tue Aug  3 15:03:57 2021
+INFO [2021-08-03 15:04:22] cluster:  2 Tue Aug  3 15:04:22 2021
+WARN [2021-08-03 15:04:22] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:04:22] cluster:  3 Tue Aug  3 15:04:22 2021
+WARN [2021-08-03 15:04:23] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:04:23] cluster:  4 Tue Aug  3 15:04:23 2021
+INFO [2021-08-03 15:04:44] cluster:  5 Tue Aug  3 15:04:44 2021
+WARN [2021-08-03 15:04:45] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:04:45] cluster:  6 Tue Aug  3 15:04:45 2021
+WARN [2021-08-03 15:04:45] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:04:45] cluster:  7 Tue Aug  3 15:04:45 2021
+WARN [2021-08-03 15:04:45] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:04:46] ****processing go up&down A_MxCre.vs.C_Csnk
+INFO [2021-08-03 15:04:46] cluster:  0 Tue Aug  3 15:04:46 2021
+INFO [2021-08-03 15:05:09] cluster:  1 Tue Aug  3 15:05:09 2021
+INFO [2021-08-03 15:05:32] cluster:  2 Tue Aug  3 15:05:32 2021
+INFO [2021-08-03 15:05:57] cluster:  3 Tue Aug  3 15:05:57 2021
+INFO [2021-08-03 15:06:19] cluster:  4 Tue Aug  3 15:06:19 2021
+INFO [2021-08-03 15:06:44] cluster:  5 Tue Aug  3 15:06:44 2021
+INFO [2021-08-03 15:07:06] cluster:  6 Tue Aug  3 15:07:06 2021
+WARN [2021-08-03 15:07:06] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:07:06] cluster:  7 Tue Aug  3 15:07:06 2021
+WARN [2021-08-03 15:07:06] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:07:06] cluster:  0 Tue Aug  3 15:07:06 2021
+INFO [2021-08-03 15:07:27] cluster:  1 Tue Aug  3 15:07:27 2021
+INFO [2021-08-03 15:07:48] cluster:  2 Tue Aug  3 15:07:48 2021
+INFO [2021-08-03 15:08:09] cluster:  3 Tue Aug  3 15:08:09 2021
+WARN [2021-08-03 15:08:09] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:08:09] cluster:  4 Tue Aug  3 15:08:09 2021
+INFO [2021-08-03 15:08:36] cluster:  5 Tue Aug  3 15:08:36 2021
+WARN [2021-08-03 15:08:36] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:08:36] cluster:  6 Tue Aug  3 15:08:36 2021
+WARN [2021-08-03 15:08:36] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:08:36] cluster:  7 Tue Aug  3 15:08:36 2021
+WARN [2021-08-03 15:08:36] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:08:38] ****processing go up&down A_MxCre.vs.D_Csnk
+INFO [2021-08-03 15:08:38] cluster:  0 Tue Aug  3 15:08:38 2021
+INFO [2021-08-03 15:09:02] cluster:  1 Tue Aug  3 15:09:02 2021
+INFO [2021-08-03 15:09:27] cluster:  2 Tue Aug  3 15:09:27 2021
+INFO [2021-08-03 15:09:52] cluster:  3 Tue Aug  3 15:09:52 2021
+INFO [2021-08-03 15:10:16] cluster:  4 Tue Aug  3 15:10:16 2021
+INFO [2021-08-03 15:10:38] cluster:  5 Tue Aug  3 15:10:38 2021
+INFO [2021-08-03 15:11:02] cluster:  6 Tue Aug  3 15:11:02 2021
+WARN [2021-08-03 15:11:02] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:11:02] cluster:  7 Tue Aug  3 15:11:02 2021
+WARN [2021-08-03 15:11:02] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:11:02] cluster:  0 Tue Aug  3 15:11:02 2021
+INFO [2021-08-03 15:11:27] cluster:  1 Tue Aug  3 15:11:27 2021
+INFO [2021-08-03 15:11:51] cluster:  2 Tue Aug  3 15:11:51 2021
+INFO [2021-08-03 15:12:14] cluster:  3 Tue Aug  3 15:12:14 2021
+INFO [2021-08-03 15:12:37] cluster:  4 Tue Aug  3 15:12:37 2021
+INFO [2021-08-03 15:13:00] cluster:  5 Tue Aug  3 15:13:00 2021
+WARN [2021-08-03 15:13:00] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:13:00] cluster:  6 Tue Aug  3 15:13:00 2021
+WARN [2021-08-03 15:13:00] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:13:00] cluster:  7 Tue Aug  3 15:13:00 2021
+WARN [2021-08-03 15:13:00] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:13:01] ****processing go up&down B_MxCre.vs.C_Csnk
+INFO [2021-08-03 15:13:01] cluster:  0 Tue Aug  3 15:13:01 2021
+INFO [2021-08-03 15:13:29] cluster:  1 Tue Aug  3 15:13:29 2021
+INFO [2021-08-03 15:13:53] cluster:  2 Tue Aug  3 15:13:53 2021
+INFO [2021-08-03 15:14:18] cluster:  3 Tue Aug  3 15:14:18 2021
+INFO [2021-08-03 15:14:42] cluster:  4 Tue Aug  3 15:14:42 2021
+WARN [2021-08-03 15:14:42] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:14:42] cluster:  5 Tue Aug  3 15:14:42 2021
+WARN [2021-08-03 15:14:42] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:14:42] cluster:  6 Tue Aug  3 15:14:42 2021
+WARN [2021-08-03 15:14:43] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:14:43] cluster:  7 Tue Aug  3 15:14:43 2021
+WARN [2021-08-03 15:14:43] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:14:43] cluster:  0 Tue Aug  3 15:14:43 2021
+INFO [2021-08-03 15:15:08] cluster:  1 Tue Aug  3 15:15:08 2021
+WARN [2021-08-03 15:15:08] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:15:08] cluster:  2 Tue Aug  3 15:15:08 2021
+INFO [2021-08-03 15:15:31] cluster:  3 Tue Aug  3 15:15:31 2021
+WARN [2021-08-03 15:15:31] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:15:31] cluster:  4 Tue Aug  3 15:15:31 2021
+WARN [2021-08-03 15:15:31] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:15:31] cluster:  5 Tue Aug  3 15:15:31 2021
+WARN [2021-08-03 15:15:31] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:15:31] cluster:  6 Tue Aug  3 15:15:31 2021
+WARN [2021-08-03 15:15:31] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:15:31] cluster:  7 Tue Aug  3 15:15:31 2021
+WARN [2021-08-03 15:15:31] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:15:32] ****processing go up&down B_MxCre.vs.D_Csnk
+INFO [2021-08-03 15:15:32] cluster:  0 Tue Aug  3 15:15:32 2021
+INFO [2021-08-03 15:15:56] cluster:  1 Tue Aug  3 15:15:56 2021
+INFO [2021-08-03 15:16:21] cluster:  2 Tue Aug  3 15:16:21 2021
+INFO [2021-08-03 15:16:45] cluster:  3 Tue Aug  3 15:16:45 2021
+INFO [2021-08-03 15:17:10] cluster:  4 Tue Aug  3 15:17:10 2021
+WARN [2021-08-03 15:17:11] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:17:11] cluster:  5 Tue Aug  3 15:17:11 2021
+INFO [2021-08-03 15:17:37] cluster:  6 Tue Aug  3 15:17:37 2021
+WARN [2021-08-03 15:17:37] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:17:37] cluster:  7 Tue Aug  3 15:17:37 2021
+WARN [2021-08-03 15:17:38] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:17:38] cluster:  0 Tue Aug  3 15:17:38 2021
+INFO [2021-08-03 15:18:00] cluster:  1 Tue Aug  3 15:18:00 2021
+WARN [2021-08-03 15:18:00] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:00] cluster:  2 Tue Aug  3 15:18:00 2021
+INFO [2021-08-03 15:18:25] cluster:  3 Tue Aug  3 15:18:25 2021
+WARN [2021-08-03 15:18:25] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:25] cluster:  4 Tue Aug  3 15:18:25 2021
+WARN [2021-08-03 15:18:25] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:25] cluster:  5 Tue Aug  3 15:18:25 2021
+WARN [2021-08-03 15:18:25] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:25] cluster:  6 Tue Aug  3 15:18:25 2021
+WARN [2021-08-03 15:18:25] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:25] cluster:  7 Tue Aug  3 15:18:25 2021
+WARN [2021-08-03 15:18:25] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:26] ****processing go up&down C_Csnk.vs.D_Csnk
+INFO [2021-08-03 15:18:26] cluster:  0 Tue Aug  3 15:18:26 2021
+WARN [2021-08-03 15:18:26] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:26] cluster:  1 Tue Aug  3 15:18:26 2021
+WARN [2021-08-03 15:18:26] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:26] cluster:  2 Tue Aug  3 15:18:26 2021
+WARN [2021-08-03 15:18:26] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:26] cluster:  3 Tue Aug  3 15:18:26 2021
+WARN [2021-08-03 15:18:26] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:26] cluster:  4 Tue Aug  3 15:18:26 2021
+INFO [2021-08-03 15:18:49] cluster:  5 Tue Aug  3 15:18:49 2021
+WARN [2021-08-03 15:18:50] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:50] cluster:  6 Tue Aug  3 15:18:50 2021
+WARN [2021-08-03 15:18:50] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:50] cluster:  7 Tue Aug  3 15:18:50 2021
+WARN [2021-08-03 15:18:50] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:18:50] cluster:  0 Tue Aug  3 15:18:50 2021
+INFO [2021-08-03 15:19:10] cluster:  1 Tue Aug  3 15:19:10 2021
+WARN [2021-08-03 15:19:11] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:19:11] cluster:  2 Tue Aug  3 15:19:11 2021
+WARN [2021-08-03 15:19:11] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:19:11] cluster:  3 Tue Aug  3 15:19:11 2021
+WARN [2021-08-03 15:19:11] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:19:11] cluster:  4 Tue Aug  3 15:19:11 2021
+WARN [2021-08-03 15:19:11] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:19:11] cluster:  5 Tue Aug  3 15:19:11 2021
+WARN [2021-08-03 15:19:11] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:19:11] cluster:  6 Tue Aug  3 15:19:11 2021
+WARN [2021-08-03 15:19:11] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:19:11] cluster:  7 Tue Aug  3 15:19:11 2021
+WARN [2021-08-03 15:19:11] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:19:12] finished generate_scrna_dego_name
+INFO [2021-08-03 15:19:12] executing generate_scrna_dego_stage
+INFO [2021-08-03 15:19:12] ****processing MxCre vs Csnk
+INFO [2021-08-03 15:19:12] processing cluster 0
+INFO [2021-08-03 15:19:30] processing cluster 1
+INFO [2021-08-03 15:19:41] processing cluster 2
+INFO [2021-08-03 15:19:49] processing cluster 3
+INFO [2021-08-03 15:19:56] processing cluster 4
+INFO [2021-08-03 15:20:03] processing cluster 5
+INFO [2021-08-03 15:20:09] processing cluster 6
+INFO [2021-08-03 15:20:14] processing cluster 7
+INFO [2021-08-03 15:20:19] ****processing go up&down MxCre.vs.Csnk
+INFO [2021-08-03 15:20:19] cluster:  0 Tue Aug  3 15:20:19 2021
+INFO [2021-08-03 15:20:44] cluster:  1 Tue Aug  3 15:20:44 2021
+INFO [2021-08-03 15:21:09] cluster:  2 Tue Aug  3 15:21:09 2021
+INFO [2021-08-03 15:21:33] cluster:  3 Tue Aug  3 15:21:33 2021
+INFO [2021-08-03 15:21:57] cluster:  4 Tue Aug  3 15:21:57 2021
+WARN [2021-08-03 15:21:57] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:21:57] cluster:  5 Tue Aug  3 15:21:57 2021
+WARN [2021-08-03 15:21:57] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:21:57] cluster:  6 Tue Aug  3 15:21:57 2021
+WARN [2021-08-03 15:21:57] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:21:57] cluster:  7 Tue Aug  3 15:21:57 2021
+WARN [2021-08-03 15:21:57] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:21:57] cluster:  0 Tue Aug  3 15:21:57 2021
+INFO [2021-08-03 15:22:19] cluster:  1 Tue Aug  3 15:22:19 2021
+INFO [2021-08-03 15:22:44] cluster:  2 Tue Aug  3 15:22:44 2021
+INFO [2021-08-03 15:23:08] cluster:  3 Tue Aug  3 15:23:08 2021
+INFO [2021-08-03 15:23:32] cluster:  4 Tue Aug  3 15:23:32 2021
+WARN [2021-08-03 15:23:32] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:32] cluster:  5 Tue Aug  3 15:23:32 2021
+WARN [2021-08-03 15:23:32] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:32] cluster:  6 Tue Aug  3 15:23:32 2021
+WARN [2021-08-03 15:23:32] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:32] cluster:  7 Tue Aug  3 15:23:32 2021
+WARN [2021-08-03 15:23:32] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:34] finished generate_scrna_dego_stage
+INFO [2021-08-03 15:23:34] executing generate_scrna_pathway_name
+INFO [2021-08-03 15:23:34] ****processing pathway up&down A_MxCre.vs.B_MxCre
+INFO [2021-08-03 15:23:34] cluster:  0 Tue Aug  3 15:23:34 2021
+INFO [2021-08-03 15:23:34] cluster:  1 Tue Aug  3 15:23:34 2021
+INFO [2021-08-03 15:23:34] cluster:  2 Tue Aug  3 15:23:34 2021
+INFO [2021-08-03 15:23:35] cluster:  3 Tue Aug  3 15:23:35 2021
+INFO [2021-08-03 15:23:35] cluster:  4 Tue Aug  3 15:23:35 2021
+WARN [2021-08-03 15:23:35] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:35] cluster:  5 Tue Aug  3 15:23:35 2021
+INFO [2021-08-03 15:23:35] cluster:  6 Tue Aug  3 15:23:35 2021
+WARN [2021-08-03 15:23:36] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:36] cluster:  7 Tue Aug  3 15:23:36 2021
+WARN [2021-08-03 15:23:36] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:36] cluster:  0 Tue Aug  3 15:23:36 2021
+INFO [2021-08-03 15:23:36] cluster:  1 Tue Aug  3 15:23:36 2021
+INFO [2021-08-03 15:23:36] cluster:  2 Tue Aug  3 15:23:36 2021
+WARN [2021-08-03 15:23:37] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:37] cluster:  3 Tue Aug  3 15:23:37 2021
+WARN [2021-08-03 15:23:37] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:37] cluster:  4 Tue Aug  3 15:23:37 2021
+INFO [2021-08-03 15:23:37] cluster:  5 Tue Aug  3 15:23:37 2021
+WARN [2021-08-03 15:23:37] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:37] cluster:  6 Tue Aug  3 15:23:37 2021
+WARN [2021-08-03 15:23:37] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:37] cluster:  7 Tue Aug  3 15:23:37 2021
+WARN [2021-08-03 15:23:37] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:37] cluster:  0 Tue Aug  3 15:23:37 2021
+INFO [2021-08-03 15:23:38] cluster:  1 Tue Aug  3 15:23:38 2021
+INFO [2021-08-03 15:23:38] cluster:  2 Tue Aug  3 15:23:38 2021
+INFO [2021-08-03 15:23:39] cluster:  3 Tue Aug  3 15:23:39 2021
+INFO [2021-08-03 15:23:40] cluster:  4 Tue Aug  3 15:23:40 2021
+WARN [2021-08-03 15:23:40] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:40] cluster:  5 Tue Aug  3 15:23:40 2021
+INFO [2021-08-03 15:23:40] cluster:  6 Tue Aug  3 15:23:40 2021
+WARN [2021-08-03 15:23:40] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:40] cluster:  7 Tue Aug  3 15:23:40 2021
+WARN [2021-08-03 15:23:41] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:41] cluster:  0 Tue Aug  3 15:23:41 2021
+INFO [2021-08-03 15:23:41] cluster:  1 Tue Aug  3 15:23:41 2021
+INFO [2021-08-03 15:23:42] cluster:  2 Tue Aug  3 15:23:42 2021
+WARN [2021-08-03 15:23:42] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:42] cluster:  3 Tue Aug  3 15:23:42 2021
+WARN [2021-08-03 15:23:42] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:42] cluster:  4 Tue Aug  3 15:23:42 2021
+INFO [2021-08-03 15:23:43] cluster:  5 Tue Aug  3 15:23:43 2021
+WARN [2021-08-03 15:23:43] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:43] cluster:  6 Tue Aug  3 15:23:43 2021
+WARN [2021-08-03 15:23:43] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:43] cluster:  7 Tue Aug  3 15:23:43 2021
+WARN [2021-08-03 15:23:43] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:23:43] cluster:  0 Tue Aug  3 15:23:43 2021
+INFO [2021-08-03 15:23:49] cluster:  1 Tue Aug  3 15:23:49 2021
+INFO [2021-08-03 15:23:56] cluster:  2 Tue Aug  3 15:23:56 2021
+INFO [2021-08-03 15:24:02] cluster:  3 Tue Aug  3 15:24:02 2021
+INFO [2021-08-03 15:24:08] cluster:  4 Tue Aug  3 15:24:08 2021
+WARN [2021-08-03 15:24:08] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:08] cluster:  5 Tue Aug  3 15:24:08 2021
+INFO [2021-08-03 15:24:15] cluster:  6 Tue Aug  3 15:24:15 2021
+WARN [2021-08-03 15:24:15] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:15] cluster:  7 Tue Aug  3 15:24:15 2021
+WARN [2021-08-03 15:24:15] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:15] cluster:  0 Tue Aug  3 15:24:15 2021
+INFO [2021-08-03 15:24:21] cluster:  1 Tue Aug  3 15:24:21 2021
+INFO [2021-08-03 15:24:27] cluster:  2 Tue Aug  3 15:24:27 2021
+WARN [2021-08-03 15:24:27] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:27] cluster:  3 Tue Aug  3 15:24:27 2021
+WARN [2021-08-03 15:24:27] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:27] cluster:  4 Tue Aug  3 15:24:27 2021
+INFO [2021-08-03 15:24:33] cluster:  5 Tue Aug  3 15:24:33 2021
+WARN [2021-08-03 15:24:33] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:33] cluster:  6 Tue Aug  3 15:24:33 2021
+WARN [2021-08-03 15:24:33] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:33] cluster:  7 Tue Aug  3 15:24:33 2021
+WARN [2021-08-03 15:24:33] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:35] ****processing pathway up&down A_MxCre.vs.C_Csnk
+INFO [2021-08-03 15:24:35] cluster:  0 Tue Aug  3 15:24:35 2021
+INFO [2021-08-03 15:24:35] cluster:  1 Tue Aug  3 15:24:35 2021
+INFO [2021-08-03 15:24:35] cluster:  2 Tue Aug  3 15:24:35 2021
+INFO [2021-08-03 15:24:36] cluster:  3 Tue Aug  3 15:24:36 2021
+INFO [2021-08-03 15:24:36] cluster:  4 Tue Aug  3 15:24:36 2021
+INFO [2021-08-03 15:24:36] cluster:  5 Tue Aug  3 15:24:36 2021
+INFO [2021-08-03 15:24:37] cluster:  6 Tue Aug  3 15:24:37 2021
+WARN [2021-08-03 15:24:37] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:37] cluster:  7 Tue Aug  3 15:24:37 2021
+WARN [2021-08-03 15:24:37] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:37] cluster:  0 Tue Aug  3 15:24:37 2021
+INFO [2021-08-03 15:24:37] cluster:  1 Tue Aug  3 15:24:37 2021
+INFO [2021-08-03 15:24:37] cluster:  2 Tue Aug  3 15:24:37 2021
+INFO [2021-08-03 15:24:38] cluster:  3 Tue Aug  3 15:24:38 2021
+WARN [2021-08-03 15:24:38] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:38] cluster:  4 Tue Aug  3 15:24:38 2021
+INFO [2021-08-03 15:24:38] cluster:  5 Tue Aug  3 15:24:38 2021
+WARN [2021-08-03 15:24:38] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:38] cluster:  6 Tue Aug  3 15:24:38 2021
+WARN [2021-08-03 15:24:38] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:38] cluster:  7 Tue Aug  3 15:24:38 2021
+WARN [2021-08-03 15:24:38] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:38] cluster:  0 Tue Aug  3 15:24:38 2021
+INFO [2021-08-03 15:24:39] cluster:  1 Tue Aug  3 15:24:39 2021
+INFO [2021-08-03 15:24:40] cluster:  2 Tue Aug  3 15:24:40 2021
+INFO [2021-08-03 15:24:40] cluster:  3 Tue Aug  3 15:24:40 2021
+INFO [2021-08-03 15:24:41] cluster:  4 Tue Aug  3 15:24:41 2021
+INFO [2021-08-03 15:24:41] cluster:  5 Tue Aug  3 15:24:41 2021
+INFO [2021-08-03 15:24:42] cluster:  6 Tue Aug  3 15:24:42 2021
+WARN [2021-08-03 15:24:42] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:42] cluster:  7 Tue Aug  3 15:24:42 2021
+WARN [2021-08-03 15:24:42] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:42] cluster:  0 Tue Aug  3 15:24:42 2021
+INFO [2021-08-03 15:24:43] cluster:  1 Tue Aug  3 15:24:43 2021
+INFO [2021-08-03 15:24:43] cluster:  2 Tue Aug  3 15:24:43 2021
+INFO [2021-08-03 15:24:44] cluster:  3 Tue Aug  3 15:24:44 2021
+WARN [2021-08-03 15:24:44] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:44] cluster:  4 Tue Aug  3 15:24:44 2021
+INFO [2021-08-03 15:24:45] cluster:  5 Tue Aug  3 15:24:45 2021
+WARN [2021-08-03 15:24:45] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:45] cluster:  6 Tue Aug  3 15:24:45 2021
+WARN [2021-08-03 15:24:45] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:45] cluster:  7 Tue Aug  3 15:24:45 2021
+WARN [2021-08-03 15:24:45] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:24:45] cluster:  0 Tue Aug  3 15:24:45 2021
+INFO [2021-08-03 15:24:51] cluster:  1 Tue Aug  3 15:24:51 2021
+INFO [2021-08-03 15:24:57] cluster:  2 Tue Aug  3 15:24:57 2021
+INFO [2021-08-03 15:25:03] cluster:  3 Tue Aug  3 15:25:03 2021
+INFO [2021-08-03 15:25:11] cluster:  4 Tue Aug  3 15:25:11 2021
+INFO [2021-08-03 15:25:17] cluster:  5 Tue Aug  3 15:25:17 2021
+INFO [2021-08-03 15:25:23] cluster:  6 Tue Aug  3 15:25:23 2021
+WARN [2021-08-03 15:25:24] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:24] cluster:  7 Tue Aug  3 15:25:24 2021
+WARN [2021-08-03 15:25:24] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:24] cluster:  0 Tue Aug  3 15:25:24 2021
+INFO [2021-08-03 15:25:30] cluster:  1 Tue Aug  3 15:25:30 2021
+INFO [2021-08-03 15:25:36] cluster:  2 Tue Aug  3 15:25:36 2021
+INFO [2021-08-03 15:25:42] cluster:  3 Tue Aug  3 15:25:42 2021
+WARN [2021-08-03 15:25:43] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:43] cluster:  4 Tue Aug  3 15:25:43 2021
+INFO [2021-08-03 15:25:49] cluster:  5 Tue Aug  3 15:25:49 2021
+WARN [2021-08-03 15:25:49] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:49] cluster:  6 Tue Aug  3 15:25:49 2021
+WARN [2021-08-03 15:25:49] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:49] cluster:  7 Tue Aug  3 15:25:49 2021
+WARN [2021-08-03 15:25:49] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:50] ****processing pathway up&down A_MxCre.vs.D_Csnk
+INFO [2021-08-03 15:25:50] cluster:  0 Tue Aug  3 15:25:50 2021
+INFO [2021-08-03 15:25:51] cluster:  1 Tue Aug  3 15:25:51 2021
+INFO [2021-08-03 15:25:51] cluster:  2 Tue Aug  3 15:25:51 2021
+INFO [2021-08-03 15:25:51] cluster:  3 Tue Aug  3 15:25:51 2021
+INFO [2021-08-03 15:25:52] cluster:  4 Tue Aug  3 15:25:52 2021
+INFO [2021-08-03 15:25:52] cluster:  5 Tue Aug  3 15:25:52 2021
+INFO [2021-08-03 15:25:52] cluster:  6 Tue Aug  3 15:25:52 2021
+WARN [2021-08-03 15:25:52] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:52] cluster:  7 Tue Aug  3 15:25:52 2021
+WARN [2021-08-03 15:25:52] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:52] cluster:  0 Tue Aug  3 15:25:52 2021
+INFO [2021-08-03 15:25:53] cluster:  1 Tue Aug  3 15:25:53 2021
+INFO [2021-08-03 15:25:53] cluster:  2 Tue Aug  3 15:25:53 2021
+INFO [2021-08-03 15:25:53] cluster:  3 Tue Aug  3 15:25:53 2021
+INFO [2021-08-03 15:25:53] cluster:  4 Tue Aug  3 15:25:53 2021
+INFO [2021-08-03 15:25:54] cluster:  5 Tue Aug  3 15:25:54 2021
+WARN [2021-08-03 15:25:54] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:54] cluster:  6 Tue Aug  3 15:25:54 2021
+WARN [2021-08-03 15:25:54] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:54] cluster:  7 Tue Aug  3 15:25:54 2021
+WARN [2021-08-03 15:25:54] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:54] cluster:  0 Tue Aug  3 15:25:54 2021
+INFO [2021-08-03 15:25:55] cluster:  1 Tue Aug  3 15:25:55 2021
+INFO [2021-08-03 15:25:55] cluster:  2 Tue Aug  3 15:25:55 2021
+INFO [2021-08-03 15:25:56] cluster:  3 Tue Aug  3 15:25:56 2021
+INFO [2021-08-03 15:25:56] cluster:  4 Tue Aug  3 15:25:56 2021
+INFO [2021-08-03 15:25:57] cluster:  5 Tue Aug  3 15:25:57 2021
+INFO [2021-08-03 15:25:58] cluster:  6 Tue Aug  3 15:25:58 2021
+WARN [2021-08-03 15:25:58] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:58] cluster:  7 Tue Aug  3 15:25:58 2021
+WARN [2021-08-03 15:25:58] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:25:58] cluster:  0 Tue Aug  3 15:25:58 2021
+INFO [2021-08-03 15:25:58] cluster:  1 Tue Aug  3 15:25:58 2021
+INFO [2021-08-03 15:25:59] cluster:  2 Tue Aug  3 15:25:59 2021
+INFO [2021-08-03 15:26:00] cluster:  3 Tue Aug  3 15:26:00 2021
+INFO [2021-08-03 15:26:00] cluster:  4 Tue Aug  3 15:26:00 2021
+INFO [2021-08-03 15:26:01] cluster:  5 Tue Aug  3 15:26:01 2021
+WARN [2021-08-03 15:26:01] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:26:01] cluster:  6 Tue Aug  3 15:26:01 2021
+WARN [2021-08-03 15:26:01] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:26:01] cluster:  7 Tue Aug  3 15:26:01 2021
+WARN [2021-08-03 15:26:01] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:26:01] cluster:  0 Tue Aug  3 15:26:01 2021
+INFO [2021-08-03 15:26:07] cluster:  1 Tue Aug  3 15:26:07 2021
+INFO [2021-08-03 15:26:14] cluster:  2 Tue Aug  3 15:26:14 2021
+INFO [2021-08-03 15:26:20] cluster:  3 Tue Aug  3 15:26:20 2021
+INFO [2021-08-03 15:26:26] cluster:  4 Tue Aug  3 15:26:26 2021
+INFO [2021-08-03 15:26:32] cluster:  5 Tue Aug  3 15:26:32 2021
+INFO [2021-08-03 15:26:39] cluster:  6 Tue Aug  3 15:26:39 2021
+WARN [2021-08-03 15:26:39] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:26:39] cluster:  7 Tue Aug  3 15:26:39 2021
+WARN [2021-08-03 15:26:39] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:26:39] cluster:  0 Tue Aug  3 15:26:39 2021
+INFO [2021-08-03 15:26:45] cluster:  1 Tue Aug  3 15:26:45 2021
+INFO [2021-08-03 15:26:51] cluster:  2 Tue Aug  3 15:26:51 2021
+INFO [2021-08-03 15:26:57] cluster:  3 Tue Aug  3 15:26:57 2021
+INFO [2021-08-03 15:27:03] cluster:  4 Tue Aug  3 15:27:03 2021
+INFO [2021-08-03 15:27:09] cluster:  5 Tue Aug  3 15:27:09 2021
+WARN [2021-08-03 15:27:09] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:09] cluster:  6 Tue Aug  3 15:27:09 2021
+WARN [2021-08-03 15:27:10] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:10] cluster:  7 Tue Aug  3 15:27:10 2021
+WARN [2021-08-03 15:27:10] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:11] ****processing pathway up&down B_MxCre.vs.C_Csnk
+INFO [2021-08-03 15:27:11] cluster:  0 Tue Aug  3 15:27:11 2021
+INFO [2021-08-03 15:27:11] cluster:  1 Tue Aug  3 15:27:11 2021
+INFO [2021-08-03 15:27:11] cluster:  2 Tue Aug  3 15:27:11 2021
+INFO [2021-08-03 15:27:12] cluster:  3 Tue Aug  3 15:27:12 2021
+INFO [2021-08-03 15:27:12] cluster:  4 Tue Aug  3 15:27:12 2021
+WARN [2021-08-03 15:27:12] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:12] cluster:  5 Tue Aug  3 15:27:12 2021
+WARN [2021-08-03 15:27:12] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:12] cluster:  6 Tue Aug  3 15:27:12 2021
+WARN [2021-08-03 15:27:12] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:12] cluster:  7 Tue Aug  3 15:27:12 2021
+WARN [2021-08-03 15:27:13] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:13] cluster:  0 Tue Aug  3 15:27:13 2021
+INFO [2021-08-03 15:27:13] cluster:  1 Tue Aug  3 15:27:13 2021
+WARN [2021-08-03 15:27:13] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:13] cluster:  2 Tue Aug  3 15:27:13 2021
+INFO [2021-08-03 15:27:13] cluster:  3 Tue Aug  3 15:27:13 2021
+WARN [2021-08-03 15:27:13] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:13] cluster:  4 Tue Aug  3 15:27:13 2021
+WARN [2021-08-03 15:27:13] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:13] cluster:  5 Tue Aug  3 15:27:13 2021
+WARN [2021-08-03 15:27:13] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:13] cluster:  6 Tue Aug  3 15:27:13 2021
+WARN [2021-08-03 15:27:14] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:14] cluster:  7 Tue Aug  3 15:27:14 2021
+WARN [2021-08-03 15:27:14] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:14] cluster:  0 Tue Aug  3 15:27:14 2021
+INFO [2021-08-03 15:27:14] cluster:  1 Tue Aug  3 15:27:14 2021
+INFO [2021-08-03 15:27:15] cluster:  2 Tue Aug  3 15:27:15 2021
+INFO [2021-08-03 15:27:16] cluster:  3 Tue Aug  3 15:27:16 2021
+INFO [2021-08-03 15:27:16] cluster:  4 Tue Aug  3 15:27:16 2021
+WARN [2021-08-03 15:27:16] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:16] cluster:  5 Tue Aug  3 15:27:16 2021
+WARN [2021-08-03 15:27:16] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:16] cluster:  6 Tue Aug  3 15:27:16 2021
+WARN [2021-08-03 15:27:17] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:17] cluster:  7 Tue Aug  3 15:27:17 2021
+WARN [2021-08-03 15:27:17] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:17] cluster:  0 Tue Aug  3 15:27:17 2021
+INFO [2021-08-03 15:27:17] cluster:  1 Tue Aug  3 15:27:17 2021
+WARN [2021-08-03 15:27:17] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:17] cluster:  2 Tue Aug  3 15:27:17 2021
+INFO [2021-08-03 15:27:18] cluster:  3 Tue Aug  3 15:27:18 2021
+WARN [2021-08-03 15:27:18] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:18] cluster:  4 Tue Aug  3 15:27:18 2021
+WARN [2021-08-03 15:27:18] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:18] cluster:  5 Tue Aug  3 15:27:18 2021
+WARN [2021-08-03 15:27:18] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:18] cluster:  6 Tue Aug  3 15:27:18 2021
+WARN [2021-08-03 15:27:18] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:18] cluster:  7 Tue Aug  3 15:27:18 2021
+WARN [2021-08-03 15:27:18] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:18] cluster:  0 Tue Aug  3 15:27:18 2021
+INFO [2021-08-03 15:27:25] cluster:  1 Tue Aug  3 15:27:25 2021
+INFO [2021-08-03 15:27:31] cluster:  2 Tue Aug  3 15:27:31 2021
+INFO [2021-08-03 15:27:38] cluster:  3 Tue Aug  3 15:27:38 2021
+INFO [2021-08-03 15:27:44] cluster:  4 Tue Aug  3 15:27:44 2021
+WARN [2021-08-03 15:27:44] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:44] cluster:  5 Tue Aug  3 15:27:44 2021
+WARN [2021-08-03 15:27:44] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:44] cluster:  6 Tue Aug  3 15:27:44 2021
+WARN [2021-08-03 15:27:44] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:44] cluster:  7 Tue Aug  3 15:27:44 2021
+WARN [2021-08-03 15:27:44] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:44] cluster:  0 Tue Aug  3 15:27:44 2021
+INFO [2021-08-03 15:27:51] cluster:  1 Tue Aug  3 15:27:51 2021
+WARN [2021-08-03 15:27:51] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:51] cluster:  2 Tue Aug  3 15:27:51 2021
+INFO [2021-08-03 15:27:57] cluster:  3 Tue Aug  3 15:27:57 2021
+WARN [2021-08-03 15:27:57] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:57] cluster:  4 Tue Aug  3 15:27:57 2021
+WARN [2021-08-03 15:27:57] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:57] cluster:  5 Tue Aug  3 15:27:57 2021
+WARN [2021-08-03 15:27:57] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:57] cluster:  6 Tue Aug  3 15:27:57 2021
+WARN [2021-08-03 15:27:58] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:27:58] cluster:  7 Tue Aug  3 15:27:58 2021
+WARN [2021-08-03 15:27:58] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+WARN [2021-08-03 15:27:58] GO LIST is EMPTY
+WARN [2021-08-03 15:27:58] GO LIST is EMPTY
+WARN [2021-08-03 15:27:58] GO LIST is EMPTY
+INFO [2021-08-03 15:27:58] ****processing pathway up&down B_MxCre.vs.D_Csnk
+INFO [2021-08-03 15:27:58] cluster:  0 Tue Aug  3 15:27:58 2021
+INFO [2021-08-03 15:27:59] cluster:  1 Tue Aug  3 15:27:59 2021
+INFO [2021-08-03 15:27:59] cluster:  2 Tue Aug  3 15:27:59 2021
+INFO [2021-08-03 15:27:59] cluster:  3 Tue Aug  3 15:27:59 2021
+INFO [2021-08-03 15:27:59] cluster:  4 Tue Aug  3 15:27:59 2021
+WARN [2021-08-03 15:28:00] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:00] cluster:  5 Tue Aug  3 15:28:00 2021
+INFO [2021-08-03 15:28:00] cluster:  6 Tue Aug  3 15:28:00 2021
+WARN [2021-08-03 15:28:00] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:00] cluster:  7 Tue Aug  3 15:28:00 2021
+WARN [2021-08-03 15:28:00] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:00] cluster:  0 Tue Aug  3 15:28:00 2021
+INFO [2021-08-03 15:28:00] cluster:  1 Tue Aug  3 15:28:00 2021
+WARN [2021-08-03 15:28:01] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:01] cluster:  2 Tue Aug  3 15:28:01 2021
+INFO [2021-08-03 15:28:01] cluster:  3 Tue Aug  3 15:28:01 2021
+WARN [2021-08-03 15:28:01] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:01] cluster:  4 Tue Aug  3 15:28:01 2021
+WARN [2021-08-03 15:28:01] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:01] cluster:  5 Tue Aug  3 15:28:01 2021
+WARN [2021-08-03 15:28:01] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:01] cluster:  6 Tue Aug  3 15:28:01 2021
+WARN [2021-08-03 15:28:01] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:01] cluster:  7 Tue Aug  3 15:28:01 2021
+WARN [2021-08-03 15:28:01] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:01] cluster:  0 Tue Aug  3 15:28:01 2021
+INFO [2021-08-03 15:28:02] cluster:  1 Tue Aug  3 15:28:02 2021
+INFO [2021-08-03 15:28:03] cluster:  2 Tue Aug  3 15:28:03 2021
+INFO [2021-08-03 15:28:03] cluster:  3 Tue Aug  3 15:28:03 2021
+INFO [2021-08-03 15:28:04] cluster:  4 Tue Aug  3 15:28:04 2021
+WARN [2021-08-03 15:28:04] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:04] cluster:  5 Tue Aug  3 15:28:04 2021
+INFO [2021-08-03 15:28:05] cluster:  6 Tue Aug  3 15:28:05 2021
+WARN [2021-08-03 15:28:05] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:05] cluster:  7 Tue Aug  3 15:28:05 2021
+WARN [2021-08-03 15:28:05] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:05] cluster:  0 Tue Aug  3 15:28:05 2021
+INFO [2021-08-03 15:28:06] cluster:  1 Tue Aug  3 15:28:06 2021
+WARN [2021-08-03 15:28:06] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:06] cluster:  2 Tue Aug  3 15:28:06 2021
+INFO [2021-08-03 15:28:06] cluster:  3 Tue Aug  3 15:28:06 2021
+WARN [2021-08-03 15:28:06] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:06] cluster:  4 Tue Aug  3 15:28:06 2021
+WARN [2021-08-03 15:28:06] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:06] cluster:  5 Tue Aug  3 15:28:06 2021
+WARN [2021-08-03 15:28:07] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:07] cluster:  6 Tue Aug  3 15:28:07 2021
+WARN [2021-08-03 15:28:07] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:07] cluster:  7 Tue Aug  3 15:28:07 2021
+WARN [2021-08-03 15:28:07] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:07] cluster:  0 Tue Aug  3 15:28:07 2021
+INFO [2021-08-03 15:28:13] cluster:  1 Tue Aug  3 15:28:13 2021
+INFO [2021-08-03 15:28:20] cluster:  2 Tue Aug  3 15:28:20 2021
+INFO [2021-08-03 15:28:26] cluster:  3 Tue Aug  3 15:28:26 2021
+INFO [2021-08-03 15:28:32] cluster:  4 Tue Aug  3 15:28:32 2021
+WARN [2021-08-03 15:28:33] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:33] cluster:  5 Tue Aug  3 15:28:33 2021
+INFO [2021-08-03 15:28:39] cluster:  6 Tue Aug  3 15:28:39 2021
+WARN [2021-08-03 15:28:39] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:39] cluster:  7 Tue Aug  3 15:28:39 2021
+WARN [2021-08-03 15:28:39] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:39] cluster:  0 Tue Aug  3 15:28:39 2021
+INFO [2021-08-03 15:28:46] cluster:  1 Tue Aug  3 15:28:46 2021
+WARN [2021-08-03 15:28:46] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:46] cluster:  2 Tue Aug  3 15:28:46 2021
+INFO [2021-08-03 15:28:52] cluster:  3 Tue Aug  3 15:28:52 2021
+WARN [2021-08-03 15:28:52] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:52] cluster:  4 Tue Aug  3 15:28:52 2021
+WARN [2021-08-03 15:28:53] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:53] cluster:  5 Tue Aug  3 15:28:53 2021
+WARN [2021-08-03 15:28:53] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:53] cluster:  6 Tue Aug  3 15:28:53 2021
+WARN [2021-08-03 15:28:53] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:53] cluster:  7 Tue Aug  3 15:28:53 2021
+WARN [2021-08-03 15:28:53] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+WARN [2021-08-03 15:28:53] GO LIST is EMPTY
+INFO [2021-08-03 15:28:54] ****processing pathway up&down C_Csnk.vs.D_Csnk
+INFO [2021-08-03 15:28:54] cluster:  0 Tue Aug  3 15:28:54 2021
+WARN [2021-08-03 15:28:54] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:54] cluster:  1 Tue Aug  3 15:28:54 2021
+WARN [2021-08-03 15:28:54] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:54] cluster:  2 Tue Aug  3 15:28:54 2021
+WARN [2021-08-03 15:28:54] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:54] cluster:  3 Tue Aug  3 15:28:54 2021
+WARN [2021-08-03 15:28:54] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:54] cluster:  4 Tue Aug  3 15:28:54 2021
+INFO [2021-08-03 15:28:55] cluster:  5 Tue Aug  3 15:28:54 2021
+WARN [2021-08-03 15:28:55] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:55] cluster:  6 Tue Aug  3 15:28:55 2021
+WARN [2021-08-03 15:28:55] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:55] cluster:  7 Tue Aug  3 15:28:55 2021
+WARN [2021-08-03 15:28:55] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:55] cluster:  0 Tue Aug  3 15:28:55 2021
+INFO [2021-08-03 15:28:55] cluster:  1 Tue Aug  3 15:28:55 2021
+WARN [2021-08-03 15:28:55] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:55] cluster:  2 Tue Aug  3 15:28:55 2021
+WARN [2021-08-03 15:28:55] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:55] cluster:  3 Tue Aug  3 15:28:55 2021
+WARN [2021-08-03 15:28:55] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:55] cluster:  4 Tue Aug  3 15:28:55 2021
+WARN [2021-08-03 15:28:56] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:56] cluster:  5 Tue Aug  3 15:28:56 2021
+WARN [2021-08-03 15:28:56] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:56] cluster:  6 Tue Aug  3 15:28:56 2021
+WARN [2021-08-03 15:28:56] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:56] cluster:  7 Tue Aug  3 15:28:56 2021
+WARN [2021-08-03 15:28:56] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:56] cluster:  0 Tue Aug  3 15:28:56 2021
+WARN [2021-08-03 15:28:56] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:56] cluster:  1 Tue Aug  3 15:28:56 2021
+WARN [2021-08-03 15:28:56] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:56] cluster:  2 Tue Aug  3 15:28:56 2021
+WARN [2021-08-03 15:28:56] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:56] cluster:  3 Tue Aug  3 15:28:56 2021
+WARN [2021-08-03 15:28:56] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:56] cluster:  4 Tue Aug  3 15:28:56 2021
+INFO [2021-08-03 15:28:57] cluster:  5 Tue Aug  3 15:28:57 2021
+WARN [2021-08-03 15:28:57] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:57] cluster:  6 Tue Aug  3 15:28:57 2021
+WARN [2021-08-03 15:28:57] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:57] cluster:  7 Tue Aug  3 15:28:57 2021
+WARN [2021-08-03 15:28:57] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:57] cluster:  0 Tue Aug  3 15:28:57 2021
+INFO [2021-08-03 15:28:58] cluster:  1 Tue Aug  3 15:28:58 2021
+WARN [2021-08-03 15:28:58] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:58] cluster:  2 Tue Aug  3 15:28:58 2021
+WARN [2021-08-03 15:28:58] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:58] cluster:  3 Tue Aug  3 15:28:58 2021
+WARN [2021-08-03 15:28:58] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:58] cluster:  4 Tue Aug  3 15:28:58 2021
+WARN [2021-08-03 15:28:58] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:58] cluster:  5 Tue Aug  3 15:28:58 2021
+WARN [2021-08-03 15:28:59] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:59] cluster:  6 Tue Aug  3 15:28:59 2021
+WARN [2021-08-03 15:28:59] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:59] cluster:  7 Tue Aug  3 15:28:59 2021
+WARN [2021-08-03 15:28:59] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:59] cluster:  0 Tue Aug  3 15:28:59 2021
+WARN [2021-08-03 15:28:59] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:59] cluster:  1 Tue Aug  3 15:28:59 2021
+WARN [2021-08-03 15:28:59] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:59] cluster:  2 Tue Aug  3 15:28:59 2021
+WARN [2021-08-03 15:28:59] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:59] cluster:  3 Tue Aug  3 15:28:59 2021
+WARN [2021-08-03 15:28:59] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:28:59] cluster:  4 Tue Aug  3 15:28:59 2021
+INFO [2021-08-03 15:29:05] cluster:  5 Tue Aug  3 15:29:05 2021
+WARN [2021-08-03 15:29:06] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:06] cluster:  6 Tue Aug  3 15:29:06 2021
+WARN [2021-08-03 15:29:06] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:06] cluster:  7 Tue Aug  3 15:29:06 2021
+WARN [2021-08-03 15:29:06] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:06] cluster:  0 Tue Aug  3 15:29:06 2021
+INFO [2021-08-03 15:29:12] cluster:  1 Tue Aug  3 15:29:12 2021
+WARN [2021-08-03 15:29:12] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:12] cluster:  2 Tue Aug  3 15:29:12 2021
+WARN [2021-08-03 15:29:12] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:12] cluster:  3 Tue Aug  3 15:29:12 2021
+WARN [2021-08-03 15:29:12] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:12] cluster:  4 Tue Aug  3 15:29:12 2021
+WARN [2021-08-03 15:29:12] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:12] cluster:  5 Tue Aug  3 15:29:12 2021
+WARN [2021-08-03 15:29:12] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:12] cluster:  6 Tue Aug  3 15:29:12 2021
+WARN [2021-08-03 15:29:13] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:13] cluster:  7 Tue Aug  3 15:29:13 2021
+WARN [2021-08-03 15:29:13] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:14] finished generate_scrna_pathway_name
+INFO [2021-08-03 15:29:14] executing generate_scrna_pathway_stage
+INFO [2021-08-03 15:29:14] ****processing pathway up&down MxCre.vs.Csnk
+INFO [2021-08-03 15:29:14] cluster:  0 Tue Aug  3 15:29:14 2021
+INFO [2021-08-03 15:29:14] cluster:  1 Tue Aug  3 15:29:14 2021
+INFO [2021-08-03 15:29:14] cluster:  2 Tue Aug  3 15:29:14 2021
+INFO [2021-08-03 15:29:15] cluster:  3 Tue Aug  3 15:29:15 2021
+INFO [2021-08-03 15:29:15] cluster:  4 Tue Aug  3 15:29:15 2021
+WARN [2021-08-03 15:29:15] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:15] cluster:  5 Tue Aug  3 15:29:15 2021
+WARN [2021-08-03 15:29:15] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:15] cluster:  6 Tue Aug  3 15:29:15 2021
+WARN [2021-08-03 15:29:15] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:15] cluster:  7 Tue Aug  3 15:29:15 2021
+WARN [2021-08-03 15:29:15] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:15] cluster:  0 Tue Aug  3 15:29:15 2021
+INFO [2021-08-03 15:29:16] cluster:  1 Tue Aug  3 15:29:16 2021
+INFO [2021-08-03 15:29:16] cluster:  2 Tue Aug  3 15:29:16 2021
+INFO [2021-08-03 15:29:16] cluster:  3 Tue Aug  3 15:29:16 2021
+INFO [2021-08-03 15:29:16] cluster:  4 Tue Aug  3 15:29:16 2021
+WARN [2021-08-03 15:29:17] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:17] cluster:  5 Tue Aug  3 15:29:17 2021
+WARN [2021-08-03 15:29:17] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:17] cluster:  6 Tue Aug  3 15:29:17 2021
+WARN [2021-08-03 15:29:17] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:17] cluster:  7 Tue Aug  3 15:29:17 2021
+WARN [2021-08-03 15:29:17] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:17] cluster:  0 Tue Aug  3 15:29:17 2021
+INFO [2021-08-03 15:29:17] cluster:  1 Tue Aug  3 15:29:17 2021
+INFO [2021-08-03 15:29:18] cluster:  2 Tue Aug  3 15:29:18 2021
+INFO [2021-08-03 15:29:19] cluster:  3 Tue Aug  3 15:29:19 2021
+INFO [2021-08-03 15:29:19] cluster:  4 Tue Aug  3 15:29:19 2021
+WARN [2021-08-03 15:29:20] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:20] cluster:  5 Tue Aug  3 15:29:20 2021
+WARN [2021-08-03 15:29:20] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:20] cluster:  6 Tue Aug  3 15:29:20 2021
+WARN [2021-08-03 15:29:20] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:20] cluster:  7 Tue Aug  3 15:29:20 2021
+WARN [2021-08-03 15:29:20] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:20] cluster:  0 Tue Aug  3 15:29:20 2021
+INFO [2021-08-03 15:29:20] cluster:  1 Tue Aug  3 15:29:20 2021
+INFO [2021-08-03 15:29:21] cluster:  2 Tue Aug  3 15:29:21 2021
+INFO [2021-08-03 15:29:22] cluster:  3 Tue Aug  3 15:29:22 2021
+INFO [2021-08-03 15:29:22] cluster:  4 Tue Aug  3 15:29:22 2021
+WARN [2021-08-03 15:29:22] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:22] cluster:  5 Tue Aug  3 15:29:22 2021
+WARN [2021-08-03 15:29:22] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:22] cluster:  6 Tue Aug  3 15:29:22 2021
+WARN [2021-08-03 15:29:23] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:23] cluster:  7 Tue Aug  3 15:29:23 2021
+WARN [2021-08-03 15:29:23] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:23] cluster:  0 Tue Aug  3 15:29:23 2021
+INFO [2021-08-03 15:29:29] cluster:  1 Tue Aug  3 15:29:29 2021
+INFO [2021-08-03 15:29:35] cluster:  2 Tue Aug  3 15:29:35 2021
+INFO [2021-08-03 15:29:41] cluster:  3 Tue Aug  3 15:29:41 2021
+INFO [2021-08-03 15:29:47] cluster:  4 Tue Aug  3 15:29:47 2021
+WARN [2021-08-03 15:29:47] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:48] cluster:  5 Tue Aug  3 15:29:47 2021
+WARN [2021-08-03 15:29:48] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:48] cluster:  6 Tue Aug  3 15:29:48 2021
+WARN [2021-08-03 15:29:48] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:48] cluster:  7 Tue Aug  3 15:29:48 2021
+WARN [2021-08-03 15:29:48] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:29:48] cluster:  0 Tue Aug  3 15:29:48 2021
+INFO [2021-08-03 15:29:55] cluster:  1 Tue Aug  3 15:29:55 2021
+INFO [2021-08-03 15:30:01] cluster:  2 Tue Aug  3 15:30:01 2021
+INFO [2021-08-03 15:30:08] cluster:  3 Tue Aug  3 15:30:08 2021
+INFO [2021-08-03 15:30:14] cluster:  4 Tue Aug  3 15:30:14 2021
+WARN [2021-08-03 15:30:14] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:30:14] cluster:  5 Tue Aug  3 15:30:14 2021
+WARN [2021-08-03 15:30:14] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:30:14] cluster:  6 Tue Aug  3 15:30:14 2021
+WARN [2021-08-03 15:30:14] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:30:14] cluster:  7 Tue Aug  3 15:30:14 2021
+WARN [2021-08-03 15:30:14] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-08-03 15:30:15] finished generate_scrna_pathway_stage
+INFO [2021-08-03 15:31:54] finished scrna_phase_comparing
+INFO [2021-08-03 15:31:54] ===============Finished===============

@@ -44,7 +44,7 @@ stage_lst = c(
 # on      --> Detect doublets and remove them from the data set.
 # off     --> Do not detect doublets.
 # display --> Detect doublets, but do not remove them.
-doublet_switch <- "on"
+doublet_switch <- "display"
 
 # This variable controls how you want to remove the doublets. If you set doublet_switch=off, you can ignore this variable.
 # The percentage of doublets you expect depends on the number of cells you have. The more cells, the higher the percentage of doublets.
@@ -95,7 +95,7 @@ doublet_switch <- "on"
 # )
 
 doublet_lst = list(
-  A_MxCre = "/data/mg000001/git_projects/20210721_scrna_seurat_pipeline/data/A_MxCre/metrics_summary.csv", 
+  A_MxCre = "data/A_MxCre/metrics_summary.csv", 
   B_MxCre = NULL, 
   C_Csnk  = 0.05, 
   D_Csnk  = 1024 
@@ -139,7 +139,7 @@ MSigDB_Geneset_names <- c(
 
 ## 0. omit,     1. calc & save,      2. load
 conf = c(
-       scrna_phase_preprocess     = 1, ## quality check and preprocessing before integration
+       scrna_phase_preprocess     = 2, ## quality check and preprocessing before integration
        scrna_phase_clustering     = 1, ## integration & clustering
        scrna_phase_comparing      = 1, ## DE GO pathway analysis etc. All rest calculating will be stored here
        scrna_cluster_annotation   = 0, ## Annotate clusters according to `cluster_annotation`

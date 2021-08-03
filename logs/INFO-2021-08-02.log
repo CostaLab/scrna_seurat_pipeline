@@ -1,0 +1,62 @@
+INFO [2021-08-02 17:07:48] RObject save in directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-02 17:07:48] xlsx save in directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-02 17:09:08] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-02 17:09:08] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-02 17:09:08] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-02 17:09:08] samples summary: 
+INFO [2021-08-02 17:09:08] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-02 17:09:08] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-02 17:09:08] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-02 17:09:08] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-02 17:09:08] The executing plan is: 
+INFO [2021-08-02 17:09:08] 			calculating: scrna_phase_preprocess
+INFO [2021-08-02 17:09:08] 			calculating: scrna_phase_clustering
+INFO [2021-08-02 17:09:08] 			calculating: scrna_phase_comparing
+INFO [2021-08-02 17:09:35] RObject save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/save
+INFO [2021-08-02 17:09:35] xlsx save in existed directory: /home/grasshoff/Documents/DoubletDetection/20210802_scrna_doublet_pipeline/TEST/charts
+INFO [2021-08-02 17:09:35] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-08-02 17:09:35] samples summary: 
+INFO [2021-08-02 17:09:35] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-08-02 17:09:35] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-08-02 17:09:35] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-08-02 17:09:35] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-08-02 17:09:35] The executing plan is: 
+INFO [2021-08-02 17:09:35] 			calculating: scrna_phase_preprocess
+INFO [2021-08-02 17:09:35] 			calculating: scrna_phase_clustering
+INFO [2021-08-02 17:09:35] 			calculating: scrna_phase_comparing
+INFO [2021-08-02 17:09:40] executing generate_scrna_phase_preprocess
+INFO [2021-08-02 17:09:40] executing generate_scrna_rawdata
+INFO [2021-08-02 17:09:51] finished generate_scrna_rawdata
+INFO [2021-08-02 17:09:51] executing generate_scrna_ambient_rna
+INFO [2021-08-02 17:10:40] finished generate_scrna_ambient_rna
+INFO [2021-08-02 17:10:40] executing generate_scrna_filter
+INFO [2021-08-02 17:10:40] finished generate_scrna_filter
+INFO [2021-08-02 17:10:40] executing generate_scrna_preprocess
+INFO [2021-08-02 17:10:47] finished generate_scrna_preprocess
+INFO [2021-08-02 17:10:47] executing generate_scrna_cellcycle
+INFO [2021-08-02 17:10:49] finished generate_scrna_cellcycle
+INFO [2021-08-02 17:10:49] executing generate_scrna_cycleRegressOut
+INFO [2021-08-02 17:11:11] finished generate_scrna_cycleRegressOut
+INFO [2021-08-02 17:11:11] executing generate_scrna_regressOut
+INFO [2021-08-02 17:11:40] finished generate_scrna_regressOut
+INFO [2021-08-02 17:12:06] finished scrna_phase_preprocess
+INFO [2021-08-02 17:12:06] executing generate_scrna_phase_clustering
+INFO [2021-08-02 17:12:06] executing generate_scrna_integration_harmony
+INFO [2021-08-02 17:12:15] finished generate_scrna_integration_harmony
+INFO [2021-08-02 17:12:15] executing generate_scrna_integration_seurat
+INFO [2021-08-02 17:12:57] finished generate_scrna_integration_seurat
+INFO [2021-08-02 17:12:57] executing generate_scrna_batchclustering
+INFO [2021-08-02 17:13:00] finished generate_scrna_batchclustering
+INFO [2021-08-02 17:13:00] executing generate_scrna_batch_markergenes
+INFO [2021-08-02 17:45:52] finished generate_scrna_batch_markergenes
+INFO [2021-08-02 17:45:52] executing generate_scrna_clustering
+INFO [2021-08-02 17:45:55] finished generate_scrna_clustering
+INFO [2021-08-02 17:45:55] executing generate_scrna_fishertest_inte_clusters
+INFO [2021-08-02 17:45:55] finished generate_scrna_fishertest_inte_clusters
+INFO [2021-08-02 17:45:55] executing generate_scrna_MCAannotate
+INFO [2021-08-02 17:46:35] finished generate_scrna_MCAannotate
+INFO [2021-08-02 17:46:35] executing generate_scrna_ExternalAnnotation
+INFO [2021-08-02 17:46:42] finished generate_scrna_ExternalAnnotation
+INFO [2021-08-02 17:46:42] executing generate_scrna_HCLannotate
+INFO [2021-08-02 17:46:47] finished generate_scrna_HCLannotate
+INFO [2021-08-02 17:46:47] executing generate_scrna_MAGIC

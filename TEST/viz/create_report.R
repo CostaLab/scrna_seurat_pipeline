@@ -661,7 +661,7 @@ render_func = function(rmd_input_filename, output_filename){
 dic_Rmd_n_Output <- list(
         "QC"                  =     c(glue("{viz_path}/1_quality_report.Rmd"),        "data_quality"),
         "AmbientRNA"          =     c(glue("{viz_path}/ambientRNA_viz.Rmd"),          "ambient_rna"),
-	"DoubletDetection"    =     c(glue("{viz_path}/doubletdetection_viz.Rmd"),    "doublet_detection"),
+	"DoubletDetection"    =     c(glue("{viz_path}/doubletdetection_viz.Rmd"),    "doubletdetection"),
         "DEs"                 =     c(glue("{viz_path}/2_clusters_DEs.Rmd"),          "clusters_DEs"),
         "Clusters"            =     c(glue("{viz_path}/2_clustering.Rmd"),            "clusters"),
         "Singleton"           =     c(glue("{viz_path}/2_clustering.Rmd"),            "clusters"),

@@ -1,0 +1,222 @@
+---
+title: "Clustering"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+params:
+    scrna: 'scrna object'
+    cluster: "clusters to analyse"
+    cluster_info: "cluster info"
+    project: "name/tag of the project"
+    savedir: "directory where rds files were saved"
+    funcs: "analysis steps to be performed"
+    report_data_folder: "folder with the output tables"
+    report_tables_folder: "folder with the table elements"
+    report_plots_folder: "folder with the plot elements"
+    report_plots_folder_png: "folder with the png plot elements"
+    report_plots_folder_pdf: "folder with the pdf plot elements"
+    author: "author of document"
+author: '`r params$author`'
+---
+
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(kableExtra)
+```
+
+```{r setup_clustering_seurat, include=FALSE}
+knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
+fixed_cluster = "seurat_inte_clusters"
+```
+## Cluster: `r colorize(fixed_cluster,"red")`
+
+### Clusters Resolution
+```{r clustree_resolution_seurat, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("clustree_resolution_",fixed_cluster,".png")
+  )
+)
+```
+```{r umap_resolution_list_seurat, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_resolution_list_",fixed_cluster,".png")
+  )
+)
+```
+
+
+### Clusters
+```{r umap_groupby_name_seurat, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_groupby_name_",fixed_cluster,".png")
+  )
+)
+```
+```{r umap_groupby_cluster_seurat, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_groupby_cluster_",fixed_cluster,".png")
+  )
+)
+```
+```{r stSample_stCond_table_cluster_seurat, echo=FALSE}
+readRDS(
+  file.path(
+    params$report_tables_folder,
+    paste0("stSample_table_cluster_",fixed_cluster,".RDS")
+  )
+) %>%
+  kable(caption = "samples: cluster cells", align = 'c') %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+readRDS(
+  file.path(
+    params$report_tables_folder,
+    paste0("stCond_table_cluster_",fixed_cluster,".RDS")
+  )
+) %>%
+  kable(caption = "condition: cluster cells", align = 'c') %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+### Clusters Statistic
+```{r cluster_statistics_seurat, out.width="100%", echo=FALSE}
+flist = grep(
+  "cluster_statistics_",
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+)
+flist = grep(fixed_cluster, flist, value=TRUE, fixed=TRUE)
+knitr::include_graphics(flist)
+```
+
+### Proportion
+```{r cluster_sample_proportions_seurat, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("cluster_sample_proportions_",fixed_cluster,".png")
+  )
+)
+```
+
+### Amount Distribution
+```{r cluster_sample_distribution_seurat, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("cluster_sample_distribution_",fixed_cluster,".png")
+  )
+)
+```
+
+### Cell cycle phase
+```{r umap_ccycle_phase_seurat, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_ccycle_phase_",fixed_cluster,".png")
+  )
+)
+```
+
+### FeaturePlot
+```{r umap_featureplot_qc_seurat, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_featureplot_qc_",fixed_cluster,".png")
+  )
+)
+```
+```{r umap_featureplot_ccycle_seurat, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_featureplot_ccycle_",fixed_cluster,".png")
+  )
+)
+```
+
+### Violin Plot
+```{r vlnplot_qc_ccycle_groupby_seurat, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("vlnplot_qc_ccycle_groupby-cluster_",fixed_cluster,".png")
+  )
+)
+```
+
+### HCL annotation
+```{r hcl_annotate_seurat, out.width="100%", echo=FALSE}
+fname <- file.path(
+    params$report_plots_folder_png,
+    paste0("hcl_annotate_",fixed_cluster,".png")
+  )
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+
+### MCA annotation
+```{r mca_annotate_seurat, out.width="100%", echo=FALSE}
+fname <- file.path(
+    params$report_plots_folder_png,
+    paste0("mca_annotate_",fixed_cluster,".png")
+  )
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+```{r mca_annotate_hover_seurat, out.width="100%", echo=FALSE, eval=FALSE}
+plt = readRDS(
+  file.path(
+    params$report_plots_folder,
+    paste0("mca_annotate_plt_",fixed_cluster,".RDS")
+  )
+)
+info = readRDS(
+  file.path(
+    params$report_plots_folder,
+    paste0("mca_annotate_info_",fixed_cluster,".RDS")
+  )
+)
+Seurat::HoverLocator(plot = plt, information = info)
+```
+
+### External Annotation
+```{r external_annotation_seurat, out.width="100%", echo=FALSE}
+fname <- file.path(
+    params$report_plots_folder_png,
+    paste0("external_annotation_",fixed_cluster,".png")
+  )
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+```{r external_annotation_hover_seurat, out.width="100%", echo=FALSE, eval=FALSE}
+plt = readRDS(
+  file.path(
+    params$report_plots_folder,
+    paste0("external_annotation_plt_",fixed_cluster,".RDS")
+  )
+)
+info = readRDS(
+  file.path(
+    params$report_plots_folder,
+    paste0("external_annotation_info_",fixed_cluster,".RDS")
+  )
+)
+Seurat::HoverLocator(plot = plt, information = info)
+```
