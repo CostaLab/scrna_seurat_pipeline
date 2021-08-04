@@ -8,10 +8,10 @@
 ### Time your job needs to execute, e. g. 15 min 30 sec 
 #SBATCH -t 24:00:00
 ### Memory your job needs per node, e. g. 1 GB
-#SBATCH --mem=180G
+#SBATCH --mem=48G
 
 ### OpenMP threads
-#SBATCH --cpus-per-task=24
+#SBATCH --cpus-per-task=8
 
 ################################################################
 module load R
