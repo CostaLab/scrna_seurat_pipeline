@@ -21,7 +21,7 @@ module load scRNA
 ################################################################
 
 # could also define it here instead of taking it as an arg
-proj_name=$1
+proj_name="$1"
 # data dir (where your results were saved)
 # the way it is set up below -o for output will also save your report
 # on that same directory path
