@@ -2,16 +2,16 @@
 
 ### Job name
 #SBATCH -J viz_ex
-#SBATCH -o logs/%j_job.log
-#SBATCH -e logs/%j_job.log
+#SBATCH -o logs/output.%j.%x.txt
+#SBATCH -e logs/error.%j.%x.txt
 
 ### Time your job needs to execute, e. g. 15 min 30 sec 
 #SBATCH -t 24:00:00
 ### Memory your job needs per node, e. g. 1 GB
-#SBATCH --mem=48G
+#SBATCH --mem=180G
 
 ### OpenMP threads
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=24
 
 ################################################################
 module load R
@@ -21,12 +21,11 @@ module load scRNA
 ################################################################
 
 # could also define it here instead of taking it as an arg
-proj_name="TEST"
+proj_name=$1
 # data dir (where your results were saved)
 # the way it is set up below -o for output will also save your report
 # on that same directory path
 data_path="/data/EXAMPLE/exp/scRNA/some_project/scrna_seurat_pipeline_results"
-data_path=`pwd`
 #cluster="removed_clusters"
 #cluster="remove_recluster"
 #cluster="merged_clusters"

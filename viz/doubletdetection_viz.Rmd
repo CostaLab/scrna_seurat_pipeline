@@ -9,7 +9,7 @@ output:
     toc: yes
     toc_depth: '3'
 params:
-    scrna: 'scrna object'
+    scrna: "scrna object"
     cluster: "clusters to analyse"
     cluster_info: "cluster info"
     project: "name/tag of the project"
@@ -29,13 +29,14 @@ library(dplyr)
 library(kableExtra)
 savedir = params$savedir
 ```
+
 ```{r , include=FALSE}
 library(ggplot2)
 ```
 
 ## Doublets
 ```{r fig.width=9, fig.height=7}
-knitr::include_graphics(file.path(params$report_plots_folder_png,"doublets.png"))
+knitr::include_graphics(file.path(params$report_plots_folder_png,"doublets_umap.png"))
 ```
 
 ```{r postfilter_ambientRNA, echo=FALSE}
@@ -43,4 +44,9 @@ stSample <- readRDS(file.path(params$report_tables_folder, "doublets_table.Rds")
 stSample %>%
   kable(caption = "Doublets detected for each sample", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+## Violin Plots
+```{r violin_doublet_all, out.width"100%", echo=FALSE}
+knitr::include_graphics(file.path(params$report_plots_folder_png,"vlnplot_doublet_combined.png"))
 ```
