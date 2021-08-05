@@ -545,6 +545,7 @@ if (MAKE_ELEMENT == "TRUE"){
 
   source(glue("{viz_path}/1_quality_report_elements.R"))
   source(glue("{viz_path}/ambientRNA_viz_elements.R"))
+  source(glue("{viz_path}/doubletdetection_viz_elements.R"))
   source(glue("{viz_path}/2_clusters_DEs_elements.R"))
   source(glue("{viz_path}/2_batch_clustering_elements.R"))
   source(glue("{viz_path}/2_clustering_elements.R"))
@@ -566,10 +567,13 @@ if (MAKE_ELEMENT == "TRUE"){
     cat(paste(date(), green(" Element: "), red("QC"), "\n"))
     quality_report_elements() ## load scrna innner the function
   }
-
   if(any(grepl("AmbientRNA",funcs,fixed=TRUE))){
     cat(paste(date(), green(" Element: "), red("AmbientRNA"), "\n"))
     ambientRNA_elements(scrna)
+  }
+  if(any(grepl("DoubletDetection",funcs,fixed=TRUE))){
+    cat(paste(date(), green(" Element: "), red("DoubletDetection"), "\n"))
+    doubletdetection_viz_elements(scrna)
   }
   if("DEs"%in% EXEC_PLAN) {
     cat(paste(date(), green(" Element: "), red("DEs"), "\n"))
@@ -657,6 +661,7 @@ render_func = function(rmd_input_filename, output_filename){
 dic_Rmd_n_Output <- list(
         "QC"                  =     c(glue("{viz_path}/1_quality_report.Rmd"),        "data_quality"),
         "AmbientRNA"          =     c(glue("{viz_path}/ambientRNA_viz.Rmd"),          "ambient_rna"),
+	"DoubletDetection"    =     c(glue("{viz_path}/doubletdetection_viz.Rmd"),    "doublet_detection"),
         "DEs"                 =     c(glue("{viz_path}/2_clusters_DEs.Rmd"),          "clusters_DEs"),
         "Clusters"            =     c(glue("{viz_path}/2_clustering.Rmd"),            "clusters"),
         "Singleton"           =     c(glue("{viz_path}/2_clustering.Rmd"),            "clusters"),
@@ -679,7 +684,7 @@ dic_Rmd_n_Output <- list(
         "kegg_stage"          =     c(glue("{viz_path}/4_kegg_stageVS.Rmd"),          "kegg_stageVS"),
         "Genesets_1v1"        =     c(glue("{viz_path}/4_Genesets_1v1.Rmd"),          "Genesets_1vs1"),
         "Genesets_stage"      =     c(glue("{viz_path}/4_Genesets_stageVS.Rmd"),      "Genesets_stageVS"),
-        "progeny_stage"      =     c(glue("{viz_path}/4_progeny_stageVS.Rmd"),        "progeny_stageVS"),
+        "progeny_stage"       =     c(glue("{viz_path}/4_progeny_stageVS.Rmd"),        "progeny_stageVS"),
         "intUMAPs"            =     c(glue("{viz_path}/interactive_UMAPs.Rmd"),       "interactive_UMAPs")
 )
 

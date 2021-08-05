@@ -206,6 +206,10 @@ if(!file.exists(pa$configfile)){
 
 source(pa$configfile)
 
+##--------------Load the function scripts----------------------
+R_scripts <- list.files("R_scripts/", full.name = TRUE)
+for(i in 1:length(R_scripts)) source(R_scripts[i])
+
 ##--------------keep variables----------------------
 pa$project_name       = PROJECT
 pa$organ              = ORGAN
@@ -215,6 +219,15 @@ pa$hcl_name           = HCL_NAME
 pa$external_file      = ANNOTATION_EXTERNAL_FILE
 pa$data_src           = data_src
 pa$stage_lst          = stage_lst
+
+
+##--------------Loading the relevant slots and attributes for the sanity function----------------------
+sanity_attributes <- read.table("static/SlotsAttributes.csv", sep = ";", header = TRUE, stringsAsFactors = FALSE)
+
+
+##--------------Doublet estimation----------------------
+estimation_10X <- read.csv("static/DoubletEstimation10X.csv")
+model_recovered <- approxfun(x = estimation_10X$CellsRecovered, y = estimation_10X$MultipletRate)
 
 
 logger.info("----------------------Project: %s --------------------------", PROJECT)
@@ -302,7 +315,7 @@ suppressPackageStartupMessages(library(doParallel))
 suppressPackageStartupMessages(library(celda))
 suppressPackageStartupMessages(library(SoupX))
 suppressPackageStartupMessages(library(Rmagic))
-
+suppressPackageStartupMessages(library(DoubletFinder))
 
 registerDoParallel(cores=WORKER_NUM)
 
@@ -2528,8 +2541,6 @@ get_pathway_comparison <- function(scrna, slot){
 
 # Sanity Function
 # This function is called every time a Seurat object is loaded or conf_main processes a new step.
-# Loading the relevant slots and attributes.
-sanity_attributes <- read.table("static/SlotsAttributes.csv", sep = ";", header = TRUE, stringsAsFactors = FALSE)
 
 # We have the singleton slots. When we run the pipeline for a single sample and use the comparing features, we need to check for these slots.
 # But we do not want to check for these slots if we use the comparing features for a set of samples, i.e. in the normal use.
@@ -2557,6 +2568,7 @@ sanity_function <- function(scrna, key){
   scrna@misc[["sanity"]] <- sanity_attributes_result
   colnames(scrna@misc$sanity) <- key
   #scrna@misc[[paste0("sanity_", key)]] <- sanity_attributes_result
+  print("Checked slot.")
   return(scrna)
 }
 check_attributes <- function(scrna, sanity_attribute){
@@ -2571,6 +2583,57 @@ check_attributes <- function(scrna, sanity_attribute){
   finally = {
     #pass
   })
+}
+
+# DoubletFinder
+generate_scrna_doublet_proportions <- function(scrna){
+  ret_code <- 1
+  if(doublet_switch %in% c("on", "display")){
+    doublet_formation_rate <- determine_doublet_proportions(scrna = scrna, doublet_lst = doublet_lst)
+    names(doublet_formation_rate) <- names(doublet_lst)
+    scrna_lst <- SplitObject(scrna, split.by = "name")
+    scrna_lst <- lapply(scrna_lst, function(x){
+      x <- NormalizeData(x)
+      x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)
+      x <- ScaleData(x)
+      x <- RunPCA(x)
+      x <- RunUMAP(x, dims = 1:20)
+    })
+    bcmvn_lst <- lapply(scrna_lst, mc_pK_identification)
+    pK_optimal <- lapply(X = bcmvn_lst, FUN = function(x){as.numeric(as.character(x[x$BCmetric == max(x$BCmetric),2]))})
+    est_expected <- lapply(X = names(bcmvn_lst), FUN = mc_est_expected, scrnas = scrna_lst, doublet_rate = doublet_formation_rate)
+    est_expected <- unlist(est_expected)
+    scrna_list_doublets <- lapply(X = names(bcmvn_lst), FUN = mc_doubletFinder_v3, seurats = scrna_lst, pN = 0.25, pK_optimal = pK_optimal, est_expected = est_expected)
+    names(scrna_list_doublets) <- names(bcmvn_lst)
+    classifications <- c()
+    cells <- c()
+    for(i in 1:length(scrna_list_doublets)){
+      cells               <- c(names(scrna_list_doublets[[i]]$classifications), cells)
+      classifications     <- c(as.character(scrna_list_doublets[[i]]$classifications), classifications)
+    }
+    classifications <- factor(classifications, levels = c("Singlet", "Doublet"))
+    names(classifications) <- cells
+    scrna <- AddMetaData(scrna, classifications, col.name = "Doublet_classifications")
+    data.list <- SplitObject(scrna, split.by = "name")
+    data.list <- lapply(X = data.list, FUN = function(x) {
+                        x <- NormalizeData(x)
+                        x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)})
+    k.filter <- min(table(scrna$name))
+    k.filter <- ifelse(k.filter < 200, k.filter, 200)
+    anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=TRUE,
+                                      k.filter = k.filter)## THIS IS CCA DIMENSIONS
+    scrna_save <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM, k.weight = k.filter) ## THIS IS PCA DIMENSION
+    scrna_save <- ScaleData(scrna_save, verbose = FALSE)
+    scrna_save <- RunPCA(scrna_save, npcs = 30, verbose = FALSE, reduction.name="DOUBLET_PCA")
+    scrna_save <- RunUMAP(scrna_save, reduction = "DOUBLET_PCA", dims = 1:20, reduction.name="DOUBLET_UMAP")
+    saveRDS(scrna_save, file.path(SAVE_DIR, "scrna_DoubletAnnotated.Rds"))
+  }
+  if(doublet_switch == "on"){
+    scrna <- subset(scrna, Doublet_classifications == "Singlet")
+  }
+  ret_code <- 0
+  print("Finished DoubletFinder")
+  return(list(scrna, ret_code))
 }
 
 if(!interactive()) {
