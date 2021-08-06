@@ -2590,7 +2590,7 @@ generate_scrna_doublet_proportions <- function(scrna){
   ret_code <- 1
   if(doublet_switch %in% c("on", "display")){
     doublet_formation_rate <- determine_doublet_proportions(scrna = scrna, doublet_lst = doublet_lst)
-    names(doublet_formation_rate) <- names(doublet_lst)
+    #names(doublet_formation_rate) <- names(doublet_lst)
     scrna_lst <- SplitObject(scrna, split.by = "name")
     scrna_lst <- lapply(scrna_lst, function(x){
       x <- NormalizeData(x)
