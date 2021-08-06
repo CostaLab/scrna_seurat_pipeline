@@ -2,8 +2,8 @@
 
 ### Job name
 #SBATCH -J viz_ex
-#SBATCH -o logs/%j_job.log
-#SBATCH -e logs/%j_job.log
+#SBATCH -o logs/output.%j.%x.txt
+#SBATCH -e logs/error.%j.%x.txt
 
 ### Time your job needs to execute, e. g. 15 min 30 sec 
 #SBATCH -t 24:00:00
@@ -26,7 +26,6 @@ proj_name="$1"
 # the way it is set up below -o for output will also save your report
 # on that same directory path
 data_path="/data/EXAMPLE/exp/scRNA/some_project/scrna_seurat_pipeline_results"
-data_path=`pwd`
 #cluster="removed_clusters"
 #cluster="remove_recluster"
 #cluster="merged_clusters"
@@ -38,6 +37,7 @@ FUNCS=(
   #Singleton
  QC
  AmbientRNA
+ DoubletDetection
  DEs
  Clusters
  Clusters_harmony
