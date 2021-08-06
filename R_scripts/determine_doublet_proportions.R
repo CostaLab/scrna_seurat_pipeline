@@ -22,7 +22,7 @@ determine_doublet_proportions <- function(scrna, doublet_lst){
             doublet_formation_rate <- c(doublet_formation_rate, doublet_lst[[i]])
         } else if(is.numeric(doublet_lst[[i]]) & doublet_lst[[i]] >= 1) doublet_formation_rate <- c(doublet_formation_rate, model_recovered(doublet_lst[[i]]))
       }
+      names(doublet_formation_rate) <- names(doublet_lst)
     }
-  names(doublet_formation_rate) <- names(doublet_lst)
   return(doublet_formation_rate)
 }
