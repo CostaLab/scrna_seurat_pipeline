@@ -1,6 +1,10 @@
 #!/usr/bin/Rscript
 
-source("helper_functions.R")
+t_start <- Sys.time()
+
+source("R/helper_functions.R")
+source("R/DE_GO_VS_helper.R")
+source("R/pathway_vs_helper.R")
 
 suppressPackageStartupMessages(library(optparse))      ## Options
 
@@ -24,7 +28,7 @@ AllOptions <- function(){
     help = "report_dir [default %default]", metavar = "character")
   parser <- add_option(
     parser, c("-r", "--charts_dir"), type = "character", default = "charts",
-    help = "charts_dir [default %default]",metavar = "character")
+    help = "charts_dir [default %default]", metavar = "character")
   parser <- add_option(
     parser, c("-p", "--project"), type = "character", default = "",
     help = "charts_dir [default %default]", metavar = "character")
@@ -142,13 +146,21 @@ scrna <- NULL
 if(MAKE_ELEMENT){
 
   if(identical(cluster,"singleton")){
-    cat(paste(date(), blue(" loading: "), red("scrna_phase_singleton.Rds"), "\n"))
-    scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
-    cat(paste(date(), blue(" loaded: "), red("scrna_phase_singleton.Rds"), "\n"))
+    cat(
+      paste0(date(), blue(" Loading: "), red("scrna_phase_singleton.Rds"), "\n")
+    )
+    scrna <- readRDS(file = file.path(savedir, "scrna_phase_singleton.Rds"))
+    cat(
+      paste0(date(), blue(" Loaded: "), red("scrna_phase_singleton.Rds"), "\n")
+    )
   }else{
-    cat(paste(date(), blue(" loading: "), red("scrna_phase_comparing.Rds"), "\n"))
-    scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
-    cat(paste(date(), blue(" loaded: "), red("scrna_phase_comparing.Rds"), "\n"))
+    cat(
+      paste0(date(), blue(" Loading: "), red("scrna_phase_comparing.Rds"), "\n")
+    )
+    scrna <- readRDS(file = file.path(savedir, "scrna_phase_comparing.Rds"))
+    cat(
+      paste0(date(), blue(" Loaded: "), red("scrna_phase_comparing.Rds"), "\n")
+    )
   }
 
   scrna$name <- factor(scrna$name, levels = names(data_src))
@@ -186,14 +198,15 @@ if(MAKE_ELEMENT){
   )
 
   # divergent palette for neg to pos values
-  neg_pos_divergent_palette = ifelse(
-    any(grepl("neg_pos_divergent_palette", names(viz_conf), fixed = TRUE)),
-    viz_conf[["neg_pos_divergent_palette"]],
-    # colorBlindness::Blue2DarkOrange12Steps
-    c("#1E8E99", "#51C3CC", "#99F9FF", "#B2FCFF",
-      "#CCFEFF", "#E5FFFF", "#FFE5CC", "#FFCA99",
-      "#FFAD65", "#FF8E32", "#CC5800", "#993F00")
-  )
+  neg_pos_divergent_palette =
+    if(any(grepl("neg_pos_divergent_palette", names(viz_conf), fixed = TRUE))){
+      viz_conf[["neg_pos_divergent_palette"]]
+    }else{
+      # colorBlindness::Blue2DarkOrange12Steps
+      c("#1E8E99", "#51C3CC", "#99F9FF", "#B2FCFF",
+        "#CCFEFF", "#E5FFFF", "#FFE5CC", "#FFCA99",
+        "#FFAD65", "#FF8E32", "#CC5800", "#993F00")
+    }
 
   zero_pos_divergent_colors = c(base_color, pos_color)
 
@@ -236,138 +249,160 @@ if(MAKE_ELEMENT){
   source(glue("{viz_path}/4_Genesets_stageVS_elements.R"))
   source(glue("{viz_path}/4_progeny_stageVS_elements.R"))
 
+
+  print_nelement_msg <- function(element){
+    cat(
+      paste0(
+        date(),
+        green(" Making element: "),
+        red(as.character(element)), "\n"
+      )
+    )
+  }
+  print_ngenelement_msg <- function(element){
+    cat(
+      paste0(
+        date(),
+        blue(" Generating: "),
+        red(as.character(element)), "\n"
+      )
+    )
+  }
+
+
 # run necessary generators
   if("QC" %in% EXEC_PLAN) {
-    cat(paste(date(), green(" Element: "), red("QC"), "\n"))
+    print_nelement_msg("QC")
     quality_report_elements() ## load scrna innner the function
   }
 
   if(any(grepl("AmbientRNA", funcs, fixed = TRUE))){
-    cat(paste(date(), green(" Element: "), red("AmbientRNA"), "\n"))
+    print_nelement_msg("AmbientRNA")
     ambientRNA_elements(scrna)
   }
   if("DEs"%in% EXEC_PLAN) {
-    cat(paste(date(), green(" Element: "), red("DEs"), "\n"))
+    print_nelement_msg("DEs")
     clusters_DEs_elements(scrna)
   }
   if(any(grepl("Clusters_", EXEC_PLAN, fixed = TRUE))){
-    cat(paste(date(), green(" Element: "), red("Clusters_integration..."), "\n"))
+    print_nelement_msg("Clusters_integration")
     batch_clustering_elements(scrna)
   }
   if("Clusters" %in% EXEC_PLAN){
-    cat(paste(date(), green(" Element: "), red("Clusters"), "\n"))
+    print_nelement_msg("Clusters")
     clustering_elements(scrna)
   }
   if("Singleton" %in% EXEC_PLAN){
-    cat(paste(date(), green(" Element: "), red("Singleton"), "\n"))
+    print_nelement_msg("Singleton")
     clustering_elements(scrna)
     clusters_DEs_elements(scrna)
   }
   if("EXT_MARKERS" %in% EXEC_PLAN){
-    cat(paste(date(), green(" Element: "), red("EXT_MARKERS"), "\n"))
+    print_nelement_msg("EXT_MARKERS")
     external_markers_elements(scrna)
   }
   # FIXME possible problem where all term enrichment analysis is on the same place
   if(length(intersect(c("DEGO","Genesets","progeny","hallmark","KEGG","Reactome"), EXEC_PLAN) > 0)){
-    cat(paste(date(), green(" Element: "), red("DEGO"), "\n"))
+    print_nelement_msg("DEGO")
     DE_GO_analysis_elements(scrna)
   }
   if("DEGO_1v1" %in% EXEC_PLAN){
-    cat(paste(date(), green(" Element: "), red("DEGO_1v1"), "\n"))
+    print_nelement_msg("DEGO_1v1")
     DEGO_1v1_elements(scrna)
   }
   if("DEGO_stage" %in% EXEC_PLAN){
-    cat(paste(date(), green(" Element: "), red("DEGO_stage"), "\n"))
+    print_nelement_msg("DEGO_stage")
     DEGO_stageVS_elements(scrna)
   }
   if(length(intersect(c("hallmark_1v1","reactome_1v1","kegg_1v1"), EXEC_PLAN) > 0)){
-    cat(paste(date(), green(" Element: "), red("pathway_1v1"), "\n"))
+    print_nelement_msg("pathway_1v1")
     pathway_1v1_elements(scrna)
   }
   if(length(intersect(c("hallmark_stage","reactome_stage","kegg_stage"), EXEC_PLAN) > 0)){
-    cat(paste(date(), green(" Element: "), red("pathway_stage"), "\n"))
+    print_nelement_msg("pathway_stage")
     pathway_stage_elements(scrna)
   }
   if(length(intersect(c("Genesets_stage"), EXEC_PLAN) > 0)){
-    cat(paste(date(), green(" Element: "), red("Genesets_stage"), "\n"))
+    print_nelement_msg("Genesets_stage")
     Genesets_stageVS_elements(scrna)
   }
   if(length(intersect(c("Genesets_1v1"), EXEC_PLAN) > 0)){
-    cat(paste(date(), green(" Element: "), red("Genesets_1v1"), "\n"))
+    print_nelement_msg("Genesets_1v1")
     Genesets_1v1_elements(scrna)
   }
   if(length(intersect(c("progeny_stage"), EXEC_PLAN) > 0)){
-    cat(paste(date(), green(" Element: "), red("progeny_stage"), "\n"))
+    print_nelement_msg("progeny_stage")
     progeny_stageVS_elements(scrna)
   }
 }
 
-cluster_info <-  build_cluster_info(scrna)
+cluster_info <- build_cluster_info(scrna)
 
 ##5. Produce Report
 render_func = function(rmd_input_filename, output_filename){
   rmarkdown::render(
     rmd_input_filename,
-    output_file=file.path(REPORTDIR,"data",output_filename),
-    output_format=c("html_document"),
-    quiet=TRUE,
-    clean=TRUE,
-    params=list(
-      scrna=scrna,
-      cluster=DEFAULTCLUSTERS,
-      cluster_info=cluster_info,
-      project=PROJECT,
-      savedir=SAVE_DIR,
-      funcs=EXEC_PLAN,
-      report_data_folder=report_data_folder,
+    output_file = output_filename,
+    output_dir = file.path(REPORTDIR,"data"),
+    output_format = c("html_document"),
+    quiet = TRUE,
+    clean = TRUE,
+    params = list(
+      scrna = scrna,
+      cluster = DEFAULTCLUSTERS,
+      cluster_info = cluster_info,
+      project = PROJECT,
+      savedir = SAVE_DIR,
+      funcs = EXEC_PLAN,
+      report_data_folder = report_data_folder,
       report_tables_folder = report_tables_folder,
       report_plots_folder = report_plots_folder,
       report_plots_folder_png = report_plots_folder_png,
       report_plots_folder_pdf = report_plots_folder_pdf,
-      author=AUTHOR
+      author = AUTHOR
     )
   )
 }
 
 dic_Rmd_n_Output <- list(
-        "QC"                  =     c(glue("{viz_path}/1_quality_report.Rmd"),        "data_quality"),
-        "AmbientRNA"          =     c(glue("{viz_path}/ambientRNA_viz.Rmd"),          "ambient_rna"),
-        "DEs"                 =     c(glue("{viz_path}/2_clusters_DEs.Rmd"),          "clusters_DEs"),
-        "Clusters"            =     c(glue("{viz_path}/2_clustering.Rmd"),            "clusters"),
-        "Singleton"           =     c(glue("{viz_path}/2_clustering.Rmd"),            "clusters"),
-        "Clusters_harmony"    =     c(glue("{viz_path}/2_clustering_harmony.Rmd"),    "clusters_harmony"),
-        "Clusters_seurat"     =     c(glue("{viz_path}/2_clustering_seurat.Rmd"),     "clusters_seurat"),
-        "EXT_MARKERS"         =     c(glue("{viz_path}/3_external_markers.Rmd"),      "external_markers"),
-        "DEGO"                =     c(glue("{viz_path}/3_DE_GO-analysis.Rmd"),        "dego"),
-        "KEGG"                =     c(glue("{viz_path}/3_KEGG.Rmd"),                  "KEGG"),
-        "progeny"             =     c(glue("{viz_path}/3_progeny.Rmd"),               "progeny"),
-        "Genesets"            =     c(glue("{viz_path}/3_Genesets.Rmd"),              "Genesets"),
-        "hallmark"            =     c(glue("{viz_path}/3_hallmark.Rmd"),              "hallmark"),
-        "Reactome"            =     c(glue("{viz_path}/3_Reactome.Rmd"),              "Reactome"),
-        "DEGO_stage"          =     c(glue("{viz_path}/4_DE_GO_%s.vs.%s_stageVS.Rmd"),"gv"),
-        "DEGO_1v1"            =     c(glue("{viz_path}/4_DE_GO_%s.vs.%s_1v1.Rmd"),    "1vs1"),
-        "hallmark_1v1"        =     c(glue("{viz_path}/4_hallmark_1v1.Rmd"),          "hallmark_1vs1"),
-        "reactome_1v1"        =     c(glue("{viz_path}/4_reactome_1v1.Rmd"),          "reactome_1vs1"),
-        "kegg_1v1"            =     c(glue("{viz_path}/4_kegg_1v1.Rmd"),              "kegg_1vs1"),
-        "hallmark_stage"      =     c(glue("{viz_path}/4_hallmark_stageVS.Rmd"),      "hallmark_stageVS"),
-        "reactome_stage"      =     c(glue("{viz_path}/4_reactome_stageVS.Rmd"),      "reactome_stageVS"),
-        "kegg_stage"          =     c(glue("{viz_path}/4_kegg_stageVS.Rmd"),          "kegg_stageVS"),
-        "Genesets_1v1"        =     c(glue("{viz_path}/4_Genesets_1v1.Rmd"),          "Genesets_1vs1"),
-        "Genesets_stage"      =     c(glue("{viz_path}/4_Genesets_stageVS.Rmd"),      "Genesets_stageVS"),
-        "progeny_stage"       =     c(glue("{viz_path}/4_progeny_stageVS.Rmd"),        "progeny_stageVS"),
-        "intUMAPs"            =     c(glue("{viz_path}/interactive_UMAPs.Rmd"),       "interactive_UMAPs")
+  "QC"               = c(glue("{viz_path}/1_quality_report.Rmd"),        "data_quality"),
+  "AmbientRNA"       = c(glue("{viz_path}/ambientRNA_viz.Rmd"),          "ambient_rna"),
+  "DEs"              = c(glue("{viz_path}/2_clusters_DEs.Rmd"),          "clusters_DEs"),
+  "Clusters"         = c(glue("{viz_path}/2_clustering.Rmd"),            "clusters"),
+  "Singleton"        = c(glue("{viz_path}/2_clustering.Rmd"),            "clusters"),
+  "Clusters_harmony" = c(glue("{viz_path}/2_clustering_harmony.Rmd"),    "clusters_harmony"),
+  "Clusters_seurat"  = c(glue("{viz_path}/2_clustering_seurat.Rmd"),     "clusters_seurat"),
+  "EXT_MARKERS"      = c(glue("{viz_path}/3_external_markers.Rmd"),      "external_markers"),
+  "DEGO"             = c(glue("{viz_path}/3_DE_GO-analysis.Rmd"),        "dego"),
+  "KEGG"             = c(glue("{viz_path}/3_KEGG.Rmd"),                  "KEGG"),
+  "progeny"          = c(glue("{viz_path}/3_progeny.Rmd"),               "progeny"),
+  "Genesets"         = c(glue("{viz_path}/3_Genesets.Rmd"),              "Genesets"),
+  "hallmark"         = c(glue("{viz_path}/3_hallmark.Rmd"),              "hallmark"),
+  "Reactome"         = c(glue("{viz_path}/3_Reactome.Rmd"),              "Reactome"),
+  "DEGO_stage"       = c(glue("{viz_path}/4_DE_GO_%s.vs.%s_stageVS.Rmd"),"gv"),
+  "DEGO_1v1"         = c(glue("{viz_path}/4_DE_GO_%s.vs.%s_1v1.Rmd"),    "1vs1"),
+  "hallmark_1v1"     = c(glue("{viz_path}/4_hallmark_1v1.Rmd"),          "hallmark_1vs1"),
+  "reactome_1v1"     = c(glue("{viz_path}/4_reactome_1v1.Rmd"),          "reactome_1vs1"),
+  "kegg_1v1"         = c(glue("{viz_path}/4_kegg_1v1.Rmd"),              "kegg_1vs1"),
+  "hallmark_stage"   = c(glue("{viz_path}/4_hallmark_stageVS.Rmd"),      "hallmark_stageVS"),
+  "reactome_stage"   = c(glue("{viz_path}/4_reactome_stageVS.Rmd"),      "reactome_stageVS"),
+  "kegg_stage"       = c(glue("{viz_path}/4_kegg_stageVS.Rmd"),          "kegg_stageVS"),
+  "Genesets_1v1"     = c(glue("{viz_path}/4_Genesets_1v1.Rmd"),          "Genesets_1vs1"),
+  "Genesets_stage"   = c(glue("{viz_path}/4_Genesets_stageVS.Rmd"),      "Genesets_stageVS"),
+  "progeny_stage"    = c(glue("{viz_path}/4_progeny_stageVS.Rmd"),       "progeny_stageVS"),
+  "intUMAPs"         = c(glue("{viz_path}/interactive_UMAPs.Rmd"),       "interactive_UMAPs")
 )
 
 
 
 
-for(i in EXEC_PLAN){
-  cat(paste(date(), blue(" Generating: "), red(i), "\n"))
-  if(i %ni% names(dic_Rmd_n_Output)){
-    message("viz ", i, " is not implemented!!")
+for(exec_elem in EXEC_PLAN){
+  print_ngenelement_msg(exec_elem)
+  if(exec_elem %ni% names(dic_Rmd_n_Output)){
+    message("viz ", exec_elem, " is not implemented!!")
     next
   }
-  rmd_n_output <- dic_Rmd_n_Output[[i]]
+  rmd_n_output <- dic_Rmd_n_Output[[exec_elem]]
   rmd <- rmd_n_output[1]
   output <- rmd_n_output[2]
   if(output == "1vs1"){
@@ -394,21 +429,28 @@ if(GEN_SINGLE_FILE){
   # generate report including everything in a single file
   rmarkdown::render(
     glue("{viz_path}/scrna_pipeline_report.Rmd"),
-    output_file=file.path(REPORTDIR,"scrna_report"),
-    output_format=c("html_document"),
-    clean=TRUE,
-    params=list(
-      cluster=DEFAULTCLUSTERS,
-      project=PROJECT,
-      savedir=SAVE_DIR,
-      funcs=EXEC_PLAN,
-      report_data_folder=report_data_folder,
+    output_file = file.path(REPORTDIR, "scrna_report"),
+    output_format = c("html_document"),
+    clean = TRUE,
+    params = list(
+      cluster = DEFAULTCLUSTERS,
+      project = PROJECT,
+      savedir = SAVE_DIR,
+      funcs = EXEC_PLAN,
+      report_data_folder = report_data_folder,
       report_tables_folder = report_tables_folder,
       report_plots_folder = report_plots_folder,
       report_plots_folder_png = report_plots_folder_png,
       report_plots_folder_pdf = report_plots_folder_pdf,
-      author=AUTHOR
+      author = AUTHOR
     )
-  )
+   )
 }
+
+t_diff <- Sys.time() - t_start
+cat(
+  black$bgGreen$bold(paste0(
+      "Time difference of ", as.character(round(t_diff, 2)), " ", units(t_diff)
+  )), "\n"
+)
 

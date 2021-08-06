@@ -33,8 +33,8 @@ run_shell <- function(cmd){
 
 save_ggplot_formats = function(
   plt, base_plot_dir, plt_name, create_plot_subdir=TRUE,
-  formats=c("png","pdf"), units="in", width=20, height=20,
-  type="cairo",
+  formats=c("png", "pdf"), units="in", width=20, height=20,
+  type="cairo", res = 300,
   plot_obj="ggplot",
   ...
 ){
@@ -42,22 +42,48 @@ save_ggplot_formats = function(
   if(!is.null(base_plot_dir) & !is.null(plt)){
     # for each format
     for(fmt in formats){
-      f_path_fmt = file.path(base_plot_dir,paste0(plt_name,".",fmt))
+      f_path_fmt = file.path(base_plot_dir, paste0(plt_name, ".", fmt))
       if(create_plot_subdir) dir.create(file.path(base_plot_dir,fmt),recursive=TRUE,showWarnings=FALSE)
       if(dir.exists(file.path(base_plot_dir,fmt))) f_path_fmt = file.path(base_plot_dir,fmt,paste0(plt_name,".",fmt))
       if(plot_obj == "ggplot"){
         if(fmt == "png"){
-          ggplot2::ggsave(filename=f_path_fmt,plot = plt,device = fmt,units = units,width = width,height = height,type=type,...)
+          ggplot2::ggsave(
+            filename = f_path_fmt,
+            plot = plt,
+            device = fmt,
+            units = units,
+            width = width,
+            height = height,
+            type = type, ...
+          )
         }else{
-          ggplot2::ggsave(filename=f_path_fmt,plot = plt,device = fmt,units = units,width = width,height = height,...)
+          ggplot2::ggsave(
+            filename = f_path_fmt,
+            plot = plt,
+            device = fmt,
+            units = units,
+            width = width,
+            height = height, ...
+          )
         }
       }else
         if(fmt == "png"){
-          png(filename=f_path_fmt,units = units,width = width,height = height, type=type)
+          png(
+            filename = f_path_fmt,
+            units = units,
+            width = width,
+            height = height,
+            type = type,
+            res = res
+          )
           draw(plt, ...)
           dev.off()
         }else{
-          pdf(file=f_path_fmt, width = width,height = height)
+          pdf(
+            file = f_path_fmt,
+            width = width,
+            height = height
+          )
           draw(plt, ...)
           dev.off()
         }
@@ -91,30 +117,52 @@ GeneBarPlot <- function(de.data, xlim = NULL, main = NULL) {
   #de.data = cluster.de[[id]]
   #de.data = plot_de
   if("avg_logFC" %in% names(de.data)){ ## compatible for seurat3
-    de.data$avg_log2FC <- de.data$avg_logFC/log(2)
+    de.data$avg_log2FC <- de.data$avg_logFC / log(2)
   }
   if (any(colnames(de.data) == "cluster")) {
-    top5.up <- de.data %>% group_by(cluster) %>% top_n(10, avg_log2FC) %>%filter(avg_log2FC > 0) %>% arrange(-avg_log2FC)
-    top5.dn <- de.data %>% group_by(cluster) %>% top_n(10, -avg_log2FC) %>%filter(avg_log2FC < 0) %>% arrange(-avg_log2FC)
+    top5.up <-
+      de.data %>%
+      group_by(cluster) %>%
+      top_n(10, avg_log2FC) %>%
+      filter(avg_log2FC > 0) %>%
+      arrange(-avg_log2FC)
+    top5.dn <-
+      de.data %>%
+      group_by(cluster) %>%
+      top_n(10, -avg_log2FC) %>%
+      filter(avg_log2FC < 0) %>%
+      arrange(-avg_log2FC)
   } else {
-    top5.up <- de.data  %>% top_n(10, avg_log2FC) %>%filter(avg_log2FC > 0) %>% arrange(-avg_log2FC)
-    top5.dn <- de.data  %>% top_n(10, -avg_log2FC) %>%filter(avg_log2FC < 0) %>% arrange(-avg_log2FC)
+    top5.up <-
+      de.data %>%
+      top_n(10, avg_log2FC) %>%
+      filter(avg_log2FC > 0) %>%
+      arrange(-avg_log2FC)
+    top5.dn <-
+      de.data %>%
+      top_n(10, -avg_log2FC) %>%
+      filter(avg_log2FC < 0) %>%
+      arrange(-avg_log2FC)
   }
+  
   top.up.dn <- rbind(top5.up, top5.dn)
   top.up.dn$gene <- make.unique(top.up.dn$gene)
-  top.up.dn$type = ifelse(top.up.dn$avg_log2FC > 0, "positive", "negative")
+  top.up.dn$type <- ifelse(top.up.dn$avg_log2FC > 0, "positive", "negative")
   top.up.dn$type <- factor(top.up.dn$type, levels = c("positive", "negative"))
-  g <- ggplot(data = top.up.dn,
-              aes(x = gene, y = avg_log2FC, fill = type)) +
-    geom_bar(stat="identity") +
-    scale_x_discrete(limits=rev(top.up.dn$gene)) +
+  
+  g <-
+    ggplot(
+      data = top.up.dn,
+      aes(x = gene, y = avg_log2FC, fill = type)
+    ) +
+    geom_bar(stat = "identity") +
+    scale_x_discrete(limits = rev(top.up.dn$gene)) +
     theme_minimal() +
-    theme(legend.position="none", axis.text=element_text(size=15)) +
-    # scale_fill_manual(values = c(positive = "#E41A1C", negative = "#377EB8")) +
+    theme(legend.position = "none", axis.text = element_text(size = 15)) +
     scale_fill_manual(values = c(positive = pos_color, negative = neg_color)) +
     coord_flip()
   if (!is.null(main)) {
-    g <- g + ggtitle(main)
+    g <- g + ggtitle(paste0(main))
   } else {
     g <- g + ggtitle("Average logFC for the top 5 up and top 5 down regulated genes")
   }
@@ -162,51 +210,76 @@ is_contigous_true_df <- function(is_sigs){
 
 pw_bar_plots <- function(pw_list){
   term_plot_list = lapply(
-                          pw_list,
-                          function(x){
-                            df = x@result
-                            if (is.list(df) && length(df)==0){
-                              log_m = as.data.frame(list())
-                              return(log_m)
-                            }
-                            log_m = as.data.frame(-log10(df$p.adjust))
-                            log_m$names = as.factor(sapply(df$Description, function(y){
-                                                             y <- as.character(trimws(y))
-                                                             return(y) }))
-                            log_m$show_names = as.factor(sapply(df$Description, function(y){
-                                                                  y <- as.character(trimws(y))
-                                                                  y <- ifelse(nchar(y)<=33,  y, paste0(substr(y, 1, 30), "..."))
-                                                                  return(y) }))
-                            log_m <- log_m[order(log_m[,1],decreasing = TRUE),]
-                            showCatetermry = min(length(log_m[,1]), 10)
-                            log_m <- log_m[1:showCatetermry, ]
-                            log_m <- log_m[order(log_m[,1],decreasing = FALSE),]
-                            return(log_m)
-                          }
+    pw_list,
+    function(x){
+      df = x@result
+      if (is.list(df) && length(df) == 0){
+        log_m = as.data.frame(list())
+        return(log_m)
+      }
+      log_m = as.data.frame(-log10(df$p.adjust))
+      log_m$names = as.factor(
+        sapply(
+          df$Description,
+          function(y){
+            y <- as.character(trimws(y))
+            return(y)
+          }
+        )
+      )
+      log_m$show_names = as.factor(
+        sapply(
+          df$Description,
+          function(y){
+            y <- as.character(trimws(y))
+            y <- ifelse(nchar(y) <= 33,  y, paste0(substr(y, 1, 30), "..."))
+            return(y)
+          }
+        )
+      )
+      log_m <- log_m[order(log_m[,1],decreasing = TRUE),]
+      showCatetermry <- min(length(log_m[,1]), 10)
+      log_m <- log_m[1:showCatetermry, ]
+      log_m <- log_m[order(log_m[,1],decreasing = FALSE),]
+      return(log_m)
+    }
   )
 
   ### direction genes plot
   plots <- lapply(
-                  seq_along(term_plot_list),
-                  function(y, i) {
-                    col <- y[[i]]
-                    if(length(col) == 0)
-                      return(NULL)
-                    ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) +
-                      #ggplot(col, aes(reorder(x=col[,2], col[,1]), y=col[,1])) +
-                      geom_bar(stat="identity", fill="#3399CC", color="grey50") +
-                      geom_hline(yintercept=-log10(0.05),linetype = 2,size=1) +
-                      ggtitle(paste(names(y)[i])) +
-                      theme_minimal() +
-                      theme(axis.text.y  = element_text(size=20), axis.title.y=element_blank(),axis.ticks.y=element_blank()) +
-                      labs(y = "") +
-                      scale_y_continuous(name="-log10(p-value)") +
-                      scale_x_discrete(breaks = col[,2], labels = col[,3]) +
-                      coord_flip()
-                  },
-                  y=term_plot_list
+    seq_along(term_plot_list),
+    function(y, i) {
+      term_df <- y[[i]]
+      if(length(term_df) == 0) return(NULL)
+
+      ggplot(
+        term_df,
+        aes(x = reorder(x = term_df[,2], term_df[,1]), y = term_df[,1])
+      ) +
+      geom_bar(
+        stat = "identity", fill = pos_color
+      ) +
+      geom_hline(
+        yintercept = -log10(0.05),
+        linetype = 2,
+        size = 1,
+        color = "grey50"
+      ) +
+      ggtitle(paste0("Cluster: ", names(y)[i])) +
+      theme_minimal(base_size = 16) +
+      theme(
+        axis.text.y = element_text(size = 20),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()
+      ) +
+      labs(y = "") +
+      scale_y_continuous(name = "-log10(p-value)") +
+      scale_x_discrete(breaks = term_df[,2], labels = term_df[,3]) +
+      coord_flip()
+    },
+    y = term_plot_list
   )
-  plots <-Filter(Negate(is.null), plots)
+  plots <- Filter(Negate(is.null), plots)
   return(plots)
 }
 
@@ -244,23 +317,29 @@ pw_mtx_create <- function(df_list){
 
   }
   if(length(filtered_term) > 5){
-    df_list <- lapply(df_list, function(x) x %>% filter(ID %in% filtered_term) )
+
+    df_list <- lapply(df_list, function(x) x %>% filter(ID %in% filtered_term))
 
     nms <- names(df_list)
     df_list <- lapply(names(df_list), function(x) df_list[[x]] %>% mutate(name=x))
     names(df_list) <- nms
 
-    df_list_select <- lapply(1:length(df_list), function(x) df_list[[x]] %>%
-                             filter(p.adjust < 0.05) %>%
-                             top_n(wt=-log10(p.adjust), n=5) %>%
-                             arrange(+log10(p.adjust)))
+    df_list_select <- lapply(
+      1:length(df_list),
+      function(x){
+        df_list[[x]] %>%
+          filter(p.adjust < 0.05) %>%
+          top_n(wt = -log10(p.adjust), n = 5) %>%
+          arrange(log10(p.adjust))
+      }
+    )
     df_list_select <- lapply(df_list_select, function(x)x[1:min(5, nrow(x)), ])
 
     all_names <- as.vector(unlist(sapply(1:length(df_list_select), function(x) (df_list_select[[x]]$ID))))
     pdf_list <- lapply(1:length(df_list), function(x) subset(df_list[[x]], ID %in%all_names))
     mdf <- do.call(rbind, pdf_list)
     pmdf <- mdf[, c("Description", "name", "p.adjust")]
-    pmdf$name <- factor(pmdf$name, levels=names(df_list))
+    pmdf$name <- factor(pmdf$name, levels = names(df_list))
 
     pmtx <- reshape2::dcast(pmdf,  Description ~ name, value.var = "p.adjust")
 
