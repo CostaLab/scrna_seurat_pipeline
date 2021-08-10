@@ -2587,6 +2587,7 @@ check_attributes <- function(scrna, sanity_attribute){
 
 # DoubletFinder
 generate_scrna_doublet_proportions <- function(scrna){
+  suppressPackageStartupMessages(library(DoubletFinder))
   ret_code <- 1
   if(doublet_switch %in% c("on", "display")){
     doublet_formation_rate <- determine_doublet_proportions(scrna = scrna, doublet_lst = doublet_lst)
