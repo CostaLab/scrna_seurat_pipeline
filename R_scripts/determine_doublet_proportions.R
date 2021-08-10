@@ -1,7 +1,7 @@
 determine_doublet_proportions <- function(scrna, doublet_lst){
   if(length(doublet_lst) == 1 & is.numeric(doublet_lst)){
       doublet_formation_rate <- rep(doublet_lst, length(unique(scrna$name)))
-      names(doublet_formation_rate) <- names(doublet_lst)
+      names(doublet_formation_rate) <- names(table(scrna$name))
     }
     if(length(doublet_lst) == 0 & is.null(doublet_lst)){
       number_of_cells <- table(scrna$name)
