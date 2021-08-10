@@ -227,7 +227,7 @@ sanity_attributes <- read.table("static/SlotsAttributes.csv", sep = ";", header 
 
 ##--------------Doublet estimation----------------------
 estimation_10X <- read.csv("static/DoubletEstimation10X.csv")
-model_recovered <- approxfun(x = estimation_10X$CellsRecovered, y = estimation_10X$MultipletRate)
+model_recovered <- approxfun(x = estimation_10X$CellsRecovered, y = estimation_10X$MultipletRate, rule = 2)
 
 
 logger.info("----------------------Project: %s --------------------------", PROJECT)
