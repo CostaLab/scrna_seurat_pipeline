@@ -72,7 +72,7 @@ date
 Rscript ./viz/create_report.R \
 	-a "Mingbo" \
 	-p ${proj_name} \
-	-m TRUE\
+	-m TRUE \
 	-s "${data_path}/${proj_name}/save" \
 	-c "./conf/config_${proj_name}.R" \
 	-o "${data_path}/${proj_name}/report" \
@@ -80,7 +80,8 @@ Rscript ./viz/create_report.R \
 	-e ./external/Human_and_mouse_cell_markers-Markers.tsv \
   -d "$cluster" \
   -j "${json_exe_list}" \
-  -i "FALSE"
+  -i "FALSE" \
+  -z "lz4"
 date
 
 

@@ -57,7 +57,7 @@ fname <- switch(
   "singleton" = "scrna_singleton_clustering.Rds"
 )
 
-scrna <- readRDS(file=file.path(savedir,fname))
+scrna <- load_object(file_name = file.path(savedir,fname))
 
 clustree(scrna, prefix = "RNA_snn_res.")
 
