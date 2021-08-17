@@ -52,7 +52,7 @@ stCond %>%
 ```
 
 
-## After filtered
+## After filtering
 
 ```{r postfilter_vlnplot, out.width="100%", echo=FALSE}
 knitr::include_graphics(file.path(params$report_plots_folder_png,"postfilter_vlnplot.png"))
@@ -81,7 +81,7 @@ stCond %>%
 knitr::include_graphics(file.path(params$report_plots_folder_png,"featurescatter_ncountRNA.png"))
 ```
 
-## High variable genes
+## Highly variable genes
 ```{r high_var_genes, out.width="100%", echo=FALSE}
 knitr::include_graphics(file.path(params$report_plots_folder_png,"high_var_genes.png"))
 ```

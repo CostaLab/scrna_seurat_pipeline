@@ -64,19 +64,6 @@ flist = stringr::str_sort(grep(
 knitr::include_graphics(flist)
 ```
 
-```{r volcanoplots_cluster, out.width="100%", echo=FALSE}
-flist = stringr::str_sort(grep(
-  paste0("volcanoplot_deg_cluster-",params$cluster),
-  list.files(
-    params$report_plots_folder_png,
-    full.names=TRUE
-  ),
-  value=TRUE,
-  fixed=TRUE
-),numeric=TRUE)
-knitr::include_graphics(flist)
-```
-
 ## GO up analysis
 ```{r heatmap_go_up , out.width="100%", echo=FALSE}
 fname=file.path(
