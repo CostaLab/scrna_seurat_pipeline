@@ -48,9 +48,10 @@ ambientRNA_elements <- function(scrna){
       ambientRNA.Mean = mean(AmbientRNA),
       ambientRNA.Median = median(AmbientRNA),
     )
-  saveRDS(
+  save_object(
     stSample,
-    file.path(report_tables_folder, "ambientRNA_postfilter.RDS")
+    file.path(report_tables_folder, "ambientRNA_postfilter.RDS"),
+    COMPRESSION_FORMAT
   )
 }
 

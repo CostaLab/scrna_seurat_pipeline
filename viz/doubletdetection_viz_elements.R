@@ -9,7 +9,7 @@ doubletdetection_viz_elements <- function(scrna){
   # We can use the output from the doublet detection function (scrna_DoubletAnnotated.Rds) and plot the UMAP we created for this purpose.
   # If doublet_switch == "off", we just put out a message stating that doublet detection was not performed.
   if(doublet_switch == "display"){
-    scrna <- readRDS(file.path(savedir, "scrna_phase_comparing.Rds"))
+    scrna <- load_object(file_name = file.path(savedir, "scrna_phase_comparing.Rds"))
     plt <- DimPlot(scrna, group.by = "Doublet_classifications", reduction = "INTE_UMAP")
     save_ggplot_formats(
       plt=plt,
@@ -18,7 +18,7 @@ doubletdetection_viz_elements <- function(scrna){
       width=9, height=7
     )
   } else if(doublet_switch == "on"){
-    scrna <- readRDS(file.path(savedir, "scrna_DoubletAnnotated.Rds"))
+    scrna <- load_object(file_name = file.path(savedir, "scrna_DoubletAnnotated.Rds"))
     plt <- DimPlot(scrna, group.by = "Doublet_classifications", reduction = "DOUBLET_UMAP")
     save_ggplot_formats(
       plt=plt,
@@ -110,5 +110,10 @@ doubletdetection_viz_elements <- function(scrna){
       Doublets=sum(Doublet_classifications == "Doublet"),
       Singlets=sum(Doublet_classifications == "Singlet")
     )
-  saveRDS(stSample,file.path(report_tables_folder,"doublets_table.Rds"))
+
+  save_object(
+    stSample,
+    file.path(report_tables_folder,"doublets_table.Rds"),
+    COMPRESSION_FORMAT
+  )
 }

@@ -5,6 +5,8 @@ t_start <- Sys.time()
 source("R/helper_functions.R")
 source("R/DE_GO_VS_helper.R")
 source("R/pathway_vs_helper.R")
+source("R/save_load_helper.R")
+
 
 suppressPackageStartupMessages(library(optparse))      ## Options
 
@@ -59,6 +61,15 @@ AllOptions <- function(){
     parser, c("-i", "--indexonly"), type = "character", default = "FALSE",
     help = "only generate index.html [default %default]", metavar = "character")
 
+  parser <- add_option(
+    parser, c("-z", "--compression"),
+    type = "character", default = "gzip", metavar = "character",
+    help = paste0(
+      "Compression algorithm to use when saving R objects [default %default]. ",
+      "One of 'zstd', 'lz4', 'gzip', 'bzip2', ",
+      "'xz' or 'nocomp' (no compression)"
+    )
+  )
   return(parser)
 }
 
@@ -77,6 +88,7 @@ DEFAULTCLUSTERS   = pa$defaultclsuters
 GEN_SINGLE_FILE   = pa$singlefile
 EXEC_PLAN         = jsonlite::fromJSON(pa$planOfreport)
 INDEX_ONLY        = pa$indexonly
+COMPRESSION_FORMAT= pa$compression
 
 dir.create(file.path(REPORTDIR, "data"), recursive = TRUE)
 
@@ -149,7 +161,9 @@ if(MAKE_ELEMENT){
     cat(
       paste0(date(), blue(" Loading: "), red("scrna_phase_singleton.Rds"), "\n")
     )
-    scrna <- readRDS(file = file.path(savedir, "scrna_phase_singleton.Rds"))
+    scrna <- load_object(
+      file_name = file.path(savedir, "scrna_phase_singleton.Rds")
+    )
     cat(
       paste0(date(), blue(" Loaded: "), red("scrna_phase_singleton.Rds"), "\n")
     )
@@ -157,7 +171,9 @@ if(MAKE_ELEMENT){
     cat(
       paste0(date(), blue(" Loading: "), red("scrna_phase_comparing.Rds"), "\n")
     )
-    scrna <- readRDS(file = file.path(savedir, "scrna_phase_comparing.Rds"))
+    scrna <- load_object(
+      file_name = file.path(savedir, "scrna_phase_comparing.Rds")
+    )
     cat(
       paste0(date(), blue(" Loaded: "), red("scrna_phase_comparing.Rds"), "\n")
     )
