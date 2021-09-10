@@ -182,7 +182,7 @@ DE_GO_analysis_elements <- function(scrna){
   for (i in names(cluster_de)){
     #plots = list()
     print(sprintf("Cluster: %s", i))
-    ps <- FeaturePlot(
+    ps <- StyleFeaturePlot(
       scrna,
       features = cluster_de_top10[[as.character(i)]]$gene,
       label = TRUE,
@@ -278,7 +278,7 @@ DE_GO_analysis_elements <- function(scrna){
 
 
   ## feature
-    plt <- FeaturePlot(
+    plt <- StyleFeaturePlot(
       scrna, features = nm,
       reduction = "DEFAULT_UMAP",
       max.cutoff = "q95",

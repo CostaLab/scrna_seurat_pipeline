@@ -228,7 +228,9 @@ pa$hcl_name           = HCL_NAME
 pa$external_file      = ANNOTATION_EXTERNAL_FILE
 pa$data_src           = data_src
 pa$stage_lst          = stage_lst
-
+pa$integration_option = INTEGRATION_OPTION
+pa$doublet_switch     = doublet_switch
+pa$doublet_lst        = doublet_lst
 
 ##--------------Loading the relevant slots and attributes for the sanity function----------------------
 sanity_attributes <- read.table("static/SlotsAttributes.csv", sep = ";", header = TRUE, stringsAsFactors = FALSE)

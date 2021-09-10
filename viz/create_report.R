@@ -35,6 +35,10 @@ AllOptions <- function(){
     parser, c("-p", "--project"), type = "character", default = "",
     help = "charts_dir [default %default]", metavar = "character")
   parser <- add_option(
+    parser, c("-f", "--featureplotstyle"), type = "character", default = "seurat",
+    help = "feature style: seurat, schex, nebulosa, current  [default %default]", metavar = "character")
+
+  parser <- add_option(
     parser, c("-e", "--externalfile"), type = "character",
     default = "./external/Human_and_mouse_cell_markers-Markers.tsv",
     help = "report_dir [default %default]", metavar = "character")
@@ -89,7 +93,7 @@ GEN_SINGLE_FILE   = pa$singlefile
 EXEC_PLAN         = jsonlite::fromJSON(pa$planOfreport)
 INDEX_ONLY        = pa$indexonly
 COMPRESSION_FORMAT= pa$compression
-
+FEATUREPLOT_STYLE = pa$featureplotstyle
 dir.create(file.path(REPORTDIR, "data"), recursive = TRUE)
 
 
