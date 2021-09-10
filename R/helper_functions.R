@@ -416,10 +416,21 @@ URLdecode_escape <-function(string){
 
 ## style: seurat, schex, nebulosa
 StyleFeaturePlot <- function(object, features, cols, reduction="DEFAULT_UMAP", style="seurat", ...){
+
   if(style=="seurat"){
     p <- FeaturePlot(object, features=features,cols=cols, reduction=reduction, ...)
   }else if(style=="schex"){
     suppressPackageStartupMessages(library(schex))
+    ncol <- 2
+    if (length(x = features) == 1) {
+      ncol <- 1
+    }
+    if (length(x = features) > 6) {
+      ncol <- 3
+    }
+    if (length(x = features) > 9) {
+      ncol <- 4
+    }
     DefaultAssay(object) <- "RNA"
     object[[glue("RNA_{reduction}")]] <- CreateDimReducObject(embeddings=object[[reduction]]@cell.embeddings, assay="RNA")
 
@@ -435,7 +446,7 @@ StyleFeaturePlot <- function(object, features, cols, reduction="DEFAULT_UMAP", s
       ps <- lapply(features, function(feat) plot_hexbin_feature(sce, type = "logcounts", feature= feat,
                                                                 action = action, xlab = "UMAP1", ylab = "UMAP2",
                                                                 title = paste0("Mean of ", feat))+ scale_fill_gradient(low=cols[1], high=cols[2]))
-      p <- cowplot::plot_grid(plotlist=ps, ncol=2)
+      p <- cowplot::plot_grid(plotlist=ps, ncol=ncol)
     }else if(all(sapply(features, function(feat) (feat %in% names(sce@colData))))) {
       if(all(sapply(features, function(feat) is.numeric(sce@colData[, feat])))){
         action = "mean"
@@ -443,7 +454,7 @@ StyleFeaturePlot <- function(object, features, cols, reduction="DEFAULT_UMAP", s
         action = "majority"
       }
       ps <- lapply(features, function(feat) plot_hexbin_meta(sce, col=feat, action=action) + scale_fill_gradient(low=cols[1], high=cols[2]))
-      p <- cowplot::plot_grid(plotlist=ps, ncol=2)
+      p <- cowplot::plot_grid(plotlist=ps, ncol=ncol)
     }else{
       stop("Feature not found!!")
     }

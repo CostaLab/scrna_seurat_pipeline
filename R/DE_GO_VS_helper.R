@@ -247,8 +247,9 @@ compare_vs_loop <- function(
       if(nrow(cluster.de.top10[[i]]) == 0) {
         next
       }
-      plt <- FeaturePlot(
+      plt <- StyleFeaturePlot(
         scrna,
+        style=FEATUREPLOT_STYLE,
         features = cluster.de.top10[[i]]$gene,
         order = TRUE,
         max.cutoff = "q95",
