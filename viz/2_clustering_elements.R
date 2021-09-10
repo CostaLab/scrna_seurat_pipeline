@@ -302,8 +302,9 @@ clustering_elements <- function(scrna){
     ## FeaturePlot
     message("### Making umap featureplot with QC elements")
     col_def <- c(base_color,pos_color)
-    plt = FeaturePlot(
+    plt = StyleFeaturePlot(
       scrna,
+      style=FEATUREPLOT_STYLE,
       features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA"),
       cols = col_def,
       order = T,
@@ -317,8 +318,9 @@ clustering_elements <- function(scrna){
       width=9, height=7
     )
     message("### Making umap featureplot with ccycle elements")
-    plt = FeaturePlot(
+    plt = StyleFeaturePlot(
       scrna,
+      style=FEATUREPLOT_STYLE,
       features = c("CC.Difference","G1.Score", "S.Score", "G2M.Score"),
       cols = col_def,
       order = T,

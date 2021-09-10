@@ -48,8 +48,9 @@ external_markers_elements <- function(scrna){
 
     for (i in seq(1, length(genes), by = 4)){
       ni = min(i + 3, length(genes))
-      p1 <- FeaturePlot(
+      p1 <- StyleFeaturePlot(
         object = scrna,
+        style = FEATUREPLOT_STYLE,
         pt.size = 0.01,
         label = TRUE,
         label.size = 2,

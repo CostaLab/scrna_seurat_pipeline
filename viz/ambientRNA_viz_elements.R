@@ -13,8 +13,9 @@ ambientRNA_elements <- function(scrna){
 
   plt <- list()
 
-  plt[[1]] <- FeaturePlot(
+  plt[[1]] <- StyleFeaturePlot(
     scrna,
+    style=FEATUREPLOT_STYLE,
     features = "AmbientRNA",
     order = TRUE,
     cols = zero_pos_divergent_colors
