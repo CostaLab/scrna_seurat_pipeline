@@ -35,7 +35,7 @@ proj_name="$1"
 # data dir (where your results will be saved)
 
 data_path="/data/EXAMPLE/exp/scRNA/some_project/scrna_seurat_pipeline_results"
-
+data_path=`pwd`
 
 date
 ## 50 cores run, future memory
