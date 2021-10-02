@@ -414,4 +414,69 @@ URLdecode_escape <-function(string){
   return(string)
 }
 
+## style: seurat, schex, nebulosa
+StyleFeaturePlot <- function(object, features, cols, reduction="DEFAULT_UMAP", style="seurat", ...){
+
+  if(style=="seurat"){
+    p <- FeaturePlot(object, features=features,cols=cols, reduction=reduction, ...)
+  }else if(style=="schex"){
+    suppressPackageStartupMessages(library(schex))
+    ncol <- 2
+    if (length(x = features) == 1) {
+      ncol <- 1
+    }
+    if (length(x = features) > 6) {
+      ncol <- 3
+    }
+    if (length(x = features) > 9) {
+      ncol <- 4
+    }
+    DefaultAssay(object) <- "RNA"
+    object[[glue("RNA_{reduction}")]] <- CreateDimReducObject(embeddings=object[[reduction]]@cell.embeddings, assay="RNA")
+
+    sce <- Seurat::as.SingleCellExperiment(object, assay="RNA")
+    if("MAGIC_RNA" %in% names(object@assays) ){
+      sce@assays@data$logcounts <- object@assays$MAGIC_RNA@data
+    }else{
+      sce@assays@data$logcounts <- object@assays$RNA@data
+    }
+    sce <- make_hexbin(sce, nbins = 80, dimension_reduction = glue("RNA_{reduction}"))
+    if(all(features %in% rownames(sce@assays@data$logcounts))){
+      action = "mean"
+      ps <- lapply(features, function(feat) plot_hexbin_feature(sce, type = "logcounts", feature= feat,
+                                                                action = action, xlab = "UMAP1", ylab = "UMAP2",
+                                                                title = paste0("Mean of ", feat))+ scale_fill_gradient(low=cols[1], high=cols[2]))
+      p <- cowplot::plot_grid(plotlist=ps, ncol=ncol)
+    }else if(all(sapply(features, function(feat) (feat %in% names(sce@colData))))) {
+      if(all(sapply(features, function(feat) is.numeric(sce@colData[, feat])))){
+        action = "mean"
+      }else{
+        action = "majority"
+      }
+      ps <- lapply(features, function(feat) plot_hexbin_meta(sce, col=feat, action=action) + scale_fill_gradient(low=cols[1], high=cols[2]))
+      p <- cowplot::plot_grid(plotlist=ps, ncol=ncol)
+    }else{
+      stop("Feature not found!!")
+    }
+  }else if(style == "nebulosa"){ ### only positive can be represented correctly
+    suppressPackageStartupMessages(library(Nebulosa))
+    #p <- plot_density(object, features=features, reduction=reduction)
+    if(all(sapply(features, function(feat) (feat %in% names(object@meta.data))))){
+      for(feat in features){
+        if(is.numeric(object@meta.data[, feat])){
+          if(any(object@meta.data[, feat] < 0)){
+            maxx <- max(object@meta.data[, feat])
+            minn <- min(object@meta.data[, feat])
+            object@meta.data[, feat] <- (object@meta.data[, feat] - minn)/(maxx - minn)
+          }
+        }
+      }
+    }
+    p <- plot_density(object, features=features, reduction=reduction)
+  }else{
+    stop("StyleFeaturePlot: wrong style, options: seurat, schex, nebulosa")
+  }
+  return(p)
+}
+
 

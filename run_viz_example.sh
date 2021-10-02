@@ -26,6 +26,7 @@ proj_name="$1"
 # the way it is set up below -o for output will also save your report
 # on that same directory path
 data_path="/data/EXAMPLE/exp/scRNA/some_project/scrna_seurat_pipeline_results"
+data_path=`pwd`
 #cluster="removed_clusters"
 #cluster="remove_recluster"
 #cluster="merged_clusters"
@@ -72,7 +73,7 @@ date
 Rscript ./viz/create_report.R \
 	-a "Mingbo" \
 	-p ${proj_name} \
-	-m TRUE\
+	-m TRUE \
 	-s "${data_path}/${proj_name}/save" \
 	-c "./conf/config_${proj_name}.R" \
 	-o "${data_path}/${proj_name}/report" \
@@ -80,7 +81,9 @@ Rscript ./viz/create_report.R \
 	-e ./external/Human_and_mouse_cell_markers-Markers.tsv \
   -d "$cluster" \
   -j "${json_exe_list}" \
-  -i "FALSE"
+  -i "FALSE" \
+  -f "seurat" \
+  -z "lz4"
 date
 
 

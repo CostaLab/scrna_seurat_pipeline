@@ -37,13 +37,13 @@ fname <- file.path(
   )
 
 if(file.exists(fname)){
-    plt = readRDS(
+    plt = load_object(
       file.path(
         params$savedir,
         paste0("hcl_annotate_plt_",params$cluster,".RDS")
       )
     )
-    info = readRDS(
+    info = load_object(
       file.path(
         params$savedir,
         paste0("hcl_annotate_info_",params$cluster,".RDS")
@@ -60,13 +60,13 @@ fname <- file.path(
     paste0("mca_annotate_plt_",params$cluster,".RDS")
   )
 if(file.exists(fname)){
-    plt = readRDS(
+    plt = load_object(
       file.path(
         params$savedir,
         paste0("mca_annotate_plt_",params$cluster,".RDS")
       )
     )
-    info = readRDS(
+    info = load_object(
       file.path(
         params$savedir,
         paste0("mca_annotate_info_",params$cluster,".RDS")
@@ -83,13 +83,13 @@ fname <-  file.path(
     paste0("external_annotation_plt_",params$cluster,".RDS")
 )
 if(file.exists(fname)){
-    plt = readRDS(
+    plt = load_object(
       file.path(
         params$savedir,
         paste0("external_annotation_plt_",params$cluster,".RDS")
       )
     )
-    info = readRDS(
+    info = load_object(
       file.path(
         params$savedir,
         paste0("external_annotation_info_",params$cluster,".RDS")

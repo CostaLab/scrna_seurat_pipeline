@@ -13,8 +13,9 @@ ambientRNA_elements <- function(scrna){
 
   plt <- list()
 
-  plt[[1]] <- FeaturePlot(
+  plt[[1]] <- StyleFeaturePlot(
     scrna,
+    style=FEATUREPLOT_STYLE,
     features = "AmbientRNA",
     order = TRUE,
     cols = zero_pos_divergent_colors
@@ -48,9 +49,10 @@ ambientRNA_elements <- function(scrna){
       ambientRNA.Mean = mean(AmbientRNA),
       ambientRNA.Median = median(AmbientRNA),
     )
-  saveRDS(
+  save_object(
     stSample,
-    file.path(report_tables_folder, "ambientRNA_postfilter.RDS")
+    file.path(report_tables_folder, "ambientRNA_postfilter.RDS"),
+    COMPRESSION_FORMAT
   )
 }
 

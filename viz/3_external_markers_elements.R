@@ -25,9 +25,10 @@ external_markers_elements <- function(scrna){
 
   mdf = df[df$Tissue.of.Origin == ORGAN, c(glue("{SPECIES}.Gene"), "Cell.Type")]
   celltype_names <- unique(mdf$Cell.Type)
-  saveRDS(
-    celltype_names,
-    file = file.path(report_tables_folder, "ext_annot_celltype_names.RDS")
+  save_object(
+    object = celltype_names,
+    file_name = file.path(report_tables_folder, "ext_annot_celltype_names.RDS"),
+    file_format = COMPRESSION_FORMAT
   )
 
   ## External markers
@@ -47,8 +48,9 @@ external_markers_elements <- function(scrna){
 
     for (i in seq(1, length(genes), by = 4)){
       ni = min(i + 3, length(genes))
-      p1 <- FeaturePlot(
+      p1 <- StyleFeaturePlot(
         object = scrna,
+        style = FEATUREPLOT_STYLE,
         pt.size = 0.01,
         label = TRUE,
         label.size = 2,
