@@ -1,0 +1,73 @@
+---
+title: "KEGG"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+params:
+    scrna: 'scrna object'
+    cluster: "clusters to analyse"
+    cluster_info: "cluster info"
+    project: "name/tag of the project"
+    savedir: "directory where rds files were saved"
+    funcs: "analysis steps to be performed"
+    report_data_folder: "folder with the output tables"
+    report_tables_folder: "folder with the table elements"
+    report_plots_folder: "folder with the plot elements"
+    report_plots_folder_png: "folder with the png plot elements"
+    report_plots_folder_pdf: "folder with the pdf plot elements"
+    author: "author of document"
+author: '`r params$author`'
+---
+
+## Cluster: `r colorize(params$cluster_info,"red")`
+
+## kegg up analysis
+```{r heatmap_kegg_up , out.width="100%", echo=FALSE}
+fname=file.path(
+  params$report_plots_folder_png,
+  paste0("heatmap_kegg-up_cluster-",params$cluster,".png")
+)
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+
+```{r barplot_kegg_up, out.width="100%", echo=FALSE}
+### up genes top 10
+flist = stringr::str_sort(grep(
+  paste0("kegg_up_genes_barplot_cluster-", params$cluster),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+knitr::include_graphics(flist)
+```
+
+## kegg down analysis
+```{r heatmap_kegg_down, out.width="100%", echo=FALSE}
+fname=file.path(
+  params$report_plots_folder_png,
+  paste0("heatmap_kegg-down_cluster-",params$cluster,".png")
+)
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+
+```{r barplot_kegg_down, out.width="100%", echo=FALSE}
+### down genes top 10
+flist = stringr::str_sort(grep(
+  paste0("kegg_down_genes_barplot_cluster-", params$cluster),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+knitr::include_graphics(flist)
+```

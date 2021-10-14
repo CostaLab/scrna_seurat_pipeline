@@ -1,0 +1,226 @@
+---
+title: "Clustering"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+params:
+    scrna: 'scrna object'
+    cluster: "clusters to analyse"
+    cluster_info: "cluster info"
+    project: "name/tag of the project"
+    savedir: "directory where rds files were saved"
+    funcs: "analysis steps to be performed"
+    report_data_folder: "folder with the output tables"
+    report_tables_folder: "folder with the table elements"
+    report_plots_folder: "folder with the plot elements"
+    report_plots_folder_png: "folder with the png plot elements"
+    report_plots_folder_pdf: "folder with the pdf plot elements"
+    author: "author of document"
+author: '`r params$author`'
+---
+
+```{r , include=FALSE}
+knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
+```
+
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(kableExtra)
+```
+
+## Cluster: `r colorize(params$cluster_info,"red")`
+
+### Clusters
+```{r umap_groupby_name, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_groupby_name_",params$cluster,".png")
+  )
+)
+```
+```{r umap_groupby_stage, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_groupby_stage_",params$cluster,".png")
+  )
+)
+```
+```{r umap_groupby_cluster, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_groupby_cluster_",params$cluster,".png")
+  )
+)
+```
+```{r stSample_stCond_table_cluster, echo=FALSE}
+load_object(
+  file.path(
+    params$report_tables_folder,
+    paste0("stSample_table_cluster_",params$cluster,".RDS")
+  )
+) %>%
+  kable(caption = "samples: cluster cells", align = 'c') %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+load_object(
+  file.path(
+    params$report_tables_folder,
+    paste0("stCond_table_cluster_",params$cluster,".RDS")
+  )
+) %>%
+  kable(caption = "condition: cluster cells", align = 'c') %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+### Clusters Statistics
+```{r cluster_statistics, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
+flist = grep(
+  "cluster_statistics_",
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+)
+flist = grep(params$cluster, flist, value=TRUE, fixed=TRUE)
+knitr::include_graphics(flist)
+```
+
+### Sample proportion per cluster
+```{r cluster_sample_proportions, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("cluster_sample_proportions_",params$cluster,".png")
+  )
+)
+```
+
+### Number of cells, per cluster, per sample
+```{r cluster_sample_distribution, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("cluster_sample_distribution_",params$cluster,".png")
+  )
+)
+```
+
+### Cell cycle phase
+```{r umap_ccycle_phase, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_ccycle_phase_",params$cluster,".png")
+  )
+)
+```
+
+### QC Feature plots
+```{r umap_featureplot_qc, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_featureplot_qc_",params$cluster,".png")
+  )
+)
+```
+```{r umap_featureplot_ccycle, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_featureplot_ccycle_",params$cluster,".png")
+  )
+)
+```
+
+### QC Violin plot
+```{r vlnplot_qc_ccycle_groupby, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("vlnplot_qc_ccycle_groupby-cluster_",params$cluster,".png")
+  )
+)
+```
+
+### MCA (Mouse Cell Atlas) annotation
+```{r mca_annotate, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
+fname <- file.path(
+    params$report_plots_folder_png,
+    paste0("mca_annotate_",params$cluster,".png")
+  )
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+```{r mca_annotate_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
+plt = load_object(
+  file.path(
+    params$report_plots_folder,
+    paste0("mca_annotate_plt_",params$cluster,".RDS")
+  )
+)
+info = load_object(
+  file.path(
+    params$report_plots_folder,
+    paste0("mca_annotate_info_",params$cluster,".RDS")
+  )
+)
+Seurat::HoverLocator(plot = plt, information = info)
+```
+
+### HCL (Human Cell Landscape) annotation
+```{r hcl_annotate, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
+fname <- file.path(
+    params$report_plots_folder_png,
+    paste0("hcl_annotate_",params$cluster,".png")
+  )
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+```{r hcl_annotate_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
+plt = load_object(
+  file.path(
+    params$report_plots_folder,
+    paste0("hcl_annotate_plt_",params$cluster,".RDS")
+  )
+)
+info = load_object(
+  file.path(
+    params$report_plots_folder,
+    paste0("hcl_annotate_info_",params$cluster,".RDS")
+  )
+)
+Seurat::HoverLocator(plot = plt, information = info)
+```
+
+### External Annotation
+```{r external_annotation, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
+fname <- file.path(
+    params$report_plots_folder_png,
+    paste0("external_annotation_",params$cluster,".png")
+  )
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+```{r external_annotation_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
+plt = load_object(
+  file.path(
+    params$report_plots_folder,
+    paste0("external_annotation_plt_",params$cluster,".RDS")
+  )
+)
+info = load_object(
+  file.path(
+    params$report_plots_folder,
+    paste0("external_annotation_info_",params$cluster,".RDS")
+  )
+)
+Seurat::HoverLocator(plot = plt, information = info)
+```

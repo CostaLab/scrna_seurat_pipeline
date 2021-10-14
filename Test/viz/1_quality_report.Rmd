@@ -1,0 +1,99 @@
+---
+title: "Data preprocess"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+params:
+    scrna: 'scrna object'
+    cluster: "clusters to analyse"
+    cluster_info: "cluster info"
+    project: "name/tag of the project"
+    savedir: "directory where rds files were saved"
+    funcs: "analysis steps to be performed"
+    report_data_folder: "folder with the output tables"
+    report_tables_folder: "folder with the table elements"
+    report_plots_folder: "folder with the plot elements"
+    report_plots_folder_png: "folder with the png plot elements"
+    report_plots_folder_pdf: "folder with the pdf plot elements"
+    author: "author of document"
+author: '`r params$author`'
+---
+```{r , include=FALSE}
+knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
+```
+
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(kableExtra)
+```
+
+## Check the nGene, nUMI, Mito-genes and ribo-genes.
+
+```{r prefilter_vlnplot, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path(params$report_plots_folder_png,"prefilter_vlnplot.png"))
+```
+```{r prefilter_stSample_stCond, echo=FALSE}
+stSample <- load_object(file.path(params$report_tables_folder,"stSample_prefilter.RDS"))
+
+stSample %>%
+  kable(caption = "Mean and median for each sample", align = 'c') %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+stCond <- load_object(file.path(params$report_tables_folder,"stCond_prefilter.RDS"))
+
+stCond %>%
+  kable(caption = "Mean and median for each condition", align = 'c') %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+
+## After filtering
+
+```{r postfilter_vlnplot, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path(params$report_plots_folder_png,"postfilter_vlnplot.png"))
+```
+
+
+```{r postfilter_cellphase_vlnplot, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path(params$report_plots_folder_png,"postfilter_cellphase.png"))
+```
+
+
+```{r postfilter_stSample_stCond, echo=FALSE}
+stSample <- load_object(file.path(params$report_tables_folder,"stSample_postfilter.RDS"))
+stSample %>%
+  kable(caption = "Mean and median for each sample", align = 'c') %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+stCond <- load_object(file.path(params$report_tables_folder,"stCond_postfilter.RDS"))
+stCond %>%
+  kable(caption = "Mean and median for each condition", align = 'c') %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+```{r featurescatter_ncountRNA, out.width="100%", echo=FALSE}
+## nGene<=>nFeature_RNA, nUMI<=>nCount_RNA
+knitr::include_graphics(file.path(params$report_plots_folder_png,"featurescatter_ncountRNA.png"))
+```
+
+## Highly variable genes
+```{r high_var_genes, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path(params$report_plots_folder_png,"high_var_genes.png"))
+```
+
+## Cellcycle scaling
+
+### before
+```{r cellcycle_scaling_before, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path(params$report_plots_folder_png,"cellcycle_scaling_before.png"))
+```
+
+### after
+```{r cellcycle_scaling_after, out.width="100%", echo=FALSE}
+knitr::include_graphics(file.path(params$report_plots_folder_png,"cellcycle_scaling_after.png"))
+```

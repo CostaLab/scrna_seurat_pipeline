@@ -1,0 +1,100 @@
+---
+title: "Interactive UMAPs"
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+params:
+    scrna: 'scrna object'
+    cluster: "clusters to analyse"
+    cluster_info: "cluster info"
+    project: "name/tag of the project"
+    savedir: "directory where rds files were saved"
+    funcs: "analysis steps to be performed"
+    report_data_folder: "folder with the output tables"
+    report_tables_folder: "folder with the table elements"
+    report_plots_folder: "folder with the plot elements"
+    report_plots_folder_png: "folder with the png plot elements"
+    report_plots_folder_pdf: "folder with the pdf plot elements"
+    author: "author of document"
+author: '`r params$author`'
+---
+
+```{r interactive_umap_setup, include=FALSE}
+knitr::opts_chunk$set(warning = F, message = F, echo = T)
+```
+## Cluster: `r colorize(params$cluster_info,"red")`
+
+### HCL annotation
+```{r hcl_interactive, out.width="100%", echo=FALSE, eval=TRUE}
+fname <- file.path(
+    params$savedir,
+    paste0("hcl_annotate_plt_",params$cluster,".RDS")
+  )
+
+if(file.exists(fname)){
+    plt = load_object(
+      file.path(
+        params$savedir,
+        paste0("hcl_annotate_plt_",params$cluster,".RDS")
+      )
+    )
+    info = load_object(
+      file.path(
+        params$savedir,
+        paste0("hcl_annotate_info_",params$cluster,".RDS")
+      )
+    )
+    Seurat::HoverLocator(plot = plt, information = info)
+}
+```
+
+### MCA annotation
+```{r mca_interactive, out.width="100%", echo=FALSE, eval=TRUE}
+fname <- file.path(
+    params$savedir,
+    paste0("mca_annotate_plt_",params$cluster,".RDS")
+  )
+if(file.exists(fname)){
+    plt = load_object(
+      file.path(
+        params$savedir,
+        paste0("mca_annotate_plt_",params$cluster,".RDS")
+      )
+    )
+    info = load_object(
+      file.path(
+        params$savedir,
+        paste0("mca_annotate_info_",params$cluster,".RDS")
+      )
+    )
+    Seurat::HoverLocator(plot = plt, information = info)
+}
+```
+
+### External Annotation
+```{r external_annot_interactive, out.width="100%", echo=FALSE, eval=TRUE}
+fname <-  file.path(
+    params$savedir,
+    paste0("external_annotation_plt_",params$cluster,".RDS")
+)
+if(file.exists(fname)){
+    plt = load_object(
+      file.path(
+        params$savedir,
+        paste0("external_annotation_plt_",params$cluster,".RDS")
+      )
+    )
+    info = load_object(
+      file.path(
+        params$savedir,
+        paste0("external_annotation_info_",params$cluster,".RDS")
+      )
+    )
+    Seurat::HoverLocator(plot = plt, information = info)
+    }
+```

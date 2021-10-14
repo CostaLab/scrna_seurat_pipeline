@@ -2643,14 +2643,19 @@ generate_scrna_doublet_proportions <- function(scrna){
 
     names(scrna_list_doublets) <- names(bcmvn_lst)
     classifications <- c()
+    pANN <- c()
     cells <- c()
     for(i in 1:length(scrna_list_doublets)){
       cells               <- c(names(scrna_list_doublets[[i]]$classifications), cells)
       classifications     <- c(as.character(scrna_list_doublets[[i]]$classifications), classifications)
+      pANN                <- c(pANN, scrna_list_doublets[[i]]@meta.data[,paste0("pANN_0.25_", pK_optimal[i], "_", est_expected[i])])
     }
     classifications <- factor(classifications, levels = c("Singlet", "Doublet"))
     names(classifications) <- cells
+    names(pANN) <- cells
     scrna <- AddMetaData(scrna, classifications, col.name = "Doublet_classifications")
+    scrna <- AddMetaData(scrna, pANN, col.name = "pANN")
+    
     if(length(unique(scrna$name)) > 1){
       data.list <- SplitObject(scrna, split.by = "name")
       data.list <- lapply(X = data.list, FUN = function(x) {

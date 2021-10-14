@@ -1,0 +1,50 @@
+---
+title: "PROGENy"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+params:
+    scrna: 'scrna object'
+    cluster: "clusters to analyse"
+    cluster_info: "cluster info"
+    project: "name/tag of the project"
+    savedir: "directory where rds files were saved"
+    funcs: "analysis steps to be performed"
+    report_data_folder: "folder with the output tables"
+    report_tables_folder: "folder with the table elements"
+    report_plots_folder: "folder with the plot elements"
+    report_plots_folder_png: "folder with the png plot elements"
+    report_plots_folder_pdf: "folder with the pdf plot elements"
+    author: "author of document"
+author: '`r params$author`'
+---
+
+## Cluster: `r colorize(params$cluster_info,"red")`
+
+## PROGENy r effect size analysis
+
+$***:\quad \text{pval}<0.001\\\\**:\quad \text{pval}<0.01\\\\*:\quad \text{pval}<0.05\\\\\text{ns}:\quad\text{ not significant}$
+
+```{r heatmap_text_PROGENy_up , out.width="100%", echo=FALSE}
+fname=file.path(
+  params$report_plots_folder_png,
+  paste0("progeny_r_effect_text_heatmap-",params$cluster,".png")
+)
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+
+## PROGENy r effect size analysis
+```{r heatmap_PROGENy_up , out.width="100%", echo=FALSE}
+fname=file.path(
+  params$report_plots_folder_png,
+  paste0("progeny_r_effect_heatmap-",params$cluster,".png")
+)
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+
+

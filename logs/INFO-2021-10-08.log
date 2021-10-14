@@ -1,0 +1,492 @@
+INFO [2021-10-08 15:05:06] RObject save in existed directory: /home/mg000001/DoubletDetection/scrna_seurat_pipeline//Test/save
+INFO [2021-10-08 15:05:06] xlsx save in existed directory: /home/mg000001/DoubletDetection/scrna_seurat_pipeline//Test/charts
+INFO [2021-10-08 15:05:06] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-10-08 15:05:06] samples summary: 
+INFO [2021-10-08 15:05:06] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-10-08 15:05:06] The executing plan is: 
+INFO [2021-10-08 15:05:06] 			calculating: scrna_phase_singleton
+INFO [2021-10-08 15:05:16] executing generate_scrna_phase_singleton
+INFO [2021-10-08 15:05:16] executing generate_scrna_rawdata
+INFO [2021-10-08 15:05:18] finished generate_scrna_rawdata
+INFO [2021-10-08 15:05:18] executing generate_scrna_ambient_rna
+INFO [2021-10-08 15:05:32] finished generate_scrna_ambient_rna
+INFO [2021-10-08 15:05:32] executing generate_scrna_filter
+INFO [2021-10-08 15:05:33] finished generate_scrna_filter
+INFO [2021-10-08 15:05:33] executing generate_scrna_doublet_proportions
+INFO [2021-10-08 15:07:25] RObject save in existed directory: /home/mg000001/DoubletDetection/scrna_seurat_pipeline//Test/save
+INFO [2021-10-08 15:07:25] xlsx save in existed directory: /home/mg000001/DoubletDetection/scrna_seurat_pipeline//Test/charts
+INFO [2021-10-08 15:07:25] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-10-08 15:07:25] samples summary: 
+INFO [2021-10-08 15:07:25] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-10-08 15:07:25] The executing plan is: 
+INFO [2021-10-08 15:07:25] 			calculating: scrna_phase_singleton
+INFO [2021-10-08 15:07:33] executing generate_scrna_phase_singleton
+INFO [2021-10-08 15:07:33] executing generate_scrna_rawdata
+INFO [2021-10-08 15:07:36] finished generate_scrna_rawdata
+INFO [2021-10-08 15:07:36] executing generate_scrna_ambient_rna
+INFO [2021-10-08 15:07:50] finished generate_scrna_ambient_rna
+INFO [2021-10-08 15:07:50] executing generate_scrna_filter
+INFO [2021-10-08 15:07:50] finished generate_scrna_filter
+INFO [2021-10-08 15:07:50] executing generate_scrna_doublet_proportions
+INFO [2021-10-08 15:08:41] finished generate_scrna_doublet_proportions
+INFO [2021-10-08 15:08:41] executing generate_scrna_preprocess
+INFO [2021-10-08 15:08:45] finished generate_scrna_preprocess
+INFO [2021-10-08 15:08:45] executing generate_scrna_cellcycle
+INFO [2021-10-08 15:08:45] finished generate_scrna_cellcycle
+INFO [2021-10-08 15:08:45] executing generate_scrna_cycleRegressOut
+INFO [2021-10-08 15:08:51] finished generate_scrna_cycleRegressOut
+INFO [2021-10-08 15:08:51] executing generate_scrna_regressOut
+INFO [2021-10-08 15:08:57] finished generate_scrna_regressOut
+INFO [2021-10-08 15:08:57] executing generate_scrna_ScaleSingleton
+INFO [2021-10-08 15:09:02] finished generate_scrna_ScaleSingleton
+INFO [2021-10-08 15:09:02] executing generate_scrna_sltn_batch_clustering
+INFO [2021-10-08 15:09:03] finished generate_scrna_sltn_batch_clustering
+INFO [2021-10-08 15:09:03] executing generate_scrna_singleton_clustering
+INFO [2021-10-08 15:09:03] finished generate_scrna_singleton_clustering
+INFO [2021-10-08 15:09:03] finished scrna_phase_singleton
+INFO [2021-10-08 15:09:03] ===============Finished===============
+INFO [2021-10-08 15:20:17] RObject save in existed directory: /home/mg000001/DoubletDetection/scrna_seurat_pipeline//Test/save
+INFO [2021-10-08 15:20:17] xlsx save in existed directory: /home/mg000001/DoubletDetection/scrna_seurat_pipeline//Test/charts
+INFO [2021-10-08 15:20:17] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-10-08 15:20:17] samples summary: 
+INFO [2021-10-08 15:20:17] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-10-08 15:20:17] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-10-08 15:20:17] 3   ------->  C_Csnk   ------->  data/C_Csnk
+INFO [2021-10-08 15:20:17] 4   ------->  D_Csnk   ------->  data/D_Csnk
+INFO [2021-10-08 15:20:17] The executing plan is: 
+INFO [2021-10-08 15:20:17] 			calculating: scrna_phase_preprocess
+INFO [2021-10-08 15:20:17] 			calculating: scrna_phase_clustering
+INFO [2021-10-08 15:20:17] 			calculating: scrna_phase_comparing
+INFO [2021-10-08 15:20:26] executing generate_scrna_phase_preprocess
+INFO [2021-10-08 15:20:26] executing generate_scrna_rawdata
+INFO [2021-10-08 15:20:32] finished generate_scrna_rawdata
+INFO [2021-10-08 15:20:32] executing generate_scrna_ambient_rna
+INFO [2021-10-08 15:21:13] finished generate_scrna_ambient_rna
+INFO [2021-10-08 15:21:13] executing generate_scrna_filter
+INFO [2021-10-08 15:21:13] finished generate_scrna_filter
+INFO [2021-10-08 15:21:13] executing generate_scrna_doublet_proportions
+INFO [2021-10-08 15:24:09] finished generate_scrna_doublet_proportions
+INFO [2021-10-08 15:24:09] executing generate_scrna_preprocess
+INFO [2021-10-08 15:24:14] finished generate_scrna_preprocess
+INFO [2021-10-08 15:24:14] executing generate_scrna_cellcycle
+INFO [2021-10-08 15:24:16] finished generate_scrna_cellcycle
+INFO [2021-10-08 15:24:16] executing generate_scrna_cycleRegressOut
+INFO [2021-10-08 15:24:24] finished generate_scrna_cycleRegressOut
+INFO [2021-10-08 15:24:24] executing generate_scrna_regressOut
+INFO [2021-10-08 15:24:36] finished generate_scrna_regressOut
+INFO [2021-10-08 15:24:38] finished scrna_phase_preprocess
+INFO [2021-10-08 15:24:38] executing generate_scrna_phase_clustering
+INFO [2021-10-08 15:24:38] executing generate_scrna_integration_harmony
+INFO [2021-10-08 15:24:49] finished generate_scrna_integration_harmony
+INFO [2021-10-08 15:24:49] executing generate_scrna_integration_seurat
+INFO [2021-10-08 15:25:31] finished generate_scrna_integration_seurat
+INFO [2021-10-08 15:25:31] executing generate_scrna_batchclustering
+INFO [2021-10-08 15:25:35] finished generate_scrna_batchclustering
+INFO [2021-10-08 15:25:35] executing generate_scrna_batch_markergenes
+INFO [2021-10-08 15:29:22] RObject save in existed directory: /home/mg000001/DoubletDetection/scrna_seurat_pipeline//Test/save
+INFO [2021-10-08 15:29:22] xlsx save in existed directory: /home/mg000001/DoubletDetection/scrna_seurat_pipeline//Test/charts
+INFO [2021-10-08 15:29:22] ----------------------Project: Mouse Blood project --------------------------
+INFO [2021-10-08 15:29:22] samples summary: 
+INFO [2021-10-08 15:29:22] 1   ------->  A_MxCre   ------->  data/A_MxCre
+INFO [2021-10-08 15:29:22] 2   ------->  B_MxCre   ------->  data/B_MxCre
+INFO [2021-10-08 15:29:22] The executing plan is: 
+INFO [2021-10-08 15:29:22] 			calculating: scrna_phase_preprocess
+INFO [2021-10-08 15:29:22] 			calculating: scrna_phase_clustering
+INFO [2021-10-08 15:29:22] 			calculating: scrna_phase_comparing
+INFO [2021-10-08 15:29:31] executing generate_scrna_phase_preprocess
+INFO [2021-10-08 15:29:31] executing generate_scrna_rawdata
+INFO [2021-10-08 15:29:36] finished generate_scrna_rawdata
+INFO [2021-10-08 15:29:36] executing generate_scrna_ambient_rna
+INFO [2021-10-08 15:29:59] finished generate_scrna_ambient_rna
+INFO [2021-10-08 15:29:59] executing generate_scrna_filter
+INFO [2021-10-08 15:29:59] finished generate_scrna_filter
+INFO [2021-10-08 15:29:59] executing generate_scrna_doublet_proportions
+INFO [2021-10-08 15:31:33] finished generate_scrna_doublet_proportions
+INFO [2021-10-08 15:31:33] executing generate_scrna_preprocess
+INFO [2021-10-08 15:31:37] finished generate_scrna_preprocess
+INFO [2021-10-08 15:31:37] executing generate_scrna_cellcycle
+INFO [2021-10-08 15:31:37] finished generate_scrna_cellcycle
+INFO [2021-10-08 15:31:37] executing generate_scrna_cycleRegressOut
+INFO [2021-10-08 15:31:43] finished generate_scrna_cycleRegressOut
+INFO [2021-10-08 15:31:43] executing generate_scrna_regressOut
+INFO [2021-10-08 15:31:51] finished generate_scrna_regressOut
+INFO [2021-10-08 15:31:52] finished scrna_phase_preprocess
+INFO [2021-10-08 15:31:52] executing generate_scrna_phase_clustering
+INFO [2021-10-08 15:31:52] executing generate_scrna_integration_harmony
+INFO [2021-10-08 15:31:59] finished generate_scrna_integration_harmony
+INFO [2021-10-08 15:31:59] executing generate_scrna_integration_seurat
+INFO [2021-10-08 15:32:20] finished generate_scrna_integration_seurat
+INFO [2021-10-08 15:32:20] executing generate_scrna_batchclustering
+INFO [2021-10-08 15:32:23] finished generate_scrna_batchclustering
+INFO [2021-10-08 15:32:23] executing generate_scrna_batch_markergenes
+INFO [2021-10-08 15:38:28] finished generate_scrna_batch_markergenes
+INFO [2021-10-08 15:38:28] executing generate_scrna_clustering
+INFO [2021-10-08 15:38:30] finished generate_scrna_clustering
+INFO [2021-10-08 15:38:30] executing generate_scrna_fishertest_inte_clusters
+INFO [2021-10-08 15:38:30] finished generate_scrna_fishertest_inte_clusters
+INFO [2021-10-08 15:38:30] executing generate_scrna_MCAannotate
+INFO [2021-10-08 15:38:59] finished generate_scrna_MCAannotate
+INFO [2021-10-08 15:38:59] executing generate_scrna_ExternalAnnotation
+INFO [2021-10-08 15:39:02] finished generate_scrna_ExternalAnnotation
+INFO [2021-10-08 15:39:02] executing generate_scrna_HCLannotate
+INFO [2021-10-08 15:39:05] finished generate_scrna_HCLannotate
+INFO [2021-10-08 15:39:05] executing generate_scrna_MAGIC
+INFO [2021-10-08 15:40:28] finished generate_scrna_MAGIC
+INFO [2021-10-08 15:40:31] finished scrna_phase_clustering
+INFO [2021-10-08 15:40:31] executing generate_scrna_phase_comparing
+INFO [2021-10-08 15:40:31] executing generate_scrna_MSigDB_geneset
+INFO [2021-10-08 15:42:24] finished generate_scrna_MSigDB_geneset
+INFO [2021-10-08 15:42:24] executing generate_scrna_fishertest_clusters
+INFO [2021-10-08 15:42:24] finished generate_scrna_fishertest_clusters
+INFO [2021-10-08 15:42:24] executing generate_scrna_markergenes
+INFO [2021-10-08 15:43:17] finished generate_scrna_markergenes
+INFO [2021-10-08 15:43:17] executing generate_scrna_go
+INFO [2021-10-08 15:43:18] cluster:  0 Fri Oct  8 15:43:18 2021
+INFO [2021-10-08 15:44:05] cluster:  1 Fri Oct  8 15:44:05 2021
+INFO [2021-10-08 15:44:24] cluster:  2 Fri Oct  8 15:44:24 2021
+INFO [2021-10-08 15:44:41] cluster:  3 Fri Oct  8 15:44:41 2021
+INFO [2021-10-08 15:45:01] cluster:  4 Fri Oct  8 15:45:01 2021
+INFO [2021-10-08 15:45:21] cluster:  5 Fri Oct  8 15:45:21 2021
+INFO [2021-10-08 15:45:41] cluster:  6 Fri Oct  8 15:45:41 2021
+INFO [2021-10-08 15:46:01] cluster:  7 Fri Oct  8 15:46:01 2021
+INFO [2021-10-08 15:46:20] cluster:  0 Fri Oct  8 15:46:20 2021
+INFO [2021-10-08 15:46:41] cluster:  1 Fri Oct  8 15:46:41 2021
+INFO [2021-10-08 15:47:01] cluster:  2 Fri Oct  8 15:47:01 2021
+INFO [2021-10-08 15:47:19] cluster:  3 Fri Oct  8 15:47:19 2021
+INFO [2021-10-08 15:47:40] cluster:  4 Fri Oct  8 15:47:40 2021
+INFO [2021-10-08 15:48:01] cluster:  5 Fri Oct  8 15:48:01 2021
+INFO [2021-10-08 15:48:19] cluster:  6 Fri Oct  8 15:48:19 2021
+INFO [2021-10-08 15:48:37] cluster:  7 Fri Oct  8 15:48:37 2021
+INFO [2021-10-08 15:49:06] finished generate_scrna_go
+INFO [2021-10-08 15:49:06] executing generate_scrna_progeny
+INFO [2021-10-08 15:49:11] finished generate_scrna_progeny
+INFO [2021-10-08 15:49:11] executing generate_scrna_genesorteR
+INFO [2021-10-08 15:49:21] finished generate_scrna_genesorteR
+INFO [2021-10-08 15:49:21] executing generate_scrna_kegg
+INFO [2021-10-08 15:49:21] cluster:  0 Fri Oct  8 15:49:21 2021
+INFO [2021-10-08 15:49:27] cluster:  1 Fri Oct  8 15:49:27 2021
+INFO [2021-10-08 15:49:27] cluster:  2 Fri Oct  8 15:49:27 2021
+INFO [2021-10-08 15:49:27] cluster:  3 Fri Oct  8 15:49:27 2021
+INFO [2021-10-08 15:49:28] cluster:  4 Fri Oct  8 15:49:28 2021
+INFO [2021-10-08 15:49:28] cluster:  5 Fri Oct  8 15:49:28 2021
+INFO [2021-10-08 15:49:28] cluster:  6 Fri Oct  8 15:49:28 2021
+INFO [2021-10-08 15:49:28] cluster:  7 Fri Oct  8 15:49:28 2021
+INFO [2021-10-08 15:49:29] cluster:  0 Fri Oct  8 15:49:29 2021
+INFO [2021-10-08 15:49:29] cluster:  1 Fri Oct  8 15:49:29 2021
+INFO [2021-10-08 15:49:30] cluster:  2 Fri Oct  8 15:49:30 2021
+INFO [2021-10-08 15:49:30] cluster:  3 Fri Oct  8 15:49:30 2021
+INFO [2021-10-08 15:49:30] cluster:  4 Fri Oct  8 15:49:30 2021
+INFO [2021-10-08 15:49:30] cluster:  5 Fri Oct  8 15:49:30 2021
+INFO [2021-10-08 15:49:31] cluster:  6 Fri Oct  8 15:49:31 2021
+INFO [2021-10-08 15:49:31] cluster:  7 Fri Oct  8 15:49:31 2021
+INFO [2021-10-08 15:49:32] finished generate_scrna_kegg
+INFO [2021-10-08 15:49:32] executing generate_scrna_reactome
+INFO [2021-10-08 15:49:33] cluster:  0 Fri Oct  8 15:49:33 2021
+INFO [2021-10-08 15:49:37] cluster:  1 Fri Oct  8 15:49:37 2021
+INFO [2021-10-08 15:49:40] cluster:  2 Fri Oct  8 15:49:40 2021
+INFO [2021-10-08 15:49:44] cluster:  3 Fri Oct  8 15:49:44 2021
+INFO [2021-10-08 15:49:48] cluster:  4 Fri Oct  8 15:49:48 2021
+INFO [2021-10-08 15:49:51] cluster:  5 Fri Oct  8 15:49:51 2021
+INFO [2021-10-08 15:49:55] cluster:  6 Fri Oct  8 15:49:55 2021
+INFO [2021-10-08 15:49:58] cluster:  7 Fri Oct  8 15:49:58 2021
+INFO [2021-10-08 15:50:02] cluster:  0 Fri Oct  8 15:50:02 2021
+INFO [2021-10-08 15:50:06] cluster:  1 Fri Oct  8 15:50:06 2021
+INFO [2021-10-08 15:50:10] cluster:  2 Fri Oct  8 15:50:10 2021
+INFO [2021-10-08 15:50:13] cluster:  3 Fri Oct  8 15:50:13 2021
+INFO [2021-10-08 15:50:17] cluster:  4 Fri Oct  8 15:50:17 2021
+INFO [2021-10-08 15:50:21] cluster:  5 Fri Oct  8 15:50:21 2021
+INFO [2021-10-08 15:50:24] cluster:  6 Fri Oct  8 15:50:24 2021
+INFO [2021-10-08 15:50:28] cluster:  7 Fri Oct  8 15:50:28 2021
+INFO [2021-10-08 15:50:33] finished generate_scrna_reactome
+INFO [2021-10-08 15:50:33] executing generate_scrna_hallmark
+INFO [2021-10-08 15:50:33] cluster:  0 Fri Oct  8 15:50:33 2021
+INFO [2021-10-08 15:50:34] cluster:  1 Fri Oct  8 15:50:34 2021
+INFO [2021-10-08 15:50:35] cluster:  2 Fri Oct  8 15:50:35 2021
+INFO [2021-10-08 15:50:35] cluster:  3 Fri Oct  8 15:50:35 2021
+INFO [2021-10-08 15:50:35] cluster:  4 Fri Oct  8 15:50:35 2021
+INFO [2021-10-08 15:50:36] cluster:  5 Fri Oct  8 15:50:36 2021
+INFO [2021-10-08 15:50:36] cluster:  6 Fri Oct  8 15:50:36 2021
+INFO [2021-10-08 15:50:37] cluster:  7 Fri Oct  8 15:50:37 2021
+INFO [2021-10-08 15:50:37] cluster:  0 Fri Oct  8 15:50:37 2021
+INFO [2021-10-08 15:50:37] cluster:  1 Fri Oct  8 15:50:37 2021
+INFO [2021-10-08 15:50:38] cluster:  2 Fri Oct  8 15:50:38 2021
+INFO [2021-10-08 15:50:38] cluster:  3 Fri Oct  8 15:50:38 2021
+INFO [2021-10-08 15:50:38] cluster:  4 Fri Oct  8 15:50:38 2021
+INFO [2021-10-08 15:50:39] cluster:  5 Fri Oct  8 15:50:39 2021
+INFO [2021-10-08 15:50:39] cluster:  6 Fri Oct  8 15:50:39 2021
+INFO [2021-10-08 15:50:39] cluster:  7 Fri Oct  8 15:50:39 2021
+INFO [2021-10-08 15:50:40] finished generate_scrna_hallmark
+INFO [2021-10-08 15:50:40] executing generate_scrna_progeny_stage
+INFO [2021-10-08 15:50:54] finished generate_scrna_progeny_stage
+INFO [2021-10-08 15:50:54] executing generate_scrna_dego_name
+INFO [2021-10-08 15:50:54] ****processing A_MxCre vs B_MxCre
+INFO [2021-10-08 15:50:54] processing cluster 0
+INFO [2021-10-08 15:50:58] processing cluster 1
+INFO [2021-10-08 15:51:03] processing cluster 2
+INFO [2021-10-08 15:51:07] processing cluster 3
+INFO [2021-10-08 15:51:11] processing cluster 4
+INFO [2021-10-08 15:51:15] processing cluster 5
+INFO [2021-10-08 15:51:19] processing cluster 6
+INFO [2021-10-08 15:51:23] processing cluster 7
+INFO [2021-10-08 15:51:27] ****processing go up&down A_MxCre.vs.B_MxCre
+INFO [2021-10-08 15:51:27] cluster:  0 Fri Oct  8 15:51:27 2021
+INFO [2021-10-08 15:51:45] cluster:  1 Fri Oct  8 15:51:45 2021
+INFO [2021-10-08 15:52:05] cluster:  2 Fri Oct  8 15:52:05 2021
+INFO [2021-10-08 15:52:26] cluster:  3 Fri Oct  8 15:52:26 2021
+INFO [2021-10-08 15:52:53] cluster:  4 Fri Oct  8 15:52:53 2021
+INFO [2021-10-08 15:53:22] cluster:  5 Fri Oct  8 15:53:22 2021
+INFO [2021-10-08 15:53:56] cluster:  6 Fri Oct  8 15:53:56 2021
+WARN [2021-10-08 15:53:56] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:53:56] cluster:  7 Fri Oct  8 15:53:56 2021
+WARN [2021-10-08 15:53:56] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:53:56] cluster:  0 Fri Oct  8 15:53:56 2021
+INFO [2021-10-08 15:54:26] cluster:  1 Fri Oct  8 15:54:26 2021
+INFO [2021-10-08 15:54:57] cluster:  2 Fri Oct  8 15:54:57 2021
+INFO [2021-10-08 15:55:28] cluster:  3 Fri Oct  8 15:55:28 2021
+WARN [2021-10-08 15:55:28] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:55:28] cluster:  4 Fri Oct  8 15:55:28 2021
+WARN [2021-10-08 15:55:28] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:55:28] cluster:  5 Fri Oct  8 15:55:28 2021
+WARN [2021-10-08 15:55:28] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:55:28] cluster:  6 Fri Oct  8 15:55:28 2021
+WARN [2021-10-08 15:55:28] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:55:29] cluster:  7 Fri Oct  8 15:55:29 2021
+WARN [2021-10-08 15:55:29] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:55:31] finished generate_scrna_dego_name
+INFO [2021-10-08 15:55:31] executing generate_scrna_dego_stage
+INFO [2021-10-08 15:55:31] ****processing MxCre vs B_MxCre
+INFO [2021-10-08 15:55:31] processing cluster 0
+INFO [2021-10-08 15:55:36] processing cluster 1
+INFO [2021-10-08 15:55:42] processing cluster 2
+INFO [2021-10-08 15:55:48] processing cluster 3
+INFO [2021-10-08 15:55:58] processing cluster 4
+INFO [2021-10-08 15:56:05] processing cluster 5
+INFO [2021-10-08 15:56:11] processing cluster 6
+INFO [2021-10-08 15:56:18] processing cluster 7
+INFO [2021-10-08 15:56:25] ****processing go up&down MxCre.vs.B_MxCre
+INFO [2021-10-08 15:56:25] cluster:  0 Fri Oct  8 15:56:25 2021
+INFO [2021-10-08 15:56:57] cluster:  1 Fri Oct  8 15:56:57 2021
+INFO [2021-10-08 15:57:16] cluster:  2 Fri Oct  8 15:57:16 2021
+INFO [2021-10-08 15:57:38] cluster:  3 Fri Oct  8 15:57:38 2021
+INFO [2021-10-08 15:57:58] cluster:  4 Fri Oct  8 15:57:58 2021
+INFO [2021-10-08 15:58:22] cluster:  5 Fri Oct  8 15:58:22 2021
+INFO [2021-10-08 15:58:43] cluster:  6 Fri Oct  8 15:58:43 2021
+WARN [2021-10-08 15:58:43] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:58:43] cluster:  7 Fri Oct  8 15:58:43 2021
+WARN [2021-10-08 15:58:43] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:58:43] cluster:  0 Fri Oct  8 15:58:43 2021
+INFO [2021-10-08 15:59:02] cluster:  1 Fri Oct  8 15:59:02 2021
+INFO [2021-10-08 15:59:20] cluster:  2 Fri Oct  8 15:59:20 2021
+INFO [2021-10-08 15:59:40] cluster:  3 Fri Oct  8 15:59:40 2021
+WARN [2021-10-08 15:59:40] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:40] cluster:  4 Fri Oct  8 15:59:40 2021
+WARN [2021-10-08 15:59:40] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:40] cluster:  5 Fri Oct  8 15:59:40 2021
+WARN [2021-10-08 15:59:40] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:40] cluster:  6 Fri Oct  8 15:59:40 2021
+WARN [2021-10-08 15:59:41] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:41] cluster:  7 Fri Oct  8 15:59:41 2021
+WARN [2021-10-08 15:59:41] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:43] finished generate_scrna_dego_stage
+INFO [2021-10-08 15:59:43] executing generate_scrna_pathway_name
+INFO [2021-10-08 15:59:43] ****processing pathway up&down A_MxCre.vs.B_MxCre
+INFO [2021-10-08 15:59:43] cluster:  0 Fri Oct  8 15:59:43 2021
+INFO [2021-10-08 15:59:43] cluster:  1 Fri Oct  8 15:59:43 2021
+INFO [2021-10-08 15:59:43] cluster:  2 Fri Oct  8 15:59:43 2021
+INFO [2021-10-08 15:59:44] cluster:  3 Fri Oct  8 15:59:44 2021
+INFO [2021-10-08 15:59:44] cluster:  4 Fri Oct  8 15:59:44 2021
+INFO [2021-10-08 15:59:44] cluster:  5 Fri Oct  8 15:59:44 2021
+INFO [2021-10-08 15:59:45] cluster:  6 Fri Oct  8 15:59:45 2021
+WARN [2021-10-08 15:59:45] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:45] cluster:  7 Fri Oct  8 15:59:45 2021
+WARN [2021-10-08 15:59:45] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:45] cluster:  0 Fri Oct  8 15:59:45 2021
+INFO [2021-10-08 15:59:45] cluster:  1 Fri Oct  8 15:59:45 2021
+INFO [2021-10-08 15:59:45] cluster:  2 Fri Oct  8 15:59:45 2021
+INFO [2021-10-08 15:59:46] cluster:  3 Fri Oct  8 15:59:46 2021
+WARN [2021-10-08 15:59:46] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:46] cluster:  4 Fri Oct  8 15:59:46 2021
+WARN [2021-10-08 15:59:46] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:46] cluster:  5 Fri Oct  8 15:59:46 2021
+WARN [2021-10-08 15:59:46] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:46] cluster:  6 Fri Oct  8 15:59:46 2021
+WARN [2021-10-08 15:59:46] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:46] cluster:  7 Fri Oct  8 15:59:46 2021
+WARN [2021-10-08 15:59:46] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:46] cluster:  0 Fri Oct  8 15:59:46 2021
+INFO [2021-10-08 15:59:47] cluster:  1 Fri Oct  8 15:59:47 2021
+INFO [2021-10-08 15:59:47] cluster:  2 Fri Oct  8 15:59:47 2021
+INFO [2021-10-08 15:59:47] cluster:  3 Fri Oct  8 15:59:47 2021
+INFO [2021-10-08 15:59:48] cluster:  4 Fri Oct  8 15:59:48 2021
+INFO [2021-10-08 15:59:48] cluster:  5 Fri Oct  8 15:59:48 2021
+INFO [2021-10-08 15:59:48] cluster:  6 Fri Oct  8 15:59:48 2021
+WARN [2021-10-08 15:59:49] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:49] cluster:  7 Fri Oct  8 15:59:49 2021
+WARN [2021-10-08 15:59:49] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:49] cluster:  0 Fri Oct  8 15:59:49 2021
+INFO [2021-10-08 15:59:49] cluster:  1 Fri Oct  8 15:59:49 2021
+INFO [2021-10-08 15:59:49] cluster:  2 Fri Oct  8 15:59:49 2021
+INFO [2021-10-08 15:59:50] cluster:  3 Fri Oct  8 15:59:50 2021
+WARN [2021-10-08 15:59:50] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:50] cluster:  4 Fri Oct  8 15:59:50 2021
+WARN [2021-10-08 15:59:50] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:50] cluster:  5 Fri Oct  8 15:59:50 2021
+WARN [2021-10-08 15:59:50] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:50] cluster:  6 Fri Oct  8 15:59:50 2021
+WARN [2021-10-08 15:59:50] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:50] cluster:  7 Fri Oct  8 15:59:50 2021
+WARN [2021-10-08 15:59:50] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 15:59:50] cluster:  0 Fri Oct  8 15:59:50 2021
+INFO [2021-10-08 15:59:54] cluster:  1 Fri Oct  8 15:59:54 2021
+INFO [2021-10-08 15:59:58] cluster:  2 Fri Oct  8 15:59:58 2021
+INFO [2021-10-08 16:00:02] cluster:  3 Fri Oct  8 16:00:02 2021
+INFO [2021-10-08 16:00:06] cluster:  4 Fri Oct  8 16:00:06 2021
+INFO [2021-10-08 16:00:09] cluster:  5 Fri Oct  8 16:00:09 2021
+INFO [2021-10-08 16:00:13] cluster:  6 Fri Oct  8 16:00:13 2021
+WARN [2021-10-08 16:00:13] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:13] cluster:  7 Fri Oct  8 16:00:13 2021
+WARN [2021-10-08 16:00:13] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:13] cluster:  0 Fri Oct  8 16:00:13 2021
+INFO [2021-10-08 16:00:17] cluster:  1 Fri Oct  8 16:00:17 2021
+INFO [2021-10-08 16:00:21] cluster:  2 Fri Oct  8 16:00:21 2021
+INFO [2021-10-08 16:00:24] cluster:  3 Fri Oct  8 16:00:24 2021
+WARN [2021-10-08 16:00:25] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:25] cluster:  4 Fri Oct  8 16:00:25 2021
+WARN [2021-10-08 16:00:25] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:25] cluster:  5 Fri Oct  8 16:00:25 2021
+WARN [2021-10-08 16:00:25] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:25] cluster:  6 Fri Oct  8 16:00:25 2021
+WARN [2021-10-08 16:00:25] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:25] cluster:  7 Fri Oct  8 16:00:25 2021
+WARN [2021-10-08 16:00:25] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:27] finished generate_scrna_pathway_name
+INFO [2021-10-08 16:00:27] executing generate_scrna_pathway_stage
+INFO [2021-10-08 16:00:27] ****processing pathway up&down MxCre.vs.B_MxCre
+INFO [2021-10-08 16:00:27] cluster:  0 Fri Oct  8 16:00:27 2021
+INFO [2021-10-08 16:00:27] cluster:  1 Fri Oct  8 16:00:27 2021
+INFO [2021-10-08 16:00:28] cluster:  2 Fri Oct  8 16:00:28 2021
+INFO [2021-10-08 16:00:28] cluster:  3 Fri Oct  8 16:00:28 2021
+INFO [2021-10-08 16:00:28] cluster:  4 Fri Oct  8 16:00:28 2021
+INFO [2021-10-08 16:00:29] cluster:  5 Fri Oct  8 16:00:29 2021
+INFO [2021-10-08 16:00:29] cluster:  6 Fri Oct  8 16:00:29 2021
+WARN [2021-10-08 16:00:29] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:29] cluster:  7 Fri Oct  8 16:00:29 2021
+WARN [2021-10-08 16:00:29] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:29] cluster:  0 Fri Oct  8 16:00:29 2021
+INFO [2021-10-08 16:00:30] cluster:  1 Fri Oct  8 16:00:30 2021
+INFO [2021-10-08 16:00:30] cluster:  2 Fri Oct  8 16:00:30 2021
+INFO [2021-10-08 16:00:30] cluster:  3 Fri Oct  8 16:00:30 2021
+WARN [2021-10-08 16:00:30] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:30] cluster:  4 Fri Oct  8 16:00:30 2021
+WARN [2021-10-08 16:00:30] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:30] cluster:  5 Fri Oct  8 16:00:30 2021
+WARN [2021-10-08 16:00:30] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:30] cluster:  6 Fri Oct  8 16:00:30 2021
+WARN [2021-10-08 16:00:31] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:31] cluster:  7 Fri Oct  8 16:00:31 2021
+WARN [2021-10-08 16:00:31] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:31] cluster:  0 Fri Oct  8 16:00:31 2021
+INFO [2021-10-08 16:00:31] cluster:  1 Fri Oct  8 16:00:31 2021
+INFO [2021-10-08 16:00:32] cluster:  2 Fri Oct  8 16:00:32 2021
+INFO [2021-10-08 16:00:32] cluster:  3 Fri Oct  8 16:00:32 2021
+INFO [2021-10-08 16:00:32] cluster:  4 Fri Oct  8 16:00:32 2021
+INFO [2021-10-08 16:00:33] cluster:  5 Fri Oct  8 16:00:33 2021
+INFO [2021-10-08 16:00:33] cluster:  6 Fri Oct  8 16:00:33 2021
+WARN [2021-10-08 16:00:33] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:33] cluster:  7 Fri Oct  8 16:00:33 2021
+WARN [2021-10-08 16:00:33] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:33] cluster:  0 Fri Oct  8 16:00:33 2021
+INFO [2021-10-08 16:00:33] cluster:  1 Fri Oct  8 16:00:33 2021
+INFO [2021-10-08 16:00:34] cluster:  2 Fri Oct  8 16:00:34 2021
+INFO [2021-10-08 16:00:34] cluster:  3 Fri Oct  8 16:00:34 2021
+WARN [2021-10-08 16:00:34] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:34] cluster:  4 Fri Oct  8 16:00:34 2021
+WARN [2021-10-08 16:00:34] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:34] cluster:  5 Fri Oct  8 16:00:34 2021
+WARN [2021-10-08 16:00:34] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:34] cluster:  6 Fri Oct  8 16:00:34 2021
+WARN [2021-10-08 16:00:34] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:34] cluster:  7 Fri Oct  8 16:00:34 2021
+WARN [2021-10-08 16:00:35] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:35] cluster:  0 Fri Oct  8 16:00:35 2021
+INFO [2021-10-08 16:00:38] cluster:  1 Fri Oct  8 16:00:38 2021
+INFO [2021-10-08 16:00:43] cluster:  2 Fri Oct  8 16:00:43 2021
+INFO [2021-10-08 16:00:46] cluster:  3 Fri Oct  8 16:00:46 2021
+INFO [2021-10-08 16:00:50] cluster:  4 Fri Oct  8 16:00:50 2021
+INFO [2021-10-08 16:00:54] cluster:  5 Fri Oct  8 16:00:54 2021
+INFO [2021-10-08 16:00:58] cluster:  6 Fri Oct  8 16:00:58 2021
+WARN [2021-10-08 16:00:58] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:58] cluster:  7 Fri Oct  8 16:00:58 2021
+WARN [2021-10-08 16:00:58] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:00:58] cluster:  0 Fri Oct  8 16:00:58 2021
+INFO [2021-10-08 16:01:02] cluster:  1 Fri Oct  8 16:01:02 2021
+INFO [2021-10-08 16:01:05] cluster:  2 Fri Oct  8 16:01:05 2021
+INFO [2021-10-08 16:01:09] cluster:  3 Fri Oct  8 16:01:09 2021
+WARN [2021-10-08 16:01:09] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:01:09] cluster:  4 Fri Oct  8 16:01:09 2021
+WARN [2021-10-08 16:01:09] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:01:09] cluster:  5 Fri Oct  8 16:01:09 2021
+WARN [2021-10-08 16:01:09] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:01:09] cluster:  6 Fri Oct  8 16:01:09 2021
+WARN [2021-10-08 16:01:10] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:01:10] cluster:  7 Fri Oct  8 16:01:10 2021
+WARN [2021-10-08 16:01:10] Error in .testForValidKeys(x, keys, keytype, fks): None of the keys entered are valid keys for 'SYMBOL'. Please use the keys method to see a listing of valid arguments.
+
+INFO [2021-10-08 16:01:12] finished generate_scrna_pathway_stage
+INFO [2021-10-08 16:01:22] finished scrna_phase_comparing
+INFO [2021-10-08 16:01:22] ===============Finished===============
