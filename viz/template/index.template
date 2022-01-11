@@ -13,6 +13,10 @@
 - [Ambient RNA](data/ambient_rna.html)
 {% endif %}
 
+{% if "DoubletDetection" in executing_list %}
+- [Doublet Detection](data/doublet_detection.html)
+{% endif %}
+
   {% set count = count + 1 %}
 {% endif %}
 

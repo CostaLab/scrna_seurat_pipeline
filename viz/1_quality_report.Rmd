@@ -38,13 +38,13 @@ library(kableExtra)
 knitr::include_graphics(file.path(params$report_plots_folder_png,"prefilter_vlnplot.png"))
 ```
 ```{r prefilter_stSample_stCond, echo=FALSE}
-stSample <- readRDS(file.path(params$report_tables_folder,"stSample_prefilter.RDS"))
+stSample <- load_object(file.path(params$report_tables_folder,"stSample_prefilter.RDS"))
 
 stSample %>%
   kable(caption = "Mean and median for each sample", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
-stCond <- readRDS(file.path(params$report_tables_folder,"stCond_prefilter.RDS"))
+stCond <- load_object(file.path(params$report_tables_folder,"stCond_prefilter.RDS"))
 
 stCond %>%
   kable(caption = "Mean and median for each condition", align = 'c') %>%
@@ -52,7 +52,7 @@ stCond %>%
 ```
 
 
-## After filtered
+## After filtering
 
 ```{r postfilter_vlnplot, out.width="100%", echo=FALSE}
 knitr::include_graphics(file.path(params$report_plots_folder_png,"postfilter_vlnplot.png"))
@@ -65,12 +65,12 @@ knitr::include_graphics(file.path(params$report_plots_folder_png,"postfilter_cel
 
 
 ```{r postfilter_stSample_stCond, echo=FALSE}
-stSample <- readRDS(file.path(params$report_tables_folder,"stSample_postfilter.RDS"))
+stSample <- load_object(file.path(params$report_tables_folder,"stSample_postfilter.RDS"))
 stSample %>%
   kable(caption = "Mean and median for each sample", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
-stCond <- readRDS(file.path(params$report_tables_folder,"stCond_postfilter.RDS"))
+stCond <- load_object(file.path(params$report_tables_folder,"stCond_postfilter.RDS"))
 stCond %>%
   kable(caption = "Mean and median for each condition", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
@@ -81,7 +81,7 @@ stCond %>%
 knitr::include_graphics(file.path(params$report_plots_folder_png,"featurescatter_ncountRNA.png"))
 ```
 
-## High variable genes
+## Highly variable genes
 ```{r high_var_genes, out.width="100%", echo=FALSE}
 knitr::include_graphics(file.path(params$report_plots_folder_png,"high_var_genes.png"))
 ```

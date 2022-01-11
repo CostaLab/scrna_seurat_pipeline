@@ -2,8 +2,8 @@
 
 ### Job name
 #SBATCH -J viz_ex
-#SBATCH -o logs/%j_job.log
-#SBATCH -e logs/%j_job.log
+#SBATCH -o logs/output.%j.%x.txt
+#SBATCH -e logs/error.%j.%x.txt
 
 ### Time your job needs to execute, e. g. 15 min 30 sec 
 #SBATCH -t 24:00:00
@@ -38,6 +38,7 @@ FUNCS=(
   #Singleton
  QC
  AmbientRNA
+ DoubletDetection
  DEs
  Clusters
  Clusters_harmony
@@ -72,7 +73,7 @@ date
 Rscript ./viz/create_report.R \
 	-a "Mingbo" \
 	-p ${proj_name} \
-	-m TRUE\
+	-m TRUE \
 	-s "${data_path}/${proj_name}/save" \
 	-c "./conf/config_${proj_name}.R" \
 	-o "${data_path}/${proj_name}/report" \
@@ -80,7 +81,9 @@ Rscript ./viz/create_report.R \
 	-e ./external/Human_and_mouse_cell_markers-Markers.tsv \
   -d "$cluster" \
   -j "${json_exe_list}" \
-  -i "FALSE"
+  -i "FALSE" \
+  -f "seurat" \
+  -z "lz4"
 date
 
 

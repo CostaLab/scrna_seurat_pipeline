@@ -72,7 +72,7 @@ knitr::include_graphics(
 )
 ```
 ```{r stSample_stCond_table_cluster_seurat, echo=FALSE}
-readRDS(
+load_object(
   file.path(
     params$report_tables_folder,
     paste0("stSample_table_cluster_",fixed_cluster,".RDS")
@@ -81,7 +81,7 @@ readRDS(
   kable(caption = "samples: cluster cells", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
-readRDS(
+load_object(
   file.path(
     params$report_tables_folder,
     paste0("stCond_table_cluster_",fixed_cluster,".RDS")
@@ -182,13 +182,13 @@ fname <- file.path(
 if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 ```{r mca_annotate_hover_seurat, out.width="100%", echo=FALSE, eval=FALSE}
-plt = readRDS(
+plt = load_object(
   file.path(
     params$report_plots_folder,
     paste0("mca_annotate_plt_",fixed_cluster,".RDS")
   )
 )
-info = readRDS(
+info = load_object(
   file.path(
     params$report_plots_folder,
     paste0("mca_annotate_info_",fixed_cluster,".RDS")
@@ -206,13 +206,13 @@ fname <- file.path(
 if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 ```{r external_annotation_hover_seurat, out.width="100%", echo=FALSE, eval=FALSE}
-plt = readRDS(
+plt = load_object(
   file.path(
     params$report_plots_folder,
     paste0("external_annotation_plt_",fixed_cluster,".RDS")
   )
 )
-info = readRDS(
+info = load_object(
   file.path(
     params$report_plots_folder,
     paste0("external_annotation_info_",fixed_cluster,".RDS")

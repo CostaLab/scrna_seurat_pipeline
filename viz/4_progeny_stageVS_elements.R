@@ -20,9 +20,15 @@ progeny_stageVS_elements <- function(scrna){
 
     a_vs <- glue("{tX}.vs.{tY}")
     progeny_df <- all_progeny_list[[a_vs]]
-    help_sort_func <- ifelse(all.is.numeric(unique(progeny_df$CellType)), as.numeric, function(x){x})
-    progeny_df$CellType <- factor(progeny_df$CellType,
-                                  levels= as.character(sort(unique(help_sort_func(progeny_df$CellType)))))
+    help_sort_func <- ifelse(
+      all.is.numeric(unique(progeny_df$CellType)),
+      as.numeric,
+      function(x){x}
+    )
+    progeny_df$CellType <- factor(
+      progeny_df$CellType,
+      levels= as.character(sort(unique(help_sort_func(progeny_df$CellType))))
+    )
 
     plt <- ggplot(progeny_df, aes(y=pathway,x=CellType,fill=r)) +
             geom_tile()+
@@ -30,25 +36,33 @@ progeny_stageVS_elements <- function(scrna){
                 position = position_dodge(width = 0),
                 hjust = 0.5, size = 7)+
             ggtitle(glue("{a_vs} r effect size")) +
-            scale_fill_gradient2(low="blue", mid="white",high="red", limits = range(minr, maxr)) +
+            scale_fill_gradientn(colours = neg_pos_divergent_palette) +
             theme_minimal()+
-            theme(strip.text.x = element_text(size=28, colour="black",hjust=0),
-                plot.caption = element_text(size=30, colour="black", hjust=0),
-                axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+            labs(x="Cluster") +
+            theme(
+              strip.text.x = element_text(size=28, colour="black",hjust=0),
+              plot.caption = element_text(size=30, colour="black", hjust=0) #,
+              # axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
+            )
 
-    save_ggplot_formats(plt=plt,
-                    base_plot_dir=report_plots_folder,
-                    plt_name=glue("progeny_heatmap_stars_vs_{a_vs}_cluster-{cluster_use}"),
-                    width=9, height=7)
+    save_ggplot_formats(
+      plt=plt,
+      base_plot_dir=report_plots_folder,
+      plt_name=glue("progeny_heatmap_stars_vs_{a_vs}_cluster-{cluster_use}"),
+      width=9, height=7
+    )
 
     plt <- ggplot(progeny_df, aes(y=pathway,x=CellType,fill=r)) +
             geom_tile()+
             ggtitle(glue("{a_vs} r effect size")) +
-            scale_fill_gradient2(low="blue", mid="white",high="red", limits = range(minr, maxr)) +
+            scale_fill_gradientn(colours = neg_pos_divergent_palette) +
             theme_minimal()+
-            theme(strip.text.x = element_text(size=28, colour="black",hjust=0),
-                plot.caption = element_text(size=30, colour="black", hjust=0),
-                axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+            labs(x="Cluster") +
+            theme(
+              strip.text.x = element_text(size=28, colour="black",hjust=0),
+              plot.caption = element_text(size=30, colour="black", hjust=0)#,
+              # axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
+            )
     save_ggplot_formats(plt=plt,
                     base_plot_dir=report_plots_folder,
                     plt_name=glue("progeny_heatmap_vs_{a_vs}_cluster-{cluster_use}"),

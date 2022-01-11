@@ -52,7 +52,6 @@ AllOptions <- function(){
                        help="min nCount_RNA [default %default]",
                        metavar="number")
 
-
   parser <- add_option(parser, c("--nCountRNAceiling"), type="character", default=40000,
                        help="max nCount_RNA [default %default]",
                        metavar="number")
@@ -104,8 +103,15 @@ AllOptions <- function(){
                        help="dims keep to do clustering using harmony [default %default]",
                        metavar="character")
 
-
-
+  parser <- add_option(
+    parser, c("-z", "--compression"),
+    type = "character", default = "gzip", metavar = "character",
+    help = paste0(
+      "Compression algorithm to use when saving R objects [default %default]. ",
+      "One of 'zstd', 'lz4', 'gzip', 'bzip2', ",
+      "'xz' or 'nocomp' (no compression)"
+    )
+  )
 
   return(parser)
 }
@@ -125,6 +131,8 @@ FINDNEIGHBORS_DIM     = eval(parse(text=pa$Dims4FindNeighbors))
 CLUSTER_RESOLUTION    = pa$clusterresolution
 DEFUALT_CLUSTER_NAME  = pa$defaultclustername
 CM_FORMAT             = pa$countmatrixformat
+COMPRESSION_FORMAT    = pa$compression
+
 f = function(x){if(x == ""){ return("")}else{ return("-")}}
 LOGNAME               = paste0(pa$logname, f(pa$logname))
 
@@ -205,6 +213,11 @@ if(!file.exists(pa$configfile)){
 }
 
 source(pa$configfile)
+source("R/save_load_helper.R")
+
+##--------------Load the function scripts----------------------
+R_scripts <- list.files("R_scripts/", full.name = TRUE)
+for(i in 1:length(R_scripts)) source(R_scripts[i])
 
 ##--------------keep variables----------------------
 pa$project_name       = PROJECT
@@ -215,6 +228,17 @@ pa$hcl_name           = HCL_NAME
 pa$external_file      = ANNOTATION_EXTERNAL_FILE
 pa$data_src           = data_src
 pa$stage_lst          = stage_lst
+pa$integration_option = INTEGRATION_OPTION
+pa$doublet_switch     = doublet_switch
+pa$doublet_lst        = doublet_lst
+
+##--------------Loading the relevant slots and attributes for the sanity function----------------------
+sanity_attributes <- read.table("static/SlotsAttributes.csv", sep = ";", header = TRUE, stringsAsFactors = FALSE)
+
+
+##--------------Doublet estimation----------------------
+estimation_10X <- read.csv("static/DoubletEstimation10X.csv")
+model_recovered <- approxfun(x = estimation_10X$CellsRecovered, y = estimation_10X$MultipletRate, rule = 2)
 
 
 logger.info("----------------------Project: %s --------------------------", PROJECT)
@@ -246,7 +270,15 @@ plan_record <- function(plan){
   }
 }
 
-
+# setup function to save object to debug for ease of use
+debug_save_stop <- function(scrna,key){
+  save_object(
+    object = scrna,
+    file_name = file.path(SAVE_DIR, "scrna_for_debug.Rds"),
+    file_format = COMPRESSION_FORMAT
+  )
+  stop(glue("ERROR when run {key}"))
+}
 
 ## executing plan
 conf = conf[conf > 0]
@@ -302,7 +334,7 @@ suppressPackageStartupMessages(library(doParallel))
 suppressPackageStartupMessages(library(celda))
 suppressPackageStartupMessages(library(SoupX))
 suppressPackageStartupMessages(library(Rmagic))
-
+suppressPackageStartupMessages(library(DoubletFinder))
 
 registerDoParallel(cores=WORKER_NUM)
 
@@ -326,7 +358,7 @@ conf_main <- function(){
       # do nothing
     }else if(val==2){
       logger.info(paste("loading", NRds))
-      scrna <- readRDS(file=file.path(SAVE_DIR, NRds))
+      scrna <- load_object(file_name = file.path(SAVE_DIR, NRds))
       scrna@tools$parameter[[cur_time]] <- unlist(pa)
       scrna@tools$execution[[cur_time]] <- conf
       scrna <- sanity_function(scrna, key)
@@ -339,20 +371,26 @@ conf_main <- function(){
         ret_list <-  eval(parse(text=func_call))
         scrna  <- ret_list[[1]]
         ret_code <- ret_list[[2]]
-	scrna <- sanity_function(scrna, key)
-        if(ret_code != 0){
-          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
-          stop(glue("ERROR when run {key}"))
-        }
+        scrna <- sanity_function(scrna, key)
+
+        if(ret_code != 0){ debug_save_stop(scrna, key) }
+
         #if("meta_order" %ni% names(scrna@tools)){
-        scrna@tools[["meta_order"]] <- list(name = names(data_src), stage=unique(stage_lst))
+        scrna@tools[["meta_order"]] <- list(
+          name = names(data_src),
+          stage = unique(stage_lst)
+        )
         #}
         phase_name <- get_output_name(scrna, key) ### only first store, or second time
-        saveRDS(scrna, file=file.path(SAVE_DIR, glue("{phase_name}.Rds")))
+        save_object(
+          object = scrna,
+          file_name = file.path(SAVE_DIR, glue("{phase_name}.Rds")),
+          file_format = COMPRESSION_FORMAT
+        )
         logger.info(paste("finished", phase_name))
       }
     }else{
-      logger.error("Wrong setting in config file in section RUN PARAMETERS\n Only 0 1 2 permitted")
+      logger.error("Wrong settings in config file in section RUN PARAMETERS\n Only 0, 1 or 2 permitted")
       logger.error(traceback())
       stop("Exit 1")
     }
@@ -557,26 +595,28 @@ generate_scrna_phase_singleton <- function(scrna){
 
 
   for (key in names(pconf)){
-      f_name = paste("generate_", key, sep="")
-      f_call = paste(f_name, "(scrna)", sep="")
-      logger.info(paste("executing", f_name))
-      ret_list <-  eval(parse(text=f_call))
-      scrna  <- ret_list[[1]]
-      ret_code <- ret_list[[2]]
-      scrna <- sanity_function(scrna, key)
-      if(ret_code != 0){
-          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
-          stop(glue("ERROR when run {key}"))
-      }
-      if(key == "scrna_rawdata"){
-          scrna@tools$parameter[[cur_time]] <- unlist(pa)
-          scrna@tools$execution[[cur_time]] <- conf
-          NRds = paste0(key, ".Rds")
-          saveRDS(scrna, file=file.path(SAVE_DIR, NRds))
-      }
-      logger.info(paste("finished", f_name))
+    f_name = paste("generate_", key, sep="")
+    f_call = paste(f_name, "(scrna)", sep="")
+    logger.info(paste("executing", f_name))
+    ret_list <-  eval(parse(text=f_call))
+    scrna  <- ret_list[[1]]
+    ret_code <- ret_list[[2]]
+    scrna <- sanity_function(scrna, key)
 
-   }
+    if(ret_code != 0){ debug_save_stop(scrna, key) }
+
+    if(key == "scrna_rawdata"){
+      scrna@tools$parameter[[cur_time]] <- unlist(pa)
+      scrna@tools$execution[[cur_time]] <- conf
+      NRds = paste0(key, ".Rds")
+      save_object(
+        object = scrna,
+        file_name = file.path(SAVE_DIR, NRds),
+        file_format = COMPRESSION_FORMAT
+      )
+    }
+    logger.info(paste("finished", f_name))
+  }
   return(list(scrna, ret_code))
 }
 
@@ -590,26 +630,28 @@ generate_scrna_phase_preprocess <- function(scrna){
 
 
   for (key in names(pconf)){
-      f_name = paste("generate_", key, sep="")
-      f_call = paste(f_name, "(scrna)", sep="")
-      logger.info(paste("executing", f_name))
-      ret_list <-  eval(parse(text=f_call))
-      scrna  <- ret_list[[1]]
-      ret_code <- ret_list[[2]]
-      scrna <- sanity_function(scrna, key)
-      if(ret_code != 0){
-          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
-          stop(glue("ERROR when run {key}"))
-      }
-      if(key == "scrna_rawdata"){
-          scrna@tools$parameter[[cur_time]] <- unlist(pa)
-          scrna@tools$execution[[cur_time]] <- conf
-          NRds = paste0(key, ".Rds")
-          saveRDS(scrna, file=file.path(SAVE_DIR, NRds))
-      }
-      logger.info(paste("finished", f_name))
+    f_name = paste("generate_", key, sep="")
+    f_call = paste(f_name, "(scrna)", sep="")
+    logger.info(paste("executing", f_name))
+    ret_list <-  eval(parse(text=f_call))
+    scrna  <- ret_list[[1]]
+    ret_code <- ret_list[[2]]
+    scrna <- sanity_function(scrna, key)
 
-   }
+    if(ret_code != 0){ debug_save_stop(scrna, key) }
+
+    if(key == "scrna_rawdata"){
+      scrna@tools$parameter[[cur_time]] <- unlist(pa)
+      scrna@tools$execution[[cur_time]] <- conf
+      NRds = paste0(key, ".Rds")
+      save_object(
+        object = scrna,
+        file_name = file.path(SAVE_DIR, NRds),
+        file_format = COMPRESSION_FORMAT
+      )
+    }
+    logger.info(paste("finished", f_name))
+  }
   return(list(scrna, ret_code))
 }
 
@@ -627,10 +669,9 @@ generate_scrna_phase_clustering <- function(scrna){
       scrna  <- ret_list[[1]]
       ret_code <- ret_list[[2]]
       scrna <- sanity_function(scrna, key)
-      if(ret_code != 0){
-          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
-          stop(glue("ERROR when run {key}"))
-      }
+
+      if(ret_code != 0){ debug_save_stop(scrna, key) }
+
       logger.info(paste("finished", f_name))
 
    }
@@ -671,12 +712,10 @@ generate_scrna_phase_existed_clusters <- function(scrna){
       scrna  <- ret_list[[1]]
       ret_code <- ret_list[[2]]
       scrna <- sanity_function(scrna, key)
-      if(ret_code != 0){
-          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
-          stop(glue("ERROR when run {key}"))
-      }
-      logger.info(paste("finished", f_name))
 
+      if(ret_code != 0){ debug_save_stop(scrna, key) }
+
+      logger.info(paste("finished", f_name))
    }
   return(list(scrna, ret_code))
 }
@@ -695,10 +734,9 @@ generate_scrna_phase_comparing <- function(scrna){
       scrna  <- ret_list[[1]]
       ret_code <- ret_list[[2]]
       scrna <- sanity_function(scrna, key)
-      if(ret_code != 0){
-          saveRDS(scrna, glue("{SAVE_DIR}/scrna_for_debug.Rds"))
-          stop(glue("ERROR when run {key}"))
-      }
+
+      if(ret_code != 0){ debug_save_stop(scrna, key) }
+
       logger.info(paste("finished", f_name))
    }
   return(list(scrna, ret_code))
@@ -951,8 +989,14 @@ generate_scrna_integration_seurat <- function(scrna){
                                    x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)})
 
              ## scale = False to use previous scaled data
-             anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=F)## THIS IS CCA DIMENSIONS
-             scrna_inte <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM) ## THIS IS PCA DIMENSION
+	     ## If the number of cells is < 200 for a sample, we need to reduce the default values.
+	     ## If the number of cells is < 200 for any sample, we set the k.filter and k.weight values to this new minimum.
+	     ## This way, we can still integrate very small data sets. 
+	     k.filter <- min(table(scrna$name))
+             k.filter <- ifelse(k.filter < 200, k.filter, 200)
+             anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=F,
+					       k.filter = k.filter)## THIS IS CCA DIMENSIONS
+             scrna_inte <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM, k.weight = k.filter) ## THIS IS PCA DIMENSION
              ## keep the order of integration obj
              scrna_inte <- scrna_inte[, colnames(scrna)]
              scrna[['integrated']] <- scrna_inte[['integrated']]
@@ -1298,7 +1342,7 @@ generate_scrna_remove_recluster <- function(scrna){
     scrna <- ret_list[[1]]
     ret_code <- ret_list[[2]]
     if(ret_code != 0){
-     return(list(scrna, ret_code))
+      return(list(scrna, ret_code))
     }
   }
   scrna$remove_recluster <- scrna$seurat_clusters
@@ -1318,7 +1362,7 @@ generate_scrna_remove_recluster <- function(scrna){
     scrna <- ret_list[[1]]
     ret_code <- ret_list[[2]]
     if(ret_code != 0){
-     return(list(scrna, ret_code))
+      return(list(scrna, ret_code))
     }
   }
   return(list(scrna, ret_code))
@@ -1724,7 +1768,11 @@ generate_scrna_dego_stage_vsRest <- function(scrna){
                             return(de.list)
            }, mc.cores=1)
 
-  saveRDS(all_de_list, file.path(SAVE_DIR,"all_de_list.Rds"))
+  save_object(
+    object = all_de_list,
+    file_name = file.path(SAVE_DIR,"all_de_list.Rds"),
+    file_format = COMPRESSION_FORMAT
+  )
   names(all_de_list) <- sapply(lst, function(x) paste0(x, ".vs.Rest") )
 
   for(nm in names(all_de_list)) {
@@ -2392,7 +2440,6 @@ get_hallmark_up <- function(de.list){
     }
 
     hallmark <- enricher(genes_e$ENTREZID, TERM2GENE=m_t2g, pvalueCutoff=1)
-
     hallmark <- setReadable(hallmark, orgdb, keyType = "ENTREZID")
     hallmark.up.list[[id]] = hallmark
   }
@@ -2434,7 +2481,6 @@ get_hallmark_down <- function(de.list){
     genes.sorted = NULL
 
     tryCatch({
-
       genes.sorted <- genes[order(pvals)][1:min(100, length(genes))]
       genes_e <- bitr(genes.sorted, fromType="SYMBOL", toType=c("ENTREZID","ENSEMBL"), OrgDb=orgdb);
     }, error = function(cond) {
@@ -2450,12 +2496,12 @@ get_hallmark_down <- function(de.list){
     m_t2g <- msigdbr(species = hallmarkorgan, category = "H") %>%
       dplyr::select(gs_name, entrez_gene)
 
-
     if(length(intersect(genes_e$ENTREZID,  m_t2g$entrez_gene)) == 0){
       hallmark.down.list[(id)] = list(NULL)
       print("null")
       next
     }
+
     hallmark <- enricher(genes_e$ENTREZID, TERM2GENE=m_t2g, pvalueCutoff=1)
     hallmark <- setReadable(hallmark, orgdb, keyType = "ENTREZID")
     hallmark.down.list[[id]] = hallmark
@@ -2506,9 +2552,9 @@ get_pathway_comparison <- function(scrna, slot){
     reactome_downs <- get_reactome_down(de.list)
     all_reactomedown_list[[nm]] <- reactome_downs
 
-    pathway_dump(nm, "KEGG" ,kegg_ups, kegg_downs)
-    pathway_dump(nm, "hallmark" ,hallmark_ups, hallmark_downs)
-    pathway_dump(nm, "Reactome" ,reactome_ups, reactome_downs)
+    pathway_dump(nm, "KEGG", kegg_ups, kegg_downs)
+    pathway_dump(nm, "hallmark", hallmark_ups, hallmark_downs)
+    pathway_dump(nm, "Reactome", reactome_ups, reactome_downs)
   }
   store_list <- list(all_keggup_list, all_keggdown_list,
                      all_hallmarkup_list, all_hallmarkdown_list,
@@ -2522,8 +2568,6 @@ get_pathway_comparison <- function(scrna, slot){
 
 # Sanity Function
 # This function is called every time a Seurat object is loaded or conf_main processes a new step.
-# Loading the relevant slots and attributes.
-sanity_attributes <- read.table("static/SlotsAttributes.csv", sep = ";", header = TRUE, stringsAsFactors = FALSE)
 
 # We have the singleton slots. When we run the pipeline for a single sample and use the comparing features, we need to check for these slots.
 # But we do not want to check for these slots if we use the comparing features for a set of samples, i.e. in the normal use.
@@ -2551,6 +2595,7 @@ sanity_function <- function(scrna, key){
   scrna@misc[["sanity"]] <- sanity_attributes_result
   colnames(scrna@misc$sanity) <- key
   #scrna@misc[[paste0("sanity_", key)]] <- sanity_attributes_result
+  print("Checked slot.")
   return(scrna)
 }
 check_attributes <- function(scrna, sanity_attribute){
@@ -2565,6 +2610,72 @@ check_attributes <- function(scrna, sanity_attribute){
   finally = {
     #pass
   })
+}
+
+# DoubletFinder
+generate_scrna_doublet_proportions <- function(scrna){
+  suppressPackageStartupMessages(library(DoubletFinder))
+  ret_code <- 1
+  if(doublet_switch %in% c("on", "display")){
+    doublet_formation_rate <- determine_doublet_proportions(scrna = scrna, doublet_lst = doublet_lst)
+    #names(doublet_formation_rate) <- names(doublet_lst)
+    scrna_lst <- SplitObject(scrna, split.by = "name")
+    scrna_lst <- lapply(scrna_lst, function(x){
+      x <- NormalizeData(x)
+      x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)
+      x <- ScaleData(x)
+      x <- RunPCA(x)
+      x <- RunUMAP(x, dims = 1:20)
+    })
+    bcmvn_lst <- lapply(scrna_lst, mc_pK_identification)
+    pK_optimal <- lapply(X = bcmvn_lst, FUN = function(x){as.numeric(as.character(x[x$BCmetric == max(x$BCmetric),2]))})
+    est_expected <- lapply(X = names(bcmvn_lst), FUN = mc_est_expected, scrnas = scrna_lst, doublet_rate = doublet_formation_rate)
+    est_expected <- unlist(est_expected)
+
+    scrna_list_doublets <- lapply(
+      X = names(bcmvn_lst),
+      FUN = mc_doubletFinder_v3,
+      seurats = scrna_lst,
+      pN = 0.25,
+      pK_optimal = pK_optimal,
+      est_expected = est_expected
+    )
+
+    names(scrna_list_doublets) <- names(bcmvn_lst)
+    classifications <- c()
+    cells <- c()
+    for(i in 1:length(scrna_list_doublets)){
+      cells               <- c(names(scrna_list_doublets[[i]]$classifications), cells)
+      classifications     <- c(as.character(scrna_list_doublets[[i]]$classifications), classifications)
+    }
+    classifications <- factor(classifications, levels = c("Singlet", "Doublet"))
+    names(classifications) <- cells
+    scrna <- AddMetaData(scrna, classifications, col.name = "Doublet_classifications")
+    data.list <- SplitObject(scrna, split.by = "name")
+    data.list <- lapply(X = data.list, FUN = function(x) {
+                        x <- NormalizeData(x)
+                        x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)})
+    k.filter <- min(table(scrna$name))
+    k.filter <- ifelse(k.filter < 200, k.filter, 200)
+    anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=TRUE,
+                                      k.filter = k.filter)## THIS IS CCA DIMENSIONS
+    scrna_save <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM, k.weight = k.filter) ## THIS IS PCA DIMENSION
+    scrna_save <- ScaleData(scrna_save, verbose = FALSE)
+    scrna_save <- RunPCA(scrna_save, npcs = 30, verbose = FALSE, reduction.name="DOUBLET_PCA")
+    scrna_save <- RunUMAP(scrna_save, reduction = "DOUBLET_PCA", dims = 1:20, reduction.name="DOUBLET_UMAP")
+
+    save_object(
+      object = scrna_save,
+      file_name = file.path(SAVE_DIR, "scrna_DoubletAnnotated.Rds"),
+      file_format = COMPRESSION_FORMAT
+    )
+  }
+  if(doublet_switch == "on"){
+    scrna <- subset(scrna, Doublet_classifications == "Singlet")
+  }
+  ret_code <- 0
+  print("Finished DoubletFinder")
+  return(list(scrna, ret_code))
 }
 
 if(!interactive()) {

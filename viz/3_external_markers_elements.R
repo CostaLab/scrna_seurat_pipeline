@@ -25,9 +25,10 @@ external_markers_elements <- function(scrna){
 
   mdf = df[df$Tissue.of.Origin == ORGAN, c(glue("{SPECIES}.Gene"), "Cell.Type")]
   celltype_names <- unique(mdf$Cell.Type)
-  saveRDS(
-    celltype_names,
-    file = file.path(report_tables_folder, "ext_annot_celltype_names.RDS")
+  save_object(
+    object = celltype_names,
+    file_name = file.path(report_tables_folder, "ext_annot_celltype_names.RDS"),
+    file_format = COMPRESSION_FORMAT
   )
 
   ## External markers
@@ -44,61 +45,70 @@ external_markers_elements <- function(scrna){
     if (length(genes) == 0){
         next
     }
-    col_def = c(base_color,pos_color)
-    for (i in seq(1, length(genes), by=4)){
-      ni = min(i+3, length(genes))
-      p1 <- FeaturePlot(
+
+    for (i in seq(1, length(genes), by = 4)){
+      ni = min(i + 3, length(genes))
+      p1 <- StyleFeaturePlot(
         object = scrna,
-        pt.size=0.01,
-        label=T,
-        label.size=2,
+        style = FEATUREPLOT_STYLE,
+        pt.size = 0.01,
+        label = TRUE,
+        label.size = 2,
         features = genes[i:ni],
         reduction = "DEFAULT_UMAP",
-        order = T,
-        # cols = c("lightgrey", "red"),
-        cols = col_def,
+        order = TRUE,
+        cols = zero_pos_divergent_colors,
         ncol = 2,
-        max.cutoff = 'q95'
+        max.cutoff = "q95"
       )
       save_ggplot_formats(
-        plt=p1,
-        base_plot_dir=report_plots_folder,
-        plt_name=paste0("extmarkers_inte_umap_featureplot_",a_celltype,"-genes_",i,"-to-",ni),
+        plt = p1,
+        base_plot_dir = report_plots_folder,
+        plt_name = paste0(
+          "extmarkers_inte_umap_featureplot_",
+          a_celltype, "-genes_", i, "-to-", ni
+        ),
         width=9, height=7
       )
     }
 
 
     p2 <- DotPlot(
-      object= scrna,
+      object = scrna,
       features = genes,
-      group.by = cluster
-    ) +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+      group.by = cluster,
+      cols = zero_pos_divergent_colors
+    ) #+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
     save_ggplot_formats(
-      plt=p2,
-      base_plot_dir=report_plots_folder,
-      plt_name=paste0("extmarkers_dotplot_",a_celltype,"_groupby-",cluster),
-      width=9, height=7
+      plt = p2,
+      base_plot_dir = report_plots_folder,
+      plt_name = paste0(
+        "extmarkers_dotplot_", a_celltype, "_groupby-", cluster
+      ),
+      width = 9, height = 7
     )
 
     group_by <- cluster
-    col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
-    for (i in seq(1, length(genes), by=9)){
-      ni = min(i+8, length(genes))
+    col_def <- rev(ggsci_pal(option = cluster_viridis_opt)(
+        length(unique(scrna@meta.data[,group_by]))
+    ))
+    for (i in seq(1, length(genes), by = 9)){
+      ni = min(i + 8, length(genes))
       p3 <- VlnPlot(
         object = scrna,
-        pt.size=0,
+        pt.size = 0,
         features = genes[i:ni],
         cols = col_def,
         group.by = group_by
       )
       save_ggplot_formats(
-        plt=p3,
-        base_plot_dir=report_plots_folder,
-        plt_name=paste0("extmarkers_vlnplot_",a_celltype,"-genes_",i,"-to-",ni),
-        width=9, height=7
+        plt = p3,
+        base_plot_dir = report_plots_folder,
+        plt_name = paste0(
+          "extmarkers_vlnplot_", a_celltype, "-genes_", i, "-to-", ni
+        ),
+        width = 9, height = 7
       )
     }
   }

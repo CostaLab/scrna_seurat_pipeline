@@ -61,7 +61,7 @@ knitr::include_graphics(
 )
 ```
 ```{r stSample_stCond_table_cluster, echo=FALSE}
-readRDS(
+load_object(
   file.path(
     params$report_tables_folder,
     paste0("stSample_table_cluster_",params$cluster,".RDS")
@@ -70,7 +70,7 @@ readRDS(
   kable(caption = "samples: cluster cells", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
-readRDS(
+load_object(
   file.path(
     params$report_tables_folder,
     paste0("stCond_table_cluster_",params$cluster,".RDS")
@@ -80,7 +80,7 @@ readRDS(
   kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
-### Clusters Statistic
+### Clusters Statistics
 ```{r cluster_statistics, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 flist = grep(
   "cluster_statistics_",
@@ -95,7 +95,7 @@ flist = grep(params$cluster, flist, value=TRUE, fixed=TRUE)
 knitr::include_graphics(flist)
 ```
 
-### Proportion
+### Sample proportion per cluster
 ```{r cluster_sample_proportions, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 knitr::include_graphics(
   file.path(
@@ -105,7 +105,7 @@ knitr::include_graphics(
 )
 ```
 
-### Amount Distribution
+### Number of cells, per cluster, per sample
 ```{r cluster_sample_distribution, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 knitr::include_graphics(
   file.path(
@@ -125,7 +125,7 @@ knitr::include_graphics(
 )
 ```
 
-### FeaturePlot
+### QC Feature plots
 ```{r umap_featureplot_qc, out.width="100%", echo=FALSE}
 knitr::include_graphics(
   file.path(
@@ -143,7 +143,7 @@ knitr::include_graphics(
 )
 ```
 
-### Violin Plot
+### QC Violin plot
 ```{r vlnplot_qc_ccycle_groupby, out.width="100%", echo=FALSE}
 knitr::include_graphics(
   file.path(
@@ -153,7 +153,7 @@ knitr::include_graphics(
 )
 ```
 
-### MCA annotation
+### MCA (Mouse Cell Atlas) annotation
 ```{r mca_annotate, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 fname <- file.path(
     params$report_plots_folder_png,
@@ -162,13 +162,13 @@ fname <- file.path(
 if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 ```{r mca_annotate_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
-plt = readRDS(
+plt = load_object(
   file.path(
     params$report_plots_folder,
     paste0("mca_annotate_plt_",params$cluster,".RDS")
   )
 )
-info = readRDS(
+info = load_object(
   file.path(
     params$report_plots_folder,
     paste0("mca_annotate_info_",params$cluster,".RDS")
@@ -177,7 +177,7 @@ info = readRDS(
 Seurat::HoverLocator(plot = plt, information = info)
 ```
 
-### HCL annotation
+### HCL (Human Cell Landscape) annotation
 ```{r hcl_annotate, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 fname <- file.path(
     params$report_plots_folder_png,
@@ -186,13 +186,13 @@ fname <- file.path(
 if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 ```{r hcl_annotate_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
-plt = readRDS(
+plt = load_object(
   file.path(
     params$report_plots_folder,
     paste0("hcl_annotate_plt_",params$cluster,".RDS")
   )
 )
-info = readRDS(
+info = load_object(
   file.path(
     params$report_plots_folder,
     paste0("hcl_annotate_info_",params$cluster,".RDS")
@@ -210,13 +210,13 @@ fname <- file.path(
 if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 ```{r external_annotation_hover, out.width="100%", echo=FALSE, eval=(FALSE & params$cluster!="singleton")}
-plt = readRDS(
+plt = load_object(
   file.path(
     params$report_plots_folder,
     paste0("external_annotation_plt_",params$cluster,".RDS")
   )
 )
-info = readRDS(
+info = load_object(
   file.path(
     params$report_plots_folder,
     paste0("external_annotation_info_",params$cluster,".RDS")

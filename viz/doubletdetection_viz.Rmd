@@ -1,5 +1,5 @@
 ---
-title: "Ambient RNA"
+title: "Doublet Detection"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
@@ -9,7 +9,7 @@ output:
     toc: yes
     toc_depth: '3'
 params:
-    scrna: 'scrna object'
+    scrna: "scrna object"
     cluster: "clusters to analyse"
     cluster_info: "cluster info"
     project: "name/tag of the project"
@@ -27,25 +27,26 @@ author: '`r params$author`'
 knitr::opts_chunk$set(warning = F, message = F, echo = F,cache=F)
 library(dplyr)
 library(kableExtra)
-library(ggplot2)
 savedir = params$savedir
 ```
 
-## Ambient RNA
-```{r fig.width=9, fig.height=7}
-knitr::include_graphics(file.path(params$report_plots_folder_png,"ambient_rna.png"))
-#plt[[1]]
+```{r , include=FALSE}
+library(ggplot2)
 ```
 
-## Ambient RNA per cluster
+## Doublets
 ```{r fig.width=9, fig.height=7}
-knitr::include_graphics(file.path(params$report_plots_folder_png,"ambient_rna_vln.png"))
-#plt[[2]]
+knitr::include_graphics(file.path(params$report_plots_folder_png,"doublets_umap.png"))
 ```
 
 ```{r postfilter_ambientRNA, echo=FALSE}
-stSample <- load_object(file.path(params$report_tables_folder, "ambientRNA_postfilter.RDS"))
+stSample <- load_object(file.path(params$report_tables_folder, "doublets_table.Rds"))
 stSample %>%
-  kable(caption = "Mean and median ambient RNA for each sample", align = 'c') %>%
+  kable(caption = "Doublets detected for each sample", align = 'c') %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+## Violin Plots
+```{r violin_doublet_all, out.width"100%", echo=FALSE}
+knitr::include_graphics(file.path(params$report_plots_folder_png,"vlnplot_doublet_combined.png"))
 ```

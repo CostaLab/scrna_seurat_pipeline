@@ -26,7 +26,7 @@ author: '`r params$author`'
 
 ```{r ext_markers_setup, include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F, echo = T)
-celltype_names = readRDS(file.path(params$report_tables_folder, "ext_annot_celltype_names.RDS"))
+celltype_names = load_object(file.path(params$report_tables_folder, "ext_annot_celltype_names.RDS"))
 ```
 
 ## External markers

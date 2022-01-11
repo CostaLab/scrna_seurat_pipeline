@@ -78,9 +78,10 @@ clustering_elements <- function(scrna){
     tbl <- cbind(tbl, rowsums)
     colsums <- colSums(tbl)
     tbl <- rbind(tbl, colsums)
-    saveRDS(
+    save_object(
       tbl,
-      file.path(report_tables_folder, paste0("stSample_table_cluster_",cluster_use,".RDS"))
+      file.path(report_tables_folder, paste0("stSample_table_cluster_",cluster_use,".RDS")),
+      COMPRESSION_FORMAT
     )
 
     tbl <- table(scrna$stage, scrna@meta.data[, cluster_use])
@@ -88,9 +89,10 @@ clustering_elements <- function(scrna){
     tbl <- cbind(tbl, rowsums)
     colsums <- colSums(tbl)
     tbl <- rbind(tbl, colsums)
-    saveRDS(
+    save_object(
       tbl,
-      file.path(report_tables_folder, paste0("stCond_table_cluster_",cluster_use,".RDS"))
+      file.path(report_tables_folder, paste0("stCond_table_cluster_",cluster_use,".RDS")),
+      COMPRESSION_FORMAT
     )
 
     if(cluster_use != "singleton"){
@@ -300,10 +302,12 @@ clustering_elements <- function(scrna){
     ## FeaturePlot
     message("### Making umap featureplot with QC elements")
     col_def <- c(base_color,pos_color)
-    plt = FeaturePlot(
+    plt = StyleFeaturePlot(
       scrna,
+      style=FEATUREPLOT_STYLE,
       features = c("percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA"),
       cols = col_def,
+      order = T,
       reduction=umap_reduction,
       ncol = 2
     )
@@ -314,10 +318,12 @@ clustering_elements <- function(scrna){
       width=9, height=7
     )
     message("### Making umap featureplot with ccycle elements")
-    plt = FeaturePlot(
+    plt = StyleFeaturePlot(
       scrna,
+      style=FEATUREPLOT_STYLE,
       features = c("CC.Difference","G1.Score", "S.Score", "G2M.Score"),
       cols = col_def,
+      order = T,
       reduction=umap_reduction,
       ncol = 2
     )
@@ -381,10 +387,15 @@ clustering_elements <- function(scrna){
 
       # also save plot and information as rds so that it can be later rendered in the report as plotly
       message("### Saving MCA annotation data to produce plotly in report")
-      saveRDS(plt,file.path(savedir,paste0("mca_annotate_plt_",cluster_use,".RDS")))
-      saveRDS(
+      save_object(
+        plt,
+        file.path(savedir,paste0("mca_annotate_plt_",cluster_use,".RDS")),
+        COMPRESSION_FORMAT
+      )
+      save_object(
         FetchData(object = tmp_scrna, vars = c("MCA_annotate", cluster_use)),
-        file.path(savedir,paste0("mca_annotate_info_",cluster_use,".RDS"))
+        file.path(savedir,paste0("mca_annotate_info_",cluster_use,".RDS")),
+        COMPRESSION_FORMAT
       )
     }
 
@@ -416,10 +427,15 @@ clustering_elements <- function(scrna){
 
       # also save plot and information as rds so that it can be later rendered in the report as plotly
       message("### Saving HCL annotation data to produce plotly in report")
-      saveRDS(plt,file.path(savedir,paste0("hcl_annotate_plt_",cluster_use,".RDS")))
-      saveRDS(
+      save_object(
+        plt,
+        file.path(savedir,paste0("hcl_annotate_plt_",cluster_use,".RDS")),
+        COMPRESSION_FORMAT
+      )
+      save_object(
         FetchData(object = tmp_scrna, vars = c("HCL_annotate", cluster_use)),
-        file.path(savedir,paste0("hcl_annotate_info_",cluster_use,".RDS"))
+        file.path(savedir,paste0("hcl_annotate_info_",cluster_use,".RDS")),
+        COMPRESSION_FORMAT
       )
     }
 
@@ -449,10 +465,15 @@ clustering_elements <- function(scrna){
         width=9, height=7
       )
       message("### Saving external annotation data to produce plotly in report")
-      saveRDS(plt,file.path(savedir,paste0("external_annotation_plt_",cluster_use,".RDS")))
-      saveRDS(
+      save_object(
+        plt,
+        file.path(savedir,paste0("external_annotation_plt_",cluster_use,".RDS")),
+        COMPRESSION_FORMAT
+      )
+      save_object(
         FetchData(object = tmp_scrna, vars = c("external_annotation", cluster_use)),
-        file.path(savedir,paste0("external_annotation_info_",cluster_use,".RDS"))
+        file.path(savedir,paste0("external_annotation_info_",cluster_use,".RDS")),
+        COMPRESSION_FORMAT
       )
     }
   }

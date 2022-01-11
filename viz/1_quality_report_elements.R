@@ -2,7 +2,8 @@
 # pre filtering
 ####################################################
 quality_report_elements <- function(){
-  scrna <- readRDS(file = file.path(savedir, "scrna_rawdata.Rds"))
+
+  scrna <- load_object(file_name = file.path(savedir, "scrna_rawdata.Rds"))
 
   Idents(object = scrna) <- "name"
 
@@ -39,7 +40,11 @@ quality_report_elements <- function(){
       pctRb.Median = median(percent.ribo),
       Cells = sum(cells)
     )
-  saveRDS(stSample,file.path(report_tables_folder,"stSample_prefilter.RDS"))
+  save_object(
+    stSample,
+    file.path(report_tables_folder,"stSample_prefilter.RDS"),
+    COMPRESSION_FORMAT
+  )
 
   stCond <- meta %>%
     group_by(stage) %>%
@@ -54,16 +59,19 @@ quality_report_elements <- function(){
       pctRb.Median = median(percent.ribo),
       Cells = sum(cells)
     )
-  saveRDS(stCond,file.path(report_tables_folder,"stCond_prefilter.RDS"))
-
+  save_object(
+    stCond,
+    file.path(report_tables_folder,"stCond_prefilter.RDS"),
+    COMPRESSION_FORMAT
+  )
 
   ####################################################
   # post filtering
   ####################################################
   if(identical(cluster,"singleton")){
-    scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
+    scrna <- load_object(file_name = file.path(savedir, "scrna_phase_singleton.Rds"))
   }else{
-    scrna <- readRDS(file = file.path(savedir, "scrna_phase_preprocess.Rds"))
+    scrna <- load_object(file_name = file.path(savedir, "scrna_phase_preprocess.Rds"))
   }
 
   Idents(object = scrna)<- "name"
@@ -124,7 +132,11 @@ quality_report_elements <- function(){
       pctRb.Median = median(percent.ribo),
       Cells = sum(cells)
     )
-  saveRDS(stSample,file.path(report_tables_folder,"stSample_postfilter.RDS"))
+  save_object(
+    stSample,
+    file.path(report_tables_folder,"stSample_postfilter.RDS"),
+    COMPRESSION_FORMAT
+  )
 
   stCond <- meta %>%
     group_by(stage) %>%
@@ -139,7 +151,11 @@ quality_report_elements <- function(){
       pctRb.Median = median(percent.ribo),
       Cells = sum(cells)
     )
-  saveRDS(stCond,file.path(report_tables_folder,"stCond_postfilter.RDS"))
+  save_object(
+    stCond,
+    file.path(report_tables_folder,"stCond_postfilter.RDS"),
+    COMPRESSION_FORMAT
+  )
 
 
 

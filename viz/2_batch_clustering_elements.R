@@ -2,10 +2,9 @@
 batch_clustering_elements <- function(scrna){
   ## Clusters Resolution
   if(identical(cluster,"singleton")){
-    # scrna <- readRDS(file=file.path(savedir, "scrna_singleton_markergenes.Rds"))
-    scrna <- readRDS(file=file.path(savedir, "scrna_phase_singleton.Rds"))
+    scrna <- load_object(file_name = file.path(savedir, "scrna_phase_singleton.Rds"))
   }else{
-    scrna <- readRDS(file=file.path(savedir, "scrna_phase_comparing.Rds"))
+    scrna <- load_object(file_name = file.path(savedir, "scrna_phase_comparing.Rds"))
   }
 
   for(cluster_use in available_clusters){
