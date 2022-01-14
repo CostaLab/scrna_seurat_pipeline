@@ -1273,6 +1273,26 @@ generate_scrna_fishertest_clusters <- function(scrna){
   return(list(scrna, ret_code))
 
 }
+generate_scrna_proptest_clusters <- function(scrna){
+  ret_code = 0
+  source("R/scProportion.R")
+
+  CLUSTER_TO_TEST <- DEFUALT_CLUSTER_NAME
+  stages_comb <- list_stages()
+  prop_test_all <- sc_utils(scrna)
+  proptest_list <- list()
+  for (x in stages_comb){
+    prop_test <- prop_test_all
+    prop_test@meta_data <- prop_test@meta_data %>% dplyr::filter(stage %in% x)
+    prop_test <- permutation_test(
+       prop_test, cluster_identity = CLUSTER_TO_TEST,
+       sample_1 = x[1], sample_2 = x[2],
+       sample_identity = "stage")
+    proptest_list[[glue("{x[1]}.vs.{x[2]}")]] <- data.table::as.data.table(prop_test@results$permutation)
+  }
+  scrna@tools[[sprintf("proptest_%s", DEFUALT_CLUSTER_NAME)]] <- proptest_list
+  return(list(scrna, ret_code))
+}
 
 generate_scrna_merge_clusters <- function(scrna){
   ret_code = 0
@@ -1282,6 +1302,8 @@ generate_scrna_merge_clusters <- function(scrna){
   }
   return(list(scrna, ret_code))
 }
+
+
 
 
 generate_scrna_remove_clusters <- function(scrna){

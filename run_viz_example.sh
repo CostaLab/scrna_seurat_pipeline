@@ -82,7 +82,7 @@ Rscript ./viz/create_report.R \
   -d "$cluster" \
   -j "${json_exe_list}" \
   -i "FALSE" \
-  -f "seurat" \
+  -f "nebulosa" \
   -z "lz4"
 date
 

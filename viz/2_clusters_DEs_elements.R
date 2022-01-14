@@ -87,8 +87,17 @@ clusters_DEs_elements <- function(scrna){
       )
     )
 
+    scrna_to_plot <- function(scrna){
+     if(ncol(scrna)<=20000){
+       return(scrna)
+     }
+     return(subset(scrna, cells=sample(colnames(scrna))[1:20000]))
+    }
+
+
     plt <- DoHeatmap(
-      object = scrna,
+      ## >30k will failed to plot, here we subset when cell number > 20,000
+      object = scrna_to_plot(scrna),
       features = genes,
       group.by = sprintf(paste0(col_string, "%.1f"), resolution),
       group.colors = col_def,

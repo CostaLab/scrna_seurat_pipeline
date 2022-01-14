@@ -56,7 +56,7 @@ flist = stringr::str_sort(grep(
 ),numeric=TRUE)
 knitr::include_graphics(flist)
 ```
-
+reference: https://www.bioconductor.org/packages/release/bioc/vignettes/EnhancedVolcano/inst/doc/EnhancedVolcano.html
 ```{r volcanoplots_cluster, out.width="100%", echo=FALSE}
 flist = stringr::str_sort(grep(
   paste0("volcanoplot_deg_cluster-",params$cluster),
@@ -71,6 +71,7 @@ knitr::include_graphics(flist)
 ```
 
 ## GO up analysis
+reference: https://bioconductor.org/packages/devel/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html
 ```{r heatmap_go_up , out.width="100%", echo=FALSE}
 fname=file.path(
   params$report_plots_folder_png,
