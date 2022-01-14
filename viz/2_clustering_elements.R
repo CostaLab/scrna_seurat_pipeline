@@ -202,7 +202,28 @@ clustering_elements <- function(scrna){
         }
       }
 
-
+      ## scProportion Test
+      scProportion_cluster_name <- paste0("proptest_", cluster_use)
+      if(scProportion_cluster_name %in% names(scrna@tools)){
+          message("### Making proptest per cluster")
+          pairs <- combn(1:length(table(scrna$stage)), 2)
+          n <- length(pairs)/2
+          for (i in 1:n){
+            i1 <- pairs[1:2, i][1]
+            i2 <- pairs[1:2, i][2]
+            nm <- scrna@tools[["meta_order"]][["stage"]][i1]
+            nm2 <- scrna@tools[["meta_order"]][["stage"]][i2]
+            dff <- scrna@tools[[scProportion_cluster_name]][[glue("{nm}.vs.{nm2}")]]
+            print(dff)
+            plt <- permutation_plot(dff) + ggtitle(glue("{nm} vs {nm2}, positive means more {nm2}"))
+            save_ggplot_formats(
+              plt=plt,
+              base_plot_dir=report_plots_folder,
+              plt_name=paste0("cluster_proptest_",nm,"-vs-",nm2,"_", cluster_use),
+              width=9, height=7
+            )
+          }
+      }
       ## Proportion
       message("### Making sample proportions per cluster barplot")
       name_len <- length(table(scrna@meta.data$name))

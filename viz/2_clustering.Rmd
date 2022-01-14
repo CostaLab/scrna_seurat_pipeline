@@ -95,6 +95,24 @@ flist = grep(params$cluster, flist, value=TRUE, fixed=TRUE)
 knitr::include_graphics(flist)
 ```
 
+### Clusters proportion test
+reference: https://github.com/rpolicastro/scProportionTest
+```{r cluster_proptest, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
+flist = grep(
+  "cluster_proptest_",
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+)
+flist = grep(params$cluster, flist, value=TRUE, fixed=TRUE)
+knitr::include_graphics(flist)
+```
+
+
+
 ### Sample proportion per cluster
 ```{r cluster_sample_proportions, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 knitr::include_graphics(

@@ -6,6 +6,7 @@ source("R/helper_functions.R")
 source("R/DE_GO_VS_helper.R")
 source("R/pathway_vs_helper.R")
 source("R/save_load_helper.R")
+source("R/scProportion.R")
 
 
 suppressPackageStartupMessages(library(optparse))      ## Options

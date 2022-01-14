@@ -39,7 +39,7 @@ packages_to_install = c(
   "kableExtra", "assertthat", "mclust", "shinythemes",
   "systemfonts", "igraph", "proj4", "Cairo", "ggalt",
   "urltools", "downloadthis", "jsonlite", "crayon", "SoupX",
-  "rcompanion", "ggridges", "ggsci", "Rmagic"
+  "rcompanion", "ggridges", "ggsci", "Rmagic", "forcats"
 )
 
 bioc_pkgs_to_install = c(
