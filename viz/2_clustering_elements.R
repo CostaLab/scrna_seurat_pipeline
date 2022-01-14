@@ -214,7 +214,6 @@ clustering_elements <- function(scrna){
             nm <- scrna@tools[["meta_order"]][["stage"]][i1]
             nm2 <- scrna@tools[["meta_order"]][["stage"]][i2]
             dff <- scrna@tools[[scProportion_cluster_name]][[glue("{nm}.vs.{nm2}")]]
-            print(dff)
             plt <- permutation_plot(dff) + ggtitle(glue("{nm} vs {nm2}, positive means more {nm2}"))
             save_ggplot_formats(
               plt=plt,

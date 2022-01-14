@@ -27,6 +27,7 @@ author: '`r params$author`'
 ## Cluster: `r colorize(params$cluster_info,"red")`
 
 ## PROGENy r effect size analysis
+reference: https://github.com/saezlab/progeny
 
 $***:\quad \text{pval}<0.001\\\\**:\quad \text{pval}<0.01\\\\*:\quad \text{pval}<0.05\\\\\text{ns}:\quad\text{ not significant}$
 

@@ -172,6 +172,7 @@ knitr::include_graphics(
 ```
 
 ### MCA (Mouse Cell Atlas) annotation
+reference: http://bis.zju.edu.cn/MCA/
 ```{r mca_annotate, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 fname <- file.path(
     params$report_plots_folder_png,
@@ -196,6 +197,7 @@ Seurat::HoverLocator(plot = plt, information = info)
 ```
 
 ### HCL (Human Cell Landscape) annotation
+reference: https://db.cngb.org/HCL/
 ```{r hcl_annotate, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 fname <- file.path(
     params$report_plots_folder_png,

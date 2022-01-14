@@ -67,9 +67,16 @@ DE_GO_analysis_elements <- function(scrna){
   scrna@meta.data[, cluster] <- help_sort_func(scrna@meta.data[, cluster])
   col_def <- rev(ggsci_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[, cluster]))))
 
+  scrna_to_plot <- function(scrna){
+    if(ncol(scrna)<=20000){
+      return(scrna)
+    }
+    return(subset(scrna, cells=sample(colnames(scrna))[1:20000]))
+  }
+
   plthm = DoHeatmap(
     ## >30k will failed to plot, here we subset when cell number > 20,000
-    object = ifelse(ncol(scrna)<=20000, scrna, subset(scrna, cells=sample(colnames(scrna))[1:20000])),
+    object = scrna_to_plot(scrna),
     features = genes,
     group.by = cluster,
     group.colors = col_def,
