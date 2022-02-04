@@ -78,6 +78,26 @@ AllOptions <- function(){
   return(parser)
 }
 
+print_nelement_msg <- function(element){
+  cat(
+    paste0(
+      date(),
+      green(" Making element: "),
+      red(as.character(element)), "\n"
+    )
+  )
+}
+print_ngenelement_msg <- function(element){
+  cat(
+    paste0(
+      date(),
+      blue(" Generating: "),
+      red(as.character(element)), "\n"
+    )
+  )
+}
+
+
 parser <- AllOptions()
 pa <- parse_args(parser)
 
@@ -270,26 +290,6 @@ if(MAKE_ELEMENT){
   source(glue("{viz_path}/4_Genesets_1v1_elements.R"))
   source(glue("{viz_path}/4_Genesets_stageVS_elements.R"))
   source(glue("{viz_path}/4_progeny_stageVS_elements.R"))
-
-
-  print_nelement_msg <- function(element){
-    cat(
-      paste0(
-        date(),
-        green(" Making element: "),
-        red(as.character(element)), "\n"
-      )
-    )
-  }
-  print_ngenelement_msg <- function(element){
-    cat(
-      paste0(
-        date(),
-        blue(" Generating: "),
-        red(as.character(element)), "\n"
-      )
-    )
-  }
 
 
 # run necessary generators
