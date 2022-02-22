@@ -214,6 +214,7 @@ if(!file.exists(pa$configfile)){
 
 source(pa$configfile)
 source("R/save_load_helper.R")
+source("R/pseudobulk.R")
 
 ##--------------Load the function scripts----------------------
 R_scripts <- list.files("R_scripts/", full.name = TRUE)
@@ -1813,6 +1814,42 @@ generate_scrna_dego_stage_vsRest <- function(scrna){
 
   return(list(scrna, ret_code))
 }
+
+generate_scrna_pseudobulk_classes <- function(scrna){
+# groupX v groupY
+  ret_code = 0
+  res <- pseudobulk_de(
+    scrna,
+    replicate_col="name",
+    cell_type_col=DEFUALT_CLUSTER_NAME,
+    label_col="stage",
+    is_single_comparison=TRUE
+  )
+
+  scrna@tools[["pseudobulk_de_classes"]] <- res
+
+  return(list(scrna, ret_code))
+}
+generate_scrna_pseudobulk_clusters <- function(scrna){
+# 1 v all
+  ret_code = 0
+
+  scrna@meta.data$dummy_cell  <- "as_bulk"
+
+  res <- pseudobulk_de(
+    scrna,
+    replicate_col="name",
+    cell_type_col="dummy_cell",
+    label_col=DEFUALT_CLUSTER_NAME,
+    is_single_comparison=FALSE
+  )
+
+  scrna@tools[["pseudobulk_de_clusters"]] <- res
+
+  return(list(scrna, ret_code))
+}
+
+
 
 
 generate_scrna_go <- function(scrna){
