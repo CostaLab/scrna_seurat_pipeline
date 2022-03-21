@@ -914,6 +914,7 @@ generate_scrna_regressOut<- function(scrna){
 
 
 
+
 select_features <- function(data.list){
   ret_code = 0
   tryCatch(
@@ -991,7 +992,7 @@ generate_scrna_integration_seurat <- function(scrna){
              ## scale = False to use previous scaled data
 	     ## If the number of cells is < 200 for a sample, we need to reduce the default values.
 	     ## If the number of cells is < 200 for any sample, we set the k.filter and k.weight values to this new minimum.
-	     ## This way, we can still integrate very small data sets. 
+	     ## This way, we can still integrate very small data sets.
 	     k.filter <- min(table(scrna$name))
              k.filter <- ifelse(k.filter < 200, k.filter, 200)
              anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=F,
@@ -2699,6 +2700,59 @@ generate_scrna_doublet_proportions <- function(scrna){
   print("Finished DoubletFinder")
   return(list(scrna, ret_code))
 }
+
+generate_scrna_ligrec <- function(scrna){
+  suppressPackageStartupMessages(library(liana))
+  ret_code <- 1
+  consensus_omni <- select_resource("Consensus")[[1]]
+  curr <- SplitObject(scrna,'stage')
+  liana_test <- list()
+  message(curr)
+  for(i in names(curr)){
+       logger.info(paste("executing", f_name,curr))
+       curr[[i]]@meta.data <- curr[[i]]@meta.data %>%
+                             filter(str_detect(stage, i))
+       curr[[i]]@meta.data[,DEFUALT_CLUSTER_NAME] <- as.character(curr[[i]]@meta.data[,DEFUALT_CLUSTER_NAME])
+       #curr[[i]]@meta.data[,DEFUALT_CLUSTER_NAME] <- factor(curr[[i]]@meta.data[,DEFUALT_CLUSTER_NAME])
+       Idents(curr[[i]]) <- DEFUALT_CLUSTER_NAME
+       curr[[i]]<- FindVariableFeatures(curr[[i]])
+       DefaultAssay(curr[[i]]) <- "RNA"
+       liana_test[[i]] <- liana_wrap(curr[[i]],
+                              method = c("cellphonedb"),
+                              resource = c('Consensus'),
+                              idents_col=DEFUALT_CLUSTER_NAME)
+  }
+  save_object(
+    object = liana_test,
+    file_name = file.path(SAVE_DIR, "scrna_liana_output.Rds"),
+    file_format = COMPRESSION_FORMAT
+  )
+  print("Finished Ligand Receptor Inference")
+  return(list(scrna, ret_code))
+  }
+
+
+generate_scrna_phase_communication <- function(scrna){
+  ret_code <- 0
+  pconf <- configr::read.config("static/phase.ini")
+  pconf <- pconf[["phase_communication"]]
+  pconf <- pconf[pconf== 1]
+  for (key in names(pconf)){
+    f_name = paste("generate_", key, sep="")
+    f_call = paste(f_name, "(scrna)", sep="")
+    logger.info(paste("executing", f_name))
+    logger.info(paste("executing", f_call))
+
+    ret_list <-  eval(parse(text=f_call))
+    scrna  <- ret_list[[1]]
+    ret_code <- ret_list[[2]]
+    if(ret_code != 0){ debug_save_stop(scrna, key) }
+    logger.info(paste("finished", f_name))
+  }
+  return(list(scrna, ret_code))
+}
+
+
 
 if(!interactive()) {
   conf_main()
