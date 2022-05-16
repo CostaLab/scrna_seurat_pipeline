@@ -76,7 +76,7 @@ quality_report_elements <- function(){
 
   Idents(object = scrna)<- "name"
 
-  feats_to_plot <- c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo")
+  feats_to_plot <- c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo", "pANN")
   col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
 
   plt = VlnPlot(
@@ -90,7 +90,7 @@ quality_report_elements <- function(){
     plt=plt,
     base_plot_dir=report_plots_folder,
     plt_name="postfilter_vlnplot",
-    width=9, height=7
+    width=9, height=14
   )
 
 
@@ -130,6 +130,8 @@ quality_report_elements <- function(){
       pctMt.Median=median(percent.mt),
       pctRb.Mean = mean(percent.ribo),
       pctRb.Median = median(percent.ribo),
+      pANN.Mean = mean(pANN),
+      pANN.Median = median(pANN),
       Cells = sum(cells)
     )
   save_object(
@@ -149,6 +151,8 @@ quality_report_elements <- function(){
       pctMt.Median=median(percent.mt),
       pctRb.Mean = mean(percent.ribo),
       pctRb.Median = median(percent.ribo),
+      pANN.Mean = mean(pANN),
+      pANN.Median = median(pANN),
       Cells = sum(cells)
     )
   save_object(
@@ -164,8 +168,9 @@ quality_report_elements <- function(){
   p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.mt", cols=col_def)
   p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.ribo", cols=col_def)
   p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols=col_def)
+  p4 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "pANN", cols=col_def)
 
-  plt = patchwork::wrap_plots(list(p1, p2, p3), ncol=1)
+  plt = patchwork::wrap_plots(list(p1, p2, p3, p4), ncol=1)
 
   save_ggplot_formats(
     plt=plt,

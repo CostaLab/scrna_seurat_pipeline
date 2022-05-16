@@ -2665,27 +2665,38 @@ generate_scrna_doublet_proportions <- function(scrna){
 
     names(scrna_list_doublets) <- names(bcmvn_lst)
     classifications <- c()
+    pANN <- c()
     cells <- c()
     for(i in 1:length(scrna_list_doublets)){
       cells               <- c(names(scrna_list_doublets[[i]]$classifications), cells)
       classifications     <- c(as.character(scrna_list_doublets[[i]]$classifications), classifications)
+      pANN                <- c(pANN, scrna_list_doublets[[i]]@meta.data[,paste0("pANN_0.25_", pK_optimal[i], "_", est_expected[i])])
     }
     classifications <- factor(classifications, levels = c("Singlet", "Doublet"))
     names(classifications) <- cells
+    names(pANN) <- cells
     scrna <- AddMetaData(scrna, classifications, col.name = "Doublet_classifications")
-    data.list <- SplitObject(scrna, split.by = "name")
-    data.list <- lapply(X = data.list, FUN = function(x) {
-                        x <- NormalizeData(x)
-                        x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)})
-    k.filter <- min(table(scrna$name))
-    k.filter <- ifelse(k.filter < 200, k.filter, 200)
-    anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=TRUE,
-                                      k.filter = k.filter)## THIS IS CCA DIMENSIONS
-    scrna_save <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM, k.weight = k.filter) ## THIS IS PCA DIMENSION
-    scrna_save <- ScaleData(scrna_save, verbose = FALSE)
-    scrna_save <- RunPCA(scrna_save, npcs = 30, verbose = FALSE, reduction.name="DOUBLET_PCA")
-    scrna_save <- RunUMAP(scrna_save, reduction = "DOUBLET_PCA", dims = 1:20, reduction.name="DOUBLET_UMAP")
-
+    scrna <- AddMetaData(scrna, pANN, col.name = "pANN")
+    
+    if(length(unique(scrna$name)) > 1){
+      data.list <- SplitObject(scrna, split.by = "name")
+      data.list <- lapply(X = data.list, FUN = function(x) {
+                          x <- NormalizeData(x)
+                          x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)})
+      k.filter <- min(table(scrna$name))
+      k.filter <- ifelse(k.filter < 200, k.filter, 200)
+      anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=TRUE,
+                                        k.filter = k.filter)## THIS IS CCA DIMENSIONS
+      scrna_save <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM, k.weight = k.filter) ## THIS IS PCA DIMENSION
+      scrna_save <- ScaleData(scrna_save, verbose = FALSE)
+      scrna_save <- RunPCA(scrna_save, npcs = 30, verbose = FALSE, reduction.name="DOUBLET_PCA")
+      scrna_save <- RunUMAP(scrna_save, reduction = "DOUBLET_PCA", dims = 1:20, reduction.name="DOUBLET_UMAP")
+    } else if(length(unique(scrna$name)) == 1){
+      scrna_save <- ScaleData(scrna, verbose = FALSE)
+      scrna_save <- FindVariableFeatures(scrna_save)
+      scrna_save <- RunPCA(scrna_save, npcs = 30, verbose = FALSE, reduction.name="DOUBLET_PCA")
+      scrna_save <- RunUMAP(scrna_save, reduction = "DOUBLET_PCA", dims = 1:20, reduction.name="DOUBLET_UMAP")
+    }
     save_object(
       object = scrna_save,
       file_name = file.path(SAVE_DIR, "scrna_DoubletAnnotated.Rds"),
