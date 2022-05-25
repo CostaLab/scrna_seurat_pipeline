@@ -83,11 +83,11 @@ AllOptions <- function(){
                        help="xlsx directory [default %default]",
                        metavar="character")
 
-  parser <- add_option(parser, c("-d", "--dims4Integrate"), type="character", default="1:20",
+  parser <- add_option(parser, c("-d", "--dims4Integrate"), type="character", default="1:30",
                        help="Dims to keep for integrating [default %default]",
                        metavar="VECTOR")
 
-  parser <- add_option(parser, c("-x", "--Dims4FindNeighbors"), type="character", default="1:12",
+  parser <- add_option(parser, c("-x", "--Dims4FindNeighbors"), type="character", default="1:50",
                        help="Dims kept for findNeighbors [default %default]",
                        metavar="VECTOR")
 
@@ -99,7 +99,7 @@ AllOptions <- function(){
                        help="downstream analysis default cluster name  [default %default]",
                        metavar="character")
 
-  parser <- add_option(parser, c("--harmony_dim"), type="character", default="1:20",
+  parser <- add_option(parser, c("--harmony_dim"), type="character", default="1:50",
                        help="dims keep to do clustering using harmony [default %default]",
                        metavar="character")
 
@@ -965,7 +965,7 @@ generate_scrna_integration_harmony <- function(scrna){
   tryCatch(
            {
             scrna <- harmony::RunHarmony(scrna,  "name", plot_convergence = "True", reduction = "RegressOut_PCA")
-            scrna <- RunUMAP(scrna, reduction = "harmony", dims = 1:20, reduction.name= "harmony_UMAP")
+            scrna <- RunUMAP(scrna, reduction = "harmony", dims = HARMONY_DIM, reduction.name= "harmony_UMAP")
            },
            error=function(cond) {
              ret_code <<- -1
@@ -996,7 +996,7 @@ generate_scrna_integration_seurat <- function(scrna){
              k.filter <- ifelse(k.filter < 200, k.filter, 200)
              anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=F,
 					       k.filter = k.filter)## THIS IS CCA DIMENSIONS
-             scrna_inte <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM, k.weight = k.filter) ## THIS IS PCA DIMENSION
+             scrna_inte <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM, k.weight = k.filter) ## THIS IS CCA DIMENSION
              ## keep the order of integration obj
              scrna_inte <- scrna_inte[, colnames(scrna)]
              scrna[['integrated']] <- scrna_inte[['integrated']]
@@ -1004,8 +1004,9 @@ generate_scrna_integration_seurat <- function(scrna){
              scrna@tools <- c(scrna@tools, scrna_inte@tools)
              DefaultAssay(scrna) <- "integrated"
              scrna <- ScaleData(scrna, verbose = FALSE)
-             scrna <- RunPCA(scrna, npcs = 30, verbose = FALSE, reduction.name="INTE_PCA")
-             scrna <- RunUMAP(scrna, reduction = "INTE_PCA", dims = 1:20, reduction.name="INTE_UMAP")
+             scrna <- RunPCA(scrna, npcs = max(50, max(FINDNEIGHBORS_DIM)), verbose = FALSE, reduction.name="INTE_PCA")
+             scrna <- RunUMAP(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM, reduction.name="INTE_UMAP")
+             rm(scrna_inte)
            },
            error=function(cond) {
              ret_code <<- -1
@@ -1025,8 +1026,8 @@ generate_scrna_ScaleSingleton <- function(scrna){
 
              # Run the standard workflow for visualization and clustering
              scrna <- ScaleData(scrna, verbose = FALSE)
-             scrna <- RunPCA(scrna, npcs = 30, verbose = FALSE, reduction.name="SINGLE_PCA")
-             scrna <- RunUMAP(scrna, reduction = "SINGLE_PCA", dims = 1:20, reduction.name="SINGLE_UMAP")
+             scrna <- RunPCA(scrna, npcs = max(50, max(FINDNEIGHBORS_DIM)), verbose = FALSE, reduction.name="SINGLE_PCA")
+             scrna <- RunUMAP(scrna, reduction = "SINGLE_PCA", dims = FINDNEIGHBORS_DIM, reduction.name="SINGLE_UMAP")
            },
            error=function(cond) {
              ret_code <<- -1
