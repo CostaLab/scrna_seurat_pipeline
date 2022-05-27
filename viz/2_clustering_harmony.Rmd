@@ -164,6 +164,7 @@ knitr::include_graphics(
   )
 )
 ```
+
 ### HCL annotation
 ```{r hcl_annotate_harmony, out.width="100%", echo=FALSE}
 fname <- file.path(
@@ -172,6 +173,7 @@ fname <- file.path(
   )
 if(file.exists(fname)) knitr::include_graphics(fname)
 ```
+
 ### MCA annotation
 ```{r mca_annotate_harmony, out.width="100%", echo=FALSE}
 fname <- file.path(
