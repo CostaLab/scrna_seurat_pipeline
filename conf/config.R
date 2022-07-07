@@ -1,6 +1,6 @@
 ### --------------Initial info----------------------------
 PROJECT = "Mouse Blood project" ## set project name
-ORGAN = 'Blood'           #For external annotation. Options: Blood, Heart, Intestine, Kidney
+ORGAN = 'Blood'           #For external annotation. Options: see below(External Organs)
 SPECIES = "Mouse"         #For external annotation. Options: Human, Mouse
 MCA_NAME = "Bone-Marrow" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
 HCL_NAME = "Adult-Bone-Marrow-CD34P" #For HCL annotation.
@@ -214,6 +214,20 @@ viz_conf = list(
   base_color = "lightgrey",#"lightgrey",
   neg_pos_divergent_palette = c('#1E8E99','#51C3CC','#99F9FF','#B2FCFF','#CCFEFF','#E5FFFF','#FFE5CC','#FFCA99','#FFAD65','#FF8E32','#CC5800','#993F00') #colorBlindness::Blue2DarkOrange12Steps
 )
+
+
+### External Organs
+# "Adrenal glands"     "Blood"              "Bone"
+# "Brain"              "Connective tissue"  "Embryo"
+# "Epithelium"         "Eye"                "GI tract"
+# "Heart"              "Immune system"      "Intestine"
+# "Kidney"             "Liver"              "Lungs"
+# "Mammary gland"      "Olfactory system"   "Oral cavity"
+# "Pancreas"           "Parathyroid glands" "Placenta"
+# "Reproductive"       "Skeletal muscle"    "Skin"
+# "Smooth muscle"      "Thymus"             "Thyroid"
+# "Urinary bladder"    "Vasculature"        "Zygote"
+
 
 
 ### MCA annotation Reference
