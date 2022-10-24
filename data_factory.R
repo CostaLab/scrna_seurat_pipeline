@@ -835,7 +835,8 @@ generate_scrna_cellcycle <-function(scrna){
              g2m.genes <- paste0("^", cc.genes$g2m.genes, "$", collapse = "|")
              g2m.genes <- all.genes[grepl(g2m.genes, all.genes, ignore.case = TRUE)]
 
-             scrna <- ScaleData(scrna)
+             scrna <- NormalizeData(scrna)
+             scrna <- ScaleData(scrna, features = rownames(scrna))
              scrna <- RunPCA(scrna, features = c(s.genes, g2m.genes), reduction.name="BCELLCYCLE_PCA")
              scrna <- CellCycleScoring(scrna, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
              scrna$G1.Score = 1 - scrna$S.Score - scrna$G2M.Score
@@ -964,8 +965,10 @@ generate_scrna_integration_harmony <- function(scrna){
   ret_code = 0
   tryCatch(
            {
+            largestDim=ncol(Seurat::Embeddings(scrna[["RegressOut_PCA"]]))
+            keep_harmony_dims = HARMONY_DIM[HARMONY_DIM<=largestDim]
             scrna <- harmony::RunHarmony(scrna,  "name", plot_convergence = "True", reduction = "RegressOut_PCA")
-            scrna <- RunUMAP(scrna, reduction = "harmony", dims = HARMONY_DIM, reduction.name= "harmony_UMAP")
+            scrna <- RunUMAP(scrna, reduction = "harmony", dims = keep_harmony_dims, reduction.name= "harmony_UMAP")
            },
            error=function(cond) {
              ret_code <<- -1
