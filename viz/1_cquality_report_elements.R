@@ -61,8 +61,6 @@ cquality_report_elements <- function(scrna){
       pctMt.Median=median(percent.mt),
       pctRb.Mean = mean(percent.ribo),
       pctRb.Median = median(percent.ribo),
-      pANN.Mean = mean(pANN),
-      pANN.Median = median(pANN),
       Cells = sum(cells)
     )
   save_object(
@@ -82,8 +80,6 @@ cquality_report_elements <- function(scrna){
       pctMt.Median=median(percent.mt),
       pctRb.Mean = mean(percent.ribo),
       pctRb.Median = median(percent.ribo),
-      pANN.Mean = mean(pANN),
-      pANN.Median = median(pANN),
       Cells = sum(cells)
     )
   save_object(
