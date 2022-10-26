@@ -9,6 +9,11 @@
 - [Data quality](data/data_quality.html)
 {% endif %}
 
+{% if "QCC" in executing_list %}
+- [Data quality existing data](data/cdata_quality.html)
+{% endif %}
+
+
 {% if "AmbientRNA" in executing_list %}
 - [Ambient RNA](data/ambient_rna.html)
 {% endif %}

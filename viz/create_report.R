@@ -273,6 +273,7 @@ if(MAKE_ELEMENT){
 
 
   source(glue("{viz_path}/1_quality_report_elements.R"))
+  source(glue("{viz_path}/1_cquality_report_elements.R"))
   source(glue("{viz_path}/ambientRNA_viz_elements.R"))
   source(glue("{viz_path}/doubletdetection_viz_elements.R"))
   source(glue("{viz_path}/2_clusters_DEs_elements.R"))
@@ -298,6 +299,10 @@ if(MAKE_ELEMENT){
     quality_report_elements() ## load scrna innner the function
   }
 
+  if("QCC" %in% EXEC_PLAN) {
+    print_nelement_msg("QCC")
+    cquality_report_elements(scrna) ## load scrna phase comparing
+  }
 
   if(any(grepl("AmbientRNA", funcs, fixed = TRUE))){
     print_nelement_msg("AmbientRNA")
@@ -393,6 +398,7 @@ render_func = function(rmd_input_filename, output_filename){
 
 dic_Rmd_n_Output <- list(
   "QC"               = c(glue("{viz_path}/1_quality_report.Rmd"),        "data_quality"),
+  "QCC"              = c(glue("{viz_path}/1_cquality_report.Rmd"),       "cdata_quality"),
   "AmbientRNA"       = c(glue("{viz_path}/ambientRNA_viz.Rmd"),          "ambient_rna"),
   "DoubletDetection" = c(glue("{viz_path}/doubletdetection_viz.Rmd"),    "doublet_detection"),
   "DEs"              = c(glue("{viz_path}/2_clusters_DEs.Rmd"),          "clusters_DEs"),
