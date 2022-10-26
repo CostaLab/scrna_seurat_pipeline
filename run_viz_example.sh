@@ -32,11 +32,14 @@ data_path=`pwd`
 #cluster="merged_clusters"
 #cluster="annotation"
 #cluster="singleton"
+
 cluster="seurat_clusters"
 
+# QCC is QC for existing RObject(no rawdata)
 FUNCS=(
   #Singleton
  QC
+ QCC
  AmbientRNA
  DoubletDetection
  DEs

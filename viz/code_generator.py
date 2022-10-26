@@ -40,7 +40,7 @@ print(
 )
 
 viz_dict = {
-    "quality": ["QC", "AmbientRNA"],
+    "quality": ["QC", "QCC", "AmbientRNA"],
     "batch_clustering": ["Clusters_seurat",
                          "Clusters_harmony",
                          "DEs"],
