@@ -283,7 +283,7 @@ debug_save_stop <- function(scrna,key){
 ## executing plan
 conf = conf[conf > 0]
 
-if(conf[1] != 2 & (names(conf)[1] %ni% c("scrna_phase_preprocess", "scrna_phase_singleton"))){
+if(conf[1] != 2 & (names(conf)[1] %ni% c("scrna_phase_preprocess", "scrna_phase_singleton", "scrna_rawdata"))){
   logger.error("!!Run without loading data, please check execution plan")
   stop("exit 1")
 }
