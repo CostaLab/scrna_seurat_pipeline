@@ -82,6 +82,7 @@ Rscript ./viz/create_report.R \
 	-o "${data_path}/${proj_name}/report" \
 	-r "${data_path}/${proj_name}/charts" \
 	-e ./external/Human_and_mouse_cell_markers-Markers.tsv \
+	-v "./static/viz_module.ini" \
   -d "$cluster" \
   -j "${json_exe_list}" \
   -i "FALSE" \
