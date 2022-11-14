@@ -27,6 +27,9 @@ AllOptions <- function(){
     parser, c("-c", "--configfile"), type = "character", default = "conf/config.R",
     help = "configfile [default %default]", metavar = "character")
   parser <- add_option(
+    parser, c("-v", "--vizconfig"), type = "character", default = "static/viz_module.ini",
+    help = "viz_config [default %default]", metavar = "character")
+  parser <- add_option(
     parser, c("-o", "--report_dir"), type = "character", default = "report",
     help = "report_dir [default %default]", metavar = "character")
   parser <- add_option(
@@ -115,6 +118,7 @@ EXEC_PLAN         = jsonlite::fromJSON(pa$planOfreport)
 INDEX_ONLY        = pa$indexonly
 COMPRESSION_FORMAT= pa$compression
 FEATUREPLOT_STYLE = pa$featureplotstyle
+VIZCONFIG         = pa$vizconfig
 dir.create(file.path(REPORTDIR, "data"), recursive = TRUE)
 
 
@@ -180,6 +184,20 @@ source(CONFIGFILE)
 scrna <- NULL
 
 
+## If comparing RDS is not needed and not there, you can just load the clustering
+pconf <- configr::read.config(VIZCONFIG)
+cviz <- names(pconf)
+assertthat::assert_that("comparing" %in% cviz)
+pconf <- pconf[["comparing"]]
+pconf <- pconf[pconf== 1]
+
+rds_to_load <- "scrna_phase_comparing.Rds"
+if(all(EXEC_PLAN %ni% names(pconf))){ ## all viz not in comparing, using clustering
+  if(!file.exists(file.path(savedir, "scrna_phase_comparing.Rds"))){  ## if comparing RDS already there load the comparing one.
+    rds_to_load <- "scrna_phase_clustering.Rds"
+  }
+}
+
 if(MAKE_ELEMENT){
 
   if(identical(cluster,"singleton")){
@@ -194,13 +212,13 @@ if(MAKE_ELEMENT){
     )
   }else{
     cat(
-      paste0(date(), blue(" Loading: "), red("scrna_phase_comparing.Rds"), "\n")
+      paste0(date(), blue(" Loading: "), red(rds_to_load), "\n")
     )
     scrna <- load_object(
-      file_name = file.path(savedir, "scrna_phase_comparing.Rds")
+      file_name = file.path(savedir, rds_to_load)
     )
     cat(
-      paste0(date(), blue(" Loaded: "), red("scrna_phase_comparing.Rds"), "\n")
+      paste0(date(), blue(" Loaded: "), red(rds_to_load), "\n")
     )
   }
 
