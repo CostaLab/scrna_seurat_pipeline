@@ -161,6 +161,18 @@ knitr::include_graphics(
 )
 ```
 
+### Doublets score
+reference: https://github.com/chris-mcginnis-ucsf/DoubletFinder
+```{r umap_featureplot_doublets, out.width="100%", echo=FALSE}
+knitr::include_graphics(
+  file.path(
+    params$report_plots_folder_png,
+    paste0("umap_featureplot_doublets_",params$cluster,".png")
+  )
+)
+```
+
+
 ### QC Violin plot
 ```{r vlnplot_qc_ccycle_groupby, out.width="100%", echo=FALSE}
 knitr::include_graphics(
