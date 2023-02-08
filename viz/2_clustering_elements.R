@@ -354,13 +354,30 @@ clustering_elements <- function(scrna){
       width=9, height=7
     )
 
+    message("### Making umap featureplot with doublets scores")
+    plt = StyleFeaturePlot(
+      scrna,
+      style=FEATUREPLOT_STYLE,
+      features = c("pANN"),
+      cols = col_def,
+      order = T,
+      reduction=umap_reduction,
+      ncol = 2
+    )
+    save_ggplot_formats(
+      plt=plt,
+      base_plot_dir=report_plots_folder,
+      plt_name=paste0("umap_featureplot_doublets_",cluster_use),
+      width=9, height=3.5
+    )
+
 
     ## Violin Plot
     message("### Making violinplot with QC and ccycle elements")
     group_by <- cluster_use
     feats_to_plot <- c(
       "percent.mt", "percent.ribo", "nCount_RNA", "nFeature_RNA",
-      "CC.Difference", "G1.Score", "S.Score", "G2M.Score"
+      "CC.Difference", "G1.Score", "S.Score", "G2M.Score", "pANN"
     )
     col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[,group_by])))
     plt = VlnPlot(
@@ -368,7 +385,8 @@ clustering_elements <- function(scrna){
       features = feats_to_plot,
       group.by = group_by,
       cols = col_def,
-      pt.size = 0
+      pt.size = 0,
+      ncol = 3
     )
     save_ggplot_formats(
       plt=plt,
