@@ -49,6 +49,15 @@ Rscript data_factory.R \
   -s "${data_path}/${proj_name}/save" \
   -e "${data_path}/${proj_name}/charts" \
   -a seurat_clusters \
+  --nFeatureRNAfloor=400 \
+  --nCountRNAfloor=0 \
+  --nCountRNAceiling=40000 \
+  --pct_mitoceiling=20 \
+  --pct_riboceiling=100 \
+  --countmatrixformat='10X' \
+  --dims4Integrate="1:30" \
+  --Dims4FindNeighbors="1:50" \
+  --harmony_dim="1:50" \
   -r 0.5
 
 date
