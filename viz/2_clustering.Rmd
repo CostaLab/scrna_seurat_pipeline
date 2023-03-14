@@ -83,13 +83,13 @@ load_object(
 ### Clusters Statistics
 ```{r cluster_statistics, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 flist = grep(
-  "cluster_statistics_",
+  glue("cluster_statistics_.*{params$cluster}"),
   list.files(
     params$report_plots_folder_png,
     full.names=TRUE
   ),
-  value=TRUE,
-  fixed=TRUE
+  perl=TRUE,
+  value=TRUE
 )
 flist = grep(params$cluster, flist, value=TRUE, fixed=TRUE)
 knitr::include_graphics(flist)
@@ -99,13 +99,13 @@ knitr::include_graphics(flist)
 reference: https://github.com/rpolicastro/scProportionTest
 ```{r cluster_proptest, out.width="100%", echo=FALSE, eval=(params$cluster!="singleton")}
 flist = grep(
-  "cluster_proptest_",
+  glue("cluster_proptest_.*{params$cluster}"),
   list.files(
     params$report_plots_folder_png,
     full.names=TRUE
   ),
-  value=TRUE,
-  fixed=TRUE
+  perl=TRUE,
+  value=TRUE
 )
 flist = grep(params$cluster, flist, value=TRUE, fixed=TRUE)
 knitr::include_graphics(flist)
