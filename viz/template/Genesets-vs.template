@@ -45,9 +45,9 @@ knitr::include_graphics(flist)
 ## {{tX}} vs {{tY}}
 ```{r, out.width="100%", echo=FALSE}
 
-#Geneset_violin_vs_{{tX}}.vs.{{tY}}_.*_cluster-seurat_clusters.png
+#Geneset_violin_vs_{{tX}}.vs.{{tY}}_.*_cluster-{params$cluster}.png
 flist = stringr::str_sort(grep(
-  glue("Geneset_violin_vs_{{tX}}.vs.{{tY}}_.*_cluster-seurat_clusters.png"),
+  glue("Geneset_violin_vs_{{tX}}.vs.{{tY}}_.*_cluster-{params$cluster}.png"),
   list.files(
     params$report_plots_folder_png,
     full.names=TRUE
