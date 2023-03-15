@@ -199,7 +199,7 @@ logger.error <- function(msg, ...) {
 if(!file.exists(SAVE_DIR)){
   dir.create(SAVE_DIR)
   logger.info("RObject save in directory: %s", SAVE_DIR)
-  if((!allinone) & (!file.exists(file.path(SAVE_DIR, "partition")))){
+  if((!ALLINONE) & (!file.exists(file.path(SAVE_DIR, "partition")))){
       dir.create(file.path(SAVE_DIR, "partition"))
       logger.info("data in @tools save in directory: %s/partition", SAVE_DIR)
   }
