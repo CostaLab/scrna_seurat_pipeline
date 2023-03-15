@@ -51,5 +51,5 @@ seutools_partition <- function(scrna, partition, save_dir, allinone=FALSE, use_t
     out <- scrna@tools[[partition]]
   }
 
-  return(partition)
+  return(out)
 }
