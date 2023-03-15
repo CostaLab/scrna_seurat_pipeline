@@ -25,7 +25,8 @@ pathway_1v1_elements <- function(scrna){
     cluster_use = cluster_use,
     pw_param = pw_sample_name,
     pathways = pathways,
-    pairs_list = list_1v1
+    pairs_list = list_1v1,
+    save_dir = SAVE_DIR
   )
 }
 
