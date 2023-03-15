@@ -2061,7 +2061,7 @@ generate_scrna_progeny <- function(scrna){
       return(txt)
   })
   if(!ALLINONE){
-    fname = file.path(SAVE_DIR, "partition", glue("progeny_stage_{DEFUALT_CLUSTER_NAME}.Rds"))
+    fname = file.path(SAVE_DIR, "partition", glue("progeny_{DEFUALT_CLUSTER_NAME}.Rds"))
     save_object(res_df,
                  file_name = fname,
                  file_format = COMPRESSION_FORMAT)
