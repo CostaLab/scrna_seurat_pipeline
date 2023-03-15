@@ -98,7 +98,10 @@ clustering_elements <- function(scrna){
     if(cluster_use != "singleton"){
       ## Clusters Statistics
       message("### Making cluster statistics barplot")
-      df <- scrna@tools[[fisher_cluster_name]]
+      df <- seutools_partition(scrna,
+                               partition=fisher_cluster_name,
+                               save_dir=SAVE_DIR,
+                               allinone=ALLINONE)
       df <- df %>% mutate_at(vars(starts_with("pval.adjust_")),~formatC(x=.,format = "e",digits = 3))
 
 
@@ -206,6 +209,12 @@ clustering_elements <- function(scrna){
       scProportion_cluster_name <- paste0("proptest_", cluster_use)
       if(scProportion_cluster_name %in% names(scrna@tools)){
           message("### Making proptest per cluster")
+
+          dffprop <- seutools_partition(scrna,
+                                        partition=scProportion_cluster_name,
+                                        save_dir=SAVE_DIR,
+                                        allinone=ALLINONE)
+
           pairs <- combn(1:length(table(scrna$stage)), 2)
           n <- length(pairs)/2
           for (i in 1:n){
@@ -213,7 +222,7 @@ clustering_elements <- function(scrna){
             i2 <- pairs[1:2, i][2]
             nm <- scrna@tools[["meta_order"]][["stage"]][i1]
             nm2 <- scrna@tools[["meta_order"]][["stage"]][i2]
-            dff <- scrna@tools[[scProportion_cluster_name]][[glue("{nm}.vs.{nm2}")]]
+            dff <- dffprop[[glue("{nm}.vs.{nm2}")]]
             plt <- permutation_plot(dff) + ggtitle(glue("{nm} vs {nm2}, positive means more {nm2}"))
             save_ggplot_formats(
               plt=plt,

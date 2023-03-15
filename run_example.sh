@@ -49,6 +49,7 @@ Rscript data_factory.R \
   -s "${data_path}/${proj_name}/save" \
   -e "${data_path}/${proj_name}/charts" \
   -a seurat_clusters \
+  --allinone=TRUE \
   --nFeatureRNAfloor=400 \
   --nCountRNAfloor=0 \
   --nCountRNAceiling=40000 \

@@ -27,3 +27,29 @@ load_object <- function(file_name){
   return(res)
 }
 
+
+# use_tools: if True, use the tools directory to load the object
+#            if False, use the save_dir
+seutools_partition <- function(scrna, partition, save_dir, allinone=FALSE, use_tools=FALSE){
+  #scrna@tools, store into partition if allinone is FALSE
+  out <- NULL
+  if(allinone == FALSE){
+    #assertthat::assert_that(scrna@tools$allinone == FALSE)
+    if(!(partition %in% names(scrna@tools))){
+      stop("partition not found in scrna@tools")
+    }
+    if(endsWith(scrna@tools[[partition]], "Rds")){
+      if(use_tools == TRUE){
+        out <- load_object(scrna@tools[[partition]])
+      }else{
+        out <- load_object(file.path(save_dir, "partition", glue::glue("{partition}.Rds")))
+      }
+    }else{
+      stop(glue::glue("The {partition}.Rds is not existing!"))
+    }
+  }else{
+    out <- scrna@tools[[partition]]
+  }
+
+  return(partition)
+}

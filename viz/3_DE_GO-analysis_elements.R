@@ -44,7 +44,12 @@ DE_GO_analysis_elements <- function(scrna){
   }
 
   # DE plots
-  cluster_de <- scrna@tools[[de_cluster_name]]
+  cluster_de <- seutools_partition(scrna,
+                                   partition=de_cluster_name,
+                                   save_dir=SAVE_DIR,
+                                   allinone=ALLINONE)
+
+
   cluster_de <- cluster_de[sapply(cluster_de, function(m) nrow(m) > 0)]
 
   cluster_de_top10 <- lapply(cluster_de, function(x) {
@@ -218,6 +223,7 @@ DE_GO_analysis_elements <- function(scrna){
   #### Genesets
 
   # FIXME if genesets not requested, this block shouldn't run
+
   for(nm in scrna@tools$genesets){
     message("nm: ", nm, "    ", appendLF = FALSE)
     if(nm %ni% names(scrna@meta.data)){
@@ -302,8 +308,11 @@ DE_GO_analysis_elements <- function(scrna){
 
   }
 
+  progeny_df <- seutools_partition(scrna,
+                                   partition=progeny_cluster_name,
+                                   save_dir=SAVE_DIR,
+                                   allinone=ALLINONE)
 
-  progeny_df <- scrna@tools[[progeny_cluster_name]]
   help_sort_func <- ifelse(
     all.is.numeric(unique(progeny_df$CellType)),
     function(x) as.numeric(as.character(x)),
@@ -380,28 +389,51 @@ DE_GO_analysis_elements <- function(scrna){
     ## TERM up analysis
     term_up_list <-
       if(enrich_cluster_name == go_cluster_name){
-        scrna@tools[[go_cluster_name]]$goup
+        seutools_partition(scrna,
+                           partition=go_cluster_name,
+                           save_dir=SAVE_DIR,
+                           allinone=ALLINONE)$goup
       }else if(enrich_cluster_name == hallmark_cluster_name){
-          scrna@tools[[hallmark_cluster_name]]$hallmarkup
+        seutools_partition(scrna,
+                           partition=hallmark_cluster_name,
+                           save_dir=SAVE_DIR,
+                           allinone=ALLINONE)$hallmarkup
       }else if(enrich_cluster_name == kegg_cluster_name){
-        scrna@tools[[kegg_cluster_name]]$keggup
+        seutools_partition(scrna,
+                           partition=kegg_cluster_name,
+                           save_dir=SAVE_DIR,
+                           allinone=ALLINONE)$keggup
       }else if(enrich_cluster_name == reactome_cluster_name){
-        scrna@tools[[reactome_cluster_name]]$reactomeup
+        seutools_partition(scrna,
+                           partition=reactome_cluster_name,
+                           save_dir=SAVE_DIR,
+                           allinone=ALLINONE)$reactomeup
       }
 
 
     ## TERM down analysis
     term_down_list <-
       if(enrich_cluster_name == go_cluster_name){
-        scrna@tools[[go_cluster_name]]$godown
+        seutools_partition(scrna,
+                           partition=go_cluster_name,
+                           save_dir=SAVE_DIR,
+                           allinone=ALLINONE)$godown
       }else if(enrich_cluster_name == hallmark_cluster_name){
-          scrna@tools[[hallmark_cluster_name]]$hallmarkdown
+        seutools_partition(scrna,
+                           partition=hallmark_cluster_name,
+                           save_dir=SAVE_DIR,
+                           allinone=ALLINONE)$hallmarkdown
       }else if(enrich_cluster_name == kegg_cluster_name){
-        scrna@tools[[kegg_cluster_name]]$keggdown
+        seutools_partition(scrna,
+                           partition=kegg_cluster_name,
+                           save_dir=SAVE_DIR,
+                           allinone=ALLINONE)$keggdown
       }else if(enrich_cluster_name == reactome_cluster_name){
-        scrna@tools[[reactome_cluster_name]]$reactomedown
+        seutools_partition(scrna,
+                           partition=reactome_cluster_name,
+                           save_dir=SAVE_DIR,
+                           allinone=ALLINONE)$reactomedown
       }
-
 
     for(term_direction in c("up", "down")){
 

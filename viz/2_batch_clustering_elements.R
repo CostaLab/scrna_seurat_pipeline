@@ -11,14 +11,8 @@ batch_clustering_elements <- function(scrna){
 
     message(paste0("### Producing elements for cluster: ",cluster_use))
 
-    fisher_cluster_name <- paste0("fishertest_", cluster_use)
-
     if(cluster_use %ni% names(scrna@meta.data)){
       stop(glue("ERROR:There's no this {cluster_use} slot, please check!!!"))
-    }
-
-    if(fisher_cluster_name %ni% names(scrna@tools)){
-      stop(glue("ERROR:fishertest hasn't been calculated for cluster {cluster_use}\n Please run [scrna_fishertest_clusters]!!!"))
     }
 
     pref_def = "integrated_snn_res."
@@ -38,7 +32,6 @@ batch_clustering_elements <- function(scrna){
       plt_name=paste0("clustree_resolution_",cluster_use),
       width=13, height=10
     )
-
 
     message("### Making umap resolution list")
     # UMAP resolution list

@@ -8,7 +8,10 @@ clusters_DEs_elements <- function(scrna){
       col_string = "RNA_snn_res."
     }
   }
-  cluster_de_list <- scrna@tools$de_batch
+  cluster_de_list  <- seutools_partition(scrna,
+                                         partition="de_batch",
+                                         save_dir=SAVE_DIR,
+                                         allinone=ALLINONE)
 
   ## Plot the top 10 DE genes in each cluster.
   # FIXME shouldnt it be vector that the user defined?
@@ -66,7 +69,12 @@ clusters_DEs_elements <- function(scrna){
   DefaultAssay(scrna) <- "RNA"
   scrna <- Seurat::ScaleData(scrna,  rownames(scrna))
 
-  cluster_de_list <- scrna@tools$de_batch
+  cluster_de_list  <- seutools_partition(scrna,
+                                         partition="de_batch",
+                                         save_dir=SAVE_DIR,
+                                         allinone=ALLINONE)
+
+
   names(cluster_de_list) <- as.character(seq(0.1, 0.8, 0.1))
 
   for (resolution in seq(0.1, 0.8, 0.1)){
