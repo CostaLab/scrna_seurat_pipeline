@@ -1,4 +1,5 @@
 pathway_vs_loop <- function(
+  scrna,
   cluster_use,
   pw_param,
   pathways,
@@ -9,7 +10,7 @@ pathway_vs_loop <- function(
     message("pathway: ", pw)
     for(direction in c("up", "down")){
 
-      pw_partition = seutools_partition(scrna, pw_param, SAVEDIR, allinone=scnra@tools$allinone)
+      pw_partition = seutools_partition(scrna, pw_param, SAVEDIR, allinone=scrna@tools$allinone)
       all_pw_direction_list <- pw_partition[[glue("{pw}{direction}")]]
 
       for(apair in pairs_list){

@@ -21,6 +21,7 @@ pathway_stage_elements <- function(scrna){
   list_stage <- comb_list(sample_stages)
 
   pathway_vs_loop(
+    scrna = scrna,
     cluster_use = cluster_use,
     pw_param = pw_sample_stage,
     pathways = pathways,
