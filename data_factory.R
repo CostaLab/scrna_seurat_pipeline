@@ -662,6 +662,7 @@ generate_scrna_phase_preprocess <- function(scrna){
         file_format = COMPRESSION_FORMAT
       )
     }
+    gc()
     logger.info(paste("finished", f_name))
   }
   return(list(scrna, ret_code))
@@ -684,8 +685,8 @@ generate_scrna_phase_clustering <- function(scrna){
 
       if(ret_code != 0){ debug_save_stop(scrna, key) }
 
+      gc()
       logger.info(paste("finished", f_name))
-
    }
   return(list(scrna, ret_code))
 }
@@ -726,7 +727,7 @@ generate_scrna_phase_existed_clusters <- function(scrna){
       scrna <- sanity_function(scrna, key)
 
       if(ret_code != 0){ debug_save_stop(scrna, key) }
-
+      gc()
       logger.info(paste("finished", f_name))
    }
   return(list(scrna, ret_code))
@@ -748,7 +749,7 @@ generate_scrna_phase_comparing <- function(scrna){
       scrna <- sanity_function(scrna, key)
 
       if(ret_code != 0){ debug_save_stop(scrna, key) }
-
+      gc()
       logger.info(paste("finished", f_name))
    }
   return(list(scrna, ret_code))
@@ -1022,6 +1023,7 @@ generate_scrna_integration_seurat <- function(scrna){
              scrna <- RunPCA(scrna, npcs = max(50, max(FINDNEIGHBORS_DIM)), verbose = FALSE, reduction.name="INTE_PCA")
              scrna <- RunUMAP(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM, reduction.name="INTE_UMAP")
              rm(scrna_inte)
+             rm(data.list)
            },
            error=function(cond) {
              ret_code <<- -1
@@ -1254,6 +1256,7 @@ generate_scrna_fishertest_inte_clusters <- function(scrna){
        scrna@tools[[sprintf("fishertest_%s", CLUSTER_TO_TEST)]] <- df
     }
   }
+  rm(count.matrix)
   return(list(scrna, ret_code))
 }
 
@@ -1304,7 +1307,7 @@ generate_scrna_fishertest_clusters <- function(scrna){
   }else{
      scrna@tools[[sprintf("fishertest_%s", CLUSTER_TO_TEST)]] <- df
   }
-
+  rm(count.matrix)
   return(list(scrna, ret_code))
 
 }
@@ -1335,6 +1338,8 @@ generate_scrna_proptest_clusters <- function(scrna){
   }else{
      scrna@tools[[sprintf("proptest_%s", DEFUALT_CLUSTER_NAME)]] <- proptest_list
   }
+  rm(proptest_list)
+  rm(prop_test_all)
   return(list(scrna, ret_code))
 }
 
@@ -1449,6 +1454,7 @@ generate_scrna_MCAannotate <- function(scrna){
   res=rownames(corr)[max.col(t(corr))]
   scrna$MCA_annotate <- res
   Idents(object=scrna) <- "name"
+  rm(mca_result)
   return(list(scrna, ret_code))
 }
 
@@ -1482,6 +1488,7 @@ generate_scrna_MAGIC <- function(scrna){
   DefaultAssay(scrna) <- "RNA"
   all_genes <- rownames(scrna)
   scrna <- magic(scrna, genes=all_genes)
+  rm(all_genes)
   return(list(scrna, ret_code))
 }
 
@@ -1524,8 +1531,8 @@ generate_scrna_ExternalAnnotation <- function(scrna){
   }
   celltypes <- unlist(celltype.list)
   names(celltypes)<-colnames(mtx)
-
   scrna$external_annotation <- unlist(celltypes)
+  rm(mtx)
   return(list(scrna, ret_code))
 
 }
@@ -1558,6 +1565,8 @@ generate_scrna_markergenes <- function(scrna){
                       flist,
                       file.path(CHARTS_DIR, sprintf("de_%s.xlsx", DEFUALT_CLUSTER_NAME)),
                       SheetNames = reformat_sheetnames(names(flist)))
+             rm(cluster.de)
+             rm(flist)
            },
            error=function(cond) {
              ret_code <<- -1
@@ -1598,7 +1607,7 @@ generate_scrna_batch_markergenes <- function(scrna){
              }else{
                 scrna@tools[["de_batch"]] <- cluster.de.list
              }
-
+             rm(cluster.de.list)
            },
            error=function(cond) {
              ret_code <<- -1
@@ -1637,6 +1646,7 @@ generate_scrna_singleton_markergenes <- function(scrna){
              }else{
                 scrna@tools[["de_batch"]] <- cluster.de.list
              }
+             rm(cluster.de)
 
            },
            error=function(cond) {
@@ -1694,6 +1704,7 @@ generate_scrna_genesorteR <- function(scrna){
              }else{
                 scrna@tools[[sprintf("genesorteR_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
              }
+             rm(store_list)
 
            },
            error=function(cond) {
@@ -1766,6 +1777,9 @@ generate_scrna_dego_name <- function(scrna){
     go_downs <- get_go_down(de.list)
     all_godown_list[[nm]] <- go_downs
     dego_dump(nm, de.list, go_ups, go_downs)
+    rm(de.list)
+    rm(go_ups)
+    rm(go_downs)
   }
 
   store_list <- list(all_de_list, all_goup_list, all_godown_list)
@@ -1780,8 +1794,10 @@ generate_scrna_dego_name <- function(scrna){
   }else{
      scrna@tools[[sprintf("dego_name_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
   }
-
-
+  rm(store_list)
+  rm(all_de_list)
+  rm(all_goup_list)
+  rm(all_godown_list)
 
 
   return(list(scrna, ret_code))
@@ -1843,6 +1859,9 @@ generate_scrna_dego_stage <- function(scrna){
     go_downs <- get_go_down(de.list)
     all_godown_list[[nm]] <- go_downs
     dego_dump(nm, de.list, go_ups, go_downs)
+    rm(de.list)
+    rm(go_ups)
+    rm(go_downs)
   }
 
   store_list <- list(all_de_list, all_goup_list, all_godown_list)
@@ -1857,8 +1876,10 @@ generate_scrna_dego_stage <- function(scrna){
   }else{
      scrna@tools[[sprintf("dego_stage_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
   }
-
-
+  rm(store_list)
+  rm(all_de_list)
+  rm(all_goup_list)
+  rm(all_godown_list)
   return(list(scrna, ret_code))
 }
 generate_scrna_dego_stage_vsRest <- function(scrna){
@@ -1919,6 +1940,9 @@ generate_scrna_dego_stage_vsRest <- function(scrna){
     go_downs <- get_go_down(de.list)
     all_godown_list[[nm]] <- go_downs
     dego_dump(nm, de.list, go_ups, go_downs)
+    rm(de.list)
+    rm(go_ups)
+    rm(go_downs)
   }
 
   store_list <- list(all_de_list, all_goup_list, all_godown_list)
@@ -1933,6 +1957,11 @@ generate_scrna_dego_stage_vsRest <- function(scrna){
   }else{
      scrna@tools[[sprintf("dego_stage_vsRest_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
   }
+
+  rm(store_list)
+  rm(all_de_list)
+  rm(all_goup_list)
+  rm(all_godown_list)
 
   return(list(scrna, ret_code))
 }
@@ -1966,6 +1995,8 @@ generate_scrna_go <- function(scrna){
   golist_xls(go.up.list,  sprintf("goup_%s.xlsx", DEFUALT_CLUSTER_NAME))
   golist_xls(go.down.list, sprintf("godown_%s.xlsx", DEFUALT_CLUSTER_NAME))
 
+  rm(go.up.list)
+  rm(go.down.list)
   return(list(scrna, ret_code))
 }
 
@@ -1997,6 +2028,8 @@ generate_scrna_MSigDB_geneset <- function(scrna){
                  scrna@meta.data[, paste0(nm, 1)] <- NULL
              }
              scrna@tools$genesets <- names(subGmt)
+             rm(Gmt)
+             rm(subGmt)
            },
            error=function(cond) {
              ret_code <<- -1
@@ -2069,6 +2102,7 @@ generate_scrna_progeny <- function(scrna){
   }else{
      scrna@tools[[glue("progeny_{DEFUALT_CLUSTER_NAME}")]] <- res_df
   }
+  rm(res_df)
 
   DefaultAssay(scrna) <- da
   return(list(scrna, ret_code))
@@ -2146,6 +2180,7 @@ generate_scrna_progeny_stage <- function(scrna){
     })
 
     vs_df_list[[glue("{vs1}.vs.{vs2}")]] <- res_df
+    rm(res_df)
 
   }
   if(!ALLINONE){
@@ -2157,6 +2192,7 @@ generate_scrna_progeny_stage <- function(scrna){
   }else{
      scrna@tools[[glue("progeny_stage_{DEFUALT_CLUSTER_NAME}")]] <- vs_df_list
   }
+  rm(vs_df_list)
   return(list(scrna, ret_code))
 }
 
@@ -2205,6 +2241,10 @@ generate_scrna_kegg <- function(scrna){
 
   golist_xls(kegg.up.list,  sprintf("keggup_%s.xlsx", DEFUALT_CLUSTER_NAME))
   golist_xls(kegg.down.list, sprintf("keggdown_%s.xlsx", DEFUALT_CLUSTER_NAME))
+  rm(store_list)
+  rm(kegg.up.list)
+  rm(kegg.down.list)
+
   return(list(scrna, ret_code))
 }
 
@@ -2232,6 +2272,11 @@ generate_scrna_reactome <- function(scrna){
   }
   golist_xls(reactome.up.list,  sprintf("reactomeup_%s.xlsx", DEFUALT_CLUSTER_NAME))
   golist_xls(reactome.down.list, sprintf("reactomedown_%s.xlsx", DEFUALT_CLUSTER_NAME))
+
+  rm(store_list)
+  rm(reactome.up.list)
+  rm(reactome.down.list)
+
   return(list(scrna, ret_code))
 }
 
@@ -2261,6 +2306,10 @@ generate_scrna_hallmark <- function(scrna){
 
   golist_xls(hallmark.up.list,  sprintf("hallmarkup_%s.xlsx", DEFUALT_CLUSTER_NAME))
   golist_xls(hallmark.down.list, sprintf("hallmarkdown_%s.xlsx", DEFUALT_CLUSTER_NAME))
+  rm(store_list)
+  rm(hallmark.up.list)
+  rm(hallmark.down.list)
+
   return(list(scrna, ret_code))
 }
 
@@ -2780,6 +2829,13 @@ get_pathway_comparison <- function(scrna, slot){
     pathway_dump(nm, "KEGG", kegg_ups, kegg_downs)
     pathway_dump(nm, "hallmark", hallmark_ups, hallmark_downs)
     pathway_dump(nm, "Reactome", reactome_ups, reactome_downs)
+
+    rm(kegg_ups)
+    rm(kegg_downs)
+    rm(hallmark_ups)
+    rm(hallmark_downs)
+    rm(reactome_ups)
+    rm(reactome_downs)
   }
   store_list <- list(all_keggup_list, all_keggdown_list,
                      all_hallmarkup_list, all_hallmarkdown_list,
@@ -2798,6 +2854,10 @@ get_pathway_comparison <- function(scrna, slot){
   }else{
      scrna@tools[[glue("pathway_{slot}_{DEFUALT_CLUSTER_NAME}")]] <- store_list
   }
+  rm(store_list)
+  rm(all_keggup_list, all_keggdown_list,
+     all_hallmarkup_list, all_hallmarkdown_list,
+     all_reactomeup_list, all_reactomedown_list)
 
 
   return(list(scrna, ret_code))
