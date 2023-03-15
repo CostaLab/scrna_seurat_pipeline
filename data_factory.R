@@ -1300,9 +1300,9 @@ generate_scrna_fishertest_clusters <- function(scrna){
      save_object(df,
                  file_name = fname,
                  file_format = COMPRESSION_FORMAT)
-     scrna@tools[[sprintf("fishertest_%s", DEFUALT_CLUSTER_NAME)]] <- fname
+     scrna@tools[[sprintf("fishertest_%s", CLUSTER_TO_TEST)]] <- fname
   }else{
-     scrna@tools[[sprintf("fishertest_%s", DEFUALT_CLUSTER_NAME)]] <- df
+     scrna@tools[[sprintf("fishertest_%s", CLUSTER_TO_TEST)]] <- df
   }
 
   return(list(scrna, ret_code))
@@ -2752,10 +2752,11 @@ get_pathway_comparison <- function(scrna, slot){
   all_reactomedown_list = list()
 
   if(!ALLINONE){
-    all_de_list  <- seutools_partition(scrna, sprintf("de_%s", DEFUALT_CLUSTER_NAME), SAVE_DIR, allinone=FALSE)
+    all_dego_list  <- seutools_partition(scrna, dego_name, SAVE_DIR, allinone=FALSE)
   }else{
-    all_de_list <- scrna@tools[[dego_name]][["de"]]
+    all_dego_list <- scrna@tools[[dego_name]]
   }
+  all_de_list <- all_dego_list[["de"]]
   for(nm in names(all_de_list)) {
     logger.info("****processing pathway up&down %s", nm)
     de.list <- all_de_list[[nm]]
