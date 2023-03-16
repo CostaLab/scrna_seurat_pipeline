@@ -103,6 +103,10 @@ AllOptions <- function(){
                        help="dims keep to do clustering using harmony [default %default]",
                        metavar="character")
 
+  parser <- add_option(parser, c("--allinone"), type="logical", default=TRUE,
+                       help="store in scrna@tools if TRUE, else store in save/partition [default %default]",
+                       metavar="character")
+
   parser <- add_option(
     parser, c("-z", "--compression"),
     type = "character", default = "gzip", metavar = "character",
@@ -132,6 +136,8 @@ CLUSTER_RESOLUTION    = pa$clusterresolution
 DEFUALT_CLUSTER_NAME  = pa$defaultclustername
 CM_FORMAT             = pa$countmatrixformat
 COMPRESSION_FORMAT    = pa$compression
+ALLINONE              = pa$allinone
+
 
 f = function(x){if(x == ""){ return("")}else{ return("-")}}
 LOGNAME               = paste0(pa$logname, f(pa$logname))
@@ -187,12 +193,16 @@ logger.error <- function(msg, ...) {
 }
 
 
-
+if(!ALLINONE){
+    dir.create(file.path(SAVE_DIR, "partition"), showWarnings=F)
+    logger.info("data in @tools save in directory: %s/partition", SAVE_DIR)
+}
 
 ## Robject directory
 if(!file.exists(SAVE_DIR)){
   dir.create(SAVE_DIR)
   logger.info("RObject save in directory: %s", SAVE_DIR)
+
 }else{
   logger.info("RObject save in existed directory: %s", SAVE_DIR)
 }
@@ -362,6 +372,7 @@ conf_main <- function(){
       scrna@tools$parameter[[cur_time]] <- unlist(pa)
       scrna@tools$execution[[cur_time]] <- conf
       scrna <- sanity_function(scrna, key)
+      scrna@tools$allinone = ALLINONE
       logger.info(paste("finished loading", NRds))
     }else if(val==1){
       func_name = paste("generate_", key, sep="")
@@ -380,6 +391,7 @@ conf_main <- function(){
           name = names(data_src),
           stage = unique(stage_lst)
         )
+        scrna@tools$allinone = ALLINONE
         #}
         phase_name <- get_output_name(scrna, key) ### only first store, or second time
         save_object(
@@ -650,6 +662,7 @@ generate_scrna_phase_preprocess <- function(scrna){
         file_format = COMPRESSION_FORMAT
       )
     }
+    gc()
     logger.info(paste("finished", f_name))
   }
   return(list(scrna, ret_code))
@@ -672,8 +685,8 @@ generate_scrna_phase_clustering <- function(scrna){
 
       if(ret_code != 0){ debug_save_stop(scrna, key) }
 
+      gc()
       logger.info(paste("finished", f_name))
-
    }
   return(list(scrna, ret_code))
 }
@@ -714,7 +727,7 @@ generate_scrna_phase_existed_clusters <- function(scrna){
       scrna <- sanity_function(scrna, key)
 
       if(ret_code != 0){ debug_save_stop(scrna, key) }
-
+      gc()
       logger.info(paste("finished", f_name))
    }
   return(list(scrna, ret_code))
@@ -736,7 +749,7 @@ generate_scrna_phase_comparing <- function(scrna){
       scrna <- sanity_function(scrna, key)
 
       if(ret_code != 0){ debug_save_stop(scrna, key) }
-
+      gc()
       logger.info(paste("finished", f_name))
    }
   return(list(scrna, ret_code))
@@ -994,7 +1007,7 @@ generate_scrna_integration_seurat <- function(scrna){
              ## scale = False to use previous scaled data
 	     ## If the number of cells is < 200 for a sample, we need to reduce the default values.
 	     ## If the number of cells is < 200 for any sample, we set the k.filter and k.weight values to this new minimum.
-	     ## This way, we can still integrate very small data sets. 
+	     ## This way, we can still integrate very small data sets.
 	     k.filter <- min(table(scrna$name))
              k.filter <- ifelse(k.filter < 200, k.filter, 200)
              anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=F,
@@ -1010,6 +1023,7 @@ generate_scrna_integration_seurat <- function(scrna){
              scrna <- RunPCA(scrna, npcs = max(50, max(FINDNEIGHBORS_DIM)), verbose = FALSE, reduction.name="INTE_PCA")
              scrna <- RunUMAP(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM, reduction.name="INTE_UMAP")
              rm(scrna_inte)
+             rm(data.list)
            },
            error=function(cond) {
              ret_code <<- -1
@@ -1231,8 +1245,18 @@ generate_scrna_fishertest_inte_clusters <- function(scrna){
        }
        df[, glue("pval.adjust_{a}.vs.{b}")] <- p.adjust(df[, glue("pval_{a}.vs.{b}")],  method = "bonferroni")
      }
-     scrna@tools[[sprintf("fishertest_%s", CLUSTER_TO_TEST)]] <- df
+
+    if(!ALLINONE){
+      fname = file.path(SAVE_DIR, "partition", glue("fishertest_{CLUSTER_TO_TEST}.Rds"))
+       save_object(df,
+                   file_name = fname,
+                   file_format = COMPRESSION_FORMAT)
+       scrna@tools[[sprintf("fishertest_%s", CLUSTER_TO_TEST)]] <- fname
+    }else{
+       scrna@tools[[sprintf("fishertest_%s", CLUSTER_TO_TEST)]] <- df
+    }
   }
+  rm(count.matrix)
   return(list(scrna, ret_code))
 }
 
@@ -1273,7 +1297,17 @@ generate_scrna_fishertest_clusters <- function(scrna){
     }
     df[, glue("pval.adjust_{a}.vs.{b}")] <- p.adjust(df[, glue("pval_{a}.vs.{b}")],  method = "bonferroni")
   }
-  scrna@tools[[sprintf("fishertest_%s", DEFUALT_CLUSTER_NAME)]] <- df
+
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", glue("fishertest_{CLUSTER_TO_TEST}.Rds"))
+     save_object(df,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[sprintf("fishertest_%s", CLUSTER_TO_TEST)]] <- fname
+  }else{
+     scrna@tools[[sprintf("fishertest_%s", CLUSTER_TO_TEST)]] <- df
+  }
+  rm(count.matrix)
   return(list(scrna, ret_code))
 
 }
@@ -1294,7 +1328,18 @@ generate_scrna_proptest_clusters <- function(scrna){
        sample_identity = "stage")
     proptest_list[[glue("{x[1]}.vs.{x[2]}")]] <- data.table::as.data.table(prop_test@results$permutation)
   }
-  scrna@tools[[sprintf("proptest_%s", DEFUALT_CLUSTER_NAME)]] <- proptest_list
+
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", glue("proptest_{DEFUALT_CLUSTER_NAME}.Rds"))
+     save_object(proptest_list,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[sprintf("proptest_%s", DEFUALT_CLUSTER_NAME)]] <- fname
+  }else{
+     scrna@tools[[sprintf("proptest_%s", DEFUALT_CLUSTER_NAME)]] <- proptest_list
+  }
+  rm(proptest_list)
+  rm(prop_test_all)
   return(list(scrna, ret_code))
 }
 
@@ -1409,6 +1454,7 @@ generate_scrna_MCAannotate <- function(scrna){
   res=rownames(corr)[max.col(t(corr))]
   scrna$MCA_annotate <- res
   Idents(object=scrna) <- "name"
+  rm(mca_result)
   return(list(scrna, ret_code))
 }
 
@@ -1442,6 +1488,7 @@ generate_scrna_MAGIC <- function(scrna){
   DefaultAssay(scrna) <- "RNA"
   all_genes <- rownames(scrna)
   scrna <- magic(scrna, genes=all_genes)
+  rm(all_genes)
   return(list(scrna, ret_code))
 }
 
@@ -1484,8 +1531,8 @@ generate_scrna_ExternalAnnotation <- function(scrna){
   }
   celltypes <- unlist(celltype.list)
   names(celltypes)<-colnames(mtx)
-
   scrna$external_annotation <- unlist(celltypes)
+  rm(mtx)
   return(list(scrna, ret_code))
 
 }
@@ -1501,7 +1548,16 @@ generate_scrna_markergenes <- function(scrna){
 
              cluster.de <- split(de.df, de.df$cluster)
 
-             scrna@tools[[sprintf("de_%s", DEFUALT_CLUSTER_NAME)]] <- cluster.de
+
+             if(!ALLINONE){
+               fname = file.path(SAVE_DIR, "partition", sprintf("de_%s.Rds", DEFUALT_CLUSTER_NAME))
+               save_object(cluster.de,
+                            file_name = fname,
+                            file_format = COMPRESSION_FORMAT)
+                scrna@tools[[sprintf("de_%s", DEFUALT_CLUSTER_NAME)]] <- fname
+             }else{
+                scrna@tools[[sprintf("de_%s", DEFUALT_CLUSTER_NAME)]] <- cluster.de
+             }
              flist <- lapply(cluster.de, subset, subset = p_val_adj < 0.05)
              flist <-  flist[sapply(flist, function(m) nrow(m) >0)]
 
@@ -1509,6 +1565,8 @@ generate_scrna_markergenes <- function(scrna){
                       flist,
                       file.path(CHARTS_DIR, sprintf("de_%s.xlsx", DEFUALT_CLUSTER_NAME)),
                       SheetNames = reformat_sheetnames(names(flist)))
+             rm(cluster.de)
+             rm(flist)
            },
            error=function(cond) {
              ret_code <<- -1
@@ -1540,7 +1598,16 @@ generate_scrna_batch_markergenes <- function(scrna){
                cluster.de <- split(de.df, de.df$cluster)
              }
 
-             scrna@tools[["de_batch"]] <- cluster.de.list
+             if(!ALLINONE){
+               fname = file.path(SAVE_DIR, "partition", "de_batch.Rds")
+               save_object(cluster.de.list,
+                            file_name = fname,
+                            file_format = COMPRESSION_FORMAT)
+               scrna@tools[["de_batch"]] <- fname
+             }else{
+                scrna@tools[["de_batch"]] <- cluster.de.list
+             }
+             rm(cluster.de.list)
            },
            error=function(cond) {
              ret_code <<- -1
@@ -1569,7 +1636,18 @@ generate_scrna_singleton_markergenes <- function(scrna){
                cluster.de <- split(de.df, de.df$cluster)
              }
 
-             scrna@tools[["de_batch"]] <- cluster.de.list
+
+             if(!ALLINONE){
+               fname = file.path(SAVE_DIR, "partition", "de_batch.Rds")
+               save_object(cluster.de.list,
+                            file_name = fname,
+                            file_format = COMPRESSION_FORMAT)
+                scrna@tools[["de_batch"]] <- fname
+             }else{
+                scrna@tools[["de_batch"]] <- cluster.de.list
+             }
+             rm(cluster.de)
+
            },
            error=function(cond) {
              ret_code <<- -1
@@ -1615,7 +1693,19 @@ generate_scrna_genesorteR <- function(scrna){
 
              store_list <- list(genesorter, flist, condGeneProb)
              names(store_list) <- c("obj", "tbl", "condprob")
-             scrna@tools[[sprintf("genesorteR_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+
+
+             if(!ALLINONE){
+               fname = file.path(SAVE_DIR, "partition", sprintf("genesorteR_%s.Rds", DEFUALT_CLUSTER_NAME))
+               save_object(store_list,
+                            file_name = fname,
+                            file_format = COMPRESSION_FORMAT)
+                scrna@tools[[sprintf("genesorteR_%s", DEFUALT_CLUSTER_NAME)]] <- fname
+             }else{
+                scrna@tools[[sprintf("genesorteR_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+             }
+             rm(store_list)
+
            },
            error=function(cond) {
              ret_code <<- -1
@@ -1687,11 +1777,28 @@ generate_scrna_dego_name <- function(scrna){
     go_downs <- get_go_down(de.list)
     all_godown_list[[nm]] <- go_downs
     dego_dump(nm, de.list, go_ups, go_downs)
+    rm(de.list)
+    rm(go_ups)
+    rm(go_downs)
   }
 
   store_list <- list(all_de_list, all_goup_list, all_godown_list)
   names(store_list) <- c("de", "goup", "godown")
-  scrna@tools[[sprintf("dego_name_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", sprintf("dego_name_%s.Rds", DEFUALT_CLUSTER_NAME))
+    save_object(store_list,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[sprintf("dego_name_%s", DEFUALT_CLUSTER_NAME)]] <- fname
+  }else{
+     scrna@tools[[sprintf("dego_name_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+  }
+  rm(store_list)
+  rm(all_de_list)
+  rm(all_goup_list)
+  rm(all_godown_list)
+
 
   return(list(scrna, ret_code))
 }
@@ -1752,12 +1859,27 @@ generate_scrna_dego_stage <- function(scrna){
     go_downs <- get_go_down(de.list)
     all_godown_list[[nm]] <- go_downs
     dego_dump(nm, de.list, go_ups, go_downs)
+    rm(de.list)
+    rm(go_ups)
+    rm(go_downs)
   }
 
   store_list <- list(all_de_list, all_goup_list, all_godown_list)
   names(store_list) <- c("de", "goup", "godown")
-  scrna@tools[[sprintf("dego_stage_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
 
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", sprintf("dego_stage_%s.Rds", DEFUALT_CLUSTER_NAME))
+    save_object(store_list,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[sprintf("dego_stage_%s", DEFUALT_CLUSTER_NAME)]] <- fname
+  }else{
+     scrna@tools[[sprintf("dego_stage_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+  }
+  rm(store_list)
+  rm(all_de_list)
+  rm(all_goup_list)
+  rm(all_godown_list)
   return(list(scrna, ret_code))
 }
 generate_scrna_dego_stage_vsRest <- function(scrna){
@@ -1818,11 +1940,28 @@ generate_scrna_dego_stage_vsRest <- function(scrna){
     go_downs <- get_go_down(de.list)
     all_godown_list[[nm]] <- go_downs
     dego_dump(nm, de.list, go_ups, go_downs)
+    rm(de.list)
+    rm(go_ups)
+    rm(go_downs)
   }
 
   store_list <- list(all_de_list, all_goup_list, all_godown_list)
   names(store_list) <- c("de", "goup", "godown")
-  scrna@tools[[sprintf("dego_stage_vsRest_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", sprintf("dego_stage_vsRest_%s.Rds", DEFUALT_CLUSTER_NAME))
+    save_object(store_list,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[sprintf("dego_stage_vsRest_%s", DEFUALT_CLUSTER_NAME)]] <- fname
+  }else{
+     scrna@tools[[sprintf("dego_stage_vsRest_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+  }
+
+  rm(store_list)
+  rm(all_de_list)
+  rm(all_goup_list)
+  rm(all_godown_list)
 
   return(list(scrna, ret_code))
 }
@@ -1830,15 +1969,34 @@ generate_scrna_dego_stage_vsRest <- function(scrna){
 
 generate_scrna_go <- function(scrna){
   ret_code = 0
-  de.list <- scrna@tools[[sprintf("de_%s", DEFUALT_CLUSTER_NAME)]]
+
+  partition = sprintf("de_%s", DEFUALT_CLUSTER_NAME)
+
+  if(!ALLINONE){
+    de.list <- seutools_partition(scrna, partition, SAVE_DIR, allinone=FALSE)
+  }else{
+    de.list <- scrna@tools[[partition]]
+  }
   go.up.list <- get_go_up(de.list)
   go.down.list <- get_go_down(de.list)
   store_list <- list(go.up.list, go.down.list)
   names(store_list) <- c("goup", "godown")
-  scrna@tools[[sprintf("go_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", sprintf("go_%s.Rds", DEFUALT_CLUSTER_NAME))
+    save_object(store_list,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[sprintf("go_%s", DEFUALT_CLUSTER_NAME)]] <- fname
+  }else{
+     scrna@tools[[sprintf("go_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+  }
+
   golist_xls(go.up.list,  sprintf("goup_%s.xlsx", DEFUALT_CLUSTER_NAME))
   golist_xls(go.down.list, sprintf("godown_%s.xlsx", DEFUALT_CLUSTER_NAME))
 
+  rm(go.up.list)
+  rm(go.down.list)
   return(list(scrna, ret_code))
 }
 
@@ -1870,6 +2028,8 @@ generate_scrna_MSigDB_geneset <- function(scrna){
                  scrna@meta.data[, paste0(nm, 1)] <- NULL
              }
              scrna@tools$genesets <- names(subGmt)
+             rm(Gmt)
+             rm(subGmt)
            },
            error=function(cond) {
              ret_code <<- -1
@@ -1933,7 +2093,17 @@ generate_scrna_progeny <- function(scrna){
       }
       return(txt)
   })
-  scrna@tools[[glue("progeny_{DEFUALT_CLUSTER_NAME}")]] <- res_df
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", glue("progeny_{DEFUALT_CLUSTER_NAME}.Rds"))
+    save_object(res_df,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[glue("progeny_{DEFUALT_CLUSTER_NAME}")]] <- fname
+  }else{
+     scrna@tools[[glue("progeny_{DEFUALT_CLUSTER_NAME}")]] <- res_df
+  }
+  rm(res_df)
+
   DefaultAssay(scrna) <- da
   return(list(scrna, ret_code))
 }
@@ -2010,9 +2180,19 @@ generate_scrna_progeny_stage <- function(scrna){
     })
 
     vs_df_list[[glue("{vs1}.vs.{vs2}")]] <- res_df
+    rm(res_df)
 
   }
-  scrna@tools[[glue("progeny_stage_{DEFUALT_CLUSTER_NAME}")]] <- vs_df_list
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", glue("progeny_stage_{DEFUALT_CLUSTER_NAME}.Rds"))
+     save_object( vs_df_list,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[glue("progeny_stage_{DEFUALT_CLUSTER_NAME}")]] <- fname
+  }else{
+     scrna@tools[[glue("progeny_stage_{DEFUALT_CLUSTER_NAME}")]] <- vs_df_list
+  }
+  rm(vs_df_list)
   return(list(scrna, ret_code))
 }
 
@@ -2040,42 +2220,96 @@ generate_scrna_pathway_stage_vsRest <- function(scrna){
 
 generate_scrna_kegg <- function(scrna){
   ret_code = 0
-  de.list <- scrna@tools[[sprintf("de_%s", DEFUALT_CLUSTER_NAME)]]
+  if(!ALLINONE){
+    de.list <- seutools_partition(scrna, sprintf("de_%s", DEFUALT_CLUSTER_NAME), SAVE_DIR, allinone=FALSE)
+  }else{
+    de.list <- scrna@tools[[sprintf("de_%s", DEFUALT_CLUSTER_NAME)]]
+  }
   kegg.up.list <- get_kegg_up(de.list)
   kegg.down.list <- get_kegg_down(de.list)
   store_list <- list(kegg.up.list, kegg.down.list)
   names(store_list) <- c("keggup", "keggdown")
-  scrna@tools[[sprintf("kegg_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", sprintf("kegg_%s.Rds", DEFUALT_CLUSTER_NAME))
+     save_object(store_list,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[sprintf("kegg_%s", DEFUALT_CLUSTER_NAME)]] <- fname
+  }else{
+     scrna@tools[[sprintf("kegg_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+  }
+
   golist_xls(kegg.up.list,  sprintf("keggup_%s.xlsx", DEFUALT_CLUSTER_NAME))
   golist_xls(kegg.down.list, sprintf("keggdown_%s.xlsx", DEFUALT_CLUSTER_NAME))
+  rm(store_list)
+  rm(kegg.up.list)
+  rm(kegg.down.list)
+
   return(list(scrna, ret_code))
 }
 
 
 generate_scrna_reactome <- function(scrna){
   ret_code = 0
-  de.list <- scrna@tools[[sprintf("de_%s", DEFUALT_CLUSTER_NAME)]]
+  if(!ALLINONE){
+    de.list <- seutools_partition(scrna, sprintf("de_%s", DEFUALT_CLUSTER_NAME), SAVE_DIR, allinone=FALSE)
+  }else{
+    de.list <- scrna@tools[[sprintf("de_%s", DEFUALT_CLUSTER_NAME)]]
+  }
   reactome.up.list <- get_reactome_up(de.list)
   reactome.down.list <- get_reactome_down(de.list)
   store_list <- list(reactome.up.list, reactome.down.list)
   names(store_list) <- c("reactomeup", "reactomedown")
-  scrna@tools[[sprintf("reactome_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", sprintf("reactome_%s.Rds", DEFUALT_CLUSTER_NAME))
+     save_object(store_list,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[sprintf("reactome_%s", DEFUALT_CLUSTER_NAME)]] <- fname
+  }else{
+     scrna@tools[[sprintf("reactome_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+  }
   golist_xls(reactome.up.list,  sprintf("reactomeup_%s.xlsx", DEFUALT_CLUSTER_NAME))
   golist_xls(reactome.down.list, sprintf("reactomedown_%s.xlsx", DEFUALT_CLUSTER_NAME))
+
+  rm(store_list)
+  rm(reactome.up.list)
+  rm(reactome.down.list)
+
   return(list(scrna, ret_code))
 }
 
 
 generate_scrna_hallmark <- function(scrna){
   ret_code = 0
-  de.list <- scrna@tools[[sprintf("de_%s", DEFUALT_CLUSTER_NAME)]]
+  if(!ALLINONE){
+    de.list <- seutools_partition(scrna, sprintf("de_%s", DEFUALT_CLUSTER_NAME), SAVE_DIR, allinone=FALSE)
+  }else{
+    de.list <- scrna@tools[[sprintf("de_%s", DEFUALT_CLUSTER_NAME)]]
+  }
   hallmark.up.list <- get_hallmark_up(de.list)
   hallmark.down.list <- get_hallmark_down(de.list)
   store_list <- list(hallmark.up.list, hallmark.down.list)
   names(store_list) <- c("hallmarkup", "hallmarkdown")
-  scrna@tools[[sprintf("hallmark_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+
+
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", sprintf("hallmark_%s.Rds", DEFUALT_CLUSTER_NAME))
+     save_object(store_list,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[sprintf("hallmark_%s", DEFUALT_CLUSTER_NAME)]] <- fname
+  }else{
+     scrna@tools[[sprintf("hallmark_%s", DEFUALT_CLUSTER_NAME)]] <- store_list
+  }
+
   golist_xls(hallmark.up.list,  sprintf("hallmarkup_%s.xlsx", DEFUALT_CLUSTER_NAME))
   golist_xls(hallmark.down.list, sprintf("hallmarkdown_%s.xlsx", DEFUALT_CLUSTER_NAME))
+  rm(store_list)
+  rm(hallmark.up.list)
+  rm(hallmark.down.list)
+
   return(list(scrna, ret_code))
 }
 
@@ -2566,7 +2800,12 @@ get_pathway_comparison <- function(scrna, slot){
   all_reactomeup_list = list()
   all_reactomedown_list = list()
 
-  all_de_list <- scrna@tools[[dego_name]][["de"]]
+  if(!ALLINONE){
+    all_dego_list  <- seutools_partition(scrna, dego_name, SAVE_DIR, allinone=FALSE)
+  }else{
+    all_dego_list <- scrna@tools[[dego_name]]
+  }
+  all_de_list <- all_dego_list[["de"]]
   for(nm in names(all_de_list)) {
     logger.info("****processing pathway up&down %s", nm)
     de.list <- all_de_list[[nm]]
@@ -2590,6 +2829,13 @@ get_pathway_comparison <- function(scrna, slot){
     pathway_dump(nm, "KEGG", kegg_ups, kegg_downs)
     pathway_dump(nm, "hallmark", hallmark_ups, hallmark_downs)
     pathway_dump(nm, "Reactome", reactome_ups, reactome_downs)
+
+    rm(kegg_ups)
+    rm(kegg_downs)
+    rm(hallmark_ups)
+    rm(hallmark_downs)
+    rm(reactome_ups)
+    rm(reactome_downs)
   }
   store_list <- list(all_keggup_list, all_keggdown_list,
                      all_hallmarkup_list, all_hallmarkdown_list,
@@ -2597,7 +2843,23 @@ get_pathway_comparison <- function(scrna, slot){
   names(store_list) <- c("keggup", "keggdown",
                          "hallmarkup", "hallmarkdown",
                          "reactomeup", "reactomedown")
-  scrna@tools[[glue("pathway_{slot}_{DEFUALT_CLUSTER_NAME}")]] <- store_list
+
+
+  if(!ALLINONE){
+    fname = file.path(SAVE_DIR, "partition", glue("pathway_{slot}_{DEFUALT_CLUSTER_NAME}.Rds"))
+     save_object(store_list,
+                 file_name = fname,
+                 file_format = COMPRESSION_FORMAT)
+     scrna@tools[[glue("pathway_{slot}_{DEFUALT_CLUSTER_NAME}")]] <- fname
+  }else{
+     scrna@tools[[glue("pathway_{slot}_{DEFUALT_CLUSTER_NAME}")]] <- store_list
+  }
+  rm(store_list)
+  rm(all_keggup_list, all_keggdown_list,
+     all_hallmarkup_list, all_hallmarkdown_list,
+     all_reactomeup_list, all_reactomedown_list)
+
+
   return(list(scrna, ret_code))
 }
 
@@ -2690,7 +2952,7 @@ generate_scrna_doublet_proportions <- function(scrna){
     names(pANN) <- cells
     scrna <- AddMetaData(scrna, classifications, col.name = "Doublet_classifications")
     scrna <- AddMetaData(scrna, pANN, col.name = "pANN")
-    
+
     if(length(unique(scrna$name)) > 1){
       data.list <- SplitObject(scrna, split.by = "name")
       data.list <- lapply(X = data.list, FUN = function(x) {

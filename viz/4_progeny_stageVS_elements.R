@@ -6,7 +6,11 @@ progeny_stageVS_elements <- function(scrna){
     stop(glue("ERORR:progeny stages comparing hasn't been calculated for cluster:{cluster_use}\n Please run [scrna_progeny_stage]!!!"))
   }
 
-  all_progeny_list <-  scrna@tools[[progeny_cond_stage]]
+  all_progeny_list <- seutools_partition(scrna,
+                                   partition=progeny_cond_stage,
+                                   save_dir=SAVE_DIR,
+                                   allinone=ALLINONE)
+
   minr <- min(sapply(all_progeny_list, function(x) min(x$r)))
   maxr <- max(sapply(all_progeny_list, function(x) max(x$r)))
 

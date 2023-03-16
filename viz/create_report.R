@@ -221,7 +221,7 @@ if(MAKE_ELEMENT){
       paste0(date(), blue(" Loaded: "), red(rds_to_load), "\n")
     )
   }
-
+  ALLINONE <- scrna@tools$allinone
   scrna$name <- factor(scrna$name, levels = names(data_src))
   scrna$stage <- factor(scrna$stage, levels = unique(stage_lst))
   cluster_viridis_opt = ifelse(

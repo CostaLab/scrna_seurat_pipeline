@@ -7,10 +7,15 @@ DEGO_1v1_elements <- function(scrna){
     stop(glue("ERROR: DE&GO samples comparing hasn't been calculated for cluster:{cluster_use}\n Please run [scrna_dego_name]!!!"))
   }
 
-  de.list <- scrna@tools[[dego_sample_name]]
-  all_de_list <- scrna@tools[[dego_sample_name]]$de
-  all_goup_list <- scrna@tools[[dego_sample_name]]$goup
-  all_godown_list <- scrna@tools[[dego_sample_name]]$godown
+
+
+  dego_df <- seutools_partition(scrna,
+                                partition=dego_sample_name,
+                                save_dir=SAVE_DIR,
+                                allinone=ALLINONE)
+  all_de_list      <- dego_df$de
+  all_goup_list    <- dego_df$goup
+  all_godown_list  <- dego_df$godown
 
   sample_names <- scrna@tools$meta_order$name
   list_1v1 <- comb_list(sample_names)
