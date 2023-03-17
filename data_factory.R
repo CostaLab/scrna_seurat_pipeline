@@ -350,7 +350,7 @@ registerDoParallel(cores=WORKER_NUM)
 
 
 # Set up future for parallelization
-plan("multiprocess", workers = WORKER_NUM)
+plan("multicore", workers = WORKER_NUM)
 options(future.globals.maxSize = MAXMEMMEGA * 1024^2)
 
 
