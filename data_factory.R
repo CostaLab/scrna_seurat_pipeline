@@ -193,11 +193,6 @@ logger.error <- function(msg, ...) {
 }
 
 
-if(!ALLINONE){
-    dir.create(file.path(SAVE_DIR, "partition"), showWarnings=F)
-    logger.info("data in @tools save in directory: %s/partition", SAVE_DIR)
-}
-
 ## Robject directory
 if(!file.exists(SAVE_DIR)){
   dir.create(SAVE_DIR)
@@ -206,6 +201,12 @@ if(!file.exists(SAVE_DIR)){
 }else{
   logger.info("RObject save in existed directory: %s", SAVE_DIR)
 }
+
+if(!ALLINONE){
+    dir.create(file.path(SAVE_DIR, "partition"), showWarnings=F)
+    logger.info("data in @tools save in directory: %s/partition", SAVE_DIR)
+}
+
 
 if(!file.exists(CHARTS_DIR)){
   dir.create(CHARTS_DIR)
