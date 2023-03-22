@@ -595,6 +595,7 @@ generate_scrna_ambient_rna <- function(scrna){
               assay_info <- list(
                  name = "decontX",
                  assay = scrna[["decontX"]],
+                 object = scrna,
                  fname = fname,
                  info = "abundance of ambient RNA")
                #save to disk
@@ -1057,6 +1058,7 @@ generate_scrna_integration_seurat <- function(scrna){
                assay_info <- list(
                  name = "integrated",
                  assay = scrna[["integrated"]],
+                 object = scrna,
                  fname = fname,
                  info = "seurat integrated assay")
                #save to disk
@@ -1545,6 +1547,7 @@ generate_scrna_MAGIC <- function(scrna){
     assay_info <- list(
       name = "MAGIC_RNA",
       assay = scrna[["MAGIC_RNA"]],
+      object = scrna,
       fname = fname,
       info = "MAGIC imputed RNA assay")
     #save to disk
