@@ -607,6 +607,7 @@ generate_scrna_ambient_rna <- function(scrna){
               ## remove from memory
               rm(assay_info)
               scrna[["decontX"]] <- NULL
+              gc()
             }
 
             return(scrna)
@@ -1070,6 +1071,7 @@ generate_scrna_integration_seurat <- function(scrna){
                ## remove from memory
                rm(assay_info)
                scrna[["integrated"]] <- NULL
+               gc()
              }
 
 
@@ -1559,6 +1561,7 @@ generate_scrna_MAGIC <- function(scrna){
     ## remove from memory
     rm(assay_info)
     scrna[["MAGIC_RNA"]] <- NULL
+    gc()
   }
   return(list(scrna, ret_code))
 }

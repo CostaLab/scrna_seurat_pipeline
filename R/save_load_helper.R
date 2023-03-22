@@ -80,5 +80,6 @@ seu_assay <- function(scrna, assay, save_dir, allinone=FALSE, use_tools=FALSE){
       stop(glue::glue("The {assay}.Rds is not existing!"))
     }
   }
+  gc()
   return(scrna)
 }
