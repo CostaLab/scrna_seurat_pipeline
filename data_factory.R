@@ -1045,11 +1045,11 @@ generate_scrna_integration_seurat <- function(scrna){
              DefaultAssay(scrna) <- "integrated"
              scrna <- ScaleData(scrna, verbose = FALSE)
              scrna <- RunPCA(scrna, npcs = max(50, max(FINDNEIGHBORS_DIM)), verbose = FALSE, reduction.name="INTE_PCA")
+             scrna@reductions$INTE_PCA@assay.used <- "RNA"
+             DefaultAssay(scrna) <- "RNA"
              scrna <- RunUMAP(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM, reduction.name="INTE_UMAP")
              rm(scrna_inte)
              rm(data.list)
-
-             DefaultAssay(scrna) <- "RNA"
              ## assay to disk
              if (!ALLINONE){
                fname = file.path(SAVE_DIR, "assays", "integrated.Rds")

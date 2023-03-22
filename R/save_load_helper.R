@@ -67,10 +67,12 @@ seu_assay <- function(scrna, assay, save_dir, allinone=FALSE, use_tools=FALSE){
     if(endsWith(scrna@tools$assay_info[[assay]], "Rds")){
       if(use_tools == TRUE){
         assay_data <- load_object(scrna@tools$assay_info[[assay]]$fname)
-        scrna[[assay]] <- assay_data
+        assertthat::assert_that(all(colnames(scrna) %in% colnames(assay_data$assay)))
+        scrna[[assay]] <- assay_data$assay[, colnames(scrna)]
       }else{
         assay_data <- load_object(file.path(save_dir, "assay", glue::glue("{assay}.Rds")))
-        scrna[[assay]] <- assay_data
+        assertthat::assert_that(all(colnames(scrna) %in% colnames(assay_data$assay)))
+        scrna[[assay]] <- assay_data$assay[, colnames(scrna)]
       }
     }else{
       stop(glue::glue("The {assay}.Rds is not existing!"))
