@@ -602,7 +602,7 @@ generate_scrna_ambient_rna <- function(scrna){
               if ("assay_info" %ni% names(scrna@tools)){
                  scrna@tools[["assay_info"]] <- list()
               }
-              scrna@tools[["assay_info"]][["decontX"]] <- assay_info
+              scrna@tools[["assay_info"]][["decontX"]] <- fname
               ## remove from memory
               rm(assay_info)
               scrna[["decontX"]] <- NULL
@@ -1064,7 +1064,7 @@ generate_scrna_integration_seurat <- function(scrna){
                if ("assay_info" %ni% names(scrna@tools)){
                   scrna@tools[["assay_info"]] <- list()
                }
-               scrna@tools[["assay_info"]][["integrated"]] <- assay_info
+               scrna@tools[["assay_info"]][["integrated"]] <- fname
                ## remove from memory
                rm(assay_info)
                scrna[["integrated"]] <- NULL
@@ -1552,7 +1552,7 @@ generate_scrna_MAGIC <- function(scrna){
     if ("assay_info" %ni% names(scrna@tools)){
        scrna@tools[["assay_info"]] <- list()
     }
-    scrna@tools[["assay_info"]][["MAGIC_RNA"]] <- assay_info
+    scrna@tools[["assay_info"]][["MAGIC_RNA"]] <- fname
     ## remove from memory
     rm(assay_info)
     scrna[["MAGIC_RNA"]] <- NULL

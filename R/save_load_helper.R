@@ -64,9 +64,9 @@ seu_assay <- function(scrna, assay, save_dir, allinone=FALSE, use_tools=FALSE){
     if(!((assay %in% names(scrna@tools$assay_info)) | (assay %in% names(scrna@assays)))){
       stop("assay not found in scrna@tools$assay_info or scrna@assay")
     }
-    if(endsWith(scrna@tools$assay_info[[assay]]$fname, "Rds")){
+    if(endsWith(scrna@tools$assay_info[[assay]], "Rds")){
       if(use_tools == TRUE){
-        assay_data <- load_object(scrna@tools$assay_info[[assay]]$fname)
+        assay_data <- load_object(scrna@tools$assay_info[[assay]])
         assertthat::assert_that(all(colnames(scrna) %in% colnames(assay_data$assay)))
         scrna[[assay]] <- subset(assay_data$assay, cells=colnames(scrna))
         rm(assay_data)
