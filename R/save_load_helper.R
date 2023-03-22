@@ -53,3 +53,28 @@ seutools_partition <- function(scrna, partition, save_dir, allinone=FALSE, use_t
 
   return(out)
 }
+
+
+
+seu_assay <- function(scrna, assay, save_dir, allinone=FALSE, use_tools=FALSE){
+  #scrna@tools, store into assay if allinone is FALSE
+  out <- NULL
+  if(allinone == FALSE){
+    #assertthat::assert_that(scrna@tools$allinone == FALSE)
+    if(!(assay %in% names(scrna@tools$assay_info)) | !(assay %in% names(scrna@assay))){
+      stop("assay not found in scrna@tools$assay_info or scrna@assay")
+    }
+    if(endsWith(scrna@tools$assay_info[[assay]], "Rds")){
+      if(use_tools == TRUE){
+        assay_data <- load_object(scrna@tools$assay_info[[assay]]$fname)
+        scrna[[assay]] <- assay_data
+      }else{
+        assay_data <- load_object(file.path(save_dir, "assay", glue::glue("{assay}.Rds")))
+        scrna[[assay]] <- assay_data
+      }
+    }else{
+      stop(glue::glue("The {assay}.Rds is not existing!"))
+    }
+  }
+  return(scrna)
+}
