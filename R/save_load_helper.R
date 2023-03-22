@@ -61,18 +61,20 @@ seu_assay <- function(scrna, assay, save_dir, allinone=FALSE, use_tools=FALSE){
   out <- NULL
   if(allinone == FALSE){
     #assertthat::assert_that(scrna@tools$allinone == FALSE)
-    if(!(assay %in% names(scrna@tools$assay_info)) | !(assay %in% names(scrna@assay))){
+    if(!((assay %in% names(scrna@tools$assay_info)) | (assay %in% names(scrna@assays)))){
       stop("assay not found in scrna@tools$assay_info or scrna@assay")
     }
-    if(endsWith(scrna@tools$assay_info[[assay]], "Rds")){
+    if(endsWith(scrna@tools$assay_info[[assay]]$fname, "Rds")){
       if(use_tools == TRUE){
         assay_data <- load_object(scrna@tools$assay_info[[assay]]$fname)
         assertthat::assert_that(all(colnames(scrna) %in% colnames(assay_data$assay)))
-        scrna[[assay]] <- assay_data$assay[, colnames(scrna)]
+        scrna[[assay]] <- subset(assay_data$assay, cells=colnames(scrna))
+        rm(assay_data)
       }else{
-        assay_data <- load_object(file.path(save_dir, "assay", glue::glue("{assay}.Rds")))
+        assay_data <- load_object(file.path(save_dir, "assays", glue::glue("{assay}.Rds")))
         assertthat::assert_that(all(colnames(scrna) %in% colnames(assay_data$assay)))
-        scrna[[assay]] <- assay_data$assay[, colnames(scrna)]
+        scrna[[assay]] <- subset(assay_data$assay, cells=colnames(scrna))
+        rm(assay_data)
       }
     }else{
       stop(glue::glue("The {assay}.Rds is not existing!"))
