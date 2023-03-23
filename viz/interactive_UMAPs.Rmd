@@ -33,6 +33,7 @@ knitr::opts_chunk$set(warning = F, message = F, echo = T)
 ```{r hcl_interactive, out.width="100%", echo=FALSE, eval=TRUE}
 fname <- file.path(
     params$savedir,
+    "to_plot",
     paste0("hcl_annotate_plt_",params$cluster,".RDS")
   )
 
@@ -40,12 +41,14 @@ if(file.exists(fname)){
     plt = load_object(
       file.path(
         params$savedir,
+        "to_plot",
         paste0("hcl_annotate_plt_",params$cluster,".RDS")
       )
     )
     info = load_object(
       file.path(
         params$savedir,
+        "to_plot",
         paste0("hcl_annotate_info_",params$cluster,".RDS")
       )
     )
@@ -57,18 +60,21 @@ if(file.exists(fname)){
 ```{r mca_interactive, out.width="100%", echo=FALSE, eval=TRUE}
 fname <- file.path(
     params$savedir,
+    "to_plot",
     paste0("mca_annotate_plt_",params$cluster,".RDS")
   )
 if(file.exists(fname)){
     plt = load_object(
       file.path(
         params$savedir,
+        "to_plot",
         paste0("mca_annotate_plt_",params$cluster,".RDS")
       )
     )
     info = load_object(
       file.path(
         params$savedir,
+        "to_plot",
         paste0("mca_annotate_info_",params$cluster,".RDS")
       )
     )
@@ -80,18 +86,21 @@ if(file.exists(fname)){
 ```{r external_annot_interactive, out.width="100%", echo=FALSE, eval=TRUE}
 fname <-  file.path(
     params$savedir,
+    "to_plot",
     paste0("external_annotation_plt_",params$cluster,".RDS")
 )
 if(file.exists(fname)){
     plt = load_object(
       file.path(
         params$savedir,
+        "to_plot",
         paste0("external_annotation_plt_",params$cluster,".RDS")
       )
     )
     info = load_object(
       file.path(
         params$savedir,
+        "to_plot",
         paste0("external_annotation_info_",params$cluster,".RDS")
       )
     )

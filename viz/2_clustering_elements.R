@@ -436,12 +436,12 @@ clustering_elements <- function(scrna){
       message("### Saving MCA annotation data to produce plotly in report")
       save_object(
         plt,
-        file.path(savedir,paste0("mca_annotate_plt_",cluster_use,".RDS")),
+        file.path(savedir, "to_plot",paste0("mca_annotate_plt_",cluster_use,".RDS")),
         COMPRESSION_FORMAT
       )
       save_object(
         FetchData(object = tmp_scrna, vars = c("MCA_annotate", cluster_use)),
-        file.path(savedir,paste0("mca_annotate_info_",cluster_use,".RDS")),
+        file.path(savedir,"to_plot", paste0("mca_annotate_info_",cluster_use,".RDS")),
         COMPRESSION_FORMAT
       )
     }
@@ -476,12 +476,12 @@ clustering_elements <- function(scrna){
       message("### Saving HCL annotation data to produce plotly in report")
       save_object(
         plt,
-        file.path(savedir,paste0("hcl_annotate_plt_",cluster_use,".RDS")),
+        file.path(savedir,"to_plot", paste0("hcl_annotate_plt_",cluster_use,".RDS")),
         COMPRESSION_FORMAT
       )
       save_object(
         FetchData(object = tmp_scrna, vars = c("HCL_annotate", cluster_use)),
-        file.path(savedir,paste0("hcl_annotate_info_",cluster_use,".RDS")),
+        file.path(savedir, "to_plot", paste0("hcl_annotate_info_",cluster_use,".RDS")),
         COMPRESSION_FORMAT
       )
     }
@@ -514,12 +514,12 @@ clustering_elements <- function(scrna){
       message("### Saving external annotation data to produce plotly in report")
       save_object(
         plt,
-        file.path(savedir,paste0("external_annotation_plt_",cluster_use,".RDS")),
+        file.path(savedir, "to_plot",paste0("external_annotation_plt_",cluster_use,".RDS")),
         COMPRESSION_FORMAT
       )
       save_object(
         FetchData(object = tmp_scrna, vars = c("external_annotation", cluster_use)),
-        file.path(savedir,paste0("external_annotation_info_",cluster_use,".RDS")),
+        file.path(savedir, "to_plot", paste0("external_annotation_info_",cluster_use,".RDS")),
         COMPRESSION_FORMAT
       )
     }
