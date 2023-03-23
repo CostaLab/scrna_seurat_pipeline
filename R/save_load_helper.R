@@ -1,22 +1,27 @@
 
 suppressPackageStartupMessages(library(archive))
 
-save_object <- function(object, file_name, file_format=NULL){
+save_object <- function(object, file_name, file_format="zstd"){
 
   stopifnot(file_format %in% c("zstd", "lz4", "gzip", "bzip2", "xz", "nocomp"))
 
+  file_name.tmp <- paste0(file_name, ".tmp")
+
   if(file_format %in% "nocomp"){
-    saveRDS(object = object, file = file_name, compress = FALSE)
+    saveRDS(object = object, file = file_name.tmp, compress = FALSE)
+    file.rename(file_name.tmp, file_name)
     return(invisible(NULL))
   }
 
   if(file_format %in% c("zstd", "lz4")){
-    con <- archive::file_write(file = file_name, filter = file_format)
+    con <- archive::file_write(file = file_name.tmp, filter = file_format)
     open(con)
     saveRDS(object = object, file = con)
     close(con)
+    file.rename(file_name.tmp, file_name)
   }else{
-    saveRDS(object = object, file = file_name, compress = file_format)
+    saveRDS(object = object, file = file_name.tmp, compress = file_format)
+    file.rename(file_name.tmp, file_name)
   }
 }
 
@@ -52,4 +57,34 @@ seutools_partition <- function(scrna, partition, save_dir, allinone=FALSE, use_t
   }
 
   return(out)
+}
+
+
+
+seu_assay <- function(scrna, assay, save_dir, allinone=FALSE, use_tools=FALSE){
+  #scrna@tools, store into assay if allinone is FALSE
+  out <- NULL
+  if(allinone == FALSE){
+    #assertthat::assert_that(scrna@tools$allinone == FALSE)
+    if(!((assay %in% names(scrna@tools$assay_info)) | (assay %in% names(scrna@assays)))){
+      stop("assay not found in scrna@tools$assay_info or scrna@assay")
+    }
+    if(endsWith(scrna@tools$assay_info[[assay]], "Rds")){
+      if(use_tools == TRUE){
+        assay_data <- load_object(scrna@tools$assay_info[[assay]])
+        assertthat::assert_that(all(colnames(scrna) %in% colnames(assay_data$assay)))
+        scrna[[assay]] <- subset(assay_data$assay, cells=colnames(scrna))
+        rm(assay_data)
+      }else{
+        assay_data <- load_object(file.path(save_dir, "assays", glue::glue("{assay}.Rds")))
+        assertthat::assert_that(all(colnames(scrna) %in% colnames(assay_data$assay)))
+        scrna[[assay]] <- subset(assay_data$assay, cells=colnames(scrna))
+        rm(assay_data)
+      }
+    }else{
+      stop(glue::glue("The {assay}.Rds is not existing!"))
+    }
+  }
+  gc()
+  return(scrna)
 }

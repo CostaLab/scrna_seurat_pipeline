@@ -34,6 +34,9 @@ external_markers_elements <- function(scrna){
   ## External markers
   message(paste0("### ","External markers"))
   Idents(scrna) <- cluster
+  if(!ALLINONE){
+    scrna <- seu_assay(scrna, assay="MAGIC_RNA", SAVE_DIR, allinone=FALSE)
+  }
   DefaultAssay(scrna) <- "MAGIC_RNA"
   o_genes <- rownames(scrna)
   for (a_celltype in celltype_names){

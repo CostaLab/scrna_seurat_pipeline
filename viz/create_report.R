@@ -146,6 +146,9 @@ code_gene_file <- file.path(REPORTDIR, "..", "viz/code_generator.py")
 
 viz_path <- file.path(REPORTDIR, "..", "viz")
 
+dir.create(glue("{SAVE_DIR}/to_plot"), recursive = TRUE, showWarnings = FALSE)
+
+
 code_generate_cmd <- glue(
   "python {code_gene_file} ",
   "-c {DEFAULTCLUSTERS} ",

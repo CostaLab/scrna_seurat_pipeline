@@ -69,3 +69,22 @@
  * Add catching exception when comparing has been calculated
  * Add once encountering error, stop for viz
  * Add unimplemented function scrna_HCLannotate
+
+## version 1.0.5  --- 03.23.2023
+ * add allinone optioin to decide store calculation result into seurat object or files.
+ * explicitly display parameters in run_example.sh
+ * compatible with Seurat 4
+ * viz add three ways of display features in umap(seurat,nebulosa and schex)
+ * viz doublets score
+ * viz QCC for a exisiting Seurat object
+ * viz improve the acolor scheme
+ * viz add references for some plot sections
+ * viz add geneset analysis
+ * viz tables to show counts and statistics of clusters and samples
+ * add PanglaoDB to external markers
+ * add ambient detection
+ * add doublet detection
+ * add scProportion to compare conditions
+ * add Rmagic to impute reads  *
+ * improve the performance of saving and loading using compression options
+ * fix some bugs
