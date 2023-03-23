@@ -104,7 +104,7 @@ AllOptions <- function(){
                        metavar="character")
 
   parser <- add_option(parser, c("--allinone"), type="logical", default=TRUE,
-                       help="store in scrna@tools if TRUE, else store in save/partition [default %default]",
+                       help="store calculated result in scrna@tools & assays in scrna@assays if TRUE, else store in save/partition & save/assays respectively [default %default]",
                        metavar="character")
 
   parser <- add_option(
