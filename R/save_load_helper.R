@@ -1,7 +1,7 @@
 
 suppressPackageStartupMessages(library(archive))
 
-save_object <- function(object, file_name, file_format=NULL){
+save_object <- function(object, file_name, file_format="zstd"){
 
   stopifnot(file_format %in% c("zstd", "lz4", "gzip", "bzip2", "xz", "nocomp"))
 
