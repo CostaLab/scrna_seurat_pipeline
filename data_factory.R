@@ -1,7 +1,7 @@
 #!/usr/bin/Rscript
 
 ###Set VERSION
-VERSION = "1.0.4"
+VERSION = "1.0.5"
 
 args <- commandArgs(trailingOnly = TRUE)
 if(length(args) == 1 && (args[1] == "-v" | args[1] == "--version")){
@@ -197,10 +197,15 @@ logger.error <- function(msg, ...) {
 if(!file.exists(SAVE_DIR)){
   dir.create(SAVE_DIR)
   logger.info("RObject save in directory: %s", SAVE_DIR)
-
+  dir.create(file.path(SAVE_DIR, "meta"), showWarnings=F)
+  logger.info("meta.data save in directory: %s", file.path(SAVE_DIR, "meta"))
 }else{
   logger.info("RObject save in existed directory: %s", SAVE_DIR)
+  logger.info("meta.data save in directory: %s", file.path(SAVE_DIR))
 }
+
+
+
 
 if(!ALLINONE){
     dir.create(file.path(SAVE_DIR, "partition"), showWarnings=F)
@@ -402,6 +407,13 @@ conf_main <- function(){
           file_name = file.path(SAVE_DIR, glue("{phase_name}.Rds")),
           file_format = COMPRESSION_FORMAT
         )
+        save_object(
+          object = scrna@meta.data,
+          file_name = file.path(SAVE_DIR, 'meta', glue("{phase_name}_meta.Rds")),
+          file_format = COMPRESSION_FORMAT
+        )
+
+
         logger.info(paste("finished", phase_name))
       }
     }else{
@@ -595,8 +607,8 @@ generate_scrna_ambient_rna <- function(scrna){
               assay_info <- list(
                  name = "decontX",
                  assay = scrna[["decontX"]],
-                 object = scrna,
                  fname = fname,
+                 meta = scrna@meta.data,
                  info = "abundance of ambient RNA")
                #save to disk
               save_object(assay_info, fname, file_format = COMPRESSION_FORMAT)
@@ -1059,8 +1071,8 @@ generate_scrna_integration_seurat <- function(scrna){
                assay_info <- list(
                  name = "integrated",
                  assay = scrna[["integrated"]],
-                 object = scrna,
                  fname = fname,
+                 meta = scrna@meta.data,
                  info = "seurat integrated assay")
                #save to disk
                save_object(assay_info, fname, file_format = COMPRESSION_FORMAT)
@@ -1158,8 +1170,8 @@ generate_scrna_clustering <- function(scrna){
            {
                #DefaultAssay(scrna) <- "integrated"
                DefaultAssay(scrna) <- "RNA"
-               scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM) %>%
-                            FindClusters(resolution = CLUSTER_RESOLUTION) ##
+               scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM, graph.name='integrated_snn') %>%
+                            FindClusters(resolution = CLUSTER_RESOLUTION, graph.name='integrated_snn') ##
 
                scrna$seurat_inte_clusters <- scrna$seurat_clusters
 
@@ -1241,8 +1253,8 @@ generate_scrna_batchclustering <- function(scrna){
 
              #DefaultAssay(scrna) <- "integrated"
              DefaultAssay(scrna) <- "RNA"
-             scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM) %>%
-                                  FindClusters(resolution = CLUSTER_RESOLUTION_RANGE) ##
+             scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM, graph.name='integrated_snn') %>%
+                                  FindClusters(resolution = CLUSTER_RESOLUTION_RANGE, graph.name='integrated_snn') ##
 
              DefaultAssay(scrna) <- "RNA"
              scrna <-  FindNeighbors(scrna, reduction = "harmony", dims = HARMONY_DIM) %>%
@@ -1549,8 +1561,8 @@ generate_scrna_MAGIC <- function(scrna){
     assay_info <- list(
       name = "MAGIC_RNA",
       assay = scrna[["MAGIC_RNA"]],
-      object = scrna,
       fname = fname,
+      meta = scrna@meta.data,
       info = "MAGIC imputed RNA assay")
     #save to disk
     save_object(assay_info, fname, file_format = COMPRESSION_FORMAT)
@@ -1675,11 +1687,11 @@ generate_scrna_batch_markergenes <- function(scrna){
              if(!ALLINONE){
                fname = file.path(SAVE_DIR, "partition", "de_batch.Rds")
                save_object(cluster.de.list,
-                            file_name = fname,
-                            file_format = COMPRESSION_FORMAT)
+                           file_name = fname,
+                           file_format = COMPRESSION_FORMAT)
                scrna@tools[["de_batch"]] <- fname
              }else{
-                scrna@tools[["de_batch"]] <- cluster.de.list
+               scrna@tools[["de_batch"]] <- cluster.de.list
              }
              rm(cluster.de.list)
            },
@@ -2188,6 +2200,31 @@ generate_scrna_progeny_stage <- function(scrna){
   if("progeny" %ni% names(scrna@assays)){
     scrna <- progeny::progeny(scrna, scale=FALSE, organism=SPECIES, top=500, perm=1,return_assay = TRUE)
   }
+
+  if (!ALLINONE){
+    fname = file.path(SAVE_DIR, "assays", "progeny.Rds")
+    # construct list
+    assay_info <- list(
+      name = "progeny",
+      assay = scrna[["progeny"]],
+      fname = fname,
+      meta = scrna@meta.data,
+      info = "progeny pathway scores")
+    #save to disk
+    save_object(assay_info, fname, file_format = COMPRESSION_FORMAT)
+    if ("assay_info" %ni% names(scrna@tools)){
+       scrna@tools[["assay_info"]] <- list()
+    }
+    scrna@tools[["assay_info"]][["progeny"]] <- fname
+    ## remove from memory
+    rm(assay_info)
+    # small assay still keep it here
+    #scrna[["progeny"]] <- NULL
+    gc()
+  }
+
+
+
   conds <- scrna@tools$meta_order$stage
   m <- combn(conds, 2)
   n = length(m)/2

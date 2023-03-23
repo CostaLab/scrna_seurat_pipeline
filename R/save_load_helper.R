@@ -5,18 +5,23 @@ save_object <- function(object, file_name, file_format=NULL){
 
   stopifnot(file_format %in% c("zstd", "lz4", "gzip", "bzip2", "xz", "nocomp"))
 
+  file_name.tmp <- paste0(file_name, ".tmp")
+
   if(file_format %in% "nocomp"){
-    saveRDS(object = object, file = file_name, compress = FALSE)
+    saveRDS(object = object, file = file_name.tmp, compress = FALSE)
+    file.rename(file_name.tmp, file_name)
     return(invisible(NULL))
   }
 
   if(file_format %in% c("zstd", "lz4")){
-    con <- archive::file_write(file = file_name, filter = file_format)
+    con <- archive::file_write(file = file_name.tmp, filter = file_format)
     open(con)
     saveRDS(object = object, file = con)
     close(con)
+    file.rename(file_name.tmp, file_name)
   }else{
-    saveRDS(object = object, file = file_name, compress = file_format)
+    saveRDS(object = object, file = file_name.tmp, compress = file_format)
+    file.rename(file_name.tmp, file_name)
   }
 }
 
