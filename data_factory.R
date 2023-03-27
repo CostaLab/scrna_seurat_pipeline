@@ -197,15 +197,15 @@ logger.error <- function(msg, ...) {
 if(!file.exists(SAVE_DIR)){
   dir.create(SAVE_DIR)
   logger.info("RObject save in directory: %s", SAVE_DIR)
-  dir.create(file.path(SAVE_DIR, "meta"), showWarnings=F)
-  logger.info("meta.data save in directory: %s", file.path(SAVE_DIR, "meta"))
 }else{
   logger.info("RObject save in existed directory: %s", SAVE_DIR)
   logger.info("meta.data save in directory: %s", file.path(SAVE_DIR))
 }
 
-
-
+if(!file.exists(file.path(SAVE_DIR, "meta"))){
+  dir.create(file.path(SAVE_DIR, "meta"), showWarnings=F)
+  logger.info("meta.data save in directory: %s", file.path(SAVE_DIR, "meta"))
+}
 
 if(!ALLINONE){
     dir.create(file.path(SAVE_DIR, "partition"), showWarnings=F)
