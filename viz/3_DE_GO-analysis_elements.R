@@ -11,377 +11,388 @@ DE_GO_analysis_elements <- function(scrna){
 
   de_cluster_name <- paste0("de_", cluster)
   go_cluster_name <- paste0("go_", cluster)
-
-  if(de_cluster_name %ni% names(scrna@tools)){
-    stop(glue("ERROR:DE hasn't been calculated for cluster:{cluster}\n Please run [scrna_markergenes]!!!"))
-  }
-  if(go_cluster_name %ni% names(scrna@tools)){
-    stop(glue("ERROR:GO hasn't been calculated for cluster:{cluster}\n Please run [scrna_go]!!!"))
-  }
-  if(any(grepl("hallmark", funcs, fixed = TRUE))){
-    hallmark_cluster_name <- paste0("hallmark_", cluster)
-    if(hallmark_cluster_name %ni% names(scrna@tools)){
-      stop(glue("ERROR:hallmark hasn't been calculated for cluster {cluster}\n Please run [scrna_hallmark]!!!"))
-    }
-  }
-  if(any(grepl("KEGG", funcs, fixed = TRUE))){
-    kegg_cluster_name <- paste0("kegg_", cluster)
-    if(kegg_cluster_name %ni% names(scrna@tools)){
-      stop(glue("ERROR:kegg hasn't been calculated for cluster {cluster}\n Please run [scrna_kegg]!!!"))
-    }
-  }
-  if(any(grepl("Reactome", funcs, fixed = TRUE))){
-    reactome_cluster_name <- paste0("reactome_", cluster)
-    if(reactome_cluster_name %ni% names(scrna@tools)){
-      stop(glue("ERROR:reactome hasn't been calculated for cluster {cluster}\n Please run [scrna_reactome]!!!"))
-    }
-  }
-  if(any(grepl("progeny", funcs, fixed = TRUE))){
-    progeny_cluster_name <- paste0("progeny_", cluster)
-    if(progeny_cluster_name %ni% names(scrna@tools)){
-      stop(glue("ERROR:progeny hasn't been calculated for cluster {cluster}\n Please run [scrna_progeny]!!!"))
-    }
-  }
-
-  # DE plots
-  cluster_de <- seutools_partition(scrna,
-                                   partition=de_cluster_name,
-                                   save_dir=SAVE_DIR,
-                                   allinone=ALLINONE)
-
-
-  cluster_de <- cluster_de[sapply(cluster_de, function(m) nrow(m) > 0)]
-
-  cluster_de_top10 <- lapply(cluster_de, function(x) {
-      if("avg_logFC" %in% names(x)){ ## compatible for seurat3
-        x$avg_log2FC <- x$avg_logFC / log(2)
-      }
-      x %>% top_n(10, avg_log2FC) %>% arrange(-avg_log2FC)
-  })
-
-
-  ## top10 DE heatmaps
-  genes <- as.vector(unlist(sapply(cluster_de_top10, function(x)x$gene)))
-  scrna <- ScaleData(scrna, rownames(scrna))
   help_sort_func <- ifelse(
     all.is.numeric(unique(scrna@meta.data[, cluster])),
     function(x) as.numeric(as.character(x)),
     as.character
   )
-
   scrna@meta.data[, cluster] <- help_sort_func(scrna@meta.data[, cluster])
   col_def <- rev(ggsci_pal(option = cluster_viridis_opt)(length(unique(scrna@meta.data[, cluster]))))
 
-  scrna_to_plot <- function(scrna){
-    if(ncol(scrna)<=20000){
-      return(scrna)
+
+  hallmark_cluster_name <- ""
+  kegg_cluster_name <- ""
+  reactome_cluster_name <- ""
+
+  if("DEGO" %in% funcs){
+    if(de_cluster_name %ni% names(scrna@tools)){
+      stop(glue("ERROR:DE hasn't been calculated for cluster:{cluster}\n Please run [scrna_markergenes]!!!"))
     }
-    return(subset(scrna, cells=sample(colnames(scrna))[1:20000]))
+    if(go_cluster_name %ni% names(scrna@tools)){
+      stop(glue("ERROR:GO hasn't been calculated for cluster:{cluster}\n Please run [scrna_go]!!!"))
+    }
   }
-
-  plthm = DoHeatmap(
-    ## >30k will failed to plot, here we subset when cell number > 20,000
-    object = scrna_to_plot(scrna),
-    features = genes,
-    group.by = cluster,
-    group.colors = col_def,
-    disp.min = -2,
-    disp.max = 2,
-    slot = "scale.data",
-    assay = "RNA",
-    raster = FALSE,
-    combine = TRUE
-  ) +
-  ggtitle("Marker genes for each cluster") +
-  NoLegend()
-
-  save_ggplot_formats(
-    plt = plthm,
-    base_plot_dir = report_plots_folder,
-    plt_name = paste0("heatmap_top10-de-genes_cluster-", cluster),
-    width = 13,
-    height = 12
-  )
-
-
-  # GeneBarPlots
-  ## Plot the top 10 DE genes in each cluster.
-  plots = list()
-
-  help_sort_func <- ifelse(
-    all.is.numeric(names(cluster_de)),
-    as.numeric,
-    function(x){x}
-  )
-
-  for (id in sort(help_sort_func(names(cluster_de)))) {
-    id <- as.character(id)
-    cluster_genes <- cluster_de_top10[[id]]
-    if("avg_logFC" %in% names(cluster_de[[id]])){ ## compatible for seurat3
-      cluster_de[[id]]$avg_log2FC <- cluster_de[[id]]$avg_logFC / log(2)
+  if("hallmark" %in% funcs){
+    hallmark_cluster_name <- paste0("hallmark_", cluster)
+    if(hallmark_cluster_name %ni% names(scrna@tools)){
+      stop(glue("ERROR:hallmark hasn't been calculated for cluster {cluster}\n Please run [scrna_hallmark]!!!"))
     }
-    x_lim = max(abs(cluster_de[[id]]$avg_log2FC))
-    x_lim <- c(-x_lim, x_lim)
-    plots[[id]] <- GeneBarPlot(
-      cluster_de[[id]],
-      xlim = x_lim,
-      main = paste0("Cluster: ", id)
+  }
+  if("KEGG" %in% funcs){
+    kegg_cluster_name <- paste0("kegg_", cluster)
+    if(kegg_cluster_name %ni% names(scrna@tools)){
+      stop(glue("ERROR:kegg hasn't been calculated for cluster {cluster}\n Please run [scrna_kegg]!!!"))
+    }
+  }
+  if("Reactome" %in% funcs){
+    reactome_cluster_name <- paste0("reactome_", cluster)
+    if(reactome_cluster_name %ni% names(scrna@tools)){
+      stop(glue("ERROR:reactome hasn't been calculated for cluster {cluster}\n Please run [scrna_reactome]!!!"))
+    }
+  }
+  if("progeny" %in%funcs){
+    progeny_cluster_name <- paste0("progeny_", cluster)
+    if(progeny_cluster_name %ni% names(scrna@tools)){
+      stop(glue("ERROR:progeny hasn't been calculated for cluster {cluster}\n Please run [scrna_progeny]!!!"))
+    }
+    progeny_df <- seutools_partition(scrna,
+                                     partition=progeny_cluster_name,
+                                     save_dir=SAVE_DIR,
+                                     allinone=ALLINONE)
+
+    help_sort_func <- ifelse(
+      all.is.numeric(unique(progeny_df$CellType)),
+      function(x) as.numeric(as.character(x)),
+      function(x){x}
+    )
+
+    progeny_df$CellType <- factor(
+      progeny_df$CellType,
+      levels = as.character(
+        sort(unique(help_sort_func(progeny_df$CellType)))
+      )
+    )
+
+    plt <-
+      ggplot(progeny_df, aes(y = pathway, x = CellType, fill = r)) +
+      geom_tile() +
+      scale_fill_gradientn(colours = neg_pos_divergent_palette) +
+      ggtitle(glue("{cluster} r effect size")) +
+      labs(x = "Cluster") +
+      # scale_fill_distiller(palette ="RdBu", direction = -1) +
+      theme_minimal() +
+      theme(
+        strip.text.x = element_text(size = 28, colour = "black", hjust = 0),
+        plot.caption = element_text(size = 30, colour = "black", hjust = 0)#,
+        #axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
+      )
+
+    save_ggplot_formats(
+      plt = plt,
+      base_plot_dir = report_plots_folder,
+      plt_name = paste0("progeny_r_effect_heatmap-", cluster),
+      width = 9, height = 7
+    )
+
+
+    plt <-
+      ggplot(progeny_df, aes(y = pathway, x = CellType, fill = r)) +
+      geom_tile() +
+      geom_text(
+        aes(y = pathway, x = CellType, label = tag),
+        position = position_dodge(width = 0),
+        hjust = 0.5, size = 4
+      ) +
+      scale_fill_gradientn(colours = neg_pos_divergent_palette) +
+      ggtitle(glue("{cluster} r effect size")) +
+      labs(x = "Cluster") +
+      # scale_fill_distiller(palette ="RdBu", direction = -1) +
+      theme_minimal() +
+      theme(
+        strip.text.x = element_text(size = 28, colour = "black", hjust = 0),
+        plot.caption = element_text(size = 30, colour = "black", hjust = 0)#,
+        # axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
+      )
+
+    save_ggplot_formats(
+      plt = plt,
+      base_plot_dir = report_plots_folder,
+      plt_name = paste0("progeny_r_effect_text_heatmap-", cluster),
+      width = 9, height = 7
     )
   }
 
-  if(length(plots) > 0){
-    for (i in seq(1, length(plots), by = 4)){
-      ni <- min(i + 3, length(plots))
-      get_plts <- plots[i:ni]
-      plt <- plot_grid(plotlist = get_plts, ncol = 4)
 
-      dynamic_height <-
-        2 + (0.2 * max(sapply(get_plts, function(p){nrow(p$data)})))
 
+  if("DEGO" %in% funcs){
+    # DE plots
+    cluster_de <- seutools_partition(scrna,
+                                     partition=de_cluster_name,
+                                     save_dir=SAVE_DIR,
+                                     allinone=ALLINONE)
+
+
+    cluster_de <- cluster_de[sapply(cluster_de, function(m) nrow(m) > 0)]
+
+    cluster_de_top10 <- lapply(cluster_de, function(x) {
+        if("avg_logFC" %in% names(x)){ ## compatible for seurat3
+          x$avg_log2FC <- x$avg_logFC / log(2)
+        }
+        x %>% top_n(10, avg_log2FC) %>% arrange(-avg_log2FC)
+    })
+
+
+    ## top10 DE heatmaps
+    genes <- as.vector(unlist(sapply(cluster_de_top10, function(x)x$gene)))
+    scrna <- ScaleData(scrna, rownames(scrna))
+
+
+    scrna_to_plot <- function(scrna){
+      if(ncol(scrna)<=20000){
+        return(scrna)
+      }
+      return(subset(scrna, cells=sample(colnames(scrna))[1:20000]))
+    }
+
+    plthm = DoHeatmap(
+      ## >30k will failed to plot, here we subset when cell number > 20,000
+      object = scrna_to_plot(scrna),
+      features = genes,
+      group.by = cluster,
+      group.colors = col_def,
+      disp.min = -2,
+      disp.max = 2,
+      slot = "scale.data",
+      assay = "RNA",
+      raster = FALSE,
+      combine = TRUE
+    ) +
+    ggtitle("Marker genes for each cluster") +
+    NoLegend()
+
+    save_ggplot_formats(
+      plt = plthm,
+      base_plot_dir = report_plots_folder,
+      plt_name = paste0("heatmap_top10-de-genes_cluster-", cluster),
+      width = 13,
+      height = 12
+    )
+
+
+    # GeneBarPlots
+    ## Plot the top 10 DE genes in each cluster.
+    plots = list()
+
+    help_sort_func <- ifelse(
+      all.is.numeric(names(cluster_de)),
+      as.numeric,
+      function(x){x}
+    )
+
+    for (id in sort(help_sort_func(names(cluster_de)))) {
+      id <- as.character(id)
+      cluster_genes <- cluster_de_top10[[id]]
+      if("avg_logFC" %in% names(cluster_de[[id]])){ ## compatible for seurat3
+        cluster_de[[id]]$avg_log2FC <- cluster_de[[id]]$avg_logFC / log(2)
+      }
+      x_lim = max(abs(cluster_de[[id]]$avg_log2FC))
+      x_lim <- c(-x_lim, x_lim)
+      plots[[id]] <- GeneBarPlot(
+        cluster_de[[id]],
+        xlim = x_lim,
+        main = paste0("Cluster: ", id)
+      )
+    }
+
+    if(length(plots) > 0){
+      for (i in seq(1, length(plots), by = 4)){
+        ni <- min(i + 3, length(plots))
+        get_plts <- plots[i:ni]
+        plt <- plot_grid(plotlist = get_plts, ncol = 4)
+
+        dynamic_height <-
+          2 + (0.2 * max(sapply(get_plts, function(p){nrow(p$data)})))
+
+        save_ggplot_formats(
+          plt = plt,
+          base_plot_dir = report_plots_folder,
+          plt_name = paste0(
+            "top10-de-genes_per_cluster-", cluster, "_p", i, "-", ni
+          ),
+          width = 13,
+          height = dynamic_height
+        )
+      }
+    }
+
+    # volcano plots
+    help_sort_func <- ifelse(
+      all.is.numeric(names(cluster_de)),
+      as.numeric,
+      function(x){x}
+    )
+
+    for (id in sort(help_sort_func(names(cluster_de)))) {
+      id = as.character(id)
+      a_de <- cluster_de[[id]]
+      if("avg_logFC" %in% names(a_de)){ ## compatible for seurat3
+        a_de$avg_log2FC <- a_de$avg_logFC / log(2)
+      }
+      a_de$log2FC <- a_de$avg_log2FC # / log(2)
+      up <- nrow(a_de %>% filter(log2FC >= 1 & p_val_adj <= 0.05) )
+      down <- nrow(a_de %>% filter(log2FC <= -1 & p_val_adj <= 0.05))
+      plt <- EnhancedVolcano(
+        a_de,
+        x = "log2FC",
+        y = "p_val_adj",
+        lab = a_de$gene,
+        pointSize = 1.0,
+        pCutoff = 0.05,
+        title = glue("Volcano plot, Cluster: {id}"),
+        subtitle = glue("up:{up} down:{down}")
+      )
       save_ggplot_formats(
         plt = plt,
         base_plot_dir = report_plots_folder,
         plt_name = paste0(
-          "top10-de-genes_per_cluster-", cluster, "_p", i, "-", ni
+          "volcanoplot_deg_cluster-",
+          cluster, "_id-",
+          URLencode_escape(id)
         ),
-        width = 13,
-        height = dynamic_height
+        width = 9,
+        height = 7
+      )
+    }
+
+    ## DE genes on UMAP plot
+    Idents(scrna) <- cluster
+    for (i in names(cluster_de)){
+      #plots = list()
+      print(sprintf("Cluster: %s", i))
+      ps <- StyleFeaturePlot(
+        scrna,
+        features = cluster_de_top10[[as.character(i)]]$gene,
+        label = TRUE,
+        max.cutoff = "q95",
+        order = TRUE,
+        label.size = 2,
+        cols = zero_pos_divergent_colors,
+        reduction = "DEFAULT_UMAP"
+      )
+      save_ggplot_formats(
+        plt = ps,
+        base_plot_dir = report_plots_folder,
+        plt_name = paste0(
+          "umap_featureplot_top10deg_cluster-",
+          cluster, "_id-",
+          URLencode_escape(i)
+        ),
+        width = 12, height = 7
       )
     }
   }
 
+  #### Genesets
+  # FIXME if genesets not requested, this block shouldn't run
+  if("Genesets" %in% funcs){
+    for(nm in scrna@tools$genesets){
+      message("nm: ", nm, "    ", appendLF = FALSE)
+      if(nm %ni% names(scrna@meta.data)){
+        next
+      }
+      df <- data.frame(
+        nm = scrna@meta.data[, nm],
+        Cluster = as.character(scrna@meta.data[, cluster]),
+        stringsAsFactors = FALSE)
 
-  # volcano plots
-  help_sort_func <- ifelse(
-    all.is.numeric(names(cluster_de)),
-    as.numeric,
-    function(x){x}
-  )
 
-  for (id in sort(help_sort_func(names(cluster_de)))) {
-    id = as.character(id)
-    a_de <- cluster_de[[id]]
-    if("avg_logFC" %in% names(a_de)){ ## compatible for seurat3
-      a_de$avg_log2FC <- a_de$avg_logFC / log(2)
+      df.s <- melt(df, id.vars = c("Cluster"))
+      df.s[df.s == -Inf] <- 0
+
+      min_x <- min(df.s$value)
+      max_x <- max(df.s$value)
+
+      ## ridges
+      plt <- ggplot(
+          df.s,
+          aes(
+            x = value,
+            y = Cluster,
+            color = Cluster,
+            point_color = Cluster,
+            fill = Cluster
+          )
+        ) +
+        geom_density_ridges(
+          jittered_points = FALSE,
+          scale = .95,
+          rel_min_height = .01,
+          alpha = 0.5
+        ) +
+        scale_y_discrete(expand = c(.01, 0)) +
+        scale_fill_manual(values = col_def) +
+        scale_color_manual(values = col_def, guide = "none") +
+        scale_discrete_manual("point_color", values = col_def, guide = "none") +
+        theme_ridges(center = TRUE) +
+        xlim(min_x, max_x) + ylab("") + ggtitle(glue("{nm}")) +
+        theme(
+          plot.title = element_text(hjust = 0.5),
+          plot.subtitle = element_text(hjust = 0.5)
+        )
+      save_ggplot_formats(
+        plt = plt,
+        base_plot_dir = report_plots_folder,
+        plt_name = paste0("Genesets_ridges_", nm, "-", cluster),
+        width = 9, height = 7
+      )
+
+
+      ## Vln
+      plt <- VlnPlot(
+        scrna, features = nm,
+        pt.size = 0,
+        group.by = cluster,
+        cols = col_def) + ggtitle(nm)
+
+      save_ggplot_formats(
+        plt = plt,
+        base_plot_dir = report_plots_folder,
+        plt_name = paste0("Genesets_violin_", nm, "-", cluster),
+        width = 9, height = 7
+      )
+
+
+    ## feature
+      plt <- StyleFeaturePlot(
+        scrna, features = nm,
+        reduction = "DEFAULT_UMAP",
+        max.cutoff = "q95",
+        order = TRUE,
+        cols = zero_pos_divergent_colors
+      ) + ggtitle(nm)
+      save_ggplot_formats(
+        plt = plt,
+        base_plot_dir = report_plots_folder,
+        plt_name = paste0("Genesets_feature_", nm, "-", cluster),
+        width = 9, height = 7
+      )
+
     }
-    a_de$log2FC <- a_de$avg_log2FC # / log(2)
-    up <- nrow(a_de %>% filter(log2FC >= 1 & p_val_adj <= 0.05) )
-    down <- nrow(a_de %>% filter(log2FC <= -1 & p_val_adj <= 0.05))
-    plt <- EnhancedVolcano(
-      a_de,
-      x = "log2FC",
-      y = "p_val_adj",
-      lab = a_de$gene,
-      pointSize = 1.0,
-      pCutoff = 0.05,
-      title = glue("Volcano plot, Cluster: {id}"),
-      subtitle = glue("up:{up} down:{down}")
-    )
-    save_ggplot_formats(
-      plt = plt,
-      base_plot_dir = report_plots_folder,
-      plt_name = paste0(
-        "volcanoplot_deg_cluster-",
-        cluster, "_id-",
-        URLencode_escape(id)
-      ),
-      width = 9,
-      height = 7
-    )
-  }
-
-  ## DE genes on UMAP plot
-  Idents(scrna) <- cluster
-  for (i in names(cluster_de)){
-    #plots = list()
-    print(sprintf("Cluster: %s", i))
-    ps <- StyleFeaturePlot(
-      scrna,
-      features = cluster_de_top10[[as.character(i)]]$gene,
-      label = TRUE,
-      max.cutoff = "q95",
-      order = TRUE,
-      label.size = 2,
-      cols = zero_pos_divergent_colors,
-      reduction = "DEFAULT_UMAP"
-    )
-    save_ggplot_formats(
-      plt = ps,
-      base_plot_dir = report_plots_folder,
-      plt_name = paste0(
-        "umap_featureplot_top10deg_cluster-",
-        cluster, "_id-",
-        URLencode_escape(i)
-      ),
-      width = 12, height = 7
-    )
   }
 
   #############################################################
   ## Term enrichment analysis (GO, hallmark, KEGG, Reactome) ##
   #############################################################
-  #### Genesets
+  enrch_analysis_vec = c()
 
-  # FIXME if genesets not requested, this block shouldn't run
-
-  for(nm in scrna@tools$genesets){
-    message("nm: ", nm, "    ", appendLF = FALSE)
-    if(nm %ni% names(scrna@meta.data)){
-      next
-    }
-    df <- data.frame(
-      nm = scrna@meta.data[, nm],
-      Cluster = as.character(scrna@meta.data[, cluster]),
-      stringsAsFactors = FALSE)
-
-
-    df.s <- melt(df, id.vars = c("Cluster"))
-    df.s[df.s == -Inf] <- 0
-
-    min_x <- min(df.s$value)
-    max_x <- max(df.s$value)
-
-    ## ridges
-    plt <- ggplot(
-        df.s,
-        aes(
-          x = value,
-          y = Cluster,
-          color = Cluster,
-          point_color = Cluster,
-          fill = Cluster
-        )
-      ) +
-      geom_density_ridges(
-        jittered_points = FALSE,
-        scale = .95,
-        rel_min_height = .01,
-        alpha = 0.5
-      ) +
-      scale_y_discrete(expand = c(.01, 0)) +
-      scale_fill_manual(values = col_def) +
-      scale_color_manual(values = col_def, guide = "none") +
-      scale_discrete_manual("point_color", values = col_def, guide = "none") +
-      theme_ridges(center = TRUE) +
-      xlim(min_x, max_x) + ylab("") + ggtitle(glue("{nm}")) +
-      theme(
-        plot.title = element_text(hjust = 0.5),
-        plot.subtitle = element_text(hjust = 0.5)
-      )
-    save_ggplot_formats(
-      plt = plt,
-      base_plot_dir = report_plots_folder,
-      plt_name = paste0("Genesets_ridges_", nm, "-", cluster),
-      width = 9, height = 7
-    )
-
-
-    ## Vln
-    plt <- VlnPlot(
-      scrna, features = nm,
-      pt.size = 0,
-      group.by = cluster,
-      cols = col_def) + ggtitle(nm)
-
-    save_ggplot_formats(
-      plt = plt,
-      base_plot_dir = report_plots_folder,
-      plt_name = paste0("Genesets_violin_", nm, "-", cluster),
-      width = 9, height = 7
-    )
-
-
-  ## feature
-    plt <- StyleFeaturePlot(
-      scrna, features = nm,
-      reduction = "DEFAULT_UMAP",
-      max.cutoff = "q95",
-      order = TRUE,
-      cols = zero_pos_divergent_colors
-    ) + ggtitle(nm)
-    save_ggplot_formats(
-      plt = plt,
-      base_plot_dir = report_plots_folder,
-      plt_name = paste0("Genesets_feature_", nm, "-", cluster),
-      width = 9, height = 7
-    )
-
-  }
-
-  progeny_df <- seutools_partition(scrna,
-                                   partition=progeny_cluster_name,
-                                   save_dir=SAVE_DIR,
-                                   allinone=ALLINONE)
-
-  help_sort_func <- ifelse(
-    all.is.numeric(unique(progeny_df$CellType)),
-    function(x) as.numeric(as.character(x)),
-    function(x){x}
-  )
-
-  progeny_df$CellType <- factor(
-    progeny_df$CellType,
-    levels = as.character(
-      sort(unique(help_sort_func(progeny_df$CellType)))
-    )
-  )
-
-  plt <-
-    ggplot(progeny_df, aes(y = pathway, x = CellType, fill = r)) +
-    geom_tile() +
-    scale_fill_gradientn(colours = neg_pos_divergent_palette) +
-    ggtitle(glue("{cluster} r effect size")) +
-    labs(x = "Cluster") +
-    # scale_fill_distiller(palette ="RdBu", direction = -1) +
-    theme_minimal() +
-    theme(
-      strip.text.x = element_text(size = 28, colour = "black", hjust = 0),
-      plot.caption = element_text(size = 30, colour = "black", hjust = 0)#,
-      #axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
-    )
-
-  save_ggplot_formats(
-    plt = plt,
-    base_plot_dir = report_plots_folder,
-    plt_name = paste0("progeny_r_effect_heatmap-", cluster),
-    width = 9, height = 7
-  )
-
-
-  plt <-
-    ggplot(progeny_df, aes(y = pathway, x = CellType, fill = r)) +
-    geom_tile() +
-    geom_text(
-      aes(y = pathway, x = CellType, label = tag),
-      position = position_dodge(width = 0),
-      hjust = 0.5, size = 4
-    ) +
-    scale_fill_gradientn(colours = neg_pos_divergent_palette) +
-    ggtitle(glue("{cluster} r effect size")) +
-    labs(x = "Cluster") +
-    # scale_fill_distiller(palette ="RdBu", direction = -1) +
-    theme_minimal() +
-    theme(
-      strip.text.x = element_text(size = 28, colour = "black", hjust = 0),
-      plot.caption = element_text(size = 30, colour = "black", hjust = 0)#,
-      # axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
-    )
-
-  save_ggplot_formats(
-    plt = plt,
-    base_plot_dir = report_plots_folder,
-    plt_name = paste0("progeny_r_effect_text_heatmap-", cluster),
-    width = 9, height = 7
-  )
-
-  enrch_analysis_vec = go_cluster_name
-  if(any(grepl("hallmark", funcs, fixed = TRUE)))
+  if("DEGO" %in% funcs)
+    enrch_analysis_vec = c(enrch_analysis_vec, go_cluster_name)
+  if("hallmark" %in% funcs)
     enrch_analysis_vec = c(enrch_analysis_vec, hallmark_cluster_name)
-  if(any(grepl("KEGG", funcs, fixed = TRUE)))
+  if("KEGG" %in% funcs)
     enrch_analysis_vec = c(enrch_analysis_vec, kegg_cluster_name)
-  if(any(grepl("Reactome", funcs, fixed = TRUE)))
+  if("Reactome" %in% funcs)
     enrch_analysis_vec = c(enrch_analysis_vec, reactome_cluster_name)
-
 
   for(enrich_cluster_name in enrch_analysis_vec){
 
