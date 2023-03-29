@@ -353,6 +353,7 @@ suppressPackageStartupMessages(library(celda))
 suppressPackageStartupMessages(library(SoupX))
 suppressPackageStartupMessages(library(Rmagic))
 suppressPackageStartupMessages(library(DoubletFinder))
+suppressPackageStartupMessages(library(SeuratWrappers))
 
 registerDoParallel(cores=WORKER_NUM)
 
@@ -1630,7 +1631,7 @@ generate_scrna_markergenes <- function(scrna){
            {
              DefaultAssay(scrna) <- "RNA"
              Idents(scrna) <- DEFUALT_CLUSTER_NAME
-             de.df = FindAllMarkers(scrna, logfc.threshold=0)
+             de.df = RunPrestoAll(scrna, logfc.threshold=0)
 
              cluster.de <- split(de.df, de.df$cluster)
 
@@ -1680,7 +1681,7 @@ generate_scrna_batch_markergenes <- function(scrna){
                  cluster_name <- sprintf("RNA_snn_res.%s", i)
                }
                Idents(scrna) <- cluster_name
-               de.df = FindAllMarkers(scrna, logfc.threshold=0)
+               de.df = RunPrestoAll(scrna, logfc.threshold=0)
                cluster.de <- split(de.df, de.df$cluster)
              }
 
@@ -1718,7 +1719,7 @@ generate_scrna_singleton_markergenes <- function(scrna){
                DefaultAssay(scrna) <- "RNA"
                cluster_name <- sprintf("RNA_snn_res.%s", i)
                Idents(scrna) <- cluster_name
-               de.df = FindAllMarkers(scrna, logfc.threshold=0)
+               de.df = RunPrestoAll(scrna, logfc.threshold=0)
                cluster.de <- split(de.df, de.df$cluster)
              }
 
@@ -1832,7 +1833,7 @@ generate_scrna_dego_name <- function(scrna){
 
                                                  cluster.inside.de <- list(NULL)
                                                  tryCatch({
-                                                   cluster.inside.de <- FindMarkers(a_sub.subset, ident.1= ident.use[1], logfc.threshold=0)
+                                                   cluster.inside.de <- RunPresto(a_sub.subset, ident.1= ident.use[1], logfc.threshold=0)
                                                  }, error=function(cond) {
                                                    logger.warn(cond)
                                                    cluster.inside.de <- list(NULL)
@@ -1915,7 +1916,7 @@ generate_scrna_dego_stage <- function(scrna){
 
                                                  cluster.inside.de <- list(NULL)
                                                  tryCatch({
-                                                   cluster.inside.de <- FindMarkers(a_sub.subset, ident.1= ident.use[1], logfc.threshold=0)
+                                                   cluster.inside.de <- RunPresto(a_sub.subset, ident.1= ident.use[1], logfc.threshold=0)
                                                  }, error=function(cond) {
                                                    logger.warn(cond)
                                                    cluster.inside.de <- list(NULL)
@@ -1991,7 +1992,7 @@ generate_scrna_dego_stage_vsRest <- function(scrna){
 
                                                  cluster.inside.de <- list(NULL)
                                                  tryCatch({
-                                                   cluster.inside.de <- FindMarkers(a_sub.subset, ident.1= ident.use, logfc.threshold=0)
+                                                   cluster.inside.de <- RunPresto(a_sub.subset, ident.1= ident.use, logfc.threshold=0)
                                                  }, error=function(cond) {
                                                    logger.warn(cond)
                                                    cluster.inside.de <- list(NULL)

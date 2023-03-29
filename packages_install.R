@@ -54,7 +54,8 @@ bioc_pkgs_to_install = c(
 
 github_pkgs_to_install = c(
   "mahmoudibrahim/genesorteR", "ggjlab/scMCA", "immunogenomics/harmony", "ggjlab/scHCL",
-  "chris-mcginnis-ucsf/DoubletFinder"
+  "chris-mcginnis-ucsf/DoubletFinder",
+  "satijalab/seurat-wrappers"
 )
 gith_pkg_names = gsub("[a-z]+/","",github_pkgs_to_install)
 
