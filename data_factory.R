@@ -2168,6 +2168,7 @@ generate_scrna_progeny <- function(scrna){
     colnames(res[[cl]]) <-  c("Top","p.value","FDR", "summary.logFC","logFC","r","pathway","CellType")
   }
   res_df <- do.call("rbind", res)
+  res_df$FDR <- p.adjust(res_df$p.value, method = "fdr")
   res_df$tag <- sapply(res_df$FDR, function(pval) {
       if(pval< 0.001) {
       txt <- "***"
@@ -2277,7 +2278,7 @@ generate_scrna_progeny_stage <- function(scrna){
 
     }
     res_df <- do.call("rbind", res)
-#    res_df$FDR <- p.adjust(res_df$p_val, method="fdr")
+    res_df$FDR <- p.adjust(res_df$p.value, method = "fdr")
     res_df$tag <- sapply(res_df$FDR, function(pval) {
         if(pval< 0.001) {
         txt <- "***"
