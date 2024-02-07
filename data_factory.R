@@ -1045,13 +1045,13 @@ generate_scrna_integration_seurat <- function(scrna){
 
              ## scale = False to use previous scaled data
 	     ## If the number of cells is < 200 for a sample, we need to reduce the default values.
-	     ## If the number of cells is < 200 for any sample, we set the k.filter and k.weight values to this new minimum.
+	     ## If the number of cells is < 200 for any sample, we set the k.filter values to this new minimum.
 	     ## This way, we can still integrate very small data sets.
 	     k.filter <- min(table(scrna$name))
              k.filter <- ifelse(k.filter < 200, k.filter, 200)
              anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=F,
 					       k.filter = k.filter)## THIS IS CCA DIMENSIONS
-             scrna_inte <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM, k.weight = k.filter) ## THIS IS CCA DIMENSION
+             scrna_inte <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM) ## THIS IS CCA DIMENSION
              ## keep the order of integration obj
              scrna_inte <- scrna_inte[, colnames(scrna)]
              scrna[['integrated']] <- scrna_inte[['integrated']]
@@ -3075,7 +3075,7 @@ generate_scrna_doublet_proportions <- function(scrna){
       k.filter <- ifelse(k.filter < 200, k.filter, 200)
       anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=TRUE,
                                         k.filter = k.filter)## THIS IS CCA DIMENSIONS
-      scrna_save <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM, k.weight = k.filter) ## THIS IS PCA DIMENSION
+      scrna_save <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM) ## THIS IS PCA DIMENSION
       scrna_save <- ScaleData(scrna_save, verbose = FALSE)
       scrna_save <- RunPCA(scrna_save, npcs = 30, verbose = FALSE, reduction.name="DOUBLET_PCA")
       scrna_save <- RunUMAP(scrna_save, reduction = "DOUBLET_PCA", dims = 1:20, reduction.name="DOUBLET_UMAP")
