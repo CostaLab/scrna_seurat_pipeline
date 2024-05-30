@@ -75,8 +75,11 @@ quality_report_elements <- function(){
   }
 
   Idents(object = scrna)<- "name"
-
-  feats_to_plot <- c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo", "pANN")
+  if (DOUBLET_SWITCH=='off'){
+    feats_to_plot <- c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo")
+  }else{
+    feats_to_plot <- c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo", "pANN")
+  }
   col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))
 
   plt = VlnPlot(
@@ -119,42 +122,79 @@ quality_report_elements <- function(){
   meta <- scrna@meta.data
   meta$cells <- 1
 
-  stSample <- meta %>%
-    group_by(name) %>%
-    summarise(
-      nCount.Mean=mean(nCount_RNA),
-      nCount.Median=median(nCount_RNA),
-      nFeature.Mean=mean(nFeature_RNA),
-      nFeature.Median=median(nFeature_RNA),
-      pctMt.Mean=mean(percent.mt),
-      pctMt.Median=median(percent.mt),
-      pctRb.Mean = mean(percent.ribo),
-      pctRb.Median = median(percent.ribo),
-      pANN.Mean = mean(pANN),
-      pANN.Median = median(pANN),
-      Cells = sum(cells)
-    )
+
+  if (DOUBLET_SWITCH=='off'){
+   stSample <- meta %>%
+      group_by(name) %>%
+      summarise(
+        nCount.Mean=mean(nCount_RNA),
+        nCount.Median=median(nCount_RNA),
+        nFeature.Mean=mean(nFeature_RNA),
+        nFeature.Median=median(nFeature_RNA),
+        pctMt.Mean=mean(percent.mt),
+        pctMt.Median=median(percent.mt),
+        pctRb.Mean = mean(percent.ribo),
+        pctRb.Median = median(percent.ribo),
+        Cells = sum(cells)
+      )
+  }else{
+   stSample <- meta %>%
+      group_by(name) %>%
+      summarise(
+        nCount.Mean=mean(nCount_RNA),
+        nCount.Median=median(nCount_RNA),
+        nFeature.Mean=mean(nFeature_RNA),
+        nFeature.Median=median(nFeature_RNA),
+        pctMt.Mean=mean(percent.mt),
+        pctMt.Median=median(percent.mt),
+        pctRb.Mean = mean(percent.ribo),
+        pctRb.Median = median(percent.ribo),
+        pANN.Mean = mean(pANN),
+        pANN.Median = median(pANN),
+        Cells = sum(cells)
+      )
+  }
+
+
   save_object(
     stSample,
     file.path(report_tables_folder,"stSample_postfilter.RDS"),
     COMPRESSION_FORMAT
   )
 
-  stCond <- meta %>%
-    group_by(stage) %>%
-    summarise(
-      nCount.Mean=mean(nCount_RNA),
-      nCount.Median=median(nCount_RNA),
-      nFeature.Mean=mean(nFeature_RNA),
-      nFeature.Median=median(nFeature_RNA),
-      pctMt.Mean=mean(percent.mt),
-      pctMt.Median=median(percent.mt),
-      pctRb.Mean = mean(percent.ribo),
-      pctRb.Median = median(percent.ribo),
-      pANN.Mean = mean(pANN),
-      pANN.Median = median(pANN),
-      Cells = sum(cells)
-    )
+  if (DOUBLET_SWITCH=='off'){
+    stCond <- meta %>%
+      group_by(stage) %>%
+      summarise(
+        nCount.Mean=mean(nCount_RNA),
+        nCount.Median=median(nCount_RNA),
+        nFeature.Mean=mean(nFeature_RNA),
+        nFeature.Median=median(nFeature_RNA),
+        pctMt.Mean=mean(percent.mt),
+        pctMt.Median=median(percent.mt),
+        pctRb.Mean = mean(percent.ribo),
+        pctRb.Median = median(percent.ribo),
+        Cells = sum(cells)
+      )
+  }else{
+    stCond <- meta %>%
+      group_by(stage) %>%
+      summarise(
+        nCount.Mean=mean(nCount_RNA),
+        nCount.Median=median(nCount_RNA),
+        nFeature.Mean=mean(nFeature_RNA),
+        nFeature.Median=median(nFeature_RNA),
+        pctMt.Mean=mean(percent.mt),
+        pctMt.Median=median(percent.mt),
+        pctRb.Mean = mean(percent.ribo),
+        pctRb.Median = median(percent.ribo),
+        pANN.Mean = mean(pANN),
+        pANN.Median = median(pANN),
+        Cells = sum(cells)
+      )
+  }
+
+
   save_object(
     stCond,
     file.path(report_tables_folder,"stCond_postfilter.RDS"),
@@ -168,9 +208,14 @@ quality_report_elements <- function(){
   p1 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.mt", cols=col_def)
   p2 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "percent.ribo", cols=col_def)
   p3 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cols=col_def)
-  p4 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "pANN", cols=col_def)
 
-  plt = patchwork::wrap_plots(list(p1, p2, p3, p4), ncol=1)
+  if (DOUBLET_SWITCH =='off'){
+    plt = patchwork::wrap_plots(list(p1, p2, p3), ncol=1)
+  }else{
+    p4 <- FeatureScatter(object = scrna, feature1 = "nCount_RNA", feature2 = "pANN", cols=col_def)
+    plt = patchwork::wrap_plots(list(p1, p2, p3, p4), ncol=1)
+  }
+
 
   save_ggplot_formats(
     plt=plt,

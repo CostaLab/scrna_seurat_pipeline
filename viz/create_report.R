@@ -184,6 +184,8 @@ ext_annot_fp = EXTERNALFILE
 
 ##4. Make_report element
 source(CONFIGFILE)
+DOUBLET_SWITCH    = doublet_switch
+
 scrna <- NULL
 
 

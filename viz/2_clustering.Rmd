@@ -164,12 +164,17 @@ knitr::include_graphics(
 ### Doublets score
 reference: https://github.com/chris-mcginnis-ucsf/DoubletFinder
 ```{r umap_featureplot_doublets, out.width="100%", echo=FALSE}
-knitr::include_graphics(
-  file.path(
+
+f = file.path(
     params$report_plots_folder_png,
     paste0("umap_featureplot_doublets_",params$cluster,".png")
   )
-)
+if (file.exists(f)){
+  knitr::include_graphics(f)
+}else{
+  print("No doublets info!")
+}
+
 ```
 
 
