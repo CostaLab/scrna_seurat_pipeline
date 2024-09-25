@@ -250,6 +250,19 @@ pa$integration_option = INTEGRATION_OPTION
 pa$doublet_switch     = doublet_switch
 pa$doublet_lst        = doublet_lst
 
+if (!setequal(names(data_src), names(stage_lst))){
+  logger.error("names of `data_src` and `stage_lst` are not consistent, please check your configuration file!")
+  stop("names of data_src and stage_lst are not consistent!!!!")
+}
+if(doublet_switch=="on"| doublet_switch=="display"){
+  if (!setequal(names(data_src), names(doublet_lst))){
+    logger.error("names of `data_src` and `doublet_lst` are not consistent, please check your configuration file!")
+    stop("names of data_src and doublet_lst are not consistent!!!!")
+  }
+}
+
+
+
 ##--------------Loading the relevant slots and attributes for the sanity function----------------------
 sanity_attributes <- read.table("static/SlotsAttributes.csv", sep = ";", header = TRUE, stringsAsFactors = FALSE)
 
