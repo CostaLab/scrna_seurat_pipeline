@@ -227,6 +227,9 @@ if(MAKE_ELEMENT){
     )
   }
   ALLINONE <- scrna@tools$allinone
+  assertthat::assert_that(length(union(names(data_src), unique(scrna$name))) ==  length(unique(scrna$name)))
+  assertthat::assert_that(length(union(unique(stage_lst), unique(scrna$stage))) ==  length(unique(scrna$stage)))
+
   scrna$name <- factor(scrna$name, levels = names(data_src))
   scrna$stage <- factor(scrna$stage, levels = unique(stage_lst))
   cluster_viridis_opt = ifelse(
