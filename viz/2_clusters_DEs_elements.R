@@ -96,10 +96,10 @@ clusters_DEs_elements <- function(scrna){
     )
 
     scrna_to_plot <- function(scrna){
-     if(ncol(scrna)<=20000){
+     if(ncol(scrna) <= 20000){
        return(scrna)
      }
-     return(subset(scrna, cells=sample(colnames(scrna))[1:20000]))
+     return(subset(scrna, cells=sample(colnames(scrna), size = 20000)))
     }
 
 
