@@ -3,10 +3,19 @@ library(Seurat)
 library(stringr)
 source("R/save_load_helper.R")
 
+`%||%` <- function(a, b) if (!is.null(a)) a else b
+GetAssayDataCompat <- function(object, assay = NULL, layer = NULL, slot = NULL, ...) {
+  ga_formals <- tryCatch(names(formals(SeuratObject::GetAssayData)), error = function(e) character())
+  if ("layer" %in% ga_formals) {
+    return(SeuratObject::GetAssayData(object = object, assay = assay, layer = (layer %||% slot), ...))
+  }
+  return(SeuratObject::GetAssayData(object = object, assay = assay, slot = (slot %||% layer), ...))
+}
+
 
 
 scrna <- load_object("exp/save/scrna_phase_clustering.Rds")
-hcl_result <- scHCL(GetAssayData(object=scrna, slot="counts"), numbers_plot = 3)
+hcl_result <- scHCL(GetAssayDataCompat(object = scrna, layer = "counts"), numbers_plot = 3)
 corr=hcl_result$cors_matrix
 rnms <- gsub("_[a-zA-Z]+\\.$", "", rownames(corr))
 rnms <- gsub("_.*high", "", rnms)

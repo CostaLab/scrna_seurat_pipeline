@@ -103,7 +103,7 @@ clusters_DEs_elements <- function(scrna){
     }
 
 
-    plt <- DoHeatmap(
+    plt <- DoHeatmapCompat(
       ## >30k will failed to plot, here we subset when cell number > 20,000
       object = scrna_to_plot(scrna),
       features = genes,
@@ -111,7 +111,7 @@ clusters_DEs_elements <- function(scrna){
       group.colors = col_def,
       disp.min = -2,
       disp.max = 2,
-      slot = "scale.data",
+      layer = "scale.data",
       assay = "RNA",
       raster = FALSE,
       combine = TRUE

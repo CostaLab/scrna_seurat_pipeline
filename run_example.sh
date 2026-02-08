@@ -1,11 +1,11 @@
 #!/bin/bash
 
 ### Job name
-#SBATCH -J proj_ex
+#SBATCH -J scrna_test_2026-02-08_09:57:23.824629
 
 ### Set logs, remember to create logs dir
-#SBATCH -e logs/error.%j.%x.txt
-#SBATCH -o logs/output.%j.%x.txt
+#SBATCH -e logs/scrna_test_2026-02-08_09:57:23.824629.txt
+#SBATCH -o logs/scrna_test_2026-02-08_09:57:23.824629.txt
 
 ### Time to execute, e. g. 15 min 30 sec
 #SBATCH -t 96:00:00
@@ -18,20 +18,20 @@
 
 ################################################################
 # PATH
-if [ -r /usr/local_host/etc/bashrc ]; then
-   . /usr/local_host/etc/bashrc
-fi
+#if [ -r /usr/local_host/etc/bashrc ]; then
+#   . /usr/local_host/etc/bashrc
+#fi
 
-export PATH=/usr/bin:$PATH
-export PATH=/usr/local_host/bin:$PATH
+#export PATH=/usr/bin:$PATH
+#export PATH=/usr/local_host/bin:$PATH
 ################################################################
-module load scRNA
+#module load scRNA
 #source ~/miniconda3/bin/activate
-#conda activate Seurat3
+#conda activate Seurat5
 ################################################################
 
 # could also define it here instead of taking it as an arg
-proj_name="$1"
+proj_name="test"
 # data dir (where your results will be saved)
 
 data_path="/data/EXAMPLE/exp/scRNA/some_project/scrna_seurat_pipeline_results"

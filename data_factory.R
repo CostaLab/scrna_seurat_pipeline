@@ -15,6 +15,20 @@ suppressPackageStartupMessages(library(futile.logger)) ## logger
 suppressPackageStartupMessages(library(dplyr))
 `%ni%` <- Negate(`%in%`)
 
+# Seurat v5 switched Assay slots -> layers (GetAssayData uses `layer=`)
+# This helper keeps the code working across SeuratObject versions.
+`%||%` <- function(a, b) if (!is.null(a)) a else b
+GetAssayDataCompat <- function(object, assay = NULL, layer = NULL, slot = NULL, ...) {
+  ga_formals <- tryCatch(names(formals(SeuratObject::GetAssayData)), error = function(e) character())
+  if ("layer" %in% ga_formals) {
+    layer <- layer %||% slot
+    # Seurat v5: must specify a single layer when assay has multiple layers (cannot pass NULL)
+    if (is.null(layer)) layer <- "counts"
+    return(SeuratObject::GetAssayData(object = object, assay = assay, layer = layer, ...))
+  }
+  return(SeuratObject::GetAssayData(object = object, assay = assay, slot = (slot %||% layer), ...))
+}
+
 
 
 
@@ -1522,7 +1536,7 @@ generate_scrna_remove_recluster <- function(scrna){
 generate_scrna_MCAannotate <- function(scrna){
   ret_code = 0
   suppressPackageStartupMessages(require(scMCA))
-  mca_result <- scMCA(GetAssayData(object=scrna, slot="counts"), numbers_plot = 3)
+  mca_result <- scMCA(GetAssayDataCompat(object = scrna, layer = "counts"), numbers_plot = 3)
   #pattern = paste0("(", gsub("-", "_", MCA_NAME), ")")
   pattern = paste0("\\(", MCA_NAME, "\\)")
   corr=mca_result$cors_matrix[grep(pattern,rownames(mca_result$cors_matrix)),]
@@ -1540,7 +1554,7 @@ generate_scrna_MCAannotate <- function(scrna){
 generate_scrna_HCLannotate <- function(scrna){
   ret_code = 0
   suppressPackageStartupMessages(require(scHCL))
-  hcl_result <- scHCL(GetAssayData(object=scrna, slot="counts"), numbers_plot = 3)
+  hcl_result <- scHCL(GetAssayDataCompat(object = scrna, layer = "counts"), numbers_plot = 3)
   pattern = gsub("-",".",HCL_NAME)
   corr=hcl_result$cors_matrix[grep(pattern,rownames(hcl_result$cors_matrix),fixed=TRUE),]
   rnms <- gsub("_[a-zA-Z]+\\.$", "", rownames(corr))
@@ -1611,7 +1625,7 @@ generate_scrna_ExternalAnnotation <- function(scrna){
   dfs <- split(df, df$Tissue.of.Origin)
 
   DefaultAssay(scrna) <- "RNA"
-  mtx <- GetAssayData(object = scrna, slot = "data")
+  mtx <- GetAssayDataCompat(object = scrna, layer = "data")
   anno_genes <- unique(dfs[[ORGAN]][, sprintf("%s.Gene", SPECIES)])
   use_genes <- intersect(anno_genes, rownames(mtx))
   df <- dfs[[ORGAN]]
@@ -1721,6 +1735,7 @@ generate_scrna_batch_markergenes <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+
 generate_scrna_singleton_markergenes <- function(scrna){
   ret_code = 0
   tryCatch(
@@ -1770,7 +1785,7 @@ generate_scrna_genesorteR <- function(scrna){
            {
              DefaultAssay(scrna) <- "RNA"
              Idents(scrna) <- DEFUALT_CLUSTER_NAME
-             genesorter = sortGenes(GetAssayData(scrna, slot="counts"), Idents(scrna))
+             genesorter = sortGenes(GetAssayDataCompat(scrna, layer = "counts"), Idents(scrna))
 
              pv <- getPValues(genesorter)
              tbl = getTable(genesorter, pv, fc_cutoff = 0, adjpval_cutoff = 0.05,
@@ -2150,7 +2165,8 @@ generate_scrna_progeny <- function(scrna){
 
   da <- DefaultAssay(scrna)
   DefaultAssay(scrna) <-'progeny'
-  pws <- rownames(scrna@assays$progeny)
+  progeny_mtx <- GetAssayDataCompat(object = scrna, assay = "progeny", layer = "data")
+  pws <- rownames(progeny_mtx)
   res <- list()
   Idents(scrna) <- DEFUALT_CLUSTER_NAME
   if (is.factor(scrna@meta.data[, DEFUALT_CLUSTER_NAME])){
@@ -2166,9 +2182,9 @@ generate_scrna_progeny <- function(scrna){
     g <- as.character(scrna@meta.data[, DEFUALT_CLUSTER_NAME])
     g[!(g==i)] <- "others"
     g <- factor(g, levels=c(i, "others"))
-    res[[i]] = scran::findMarkers(as.matrix(scrna@assays$progeny@data), g)[[1]]
+    res[[i]] = scran::findMarkers(as.matrix(progeny_mtx), g)[[1]]
     res[[i]] <- as.data.frame(res[[i]])
-    r <- sapply(pws, function(pw) rcompanion::wilcoxonR(as.vector(scrna@assays$progeny@data[pw,]), g))
+    r <- sapply(pws, function(pw) rcompanion::wilcoxonR(as.vector(progeny_mtx[pw, ]), g))
     nms <- sapply(stringr::str_split(names(r), "\\."), function(x)x[1])
     names(r) <- nms
     res[[i]][nms, "r"] <- r
@@ -2204,6 +2220,7 @@ generate_scrna_progeny <- function(scrna){
      scrna@tools[[glue("progeny_{DEFUALT_CLUSTER_NAME}")]] <- res_df
   }
   rm(res_df)
+  rm(progeny_mtx)
 
   DefaultAssay(scrna) <- da
   return(list(scrna, ret_code))
@@ -2256,7 +2273,7 @@ generate_scrna_progeny_stage <- function(scrna){
                                                       levels=sort(help_sort_func(c_names)))
   }
 
-  pws <- rownames(scrna@assays$progeny)
+  pws <- rownames(GetAssayDataCompat(object = scrna, assay = "progeny", layer = "data"))
   vs_df_list <- list()
   for(apair in lst){
     vs1 <- apair[1]
@@ -2274,13 +2291,15 @@ generate_scrna_progeny_stage <- function(scrna){
         a_sub = subset(scrna, cells=c(cells1, cells2))
         g <- as.character(a_sub@meta.data$stage)
         g <- factor(g, levels=c(vs1, vs2))
-        res[[i]] = scran::findMarkers(as.matrix(a_sub@assays$progeny@data), g)[[1]]
+        a_sub_mtx <- GetAssayDataCompat(object = a_sub, assay = "progeny", layer = "data")
+        res[[i]] = scran::findMarkers(as.matrix(a_sub_mtx), g)[[1]]
         res[[i]] <- as.data.frame(res[[i]])
-        r <- sapply(pws, function(pw) rcompanion::wilcoxonR(as.vector(a_sub@assays$progeny@data[pw,]), g))
+        r <- sapply(pws, function(pw) rcompanion::wilcoxonR(as.vector(a_sub_mtx[pw, ]), g))
         nms <- sapply(stringr::str_split(names(r), "\\."), function(x)x[1])
         names(r) <- nms
         res[[i]][nms, "r"] <- r
         res[[i]] <- res[[i]][nms, ]
+        rm(a_sub_mtx)
 
     }
 
@@ -3051,13 +3070,17 @@ generate_scrna_doublet_proportions <- function(scrna){
       x <- RunUMAP(x, dims = 1:20)
     })
     bcmvn_lst <- lapply(scrna_lst, mc_pK_identification)
-    pK_optimal <- lapply(X = bcmvn_lst, FUN = function(x){as.numeric(as.character(x[x$BCmetric == max(x$BCmetric),2]))})
+    # Ensure scalar pK per sample (take first when multiple rows tie for max BCmetric); drop=TRUE avoids data.frame -> xtfrm error
+    pK_optimal <- lapply(X = bcmvn_lst, FUN = function(x){
+      pK_col <- x[x$BCmetric == max(x$BCmetric), 2L, drop = TRUE]
+      as.numeric(as.character(pK_col))[1L]
+    })
     est_expected <- lapply(X = names(bcmvn_lst), FUN = mc_est_expected, scrnas = scrna_lst, doublet_rate = doublet_formation_rate)
     est_expected <- unlist(est_expected)
 
     scrna_list_doublets <- lapply(
       X = names(bcmvn_lst),
-      FUN = mc_doubletFinder_v3,
+      FUN = mc_doubletFinder,
       seurats = scrna_lst,
       pN = 0.25,
       pK_optimal = pK_optimal,
@@ -3071,7 +3094,7 @@ generate_scrna_doublet_proportions <- function(scrna){
     for(i in 1:length(scrna_list_doublets)){
       cells               <- c(names(scrna_list_doublets[[i]]$classifications), cells)
       classifications     <- c(as.character(scrna_list_doublets[[i]]$classifications), classifications)
-      pANN                <- c(pANN, scrna_list_doublets[[i]]@meta.data[,paste0("pANN_0.25_", pK_optimal[i], "_", est_expected[i])])
+      pANN                <- c(pANN, scrna_list_doublets[[i]]@meta.data[, paste0("pANN_0.25_", pK_optimal[[i]], "_", est_expected[i])])
     }
     classifications <- factor(classifications, levels = c("Singlet", "Doublet"))
     names(classifications) <- cells

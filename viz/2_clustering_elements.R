@@ -418,7 +418,7 @@ clustering_elements <- function(scrna){
     ## MCA annotation
     if("MCA_annotate" %in% names(scrna@meta.data)){
       message("### Making umap with MCA annotation")
-      tmp_scrna <- CreateSeuratObject(counts=scrna@assays$RNA@counts, meta.data = scrna@meta.data)
+      tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = "RNA", layer = "counts"), meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "MCA_annotate"
       col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
@@ -458,7 +458,7 @@ clustering_elements <- function(scrna){
     ## HCL annotation
     if("HCL_annotate" %in% names(scrna@meta.data)){
       message("### Making umap with HCL annotation")
-      tmp_scrna <- CreateSeuratObject(counts=scrna@assays$RNA@counts, meta.data = scrna@meta.data)
+      tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = "RNA", layer = "counts"), meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "HCL_annotate"
       col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
@@ -498,7 +498,7 @@ clustering_elements <- function(scrna){
     ## External Annotation
     if("external_annotation" %in% names(scrna@meta.data)){
       message("### Making umap with external annotation")
-      tmp_scrna <- CreateSeuratObject(counts=scrna@assays$RNA@counts, meta.data = scrna@meta.data)
+      tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = "RNA", layer = "counts"), meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "external_annotation"
       col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))

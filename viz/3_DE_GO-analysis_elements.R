@@ -154,7 +154,7 @@ DE_GO_analysis_elements <- function(scrna){
       return(subset(scrna, cells = sample(colnames(scrna), size = 20000)))
     }
 
-    plthm = DoHeatmap(
+    plthm = DoHeatmapCompat(
       ## >30k will failed to plot, here we subset when cell number > 20,000
       object = scrna_to_plot(scrna),
       features = genes,
@@ -162,7 +162,7 @@ DE_GO_analysis_elements <- function(scrna){
       group.colors = col_def,
       disp.min = -2,
       disp.max = 2,
-      slot = "scale.data",
+      layer = "scale.data",
       assay = "RNA",
       raster = FALSE,
       combine = TRUE

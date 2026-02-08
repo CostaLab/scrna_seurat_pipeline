@@ -47,7 +47,7 @@ external_markers_elements <- function(scrna){
     genes <- intersect(genes, o_genes)
     genes_filter = c()
     for(gene in genes){
-      if(sum(GetAssayData(scrna, assay = "RNA", slot="counts")[gene,]) > 0){
+      if(sum(GetAssayDataCompat(scrna, assay = "RNA", layer = "counts")[gene, ]) > 0){
         genes_filter = c(genes_filter, TRUE)
       }else{
         genes_filter = c(genes_filter, FALSE)

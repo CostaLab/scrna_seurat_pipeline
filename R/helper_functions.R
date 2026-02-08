@@ -27,6 +27,26 @@ suppressPackageStartupMessages(library(DOSE))
 
 `%ni%` <- Negate(`%in%`)
 
+# ---------------- Seurat v4/v5 compatibility ----------------
+# Seurat v5 (SeuratObject >= 5) replaced Assay slots -> layers.
+`%||%` <- function(a, b) if (!is.null(a)) a else b
+
+GetAssayDataCompat <- function(object, assay = NULL, layer = NULL, slot = NULL, ...) {
+  ga_formals <- tryCatch(names(formals(SeuratObject::GetAssayData)), error = function(e) character())
+  if ("layer" %in% ga_formals) {
+    return(SeuratObject::GetAssayData(object = object, assay = assay, layer = (layer %||% slot), ...))
+  }
+  return(SeuratObject::GetAssayData(object = object, assay = assay, slot = (slot %||% layer), ...))
+}
+
+DoHeatmapCompat <- function(..., layer = NULL, slot = NULL) {
+  dh_formals <- tryCatch(names(formals(Seurat::DoHeatmap)), error = function(e) character())
+  if ("layer" %in% dh_formals) {
+    return(Seurat::DoHeatmap(..., layer = (layer %||% slot)))
+  }
+  return(Seurat::DoHeatmap(..., slot = (slot %||% layer)))
+}
+
 run_shell <- function(cmd){
   system(cmd)
 }
@@ -421,6 +441,7 @@ StyleFeaturePlot <- function(object, features, cols, reduction="DEFAULT_UMAP", s
     p <- FeaturePlot(object, features=features,cols=cols, reduction=reduction, ...)
   }else if(style=="schex"){
     suppressPackageStartupMessages(library(schex))
+    suppressPackageStartupMessages(library(SummarizedExperiment))
     ncol <- 2
     if (length(x = features) == 1) {
       ncol <- 1
@@ -436,9 +457,9 @@ StyleFeaturePlot <- function(object, features, cols, reduction="DEFAULT_UMAP", s
 
     sce <- Seurat::as.SingleCellExperiment(object, assay="RNA")
     if("MAGIC_RNA" %in% names(object@assays) ){
-      sce@assays@data$logcounts <- object@assays$MAGIC_RNA@data
+      SummarizedExperiment::assay(sce, "logcounts") <- GetAssayDataCompat(object, assay = "MAGIC_RNA", layer = "data")
     }else{
-      sce@assays@data$logcounts <- object@assays$RNA@data
+      SummarizedExperiment::assay(sce, "logcounts") <- GetAssayDataCompat(object, assay = "RNA", layer = "data")
     }
     sce <- make_hexbin(sce, nbins = 80, dimension_reduction = glue("RNA_{reduction}"))
     if(all(features %in% rownames(sce@assays@data$logcounts))){
