@@ -34,7 +34,10 @@ suppressPackageStartupMessages(library(DOSE))
 GetAssayDataCompat <- function(object, assay = NULL, layer = NULL, slot = NULL, ...) {
   ga_formals <- tryCatch(names(formals(SeuratObject::GetAssayData)), error = function(e) character())
   if ("layer" %in% ga_formals) {
-    return(SeuratObject::GetAssayData(object = object, assay = assay, layer = (layer %||% slot), ...))
+    layer <- layer %||% slot
+    # Seurat v5: must specify a single layer when assay has multiple layers (cannot pass NULL)
+    if (is.null(layer)) layer <- "counts"
+    return(SeuratObject::GetAssayData(object = object, assay = assay, layer = layer, ...))
   }
   return(SeuratObject::GetAssayData(object = object, assay = assay, slot = (slot %||% layer), ...))
 }

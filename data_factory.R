@@ -1046,7 +1046,7 @@ generate_scrna_integration_harmony <- function(scrna){
            {
             largestDim=ncol(Seurat::Embeddings(scrna[["RegressOut_PCA"]]))
             keep_harmony_dims = HARMONY_DIM[HARMONY_DIM<=largestDim]
-            scrna <- harmony::RunHarmony(scrna,  "name", plot_convergence = "True", reduction = "RegressOut_PCA")
+            scrna <- harmony::RunHarmony(scrna,  "name", reduction.use = "RegressOut_PCA")
             scrna <- RunUMAP(scrna, reduction = "harmony", dims = keep_harmony_dims, reduction.name= "harmony_UMAP")
            },
            error=function(cond) {
@@ -3070,11 +3070,8 @@ generate_scrna_doublet_proportions <- function(scrna){
       x <- RunUMAP(x, dims = 1:20)
     })
     bcmvn_lst <- lapply(scrna_lst, mc_pK_identification)
-    # Ensure scalar pK per sample (take first when multiple rows tie for max BCmetric); drop=TRUE avoids data.frame -> xtfrm error
-    pK_optimal <- lapply(X = bcmvn_lst, FUN = function(x){
-      pK_col <- x[x$BCmetric == max(x$BCmetric), 2L, drop = TRUE]
-      as.numeric(as.character(pK_col))[1L]
-    })
+    pK_optimal <- lapply(X = bcmvn_lst, FUN = function(x){as.numeric(as.character(x[x$BCmetric == max(x$BCmetric),2]))})
+    names(pK_optimal) <- names(bcmvn_lst)
     est_expected <- lapply(X = names(bcmvn_lst), FUN = mc_est_expected, scrnas = scrna_lst, doublet_rate = doublet_formation_rate)
     est_expected <- unlist(est_expected)
 
@@ -3094,14 +3091,13 @@ generate_scrna_doublet_proportions <- function(scrna){
     for(i in 1:length(scrna_list_doublets)){
       cells               <- c(names(scrna_list_doublets[[i]]$classifications), cells)
       classifications     <- c(as.character(scrna_list_doublets[[i]]$classifications), classifications)
-      pANN                <- c(pANN, scrna_list_doublets[[i]]@meta.data[, paste0("pANN_0.25_", pK_optimal[[i]], "_", est_expected[i])])
+      pANN                <- c(pANN, scrna_list_doublets[[i]]@meta.data[, paste0("pANN_0.25_", pK_optimal[[i]][1L], "_", est_expected[i])])
     }
     classifications <- factor(classifications, levels = c("Singlet", "Doublet"))
     names(classifications) <- cells
     names(pANN) <- cells
     scrna <- AddMetaData(scrna, classifications, col.name = "Doublet_classifications")
     scrna <- AddMetaData(scrna, pANN, col.name = "pANN")
-
     if(length(unique(scrna$name)) > 1){
       data.list <- SplitObject(scrna, split.by = "name")
       data.list <- lapply(X = data.list, FUN = function(x) {
