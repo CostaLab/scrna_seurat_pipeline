@@ -451,6 +451,7 @@ conf_main <- function(){
     }
   }
   logger.info("===============Finished===============")
+  for (line in capture.output(sessionInfo())) logger.info(line)
 }
 
 
@@ -1061,14 +1062,32 @@ generate_scrna_integration_harmony <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+# Seurat v5: collapse layers so FindIntegrationAnchors/IntegrateData don't hit subscript out of bounds (t(x))
+join_layers_for_integration <- function(obj) {
+  join_fn <- tryCatch(get("JoinLayers", mode = "function", envir = asNamespace("SeuratObject")), error = function(e) NULL)
+  if (is.null(join_fn)) join_fn <- tryCatch(get("JoinLayers", mode = "function", envir = asNamespace("Seurat")), error = function(e) NULL)
+  if (!is.null(join_fn)) tryCatch(return(join_fn(obj)), error = function(e) obj)
+  obj
+}
+
+# Build counts-only Seurat object for FindIntegrationAnchors (avoids v5 multi-layer -> subscript out of bounds)
+build_simple_obj_for_integration <- function(obj) {
+  counts <- GetAssayDataCompat(object = obj, layer = "counts")
+  counts <- as.matrix(counts)
+  o <- Seurat::CreateSeuratObject(counts = counts)
+  o <- Seurat::NormalizeData(o)
+  o <- Seurat::FindVariableFeatures(o, selection.method = "vst", nfeatures = 2000)
+  # Scale all features so scale.data has same features/cells as data (avoids "Different features/cells in new layer" warnings in IntegrateData)
+  o <- Seurat::ScaleData(o, features = rownames(o), verbose = FALSE)
+  o
+}
+
 generate_scrna_integration_seurat <- function(scrna){
   ret_code = 0
   tryCatch(
            {
              data.list <- SplitObject(scrna, split.by = "name")
-             data.list <- lapply(X = data.list, FUN = function(x) {
-                                   x <- NormalizeData(x)
-                                   x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)})
+             data.list <- lapply(data.list, build_simple_obj_for_integration)
 
              ## scale = False to use previous scaled data
 	     ## If the number of cells is < 200 for a sample, we need to reduce the default values.
@@ -1535,6 +1554,7 @@ generate_scrna_remove_recluster <- function(scrna){
 
 generate_scrna_MCAannotate <- function(scrna){
   ret_code = 0
+  scrna <- join_layers_for_integration(scrna)  # v5: need single layer for GetAssayData
   suppressPackageStartupMessages(require(scMCA))
   mca_result <- scMCA(GetAssayDataCompat(object = scrna, layer = "counts"), numbers_plot = 3)
   #pattern = paste0("(", gsub("-", "_", MCA_NAME), ")")
@@ -1553,6 +1573,7 @@ generate_scrna_MCAannotate <- function(scrna){
 
 generate_scrna_HCLannotate <- function(scrna){
   ret_code = 0
+  scrna <- join_layers_for_integration(scrna)  # v5: need single layer for GetAssayData
   suppressPackageStartupMessages(require(scHCL))
   hcl_result <- scHCL(GetAssayDataCompat(object = scrna, layer = "counts"), numbers_plot = 3)
   pattern = gsub("-",".",HCL_NAME)
@@ -1624,6 +1645,7 @@ generate_scrna_ExternalAnnotation <- function(scrna){
 
   dfs <- split(df, df$Tissue.of.Origin)
 
+  scrna <- join_layers_for_integration(scrna)  # v5: need single layer for GetAssayData
   DefaultAssay(scrna) <- "RNA"
   mtx <- GetAssayDataCompat(object = scrna, layer = "data")
   anno_genes <- unique(dfs[[ORGAN]][, sprintf("%s.Gene", SPECIES)])
@@ -1656,6 +1678,7 @@ generate_scrna_markergenes <- function(scrna){
   ret_code = 0
   tryCatch(
            {
+             scrna <- join_layers_for_integration(scrna)  # join RNA layers so DE uses all data (avoids "data layers are not joined" warning)
              DefaultAssay(scrna) <- "RNA"
              Idents(scrna) <- DEFUALT_CLUSTER_NAME
              de.df = RunPrestoAll(scrna, logfc.threshold=0)
@@ -1698,6 +1721,7 @@ generate_scrna_batch_markergenes <- function(scrna){
   ret_code = 0
   tryCatch(
            {
+             scrna <- join_layers_for_integration(scrna)  # join RNA layers so DE uses all data
              len <- length(CLUSTER_RESOLUTION_RANGE)
              cluster.de.list <- vector("list", length = len)
              names(cluster.de.list) <- as.character(CLUSTER_RESOLUTION_RANGE)
@@ -1740,6 +1764,7 @@ generate_scrna_singleton_markergenes <- function(scrna){
   ret_code = 0
   tryCatch(
            {
+             scrna <- join_layers_for_integration(scrna)  # join RNA layers so DE uses all data
              len <- length(CLUSTER_RESOLUTION_RANGE)
              cluster.de.list <- vector("list", length = len)
              names(cluster.de.list) <- as.character(CLUSTER_RESOLUTION_RANGE)
@@ -1783,6 +1808,7 @@ generate_scrna_genesorteR <- function(scrna){
   ret_code = 0
   tryCatch(
            {
+             scrna <- join_layers_for_integration(scrna)  # v5: need single layer for GetAssayData
              DefaultAssay(scrna) <- "RNA"
              Idents(scrna) <- DEFUALT_CLUSTER_NAME
              genesorter = sortGenes(GetAssayDataCompat(scrna, layer = "counts"), Idents(scrna))
@@ -3100,9 +3126,7 @@ generate_scrna_doublet_proportions <- function(scrna){
     scrna <- AddMetaData(scrna, pANN, col.name = "pANN")
     if(length(unique(scrna$name)) > 1){
       data.list <- SplitObject(scrna, split.by = "name")
-      data.list <- lapply(X = data.list, FUN = function(x) {
-                          x <- NormalizeData(x)
-                          x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)})
+      data.list <- lapply(data.list, build_simple_obj_for_integration)
       k.filter <- min(table(scrna$name))
       k.filter <- ifelse(k.filter < 200, k.filter, 200)
       anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=TRUE,
