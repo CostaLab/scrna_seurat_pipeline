@@ -2429,7 +2429,7 @@ generate_scrna_kegg <- function(scrna){
 
 generate_scrna_reactome <- function(scrna){
   ret_code = 0
-  require(ReatomePA)
+  require(ReactomePA)
   if(!ALLINONE){
     de.list <- seutools_partition(scrna, sprintf("de_%s", DEFUALT_CLUSTER_NAME), SAVE_DIR, allinone=FALSE)
   }else{
