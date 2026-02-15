@@ -226,6 +226,7 @@ if(MAKE_ELEMENT){
       paste0(date(), blue(" Loaded: "), red(rds_to_load), "\n")
     )
   }
+  scrna <- safe_join_layers(scrna)  # v5: join layers once for all downstream viz
   ALLINONE <- scrna@tools$allinone
   assertthat::assert_that(length(union(names(data_src), unique(scrna$name))) ==  length(unique(scrna$name)))
   assertthat::assert_that(length(union(unique(stage_lst), unique(scrna$stage))) ==  length(unique(scrna$stage)))
@@ -513,4 +514,5 @@ cat(
       "Time difference of ", as.character(round(t_diff, 2)), " ", units(t_diff)
   )), "\n"
 )
-
+cat("\n::::::::::Session info::::::::::\n")
+print(sessionInfo())

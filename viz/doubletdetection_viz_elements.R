@@ -10,22 +10,33 @@ doubletdetection_viz_elements <- function(scrna){
   # If doublet_switch == "off", we just put out a message stating that doublet detection was not performed.
   if(doublet_switch == "display"){
     scrna <- load_object(file_name = file.path(savedir, "scrna_phase_comparing.Rds"))
-    plt <- DimPlot(scrna, group.by = "Doublet_classifications", reduction = "INTE_UMAP")
-    save_ggplot_formats(
-      plt=plt,
-      base_plot_dir=report_plots_folder,
-      plt_name="doublets_umap",
-      width=9, height=7
-    )
+    scrna <- safe_join_layers(scrna)  # v5: join layers
+    if ("Doublet_classifications" %in% names(scrna@meta.data)) {
+      plt <- DimPlot(scrna, group.by = "Doublet_classifications", reduction = "INTE_UMAP")
+      save_ggplot_formats(
+        plt=plt,
+        base_plot_dir=report_plots_folder,
+        plt_name="doublets_umap",
+        width=9, height=7
+      )
+    }
   } else if(doublet_switch == "on"){
     scrna <- load_object(file_name = file.path(savedir, "scrna_DoubletAnnotated.Rds"))
-    plt <- DimPlot(scrna, group.by = "Doublet_classifications", reduction = "DOUBLET_UMAP")
-    save_ggplot_formats(
-      plt=plt,
-      base_plot_dir=report_plots_folder,
-      plt_name="doublets_umap",
-      width=9, height=7
-    )
+    scrna <- safe_join_layers(scrna)  # v5: join layers
+    if ("Doublet_classifications" %in% names(scrna@meta.data)) {
+      plt <- DimPlot(scrna, group.by = "Doublet_classifications", reduction = "DOUBLET_UMAP")
+      save_ggplot_formats(
+        plt=plt,
+        base_plot_dir=report_plots_folder,
+        plt_name="doublets_umap",
+        width=9, height=7
+      )
+    }
+  }
+
+  if (!("Doublet_classifications" %in% names(scrna@meta.data))) {
+    message("Doublet_classifications not in meta.data; skipping doublet-specific plots and table.")
+    return(invisible(NULL))
   }
 
   Idents(object = scrna) <- "name"
@@ -37,14 +48,14 @@ doubletdetection_viz_elements <- function(scrna){
     ncol = 2,
     cols = col_def,
     pt.size = 0
-  ) + ggtitle("All cells")
+  ) %+safe% ggtitle("All cells")
   plt1_linear = VlnPlot(
     object = scrna,
     features = feats_to_plot,
     ncol = 1,
     cols = col_def,
     pt.size = 0
-  ) + ggtitle("All cells")
+  ) %+safe% ggtitle("All cells")
   save_ggplot_formats(
     plt=plt1,
     base_plot_dir=report_plots_folder,
@@ -59,14 +70,14 @@ doubletdetection_viz_elements <- function(scrna){
     ncol = 2,
     cols = col_def,
     pt.size=0
-  ) + ggtitle("Singlets")
+  ) %+safe% ggtitle("Singlets")
   plt2_linear = VlnPlot(
     object = scrna_subset,
     features = feats_to_plot,
     ncol = 1,
     cols = col_def,
     pt.size=0
-  ) + ggtitle("Singlets")
+  ) %+safe% ggtitle("Singlets")
   save_ggplot_formats(
     plt=plt2,
     base_plot_dir=report_plots_folder,

@@ -53,7 +53,7 @@ batch_clustering_elements <- function(scrna){
         label=TRUE,
         label.size=8,
         cols=col_def
-      ) + ggtitle(sprintf("resolution %s", nm))
+      ) %+safe% ggtitle(sprintf("resolution %s", nm))
 
     }
 

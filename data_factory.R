@@ -1,7 +1,7 @@
 #!/usr/bin/Rscript
 
 ###Set VERSION
-VERSION = "1.0.5"
+VERSION = "1.0.6"
 
 args <- commandArgs(trailingOnly = TRUE)
 if(length(args) == 1 && (args[1] == "-v" | args[1] == "--version")){
@@ -378,6 +378,11 @@ suppressPackageStartupMessages(library(foreach))
 suppressPackageStartupMessages(library(doParallel))
 suppressPackageStartupMessages(library(celda))
 suppressPackageStartupMessages(library(SoupX))
+if (Sys.getenv("RETICULATE_PYTHON") == "") {
+  py <- Sys.which("python3")
+  if (py == "") py <- Sys.which("python")
+  if (py != "") Sys.setenv(RETICULATE_PYTHON = py)
+}
 suppressPackageStartupMessages(library(Rmagic))
 suppressPackageStartupMessages(library(DoubletFinder))
 suppressPackageStartupMessages(library(SeuratWrappers))
@@ -451,6 +456,7 @@ conf_main <- function(){
     }
   }
   logger.info("===============Finished===============")
+  logger.info("::::::::sessionInfo:::::::::")
   for (line in capture.output(sessionInfo())) logger.info(line)
 }
 
@@ -612,6 +618,7 @@ generate_scrna_ambient_rna <- function(scrna){
             # This is the require input for decontX
             assay.used <- DefaultAssay(scrna)
             DefaultAssay(scrna) <- "RNA"
+            scrna <- join_layers_for_integration(scrna)  # v5: as.SingleCellExperiment uses GetAssayData, needs single layer
             scrna.sce <- as.SingleCellExperiment(scrna)
 
             # Now, we estimate and correct the amount of ambient RNA.
@@ -1601,7 +1608,7 @@ generate_scrna_MAGIC <- function(scrna){
   ret_code = 0
   DefaultAssay(scrna) <- "RNA"
   all_genes <- rownames(scrna)
-  scrna <- magic(scrna, genes=all_genes)
+  scrna <- magic(scrna, genes='all_genes')
   rm(all_genes)
   ## assay to disk
   if (!ALLINONE){
@@ -2422,6 +2429,7 @@ generate_scrna_kegg <- function(scrna){
 
 generate_scrna_reactome <- function(scrna){
   ret_code = 0
+  require(ReatomePA)
   if(!ALLINONE){
     de.list <- seutools_partition(scrna, sprintf("de_%s", DEFUALT_CLUSTER_NAME), SAVE_DIR, allinone=FALSE)
   }else{

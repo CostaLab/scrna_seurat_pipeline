@@ -2,6 +2,7 @@
 # QC on the current clusters
 ####################################################
 cquality_report_elements <- function(scrna){
+  scrna <- safe_join_layers(scrna)  # v5: join layers for downstream plotting
 
   Idents(object = scrna)<- "name"
 
@@ -34,7 +35,7 @@ cquality_report_elements <- function(scrna){
       group.by="name",
       cols = col_def,
       pt.size=0
-    ) + NoLegend()
+    ) %+safe% NoLegend()
   })
 
   plt = plot_grid(plotlist=ps, ncol=2)

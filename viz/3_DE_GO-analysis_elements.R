@@ -144,6 +144,7 @@ DE_GO_analysis_elements <- function(scrna){
 
     ## top10 DE heatmaps
     genes <- as.vector(unlist(sapply(cluster_de_top10, function(x)x$gene)))
+    scrna <- safe_join_layers(scrna)  # v5: join layers before ScaleData
     scrna <- ScaleData(scrna, rownames(scrna))
 
 
@@ -166,8 +167,8 @@ DE_GO_analysis_elements <- function(scrna){
       assay = "RNA",
       raster = FALSE,
       combine = TRUE
-    ) +
-    ggtitle("Marker genes for each cluster") +
+    ) %+safe%
+    ggtitle("Marker genes for each cluster") %+safe%
     NoLegend()
 
     save_ggplot_formats(
@@ -352,7 +353,7 @@ DE_GO_analysis_elements <- function(scrna){
         scrna, features = nm,
         pt.size = 0,
         group.by = cluster,
-        cols = col_def) + ggtitle(nm)
+        cols = col_def) %+safe% ggtitle(nm)
 
       save_ggplot_formats(
         plt = plt,
@@ -369,7 +370,7 @@ DE_GO_analysis_elements <- function(scrna){
         max.cutoff = "q95",
         order = TRUE,
         cols = zero_pos_divergent_colors
-      ) + ggtitle(nm)
+      ) %+safe% ggtitle(nm)
       save_ggplot_formats(
         plt = plt,
         base_plot_dir = report_plots_folder,

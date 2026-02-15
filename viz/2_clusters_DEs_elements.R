@@ -67,7 +67,8 @@ clusters_DEs_elements <- function(scrna){
 
   ## DE genes on heatmap
   DefaultAssay(scrna) <- "RNA"
-  scrna <- Seurat::ScaleData(scrna,  rownames(scrna))
+  scrna <- safe_join_layers(scrna)  # v5: join layers before ScaleData
+  scrna <- Seurat::ScaleData(scrna, rownames(scrna))
 
   cluster_de_list  <- seutools_partition(scrna,
                                          partition="de_batch",
@@ -115,8 +116,8 @@ clusters_DEs_elements <- function(scrna){
       assay = "RNA",
       raster = FALSE,
       combine = TRUE
-    ) +
-    ggtitle(sprintf("resolution: %.1f", resolution)) +
+    ) %+safe%
+    ggtitle(sprintf("resolution: %.1f", resolution)) %+safe%
     NoLegend()
 
     save_ggplot_formats(

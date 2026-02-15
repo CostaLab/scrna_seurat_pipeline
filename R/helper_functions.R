@@ -50,6 +50,22 @@ DoHeatmapCompat <- function(..., layer = NULL, slot = NULL) {
   return(Seurat::DoHeatmap(..., slot = (slot %||% layer)))
 }
 
+# Seurat v5: safely join multiple assay layers into one (no-op on v4 or already-joined)
+safe_join_layers <- function(obj) {
+  join_fn <- tryCatch(get("JoinLayers", mode = "function", envir = asNamespace("SeuratObject")), error = function(e) NULL)
+  if (is.null(join_fn)) join_fn <- tryCatch(get("JoinLayers", mode = "function", envir = asNamespace("Seurat")), error = function(e) NULL)
+  if (!is.null(join_fn)) tryCatch(return(join_fn(obj)), error = function(e) obj)
+  obj
+}
+
+# ggplot2 v4 safe + operator: catches S4SXP deparse crash and falls back to patchwork &
+`%+safe%` <- function(p, layer) {
+  tryCatch(p + layer, error = function(e) {
+    if (grepl("S4SXP", conditionMessage(e), fixed = TRUE)) return(p & layer)
+    stop(e)
+  })
+}
+
 run_shell <- function(cmd){
   system(cmd)
 }
@@ -456,7 +472,8 @@ StyleFeaturePlot <- function(object, features, cols, reduction="DEFAULT_UMAP", s
       ncol <- 4
     }
     DefaultAssay(object) <- "RNA"
-    object[[glue("RNA_{reduction}")]] <- CreateDimReducObject(embeddings=object[[reduction]]@cell.embeddings, assay="RNA")
+    object <- safe_join_layers(object)  # v5: join layers before as.SingleCellExperiment / GetAssayData
+    object[[glue("RNA_{reduction}")]] <- CreateDimReducObject(embeddings=Embeddings(object[[reduction]]), assay="RNA")
 
     sce <- Seurat::as.SingleCellExperiment(object, assay="RNA")
     if("MAGIC_RNA" %in% names(object@assays) ){
@@ -465,7 +482,7 @@ StyleFeaturePlot <- function(object, features, cols, reduction="DEFAULT_UMAP", s
       SummarizedExperiment::assay(sce, "logcounts") <- GetAssayDataCompat(object, assay = "RNA", layer = "data")
     }
     sce <- make_hexbin(sce, nbins = 80, dimension_reduction = glue("RNA_{reduction}"))
-    if(all(features %in% rownames(sce@assays@data$logcounts))){
+    if(all(features %in% rownames(SummarizedExperiment::assay(sce, "logcounts")))){
       action = "mean"
       ps <- lapply(features, function(feat) plot_hexbin_feature(sce, type = "logcounts", feature= feat,
                                                                 action = action, xlab = "UMAP1", ylab = "UMAP2",

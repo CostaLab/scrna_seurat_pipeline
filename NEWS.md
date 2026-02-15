@@ -88,3 +88,8 @@
  * add Rmagic to impute reads  *
  * improve the performance of saving and loading using compression options
  * fix some bugs
+
+
+## version 1.0.6 ---17.02.2026 
+ * switch seurat 4 to seurat 5
+ * add sessionInfo for each successful execution for data producing 

@@ -19,7 +19,7 @@ ambientRNA_elements <- function(scrna){
     features = "AmbientRNA",
     order = TRUE,
     cols = zero_pos_divergent_colors
-  ) +
+  ) %+safe%
   ggtitle(label = "Ambient RNA Contamination")
 
   plt[[2]] <- VlnPlot(

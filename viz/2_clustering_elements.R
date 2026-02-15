@@ -133,9 +133,10 @@ clustering_elements <- function(scrna){
         nm2 <- scrna@tools[["meta_order"]][["stage"]][2]
 
         aodds <- wrapp_invalid_name(glue("odds.ratio_{nm}.vs.{nm2}"))
+        pval_col <- wrapp_invalid_name(glue::glue("pval.adjust_{nm}.vs.{nm2}"))
 
         plt <- ggplot(
-          data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")
+          data=df, aes(x = .data[["Cluster"]], y = .data[[aodds]], fill = .data[["Cluster"]])
         ) +
         geom_bar(stat="identity") +
         coord_flip() +
@@ -143,10 +144,10 @@ clustering_elements <- function(scrna){
         scale_y_continuous(trans = shift_trans(1)) +
         geom_text(
           data = df,
-          aes_string(
-            x="Cluster",
-            y=1,
-            label = wrapp_invalid_name(glue::glue("pval.adjust_{nm}.vs.{nm2}"))
+          aes(
+            x = .data[["Cluster"]],
+            y = 1,
+            label = .data[[pval_col]]
           ),
           position = "identity",
           size=4
@@ -174,18 +175,19 @@ clustering_elements <- function(scrna){
           nm2 <- scrna@tools[["meta_order"]][["stage"]][i2]
 
           aodds <- wrapp_invalid_name(glue("odds.ratio_{nm}.vs.{nm2}"))
+          pval_col <- wrapp_invalid_name(glue("pval.adjust_{nm}.vs.{nm2}"))
 
-          plt <- ggplot(data=df, aes_string(x = "Cluster", y = aodds, fill = "Cluster")) +
+          plt <- ggplot(data=df, aes(x = .data[["Cluster"]], y = .data[[aodds]], fill = .data[["Cluster"]])) +
           geom_bar(stat="identity") +
           coord_flip() +
           guides(fill = guide_legend(reverse = TRUE)) +
           scale_y_continuous(trans = shift_trans(1)) +
           geom_text(
             data = df,
-            aes_string(
-              x="Cluster",
-              y=1,
-              label = wrapp_invalid_name(glue("pval.adjust_{nm}.vs.{nm2}"))
+            aes(
+              x = .data[["Cluster"]],
+              y = 1,
+              label = .data[[pval_col]]
             ),
             position = "identity",
             size=4
@@ -223,7 +225,7 @@ clustering_elements <- function(scrna){
             nm <- scrna@tools[["meta_order"]][["stage"]][i1]
             nm2 <- scrna@tools[["meta_order"]][["stage"]][i2]
             dff <- dffprop[[glue("{nm}.vs.{nm2}")]]
-            plt <- permutation_plot(dff) + ggtitle(glue("{nm} vs {nm2}, positive means more {nm2}"))
+            plt <- permutation_plot(dff) %+safe% ggtitle(glue("{nm} vs {nm2}, positive means more {nm2}"))
             save_ggplot_formats(
               plt=plt,
               base_plot_dir=report_plots_folder,
@@ -418,6 +420,7 @@ clustering_elements <- function(scrna){
     ## MCA annotation
     if("MCA_annotate" %in% names(scrna@meta.data)){
       message("### Making umap with MCA annotation")
+      scrna <- safe_join_layers(scrna)  # v5: join layers before GetAssayData
       tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = "RNA", layer = "counts"), meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "MCA_annotate"
@@ -428,7 +431,7 @@ clustering_elements <- function(scrna){
         pt.size = 0.2,
         cols=col_def,
         group.by = group_by
-      ) +
+      ) %+safe%
       theme(
         legend.position = "right",
         legend.title = element_text(colour="blue", size=4, face="bold"),
@@ -458,6 +461,7 @@ clustering_elements <- function(scrna){
     ## HCL annotation
     if("HCL_annotate" %in% names(scrna@meta.data)){
       message("### Making umap with HCL annotation")
+      scrna <- safe_join_layers(scrna)  # v5: join layers before GetAssayData
       tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = "RNA", layer = "counts"), meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "HCL_annotate"
@@ -468,7 +472,7 @@ clustering_elements <- function(scrna){
         pt.size = 0.2,
         cols=col_def,
         group.by = group_by
-      ) +
+      ) %+safe%
       theme(
         legend.position = "right",
         legend.title = element_text(colour="blue", size=4, face="bold"),
@@ -498,6 +502,7 @@ clustering_elements <- function(scrna){
     ## External Annotation
     if("external_annotation" %in% names(scrna@meta.data)){
       message("### Making umap with external annotation")
+      scrna <- safe_join_layers(scrna)  # v5: join layers before GetAssayData
       tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = "RNA", layer = "counts"), meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "external_annotation"
@@ -508,7 +513,7 @@ clustering_elements <- function(scrna){
         pt.size = 0.2,
         cols=col_def,
         group.by = group_by
-      ) +
+      ) %+safe%
       theme(
         legend.position = "right",
         legend.title = element_text(colour="blue", size=4, face="bold"),

@@ -4,6 +4,7 @@
 quality_report_elements <- function(){
 
   scrna <- load_object(file_name = file.path(savedir, "scrna_rawdata.Rds"))
+  scrna <- safe_join_layers(scrna)  # v5: join layers
 
   Idents(object = scrna) <- "name"
 
@@ -73,6 +74,7 @@ quality_report_elements <- function(){
   }else{
     scrna <- load_object(file_name = file.path(savedir, "scrna_phase_preprocess.Rds"))
   }
+  scrna <- safe_join_layers(scrna)  # v5: join layers for downstream GetAssayData / VariableFeatures
 
   Idents(object = scrna)<- "name"
   if (DOUBLET_SWITCH=='off'){
@@ -106,7 +108,7 @@ quality_report_elements <- function(){
       group.by="name",
       cols = col_def,
       pt.size=0
-    ) + NoLegend()
+    ) %+safe% NoLegend()
   })
 
   plt = plot_grid(plotlist=ps, ncol=2)
@@ -225,20 +227,27 @@ quality_report_elements <- function(){
   )
 
 
-  ## High variable genes
-  col_def <- c(base_color,pos_color)
-  top10 <- head(VariableFeatures(scrna), 10)
-  plot1 <- VariableFeaturePlot(scrna,cols = col_def)
-  plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
-
-  plt = patchwork::wrap_plots(list(plot1, plot2))
-
-  save_ggplot_formats(
-    plt=plt,
-    base_plot_dir=report_plots_folder,
-    plt_name="high_var_genes",
-    width=13, height=5
-  )
+  ## High variable genes (Seurat v5: ensure HVF metadata exists before VariableFeaturePlot)
+  col_def <- c(base_color, pos_color)
+  DefaultAssay(scrna) <- "RNA"
+  vf <- VariableFeatures(scrna)
+  if (length(vf) == 0) {
+    scrna <- NormalizeData(scrna, verbose = FALSE)
+    scrna <- FindVariableFeatures(scrna, verbose = FALSE)
+    vf <- VariableFeatures(scrna)
+  }
+  if (length(vf) > 0) {
+    top10 <- head(vf, 10)
+    plot1 <- VariableFeaturePlot(scrna, cols = col_def)
+    plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+    plt <- patchwork::wrap_plots(list(plot1, plot2))
+    save_ggplot_formats(
+      plt = plt,
+      base_plot_dir = report_plots_folder,
+      plt_name = "high_var_genes",
+      width = 13, height = 5
+    )
+  }
 
   ## Cellcycle scaling
   col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(Idents(scrna))))

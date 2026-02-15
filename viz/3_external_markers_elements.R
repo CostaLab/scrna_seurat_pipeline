@@ -31,13 +31,18 @@ external_markers_elements <- function(scrna){
     file_format = COMPRESSION_FORMAT
   )
 
-  ## External markers
+  ## External markers (Seurat v5: MAGIC_RNA is optional; use RNA if not present)
   message(paste0("### ","External markers"))
+  scrna <- safe_join_layers(scrna)
   Idents(scrna) <- cluster
-  if(!ALLINONE){
-    scrna <- seu_assay(scrna, assay="MAGIC_RNA", SAVE_DIR, allinone=FALSE)
+  assay_use <- "RNA"
+  if ("MAGIC_RNA" %in% names(scrna@assays)) {
+    assay_use <- "MAGIC_RNA"
+  } else if (!ALLINONE && "MAGIC_RNA" %in% names(scrna@tools$assay_info)) {
+    scrna <- seu_assay(scrna, assay = "MAGIC_RNA", SAVE_DIR, allinone = FALSE)
+    assay_use <- "MAGIC_RNA"
   }
-  DefaultAssay(scrna) <- "MAGIC_RNA"
+  DefaultAssay(scrna) <- assay_use
   o_genes <- rownames(scrna)
   for (a_celltype in celltype_names){
 
