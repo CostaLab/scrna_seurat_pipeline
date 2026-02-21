@@ -31,15 +31,29 @@ suppressPackageStartupMessages(library(DOSE))
 # Seurat v5 (SeuratObject >= 5) replaced Assay slots -> layers.
 `%||%` <- function(a, b) if (!is.null(a)) a else b
 
-GetAssayDataCompat <- function(object, assay = NULL, layer = NULL, slot = NULL, ...) {
-  ga_formals <- tryCatch(names(formals(SeuratObject::GetAssayData)), error = function(e) character())
-  if ("layer" %in% ga_formals) {
+
+GetAssayDataCompat <- function(object, assay = "RNA", layer = NULL, slot = NULL, ...) {
+
+  assay_obj <- object[[assay]]
+
+  if (inherits(assay_obj, "Assay5")) {
     layer <- layer %||% slot
-    # Seurat v5: must specify a single layer when assay has multiple layers (cannot pass NULL)
     if (is.null(layer)) layer <- "counts"
-    return(SeuratObject::GetAssayData(object = object, assay = assay, layer = layer, ...))
+
+    return(SeuratObject::GetAssayData(
+      object = object,
+      assay = assay,
+      layer = layer,
+      ...
+    ))
   }
-  return(SeuratObject::GetAssayData(object = object, assay = assay, slot = (slot %||% layer), ...))
+
+  return(SeuratObject::GetAssayData(
+    object = object,
+    assay = assay,
+    slot = (slot %||% layer),
+    ...
+  ))
 }
 
 DoHeatmapCompat <- function(..., layer = NULL, slot = NULL) {

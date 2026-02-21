@@ -18,15 +18,39 @@ suppressPackageStartupMessages(library(dplyr))
 # Seurat v5 switched Assay slots -> layers (GetAssayData uses `layer=`)
 # This helper keeps the code working across SeuratObject versions.
 `%||%` <- function(a, b) if (!is.null(a)) a else b
-GetAssayDataCompat <- function(object, assay = NULL, layer = NULL, slot = NULL, ...) {
-  ga_formals <- tryCatch(names(formals(SeuratObject::GetAssayData)), error = function(e) character())
-  if ("layer" %in% ga_formals) {
+#GetAssayDataCompat <- function(object, assay = NULL, layer = NULL, slot = NULL, ...) {
+#  ga_formals <- tryCatch(names(formals(SeuratObject::GetAssayData)), error = function(e) character())
+#  if ("layer" %in% ga_formals) {
+#    layer <- layer %||% slot
+#    # Seurat v5: must specify a single layer when assay has multiple layers (cannot pass NULL)
+#    if (is.null(layer)) layer <- "counts"
+#    return(SeuratObject::GetAssayData(object = object, assay = assay, layer = layer, ...))
+#  }
+#  return(SeuratObject::GetAssayData(object = object, assay = assay, slot = (slot %||% layer), ...))
+#}
+
+GetAssayDataCompat <- function(object, assay = "RNA", layer = NULL, slot = NULL, ...) {
+
+  assay_obj <- object[[assay]]
+
+  if (inherits(assay_obj, "Assay5")) {
     layer <- layer %||% slot
-    # Seurat v5: must specify a single layer when assay has multiple layers (cannot pass NULL)
     if (is.null(layer)) layer <- "counts"
-    return(SeuratObject::GetAssayData(object = object, assay = assay, layer = layer, ...))
+
+    return(SeuratObject::GetAssayData(
+      object = object,
+      assay = assay,
+      layer = layer,
+      ...
+    ))
   }
-  return(SeuratObject::GetAssayData(object = object, assay = assay, slot = (slot %||% layer), ...))
+
+  return(SeuratObject::GetAssayData(
+    object = object,
+    assay = assay,
+    slot = (slot %||% layer),
+    ...
+  ))
 }
 
 
@@ -378,6 +402,8 @@ suppressPackageStartupMessages(library(foreach))
 suppressPackageStartupMessages(library(doParallel))
 suppressPackageStartupMessages(library(celda))
 suppressPackageStartupMessages(library(SoupX))
+suppressPackageStartupMessages(library(presto))
+
 if (Sys.getenv("RETICULATE_PYTHON") == "") {
   py <- Sys.which("python3")
   if (py == "") py <- Sys.which("python")
@@ -1607,9 +1633,10 @@ generate_scrna_HCLannotate <- function(scrna){
 generate_scrna_MAGIC <- function(scrna){
   ret_code = 0
   DefaultAssay(scrna) <- "RNA"
-  all_genes <- rownames(scrna)
-  scrna <- magic(scrna, genes='all_genes')
-  rm(all_genes)
+
+  rst = magic(GetAssayData(scrna, layer='data'))
+  #scrna <- magic(scrna, genes='all_genes')
+  scrna[["RNA_MAGIC"]] <- CreateAssay5Object(data=as.matrix(rst$result))
   ## assay to disk
   if (!ALLINONE){
     fname = file.path(SAVE_DIR, "assays", "MAGIC_RNA.Rds")
@@ -2194,7 +2221,8 @@ generate_scrna_progeny <- function(scrna){
   ret_code = 0
   assertthat::assert_that(SPECIES == "Human" | SPECIES == "Mouse")
   Idents(scrna) <- DEFUALT_CLUSTER_NAME
-  scrna <- progeny::progeny(scrna, scale=FALSE, organism=SPECIES, top=500, perm=1,return_assay = TRUE)
+  prmtx <- progeny::progeny(as.matrix(GetAssayData(scrna, layer='data')), scale=FALSE, organism=SPECIES, top=500, perm=1,return_assay = TRUE)
+  scrna[['progeny']] <- CreateAssay5Object(data=t(prmtx))
 
   da <- DefaultAssay(scrna)
   DefaultAssay(scrna) <-'progeny'
@@ -3089,6 +3117,46 @@ check_attributes <- function(scrna, sanity_attribute){
 }
 
 # DoubletFinder
+
+AddMissingMeta <- function(a, b, cells.use = NULL) {
+
+  # Extract metadata
+  meta.a <- a@meta.data
+  meta.b <- b@meta.data
+  
+  # Optionally restrict to specific cells
+  if (!is.null(cells.use)) {
+    meta.a <- meta.a[cells.use, , drop = FALSE]
+    b <- subset(b, cells = cells.use)
+  }
+  
+  # Find columns missing in b
+  new.cols <- setdiff(colnames(meta.a), colnames(meta.b))
+  
+  if (length(new.cols) == 0) {
+    message("No new metadata columns to add.")
+    return(b)
+  }
+  
+  # Subset metadata
+  meta.to.add <- meta.a[, new.cols, drop = FALSE]
+  
+  # Match cells (safe alignment)
+  common.cells <- intersect(rownames(meta.to.add), colnames(b))
+  
+  if (length(common.cells) == 0) {
+    stop("No overlapping cells between objects.")
+  }
+  
+  meta.to.add <- meta.to.add[common.cells, , drop = FALSE]
+  b <- subset(b, cells = common.cells)
+  
+  # Add metadata
+  b <- AddMetaData(b, metadata = meta.to.add)
+  
+  return(b)
+}
+
 generate_scrna_doublet_proportions <- function(scrna){
   suppressPackageStartupMessages(library(DoubletFinder))
   ret_code <- 1
@@ -3143,11 +3211,14 @@ generate_scrna_doublet_proportions <- function(scrna){
       scrna_save <- ScaleData(scrna_save, verbose = FALSE)
       scrna_save <- RunPCA(scrna_save, npcs = 30, verbose = FALSE, reduction.name="DOUBLET_PCA")
       scrna_save <- RunUMAP(scrna_save, reduction = "DOUBLET_PCA", dims = 1:20, reduction.name="DOUBLET_UMAP")
+      scrna_save <- AddMissingMeta(scrna, scrna_save)
+      
     } else if(length(unique(scrna$name)) == 1){
       scrna_save <- ScaleData(scrna, verbose = FALSE)
       scrna_save <- FindVariableFeatures(scrna_save)
       scrna_save <- RunPCA(scrna_save, npcs = 30, verbose = FALSE, reduction.name="DOUBLET_PCA")
       scrna_save <- RunUMAP(scrna_save, reduction = "DOUBLET_PCA", dims = 1:20, reduction.name="DOUBLET_UMAP")
+      scrna_save <- AddMissingMeta(scrna, scrna_save)
     }
     save_object(
       object = scrna_save,
