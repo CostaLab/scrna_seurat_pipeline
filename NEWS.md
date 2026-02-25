@@ -97,3 +97,4 @@
  * support offline run of visualization
  * add pathway checking script to the tools folder
  * add dockerfile for seurat5
+ * add not allinone meta file preview in tools

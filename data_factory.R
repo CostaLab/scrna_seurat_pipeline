@@ -1695,7 +1695,7 @@ generate_scrna_MAGIC <- function(scrna){
 
   rst = magic(GetAssayData(scrna, layer='data'))
   #scrna <- magic(scrna, genes='all_genes')
-  scrna[["RNA_MAGIC"]] <- CreateAssay5Object(data=as.matrix(rst$result))
+  scrna[["MAGIC_RNA"]] <- CreateAssay5Object(data=as.matrix(rst$result))
   ## assay to disk
   if (!ALLINONE){
     fname = file.path(SAVE_DIR, "assays", "MAGIC_RNA.Rds")
