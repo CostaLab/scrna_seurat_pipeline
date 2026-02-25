@@ -1,11 +1,11 @@
 #!/bin/bash
 
 ### Job name
-#SBATCH -J scrna_test_2026-02-08_09:57:23.824629
+#SBATCH -J scrna_test_2026-02-25_10:23:08.834907
 
 ### Set logs, remember to create logs dir
-#SBATCH -e logs/scrna_test_2026-02-08_09:57:23.824629.txt
-#SBATCH -o logs/scrna_test_2026-02-08_09:57:23.824629.txt
+#SBATCH -e logs/scrna_test_2026-02-25_10:23:08.834907.txt
+#SBATCH -o logs/scrna_test_2026-02-25_10:23:08.834907.txt
 
 ### Time to execute, e. g. 15 min 30 sec
 #SBATCH -t 96:00:00
@@ -31,7 +31,7 @@
 ################################################################
 
 # could also define it here instead of taking it as an arg
-proj_name="test"
+proj_name=$1
 # data dir (where your results will be saved)
 
 data_path="/data/EXAMPLE/exp/scRNA/some_project/scrna_seurat_pipeline_results"
@@ -50,6 +50,7 @@ Rscript data_factory.R \
   -e "${data_path}/${proj_name}/charts" \
   -a seurat_clusters \
   --allinone=TRUE \
+  --offline_all_databases=TRUE \
   --nFeatureRNAfloor=400 \
   --nCountRNAfloor=0 \
   --nCountRNAceiling=40000 \

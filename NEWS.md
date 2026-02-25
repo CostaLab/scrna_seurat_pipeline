@@ -93,3 +93,7 @@
 ## version 1.0.6 ---17.02.2026 
  * switch seurat 4 to seurat 5
  * add sessionInfo for each successful execution for data producing 
+ * support offline run of data producing
+ * support offline run of visualization
+ * add pathway checking script to the tools folder
+ * add dockerfile for seurat5

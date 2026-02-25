@@ -141,6 +141,11 @@ AllOptions <- function(){
                        help="dims keep to do clustering using harmony [default %default]",
                        metavar="character")
 
+  ## if offline all databases, if TRUE or FALSE
+  parser <- add_option(parser, c("-o", "--offline_all_databases"), type="logical", default=FALSE,
+                      help="if TRUE, will offline all databases, if FALSE, will use online databases [default %default]",
+                      metavar="logical")
+
   parser <- add_option(parser, c("--allinone"), type="logical", default=TRUE,
                        help="store calculated result in scrna@tools & assays in scrna@assays if TRUE, else store in save/partition & save/assays respectively [default %default]",
                        metavar="character")
@@ -175,6 +180,9 @@ DEFUALT_CLUSTER_NAME  = pa$defaultclustername
 CM_FORMAT             = pa$countmatrixformat
 COMPRESSION_FORMAT    = pa$compression
 ALLINONE              = pa$allinone
+OFFLINE_ALL_DATABASES = pa$offline_all_databases
+KEGG_DB_PATH          = "PathWayDB/KEGG"
+MSig_DB_PATH          = "PathWayDB/MSig"
 
 
 f = function(x){if(x == ""){ return("")}else{ return("-")}}
@@ -193,6 +201,57 @@ pct_ribofloor         = toInt(pa$pct_ribofloor)
 
 
 CLUSTER_RESOLUTION_RANGE = seq(0.1, 0.8, 0.1)
+
+ensure_msigdb_cache_for_species <- function(){
+  if(!OFFLINE_ALL_DATABASES){
+    return(invisible(NULL))
+  }
+
+  msig_suffix <- switch(
+    SPECIES,
+    "Human" = "Hs",
+    "Mouse" = "Mm",
+    "NotSupport"
+  )
+
+  if(msig_suffix == "NotSupport"){
+    logger.error("not support species for hallmark/MSigDB cache: %s", SPECIES)
+    stop("not support species for hallmark/MSigDB cache")
+  }
+
+  src_candidates <- list.files(
+    MSig_DB_PATH,
+    pattern = sprintf("^msigdb\\..*\\.%s\\.rds$", msig_suffix),
+    full.names = TRUE
+  )
+
+  if(length(src_candidates) == 0){
+    logger.error("No offline MSigDB cache found under %s for suffix %s", MSig_DB_PATH, msig_suffix)
+    stop(sprintf("Missing offline MSigDB file in %s for %s", MSig_DB_PATH, SPECIES))
+  }
+
+  # Pick the newest matching snapshot if multiple versions exist.
+  finfo <- file.info(src_candidates)
+  src_file <- src_candidates[which.max(finfo$mtime)]
+
+  cache_dir <- tryCatch(
+    tools::R_user_dir("msigdbr", which = "cache"),
+    error = function(e) file.path(path.expand("~"), ".cache", "R", "msigdbr")
+  )
+  dir.create(cache_dir, recursive = TRUE, showWarnings = FALSE)
+
+  dst_file <- file.path(cache_dir, basename(src_file))
+  if(!file.exists(dst_file) || file.size(dst_file) == 0){
+    ok <- file.copy(src_file, dst_file, overwrite = TRUE)
+    if(!ok){
+      logger.error("Failed to copy offline MSigDB cache from %s to %s", src_file, dst_file)
+      stop("Failed to initialize offline MSigDB cache")
+    }
+    logger.info("Copied offline MSigDB cache: %s -> %s", src_file, dst_file)
+  }else{
+    logger.info("Using existing offline MSigDB cache: %s", dst_file)
+  }
+}
 
 
 if(!file.exists("logs")){
@@ -2664,9 +2723,18 @@ get_kegg_up <- function(de.list){
       next
     }
 
+    ## if offline all databases, use offline KEGG db
+    if(OFFLINE_ALL_DATABASES){
+      kegg_db_path <- file.path(KEGG_DB_PATH, sprintf("kegg_term2gene_%s.rds", keggorgan))
+      kegg_term2name_file <- file.path(KEGG_DB_PATH, sprintf("kegg_term2name_%s.rds", keggorgan))
+      term2gene <- readRDS(kegg_db_path)
+      term2name <- readRDS(kegg_term2name_file)
+      kegg <- enricher(gene= genes_e$ENTREZID, TERM2GENE = term2gene, TERM2NAME = term2name, pvalueCutoff = 1)
+    }else{
     kegg <- enrichKEGG(gene= genes_e$ENTREZID,
                        organism     = keggorgan,
                        pvalueCutoff = 1)
+    }
 
     if(is.null(kegg)){
       kegg.up.list[(id)] = list(NULL)
@@ -2726,9 +2794,18 @@ get_kegg_down <- function(de.list){
       next
     }
 
-    kegg <- enrichKEGG(gene= genes_e$ENTREZID,
-                       organism     = keggorgan,
-                       pvalueCutoff = 1)
+    ## if offline all databases, use offline KEGG db
+    if(OFFLINE_ALL_DATABASES){
+      kegg_db_path <- file.path(KEGG_DB_PATH, sprintf("kegg_term2gene_%s.rds", keggorgan))
+      kegg_term2name_file <- file.path(KEGG_DB_PATH, sprintf("kegg_term2name_%s.rds", keggorgan))
+      term2gene <- readRDS(kegg_db_path)
+      term2name <- readRDS(kegg_term2name_file)
+      kegg <- enricher(gene= genes_e$ENTREZID, TERM2GENE = term2gene, TERM2NAME = term2name, pvalueCutoff = 1)
+    }else{
+      kegg <- enrichKEGG(gene= genes_e$ENTREZID,
+                         organism     = keggorgan,
+                         pvalueCutoff = 1)
+    }
 
     if(is.null(kegg)){
       kegg.down.list[(id)] = list(NULL)
@@ -2867,6 +2944,7 @@ get_hallmark_up <- function(de.list){
   suppressPackageStartupMessages(require(clusterProfiler))
   suppressPackageStartupMessages(require(org.Mm.eg.db))
   suppressPackageStartupMessages(require(org.Hs.eg.db))
+  ensure_msigdb_cache_for_species()
   hallmark.up.list = list()
   help_sort_func <- ifelse(all.is.numeric(names(de.list)), as.numeric, function(x){x})
   orgdb <- switch(SPECIES, "Mouse"="org.Mm.eg.db",
@@ -2932,6 +3010,7 @@ get_hallmark_down <- function(de.list){
   suppressPackageStartupMessages(require(clusterProfiler))
   suppressPackageStartupMessages(require(org.Mm.eg.db))
   suppressPackageStartupMessages(require(org.Hs.eg.db))
+  ensure_msigdb_cache_for_species()
   hallmark.down.list = list()
   help_sort_func <- ifelse(all.is.numeric(names(de.list)), as.numeric, function(x){x})
   orgdb <- switch(SPECIES, "Mouse"="org.Mm.eg.db",
