@@ -1,27 +1,27 @@
 #!/bin/bash
 
 ### Job name
-#SBATCH -J viz_ex
-#SBATCH -o logs/output.%j.%x.txt
-#SBATCH -e logs/error.%j.%x.txt
+#SBATCH -J viz_2026-02-26_20:35:56.996905
+#SBATCH -o logs/viz_2026-02-26_20:35:56.996905.txt
+#SBATCH -e logs/viz_2026-02-26_20:35:56.996905.txt
 
 ### Time your job needs to execute, e. g. 15 min 30 sec 
 #SBATCH -t 24:00:00
 ### Memory your job needs per node, e. g. 1 GB
 #SBATCH --mem=48G
-
+#SBATCH --partition=cpu2
 ### OpenMP threads
 #SBATCH --cpus-per-task=8
 
 ################################################################
-module load R
-module load scRNA
+#module load R
+#module load scRNA
 #source ~/miniconda3/bin/activate
-#conda activate Seurat3
+#conda activate Seurat5
 ################################################################
 
 # could also define it here instead of taking it as an arg
-proj_name="$1"
+proj_name="test"
 # data dir (where your results were saved)
 # the way it is set up below -o for output will also save your report
 # on that same directory path

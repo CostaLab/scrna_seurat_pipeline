@@ -306,8 +306,8 @@ DE_GO_analysis_elements <- function(scrna){
         Cluster = as.character(scrna@meta.data[, cluster]),
         stringsAsFactors = FALSE)
 
-
-      df.s <- melt(df, id.vars = c("Cluster"))
+      df <- as.data.table(df)
+      df.s <- data.table::melt(df, id.vars = c("Cluster"))
       df.s[df.s == -Inf] <- 0
 
       min_x <- min(df.s$value)

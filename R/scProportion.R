@@ -1,4 +1,9 @@
 ### adjusted from https://github.com/rpolicastro/scProportionTest.git
+suppressPackageStartupMessages(library(data.table))
+# When sourced directly (not via package namespace), ensure S3 class is known to S4.
+if (!methods::isClass("data.table")) {
+  methods::setOldClass(c("data.table", "data.frame"))
+}
 #' Single-Cell Utilities
 #'
 #' @slot meta_data Seurat meta-data
@@ -14,7 +19,7 @@ setClass(
 		results = "list"
 	),
 	prototype(
-		meta_data = data.frame(),
+		meta_data = data.table::data.table(),
 		results = list()
 	)
 )

@@ -11,7 +11,8 @@ Genesets_stageVS_elements <- function(scrna){
                      Cluster = as.character(scrna@meta.data[, cluster_use]),
                      stage = as.character(scrna@meta.data[, "stage"]),
                      stringsAsFactors=F)
-    df.s <- melt(df, id.vars = c("Cluster", "stage"))
+    df <- as.data.table(df)
+    df.s <- data.table::melt(df, id.vars = c("Cluster", "stage"))
     df.s[df.s == -Inf] <- 0
 
     min_x <- min(df.s$value)

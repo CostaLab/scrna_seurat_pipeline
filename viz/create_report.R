@@ -7,8 +7,7 @@ source("R/DE_GO_VS_helper.R")
 source("R/pathway_vs_helper.R")
 source("R/save_load_helper.R")
 source("R/scProportion.R")
-
-
+suppressPackageStartupMessages(library(Seurat))      ## Options
 suppressPackageStartupMessages(library(optparse))      ## Options
 
 ###======================PARAMETERS BEGIN====================================
@@ -163,8 +162,51 @@ code_generate_cmd <- glue(
 ##2. code generate
 run_shell(code_generate_cmd)
 ##3. generate index.html from template
-run_shell(glue("grip --export {REPORTDIR}/index.md"))
+index_md <- normalizePath(file.path(REPORTDIR, "index.md"), mustWork = FALSE)
+index_html <- normalizePath(file.path(REPORTDIR, "index.html"), mustWork = FALSE)
+css_file <- normalizePath(file.path(REPORTDIR, "..", "viz", "github-markdown.css"), mustWork = FALSE)
 
+offline_html_cmd <- paste(
+  "python3 - <<'EOF'",
+  "import markdown",
+  "",
+  sprintf("with open(%s, 'r', encoding='utf-8') as f:", shQuote(index_md)),
+  "    md = f.read()",
+  "",
+  "html_body = markdown.markdown(md, extensions=['fenced_code', 'tables'])",
+  "",
+  "html = f\"\"\"<!DOCTYPE html>",
+  "<html>",
+  "<head>",
+  "  <meta charset=\\\"utf-8\\\">",
+  sprintf("  <link rel=\\\"stylesheet\\\" href=%s>", shQuote(css_file)),
+  "  <style>",
+  "    body {{",
+  "      box-sizing: border-box;",
+  "      min-width: 200px;",
+  "      max-width: 980px;",
+  "      margin: 40px auto;",
+  "      padding: 0 20px;",
+  "    }}",
+  "  </style>",
+  "</head>",
+  "<body>",
+  "  <article class=\\\"markdown-body\\\">",
+  "    {html_body}",
+  "  </article>",
+  "</body>",
+  "</html>",
+  "\"\"\"",
+  "",
+  sprintf("with open(%s, 'w', encoding='utf-8') as f:", shQuote(index_html)),
+  "    f.write(html)",
+  "EOF",
+  sep = "\n"
+)
+ret_html <- system(offline_html_cmd)
+if(ret_html != 0){
+  stop("Failed to generate offline index.html from index.md")
+}
 if(INDEX_ONLY){
   cat(red("======Only generate index.html=====\n"))
   quit(save = "no")

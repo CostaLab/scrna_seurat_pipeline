@@ -74,7 +74,7 @@ quality_report_elements <- function(){
   }else{
     scrna <- load_object(file_name = file.path(savedir, "scrna_phase_preprocess.Rds"))
   }
-  scrna <- safe_join_layers(scrna)  # v5: join layers for downstream GetAssayData / VariableFeatures
+  #scrna <- safe_join_layers(scrna)  # v5: join layers for downstream GetAssayData / VariableFeatures
 
   Idents(object = scrna)<- "name"
   if (DOUBLET_SWITCH=='off'){
@@ -280,4 +280,3 @@ quality_report_elements <- function(){
     width=10, height=8
   )
 }
-

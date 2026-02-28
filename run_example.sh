@@ -1,20 +1,21 @@
 #!/bin/bash
 
 ### Job name
-#SBATCH -J scrna_test_2026-02-25_10:23:08.834907
+#SBATCH -J scrna_2026-02-26_20:54:46.199555
 
 ### Set logs, remember to create logs dir
-#SBATCH -e logs/scrna_test_2026-02-25_10:23:08.834907.txt
-#SBATCH -o logs/scrna_test_2026-02-25_10:23:08.834907.txt
+#SBATCH -e logs/scrna_2026-02-26_20:54:46.199555.txt
+#SBATCH -o logs/scrna_2026-02-26_20:54:46.199555.txt
 
 ### Time to execute, e. g. 15 min 30 sec
 #SBATCH -t 96:00:00
 
 ### Job memory needs per node, e. g. 1 GB
-#SBATCH --mem=180G
+#SBATCH --mem=30G
+#SBATCH --partition=cpu1,cpu2
 
 ### OpenMP threads
-#SBATCH --cpus-per-task=24
+#SBATCH --cpus-per-task=10
 
 ################################################################
 # PATH
@@ -31,7 +32,7 @@
 ################################################################
 
 # could also define it here instead of taking it as an arg
-proj_name=$1
+proj_name="test"
 # data dir (where your results will be saved)
 
 data_path="/data/EXAMPLE/exp/scRNA/some_project/scrna_seurat_pipeline_results"
