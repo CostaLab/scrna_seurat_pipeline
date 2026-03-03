@@ -327,6 +327,7 @@ if(!file.exists(pa$configfile)){
   parse_args(parser, args = c("--help"))
 }
 
+clinical_meta <- NULL
 source(pa$configfile)
 source("R/save_load_helper.R")
 
@@ -668,6 +669,11 @@ generate_scrna_rawdata <- function(scrna){
                name = names(data_src)[i]
                scrna@meta.data[, "name"] <- name
                scrna@meta.data[, "stage"] <- stage_lst[name]
+               if (!is.null(clinical_meta) && name %in% rownames(clinical_meta)) {
+                 for (col in colnames(clinical_meta)) {
+                   scrna@meta.data[, col] <- clinical_meta[name, col]
+                 }
+               }
                data.list[[i]] <- scrna
                rm(scrna)
              }

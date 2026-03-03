@@ -37,6 +37,18 @@ stage_lst = c(
 )
 
 
+##------------------ Clinical Metadata (optional) -----------
+## Row names must match names in data_src / stage_lst.
+## Set to NULL if not applicable.
+clinical_meta <- NULL
+#clinical_meta <- data.frame(
+#  row.names = c("P_1953009","P_1966702","P_1976301","P_2388032","P_1981951","P_1981440","P_1989311"),
+#  sex       = c("F",       "M",       "M",       "F",       "M",       "M",       "F"),
+#  age       = c(30,         30,        20,        30,        20,        30,        20),
+#  height_cm = c(172,        172,       172,       183,       183,       183,       183),
+#  weight_kg = c(80          80,        80,        70,        70,        70,        70),
+#  stringsAsFactors = FALSE
+#)
 ##------------------ Number of Cells for Doublet Detection --------------
 # You have to set two variables.
 # doublet_switch: This variable controls, if you want to detect doublets.
