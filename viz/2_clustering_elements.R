@@ -73,6 +73,41 @@ clustering_elements <- function(scrna){
       width=9, height=7
     )
 
+    ## Clinical metadata: violin plots & UMAPs per cluster
+    if (!is.null(clinical_meta)) {
+      numeric_cols <- colnames(clinical_meta)[sapply(clinical_meta, is.numeric)]
+      cat_cols <- colnames(clinical_meta)[sapply(clinical_meta, function(x) is.character(x) || is.factor(x))]
+
+      for (col in numeric_cols) {
+        if (col %in% colnames(scrna@meta.data)) {
+          message(paste0("### Making clinical violin: ", col))
+          plt <- VlnPlot(scrna, features = col, group.by = cluster_use, pt.size = 0.1) +
+            ggtitle(paste(col, "by cluster"))
+          save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder,
+            plt_name = paste0("clinical_violin_", col, "_", cluster_use),
+            width = 10, height = 6)
+
+          message(paste0("### Making clinical UMAP: ", col))
+          plt <- FeaturePlot(scrna, features = col, reduction = umap_reduction)
+          save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder,
+            plt_name = paste0("clinical_umap_", col, "_", cluster_use),
+            width = 9, height = 7)
+        }
+      }
+
+      for (col in cat_cols) {
+        if (col %in% colnames(scrna@meta.data)) {
+          message(paste0("### Making clinical UMAP (categorical): ", col))
+          n_lvl <- length(unique(scrna@meta.data[, col]))
+          col_def_cat <- ggsci_pal(option = replicates_viridis_opt)(max(n_lvl, 2))
+          plt <- DimPlot(scrna, group.by = col, reduction = umap_reduction, cols = col_def_cat)
+          save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder,
+            plt_name = paste0("clinical_umap_", col, "_", cluster_use),
+            width = 9, height = 7)
+        }
+      }
+    }
+
     tbl <- table(scrna$name, scrna@meta.data[, cluster_use])
     rowsums <- rowSums(tbl)
     tbl <- cbind(tbl, rowsums)

@@ -67,6 +67,45 @@ quality_report_elements <- function(){
   )
 
   ####################################################
+  # clinical metadata (optional, per-patient barplots)
+  ####################################################
+  if (!is.null(clinical_meta)) {
+    message("### Making clinical metadata barplots")
+    meta_samples <- clinical_meta[intersect(names(data_src), rownames(clinical_meta)), , drop=FALSE]
+    meta_samples$sample <- factor(rownames(meta_samples), levels = names(data_src))
+    meta_samples$stage  <- stage_lst[rownames(meta_samples)]
+
+    for (col in colnames(clinical_meta)) {
+      if (is.numeric(meta_samples[[col]])) {
+        plt <- ggplot(meta_samples, aes(x = sample, y = .data[[col]], fill = stage)) +
+          geom_col(width = 0.7) +
+          coord_flip() +
+          theme_minimal() +
+          ggtitle(paste("Patient", col)) +
+          xlab("") + ylab(col)
+      } else {
+        plt <- ggplot(meta_samples, aes(x = sample, fill = .data[[col]])) +
+          geom_bar(width = 0.7) +
+          coord_flip() +
+          theme_minimal() +
+          ggtitle(paste("Patient", col)) +
+          xlab("")
+      }
+      save_ggplot_formats(
+        plt = plt,
+        base_plot_dir = report_plots_folder,
+        plt_name = paste0("clinical_barplot_", col),
+        width = 9, height = 5
+      )
+    }
+    save_object(
+      meta_samples,
+      file.path(report_tables_folder, "clinical_meta_summary.RDS"),
+      COMPRESSION_FORMAT
+    )
+  }
+
+  ####################################################
   # post filtering
   ####################################################
   if(identical(cluster,"singleton")){
