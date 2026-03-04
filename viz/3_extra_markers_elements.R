@@ -1,3 +1,5 @@
+sanitize_celltype_name <- function(x) gsub("[^A-Za-z0-9_.-]", "_", x)
+
 extra_markers_elements <- function(scrna){
   len <- length(scrna@tools$parameter)
 
@@ -40,6 +42,7 @@ extra_markers_elements <- function(scrna){
   DefaultAssay(scrna) <- assay_use
   o_genes <- rownames(scrna)
   for (a_celltype in celltype_names){
+    safe_ct <- sanitize_celltype_name(a_celltype)
 
     genes <- mdf[mdf$Cell.Type==a_celltype,glue::glue("{SPECIES}.Gene") ]
 
@@ -79,7 +82,7 @@ extra_markers_elements <- function(scrna){
         base_plot_dir = report_plots_folder,
         plt_name = paste0(
           "extra_extmarkers_inte_umap_featureplot_",
-          a_celltype, "-genes_", i, "-to-", ni
+          safe_ct, "-genes_", i, "-to-", ni
         ),
         width=9, height=7
       )
@@ -97,7 +100,7 @@ extra_markers_elements <- function(scrna){
       plt = p2,
       base_plot_dir = report_plots_folder,
       plt_name = paste0(
-        "extra_extmarkers_dotplot_", a_celltype, "_groupby-", cluster
+        "extra_extmarkers_dotplot_", safe_ct, "_groupby-", cluster
       ),
       width = 9, height = 7
     )
@@ -119,7 +122,7 @@ extra_markers_elements <- function(scrna){
         plt = p3,
         base_plot_dir = report_plots_folder,
         plt_name = paste0(
-          "extra_extmarkers_vlnplot_", a_celltype, "-genes_", i, "-to-", ni
+          "extra_extmarkers_vlnplot_", safe_ct, "-genes_", i, "-to-", ni
         ),
         width = 9, height = 7
       )

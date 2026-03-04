@@ -27,16 +27,18 @@ author: '`r params$author`'
 ```{r extra_ext_markers_setup, include=FALSE}
 knitr::opts_chunk$set(warning = F, message = F, echo = T)
 celltype_names = load_object(file.path(params$report_tables_folder, "extra_ext_annot_celltype_names.RDS"))
+sanitize_celltype_name <- function(x) gsub("[^A-Za-z0-9_.-]", "_", x)
 ```
 
 ## Extra markers
 ```{r extra_ext_markers, results="asis", out.width="100%", echo=FALSE}
 for (a_celltype in celltype_names){
+  safe_ct <- sanitize_celltype_name(a_celltype)
   cat('\n')
   cat("  \n###",  glue::glue("{a_celltype}"),"   \n")
   cat('\n')
   flist = grep(
-    paste0("extra_extmarkers_inte_umap_featureplot_",a_celltype),
+    paste0("extra_extmarkers_inte_umap_featureplot_",safe_ct),
     list.files(
       params$report_plots_folder_png,
       full.names=TRUE
@@ -50,12 +52,12 @@ for (a_celltype in celltype_names){
 
   fname = file.path(
     params$report_plots_folder_png,
-    paste0("extra_extmarkers_dotplot_",a_celltype,"_groupby-",params$cluster,".png")
+    paste0("extra_extmarkers_dotplot_",safe_ct,"_groupby-",params$cluster,".png")
   )
   if(file.exists(fname)) cat("![](",fname,")")
 
   flist = grep(
-    paste0("extra_extmarkers_vlnplot_",a_celltype),
+    paste0("extra_extmarkers_vlnplot_",safe_ct),
     list.files(
       params$report_plots_folder_png,
       full.names=TRUE
