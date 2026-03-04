@@ -136,6 +136,29 @@
 {% endif %}
 
 
+{% if intersect(viz_dict['DEGOextrastageVS'], executing_list) %}
+## {{count}}. Differential Expression & GO analysis (extra stage columns)
+{% for col_name, pairs in lst_extrastages.items() %}
+ - **{{col_name}}** DE&GO pages
+    {% for x, y in pairs %}
+	- [{{x}}.vs.{{y}}](data/extrastage_gv_{{col_name}}_{{requote_uri(x)}}.vs.{{requote_uri(y)}}.html )
+    {% endfor %}
+
+ - **{{col_name}}** DE FILES
+    {% for x, y in pairs %}
+   - [DE {{x}}.vs.{{y}}.xlsx](data/extrastage_{{col_name}}_{{requote_uri(x)}}.vs.{{requote_uri(y)}}.de_{{cluster_use}}.xlsx )
+    {% endfor %}
+ - **{{col_name}}** GO FILES
+    {% for x, y in pairs %}
+   - [GO UP    {{x}}.vs.{{y}} xlsx](data/extrastage_{{col_name}}_{{requote_uri(x)}}.vs.{{requote_uri(y)}}.goup_{{cluster_use}}.xlsx)
+   - [GO DOWN  {{x}}.vs.{{y}} xlsx](data/extrastage_{{col_name}}_{{requote_uri(x)}}.vs.{{requote_uri(y)}}.godown_{{cluster_use}}.xlsx)
+    {% endfor %}
+{% endfor %}
+
+  {% set count = count + 1 %}
+{% endif %}
+
+
 {% if intersect(viz_dict['PWstageVS'], executing_list) %}
 ## {{count}}. Pathway analysis (between groups)
 

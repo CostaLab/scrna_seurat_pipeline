@@ -226,6 +226,7 @@ ext_annot_fp = EXTERNALFILE
 
 ##4. Make_report element
 EXTRA_ANNOTATION_EXTERNAL_FILE <- NULL
+extra_stage_cols <- NULL
 source(CONFIGFILE)
 extra_ext_annot_fp = EXTRA_ANNOTATION_EXTERNAL_FILE
 DOUBLET_SWITCH    = doublet_switch
@@ -422,6 +423,10 @@ if(MAKE_ELEMENT){
     print_nelement_msg("DEGO_stage")
     DEGO_stageVS_elements(scrna)
   }
+  if("DEGO_extrastage" %in% EXEC_PLAN){
+    print_nelement_msg("DEGO_extrastage")
+    DEGO_extrastageVS_elements(scrna)
+  }
   if(length(intersect(c("hallmark_1v1","reactome_1v1","kegg_1v1"), EXEC_PLAN) > 0)){
     print_nelement_msg("pathway_1v1")
     pathway_1v1_elements(scrna)
@@ -491,6 +496,7 @@ dic_Rmd_n_Output <- list(
   "hallmark"         = c(glue("{viz_path}/3_hallmark.Rmd"),              "hallmark"),
   "Reactome"         = c(glue("{viz_path}/3_Reactome.Rmd"),              "Reactome"),
   "DEGO_stage"       = c(glue("{viz_path}/4_DE_GO_%s.vs.%s_stageVS.Rmd"),"gv"),
+  "DEGO_extrastage"  = c(glue("{viz_path}/4_DE_GO_extrastage_%s_%s.vs.%s.Rmd"), "extrastage_gv"),
   "DEGO_1v1"         = c(glue("{viz_path}/4_DE_GO_%s.vs.%s_1v1.Rmd"),    "1vs1"),
   "hallmark_1v1"     = c(glue("{viz_path}/4_hallmark_1v1.Rmd"),          "hallmark_1vs1"),
   "reactome_1v1"     = c(glue("{viz_path}/4_reactome_1v1.Rmd"),          "reactome_1vs1"),
@@ -529,6 +535,31 @@ for(exec_elem in EXEC_PLAN){
         sprintf(rmd, apair[1], apair[2]),
         glue("{output}_{apair[1]}.vs.{apair[2]}.html")
       )
+    }
+  }else if(output == "extrastage_gv"){
+    if (!is.null(extra_stage_cols)) {
+      tmpl_path <- file.path(viz_path, "template", "DE-GO-extrastage-vs.template")
+      for (col_name in names(extra_stage_cols)) {
+        defn <- extra_stage_cols[[col_name]]
+        meta_col <- if (is.list(defn)) col_name else defn
+        groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+        for (apair in comb_list(groups)) {
+          rmd_path <- sprintf(rmd, col_name, apair[1], apair[2])
+          if (file.exists(tmpl_path)) {
+            prefix <- glue("extrastage_{col_name}_")
+            txt <- readLines(tmpl_path, warn = FALSE)
+            txt <- gsub("{{prefix}}", prefix, txt, fixed = TRUE)
+            txt <- gsub("{{tX}}", apair[1], txt, fixed = TRUE)
+            txt <- gsub("{{tY}}", apair[2], txt, fixed = TRUE)
+            txt <- gsub("{{col_name}}", col_name, txt, fixed = TRUE)
+            writeLines(txt, rmd_path)
+          }
+          render_func(
+            rmd_path,
+            glue("{output}_{col_name}_{apair[1]}.vs.{apair[2]}.html")
+          )
+        }
+      }
     }
   }else{
     render_func(rmd, output)

@@ -59,6 +59,8 @@ viz_dict = {
 
     "DEGOstageVS": ["DEGO_stage"],
 
+    "DEGOextrastageVS": ["DEGO_extrastage"],
+
     "PWstageVS": ["Genesets_stage",
                   "progeny_stage",
                   "hallmark_stage",
@@ -88,6 +90,33 @@ seen = set()
 u_stages = [x for x in stages if x not in seen and not seen.add(x)]  # remove dup
 lst_stages = list(combinations(u_stages, 2))
 
+try:
+    robjects.r('if (!exists("extra_stage_cols")) extra_stage_cols <- NULL')
+    esc_r = robjects.r("extra_stage_cols")
+    if esc_r != robjects.NULL:
+        robjects.r('if (!exists("clinical_meta")) clinical_meta <- NULL')
+        extra_stage_cols = {}
+        for col_name in list(esc_r.names):
+            defn = esc_r.rx2(col_name)
+            if isinstance(defn, robjects.ListVector):
+                extra_stage_cols[col_name] = list(defn.rx2("labels"))
+            else:
+                cm = robjects.r("clinical_meta")
+                if cm != robjects.NULL:
+                    vals = list(set(str(v) for v in cm.rx2(str(defn))))
+                    extra_stage_cols[col_name] = vals
+                else:
+                    extra_stage_cols[col_name] = []
+    else:
+        extra_stage_cols = {}
+except Exception:
+    extra_stage_cols = {}
+
+lst_extrastages = {}
+for col_name, groups in extra_stage_cols.items():
+    if len(groups) >= 2:
+        lst_extrastages[col_name] = list(combinations(groups, 2))
+
 # FIXME should 'cluster_use' be redefined here?
 # cluster_use = "seurat_clusters"
 # savedir = os.path.join(DATADIR, "save"+args.proj_tag)#robjects.r("SAVE_DIR")[0]
@@ -114,6 +143,7 @@ def generate_md_idx(out):
                   viz_dict=viz_dict,
                   list_1v1=lst_1v1,
                   list_stages=lst_stages,
+                  lst_extrastages=lst_extrastages,
                   integr_option=integration_option,
                   project_name=project_name[0],
                   cluster_use=args.cluster_use)
@@ -243,6 +273,26 @@ def generate_report_stageVS_progeny(viz_path):
 # endf generate_groupVS
 
 
+def generate_report_extrastagesVS(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__), "template", "DE-GO-extrastage-vs.template"))
+    tmpl = tfile.read()
+
+    for col_name, pairs in lst_extrastages.items():
+        prefix = f"extrastage_{col_name}_"
+        t = Template(tmpl)
+        for x, y in pairs:
+            r = t.render(
+                tX=x,
+                tY=y,
+                col_name=col_name,
+                prefix=prefix
+            )
+            fw = open(os.path.join(viz_path, f"4_DE_GO_extrastage_{col_name}_{x}.vs.{y}.Rmd"), "w")
+            fw.write("%s\n\n" % r)
+            fw.close()
+# endf generate_report_extrastagesVS
+
+
 def main():
 
     out_dir = args.output_dir
@@ -250,6 +300,7 @@ def main():
 
     generate_report_1v1(viz_dir)
     generate_report_stagesVS(viz_dir)
+    generate_report_extrastagesVS(viz_dir)
 
     generate_report_1v1_pw(viz_dir)
     generate_report_stagesVS_pw(viz_dir)

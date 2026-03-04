@@ -5,7 +5,8 @@ compare_vs_loop <- function(
   all_de_list,
   all_goup_list,
   all_godown_list,
-  pairs_list
+  pairs_list,
+  prefix = ""
 ){
 
   for(apair in pairs_list){
@@ -49,7 +50,7 @@ compare_vs_loop <- function(
         save_ggplot_formats(
           plt = plt,
           base_plot_dir = report_plots_folder,
-          plt_name = glue("top10-deg-vs_{a_vs}_cluster-{cluster_use}_p{i}-{ni}"),
+          plt_name = glue("{prefix}top10-deg-vs_{a_vs}_cluster-{cluster_use}_p{i}-{ni}"),
           width = 9,
           height = dynamic_height
         )
@@ -85,7 +86,7 @@ compare_vs_loop <- function(
       save_ggplot_formats(
         plt = plt,
         base_plot_dir = report_plots_folder,
-        plt_name = glue("volcanoplot_deg_vs_{a_vs}_cluster-{cluster_use}_id-{id}"),
+        plt_name = glue("{prefix}volcanoplot_deg_vs_{a_vs}_cluster-{cluster_use}_id-{id}"),
         width = 9,
         height = 7
       )
@@ -127,7 +128,7 @@ compare_vs_loop <- function(
         )
         save_ggplot_formats(
           plt = plt,
-          plt_name = glue("go_up_genes_heatmap_vs_{a_vs}_cluster-{cluster_use}"),
+          plt_name = glue("{prefix}go_up_genes_heatmap_vs_{a_vs}_cluster-{cluster_use}"),
           units = "in",
           base_plot_dir = report_plots_folder,
           plot_obj = "ComplexHeatmap",
@@ -155,7 +156,7 @@ compare_vs_loop <- function(
         save_ggplot_formats(
           plt = plt,
           base_plot_dir = report_plots_folder,
-          plt_name = glue("top10-goup_bar_vs_{a_vs}_cluster-{cluster_use}_p{i}-{ni}"),
+          plt_name = glue("{prefix}top10-goup_bar_vs_{a_vs}_cluster-{cluster_use}_p{i}-{ni}"),
           width = 18,
           height = dynamic_height
         )
@@ -199,7 +200,7 @@ compare_vs_loop <- function(
         )
         save_ggplot_formats(
           plt = plt,
-          plt_name = glue("go_down_genes_heatmap_vs_{a_vs}_cluster-{cluster_use}"),
+          plt_name = glue("{prefix}go_down_genes_heatmap_vs_{a_vs}_cluster-{cluster_use}"),
           units = "in",
           base_plot_dir = report_plots_folder,
           plot_obj = "ComplexHeatmap",
@@ -224,7 +225,7 @@ compare_vs_loop <- function(
         save_ggplot_formats(
           plt = plt,
           base_plot_dir = report_plots_folder,
-          plt_name = glue("top10-godown_bar_vs_{a_vs}_cluster-{cluster_use}_p{i}-{ni}"),
+          plt_name = glue("{prefix}top10-godown_bar_vs_{a_vs}_cluster-{cluster_use}_p{i}-{ni}"),
           width = 18,
           height = dynamic_height
         )
@@ -260,7 +261,7 @@ compare_vs_loop <- function(
       save_ggplot_formats(
         plt = plt,
         base_plot_dir = report_plots_folder,
-        plt_name = glue("featureplot_top10_deg_vs_{a_vs}_cluster-{cluster_use}_id-{i}"),
+        plt_name = glue("{prefix}featureplot_top10_deg_vs_{a_vs}_cluster-{cluster_use}_id-{i}"),
         width = 12, height = 7
       )
     }
