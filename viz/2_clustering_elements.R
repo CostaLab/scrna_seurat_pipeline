@@ -108,6 +108,68 @@ clustering_elements <- function(scrna){
       }
     }
 
+    ## Extra stage columns: UMAP + composition barplots
+    esc <- scrna@tools[["extra_stage_cols"]]
+    if (!is.null(esc) && length(esc) > 0) {
+      for (col_name in names(esc)) {
+        defn <- esc[[col_name]]
+        meta_col <- if (is.list(defn)) col_name else defn
+        if (!(meta_col %in% colnames(scrna@meta.data))) next
+        groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+        if (length(groups) < 2) next
+
+        message(paste0("### Making extra stage UMAP: ", col_name))
+        n_lvl <- length(groups)
+        esc_cols <- ggsci_pal(option = replicates_viridis_opt)(max(n_lvl, 2))
+        plt <- DimPlot(scrna, group.by = meta_col, reduction = umap_reduction, cols = esc_cols)
+        save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder,
+          plt_name = paste0("extrastage_umap_", col_name, "_", cluster_use),
+          width = 9, height = 7)
+
+        message(paste0("### Making extra stage composition: ", col_name))
+        comp_tbl <- table(scrna@meta.data[, meta_col], scrna@meta.data[, cluster_use])
+        comp_df <- as.data.frame(prop.table(comp_tbl, margin = 2))
+        colnames(comp_df) <- c("Group", "Cluster", "Proportion")
+        plt <- ggplot(comp_df, aes(x = Cluster, y = Proportion, fill = Group)) +
+          geom_col(position = "fill") +
+          theme_minimal() +
+          ggtitle(paste("Cluster composition by", col_name)) +
+          xlab("Cluster") + ylab("Proportion") +
+          theme(axis.text.x = element_text(angle = 45, hjust = 1))
+        save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder,
+          plt_name = paste0("extrastage_composition_", col_name, "_", cluster_use),
+          width = 10, height = 6)
+
+        fisher_key <- sprintf("fisher_extrastage_%s_%s", col_name, cluster_use)
+        fisher_data <- scrna@tools[[fisher_key]]
+        if (!is.null(fisher_data) && !is.null(fisher_data$fisher)) {
+          message(paste0("### Making extra stage Fisher heatmap: ", col_name))
+          pvals <- sapply(fisher_data$fisher, function(x) x$p.value)
+          pval_df <- data.frame(
+            Cluster = names(pvals),
+            neg_log10_p = -log10(pmax(pvals, 1e-300)),
+            stringsAsFactors = FALSE
+          )
+          plt <- ggplot(pval_df, aes(x = Cluster, y = neg_log10_p)) +
+            geom_col(fill = "steelblue") +
+            geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "red") +
+            theme_minimal() +
+            ggtitle(paste("Fisher test:", col_name, "vs cluster")) +
+            xlab("Cluster") + ylab("-log10(p-value)") +
+            theme(axis.text.x = element_text(angle = 45, hjust = 1))
+          save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder,
+            plt_name = paste0("extrastage_fisher_", col_name, "_", cluster_use),
+            width = 10, height = 6)
+        }
+
+        save_object(
+          as.data.frame.matrix(comp_tbl),
+          file.path(report_tables_folder, paste0("extrastage_table_", col_name, "_", cluster_use, ".RDS")),
+          COMPRESSION_FORMAT
+        )
+      }
+    }
+
     tbl <- table(scrna$name, scrna@meta.data[, cluster_use])
     rowsums <- rowSums(tbl)
     tbl <- cbind(tbl, rowsums)

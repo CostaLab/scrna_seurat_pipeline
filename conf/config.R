@@ -49,6 +49,18 @@ clinical_meta <- NULL
 #  weight_kg = c(80          80,        80,        70,        70,        70,        70),
 #  stringsAsFactors = FALSE
 #)
+
+##------------------ Extra Stage Columns (optional) -----------
+## Additional grouping variables for stage-based comparisons.
+## Each entry: a string (categorical clinical_meta column, used as-is)
+##   or a list(source, breaks, labels) for discretizing a numeric column.
+## Set to NULL or list() if not needed.
+extra_stage_cols <- NULL
+# extra_stage_cols <- list(
+#   sex = "sex",
+#   bmi_group = list(source = "bmi", breaks = c(40), labels = c("BMI_low", "BMI_high"))
+# )
+
 ##------------------ Number of Cells for Doublet Detection --------------
 # You have to set two variables.
 # doublet_switch: This variable controls, if you want to detect doublets.

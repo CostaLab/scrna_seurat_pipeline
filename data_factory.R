@@ -328,6 +328,7 @@ if(!file.exists(pa$configfile)){
 }
 
 clinical_meta <- NULL
+extra_stage_cols <- NULL
 source(pa$configfile)
 source("R/save_load_helper.R")
 
@@ -351,6 +352,28 @@ pa$doublet_lst        = doublet_lst
 if (!setequal(names(data_src), names(stage_lst))){
   logger.error("names of `data_src` and `stage_lst` are not consistent, please check your configuration file!")
   stop("names of data_src and stage_lst are not consistent!!!!")
+}
+if (length(unique(stage_lst)) < 2) {
+  logger.error("stage_lst must have at least 2 distinct conditions, found only: %s", paste(unique(stage_lst), collapse=", "))
+  stop("stage_lst has only one condition! Need at least 2 for stage-based comparisons.")
+}
+if (!is.null(extra_stage_cols) && length(extra_stage_cols) > 0) {
+  for (.esc_name in names(extra_stage_cols)) {
+    .esc_defn <- extra_stage_cols[[.esc_name]]
+    if (is.list(.esc_defn)) {
+      if (length(.esc_defn$labels) < 2) {
+        logger.error("extra_stage_cols '%s' must define at least 2 groups, found: %s", .esc_name, paste(.esc_defn$labels, collapse=", "))
+        stop(sprintf("extra_stage_cols '%s' has fewer than 2 groups!", .esc_name))
+      }
+    } else {
+      .col_vals <- clinical_meta[names(data_src)[names(data_src) %in% rownames(clinical_meta)], .esc_defn]
+      if (length(unique(na.omit(.col_vals))) < 2) {
+        logger.error("extra_stage_cols '%s' (column '%s') must have at least 2 distinct values, found only: %s",
+                     .esc_name, .esc_defn, paste(unique(na.omit(.col_vals)), collapse=", "))
+        stop(sprintf("extra_stage_cols '%s' has only one condition!", .esc_name))
+      }
+    }
+  }
 }
 if(doublet_switch=="on"| doublet_switch=="display"){
   if (!setequal(names(data_src), names(doublet_lst))){
@@ -674,6 +697,18 @@ generate_scrna_rawdata <- function(scrna){
                    scrna@meta.data[, col] <- clinical_meta[name, col]
                  }
                }
+               if (!is.null(extra_stage_cols) && !is.null(clinical_meta) && name %in% rownames(clinical_meta)) {
+                 for (col_name in names(extra_stage_cols)) {
+                   defn <- extra_stage_cols[[col_name]]
+                   if (is.list(defn)) {
+                     val <- clinical_meta[name, defn$source]
+                     scrna@meta.data[, col_name] <- cut(
+                       val, breaks = c(-Inf, defn$breaks, Inf),
+                       labels = defn$labels
+                     )
+                   }
+                 }
+               }
                data.list[[i]] <- scrna
                rm(scrna)
              }
@@ -685,6 +720,7 @@ generate_scrna_rawdata <- function(scrna){
              scrna[["percent.mt"]] <- PercentageFeatureSet(scrna, pattern = "^mt-|^MT-")
              scrna[["percent.ribo"]] <- PercentageFeatureSet(scrna, pattern = "^Rpl|^Rps|^RPL|^RPS")
              scrna@tools[["meta_order"]] <- list(name = names(data_src), stage=unique(stage_lst))
+             scrna@tools[["extra_stage_cols"]] <- extra_stage_cols
 
            },
            error=function(cond) {
@@ -2488,6 +2524,128 @@ generate_scrna_pathway_stage_vsRest <- function(scrna){
   ret_code <- ret_list[[2]]
   return(list(scrna, ret_code))
 }
+
+
+generate_scrna_extra_stage_comparisons <- function(scrna){
+  ret_code = 0
+  if (is.null(extra_stage_cols) || length(extra_stage_cols) == 0) {
+    logger.info("No extra_stage_cols defined, skipping.")
+    return(list(scrna, ret_code))
+  }
+
+  tryCatch({
+    for (col_name in names(extra_stage_cols)) {
+      defn <- extra_stage_cols[[col_name]]
+      meta_col <- if (is.list(defn)) col_name else defn
+
+      if (!(meta_col %in% colnames(scrna@meta.data))) {
+        logger.warn("extra_stage_cols: column '%s' not found in metadata, skipping.", meta_col)
+        next
+      }
+
+      groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+      if (length(groups) < 2) {
+        logger.warn("extra_stage_cols: column '%s' has fewer than 2 groups, skipping.", meta_col)
+        next
+      }
+
+      logger.info("=== Extra stage comparison: %s (groups: %s) ===", col_name, paste(groups, collapse=", "))
+
+      ## --- Fisher test on cluster x group contingency table ---
+      tryCatch({
+        count_mat <- as.matrix(Matrix::Matrix(table(
+          scrna@meta.data[, DEFUALT_CLUSTER_NAME],
+          scrna@meta.data[, meta_col]
+        )))
+        count_mat <- count_mat[rowSums(count_mat) > 0, , drop = FALSE]
+        fisher_results <- list()
+        for (ri in seq_len(nrow(count_mat))) {
+          row_name <- rownames(count_mat)[ri]
+          rest <- colSums(count_mat[-ri, , drop = FALSE])
+          tbl_2x <- rbind(count_mat[ri, ], rest)
+          ft <- fisher.test(tbl_2x, simulate.p.value = TRUE)
+          fisher_results[[row_name]] <- list(
+            p.value = ft$p.value,
+            estimate = ifelse(is.null(ft$estimate), NA, ft$estimate)
+          )
+        }
+        tool_key <- sprintf("fisher_extrastage_%s_%s", col_name, DEFUALT_CLUSTER_NAME)
+        scrna@tools[[tool_key]] <- list(count_matrix = count_mat, fisher = fisher_results)
+        logger.info("  Fisher test saved to scrna@tools$%s", tool_key)
+      }, error = function(e) {
+        logger.warn("  Fisher test failed for %s: %s", col_name, conditionMessage(e))
+      })
+
+      ## --- DE + GO per cluster between groups ---
+      pairs <- combn(groups, 2, simplify = FALSE)
+      all_de_list <- list()
+      all_goup_list <- list()
+      all_godown_list <- list()
+      for (apair in pairs) {
+        pair_name <- paste0(apair[1], ".vs.", apair[2])
+        logger.info("  DE: %s", pair_name)
+        cells_in_pair <- which(scrna@meta.data[, meta_col] %in% apair)
+        if (length(cells_in_pair) < 10) {
+          logger.warn("    Too few cells (%d), skipping pair.", length(cells_in_pair))
+          next
+        }
+        a_sub <- subset(scrna, cells = cells_in_pair)
+        Idents(a_sub) <- DEFUALT_CLUSTER_NAME
+        de_list <- list()
+        for (cl in unique(sort(a_sub@meta.data[, DEFUALT_CLUSTER_NAME]))) {
+          sub_idents <- which(a_sub@meta.data[, DEFUALT_CLUSTER_NAME] == cl)
+          if (length(sub_idents) < 5) next
+          a_sub_cl <- subset(a_sub, cells = sub_idents)
+          Idents(a_sub_cl) <- meta_col
+          tryCatch({
+            de_res <- RunPresto(a_sub_cl, ident.1 = apair[1], logfc.threshold = 0)
+            if (!is.null(de_res) && nrow(de_res) > 0) {
+              de_res$gene <- rownames(de_res)
+              de_list[[as.character(cl)]] <- de_res
+            }
+          }, error = function(e) {
+            logger.warn("    DE failed for cluster %s: %s", as.character(cl), conditionMessage(e))
+          })
+        }
+        all_de_list[[pair_name]] <- de_list
+
+        logger.info("  GO enrichment: %s", pair_name)
+        tryCatch({
+          go_ups <- get_go_up(de_list)
+          all_goup_list[[pair_name]] <- go_ups
+          go_downs <- get_go_down(de_list)
+          all_godown_list[[pair_name]] <- go_downs
+          dego_dump(paste0("extrastage_", col_name, "_", pair_name), de_list, go_ups, go_downs)
+          rm(go_ups, go_downs)
+        }, error = function(e) {
+          logger.warn("  GO enrichment failed for %s: %s", pair_name, conditionMessage(e))
+        })
+
+        rm(a_sub, de_list)
+      }
+
+      store_list <- list(all_de_list, all_goup_list, all_godown_list)
+      names(store_list) <- c("de", "goup", "godown")
+      tool_key <- sprintf("dego_extrastage_%s_%s", col_name, DEFUALT_CLUSTER_NAME)
+      if (!ALLINONE) {
+        fname <- file.path(SAVE_DIR, "partition", sprintf("%s.Rds", tool_key))
+        save_object(store_list, file_name = fname, file_format = COMPRESSION_FORMAT)
+        scrna@tools[[tool_key]] <- fname
+      } else {
+        scrna@tools[[tool_key]] <- store_list
+      }
+      rm(store_list, all_de_list, all_goup_list, all_godown_list)
+      logger.info("  DE+GO results saved to scrna@tools$%s", tool_key)
+    }
+  }, error = function(cond) {
+    ret_code <<- -1
+    logger.error("extra_stage_comparisons error: %s", conditionMessage(cond))
+    logger.error(traceback())
+  })
+
+  return(list(scrna, ret_code))
+}
+
 
 generate_scrna_kegg <- function(scrna){
   ret_code = 0
