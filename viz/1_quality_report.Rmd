@@ -52,23 +52,33 @@ stCond %>%
 ```
 
 ## Clinical Metadata
-```{r clinical_meta_plots, results='asis', out.width="100%", echo=FALSE}
-clinical_plots <- list.files(params$report_plots_folder_png,
-  pattern = "^clinical_barplot_.*\\.png$", full.names = TRUE)
+```{r clinical_meta_plots, results="asis", echo=FALSE}
+clinical_plots <- list.files(
+  params$report_plots_folder_png,
+  pattern = "^clinical_barplot_.*\\.png$",
+  full.names = TRUE
+)
+
 if (length(clinical_plots) > 0) {
+
   clinical_tbl <- tryCatch(
-    load_object(file.path(params$report_tables_folder, "clinical_meta_summary.RDS")),
-    error = function(e) NULL)
+    load_object(file.path(params$report_tables_folder,
+                          "clinical_meta_summary.RDS")),
+    error = function(e) NULL
+  )
+
   if (!is.null(clinical_tbl)) {
-    clinical_tbl %>%
+    print(clinical_tbl %>%
       kable(caption = "Clinical metadata per sample", align = 'c') %>%
-      kable_styling(bootstrap_options = c("striped", "hover")) %>%
-      print()
+      kable_styling(bootstrap_options = c("striped", "hover")))
   }
+
+  cat("\n")
+
   for (p in sort(clinical_plots)) {
-    cat("\n\n")
-    print(knitr::include_graphics(p))
+    cat("![](", p, ")\n")
   }
+
 } else {
   cat("No clinical metadata available.\n")
 }

@@ -70,11 +70,41 @@ clin_umaps <- list.files(params$report_plots_folder_png,
 all_clin <- sort(c(clin_violins, clin_umaps))
 if (length(all_clin) > 0) {
   for (p in all_clin) {
-    cat("\n\n")
-    print(knitr::include_graphics(p))
+    cat("![](", p, ")\n\n")
   }
 } else {
   cat("No clinical metadata visualizations available.\n")
+}
+```
+
+### Extra Stage Comparisons
+```{r extra_stage_plots, results='asis', out.width="100%", echo=FALSE}
+es_umaps <- list.files(params$report_plots_folder_png,
+  pattern = paste0("^extrastage_umap_.*_", params$cluster, "\\.png$"), full.names = TRUE)
+es_comps <- list.files(params$report_plots_folder_png,
+  pattern = paste0("^extrastage_composition_.*_", params$cluster, "\\.png$"), full.names = TRUE)
+es_fishers <- list.files(params$report_plots_folder_png,
+  pattern = paste0("^extrastage_fisher_.*_", params$cluster, "\\.png$"), full.names = TRUE)
+all_es <- sort(c(es_umaps, es_comps, es_fishers))
+if (length(all_es) > 0) {
+  for (p in all_es) {
+    cat("![](", p, ")\n\n")
+  }
+
+  es_tables <- list.files(params$report_tables_folder,
+    pattern = paste0("^extrastage_table_.*_", params$cluster, "\\.RDS$"), full.names = TRUE)
+  for (tbl_path in sort(es_tables)) {
+    tbl_name <- gsub("^extrastage_table_|_[^_]+\\.RDS$", "", basename(tbl_path))
+    tbl <- tryCatch(load_object(tbl_path), error = function(e) NULL)
+    if (!is.null(tbl)) {
+      tbl %>%
+        kable(caption = paste("Cluster composition by", tbl_name), align = 'c') %>%
+        kable_styling(bootstrap_options = c("striped", "hover")) %>%
+        print()
+    }
+  }
+} else {
+  cat("No extra stage comparisons available.\n")
 }
 ```
 
