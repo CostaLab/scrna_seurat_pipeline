@@ -2525,6 +2525,108 @@ generate_scrna_pathway_stage_vsRest <- function(scrna){
   return(list(scrna, ret_code))
 }
 
+generate_scrna_pathway_extra_stage <- function(scrna){
+  ret_code <- 0
+  if (is.null(extra_stage_cols) || length(extra_stage_cols) == 0) {
+    logger.info("No extra_stage_cols defined, skipping pathway extra stage computation.")
+    return(list(scrna, ret_code))
+  }
+
+  tryCatch({
+    for (col_name in names(extra_stage_cols)) {
+      defn <- extra_stage_cols[[col_name]]
+      meta_col <- if (is.list(defn)) col_name else defn
+
+      if (!(meta_col %in% colnames(scrna@meta.data))) {
+        logger.warn("extra_stage_cols: column '%s' not found in metadata, skipping pathway computation.", meta_col)
+        next
+      }
+
+      groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+      if (length(groups) < 2) {
+        logger.warn("extra_stage_cols: column '%s' has fewer than 2 groups, skipping pathway computation.", meta_col)
+        next
+      }
+
+      tool_key <- sprintf("dego_extrastage_%s_%s", col_name, DEFUALT_CLUSTER_NAME)
+      if (!(tool_key %in% names(scrna@tools))) {
+        logger.warn("DEGO extra stage '%s' not computed, skipping pathway computation.", col_name)
+        next
+      }
+
+      logger.info("=== Pathway extra stage comparison: %s (groups: %s) ===", col_name, paste(groups, collapse=", "))
+
+      if (!ALLINONE) {
+        all_dego_list <- seutools_partition(scrna, tool_key, SAVE_DIR, allinone = FALSE)
+      } else {
+        all_dego_list <- scrna@tools[[tool_key]]
+      }
+
+      all_de_list <- all_dego_list[["de"]]
+
+      all_keggup_list <- list()
+      all_keggdown_list <- list()
+      all_hallmarkup_list <- list()
+      all_hallmarkdown_list <- list()
+      all_reactomeup_list <- list()
+      all_reactomedown_list <- list()
+
+      for (nm in names(all_de_list)) {
+        logger.info("****processing pathway extra stage %s - %s", col_name, nm)
+        de.list <- all_de_list[[nm]]
+
+        kegg_ups <- get_kegg_up(de.list)
+        all_keggup_list[[nm]] <- kegg_ups
+        kegg_downs <- get_kegg_down(de.list)
+        all_keggdown_list[[nm]] <- kegg_downs
+
+        hallmark_ups <- get_hallmark_up(de.list)
+        all_hallmarkup_list[[nm]] <- hallmark_ups
+        hallmark_downs <- get_hallmark_down(de.list)
+        all_hallmarkdown_list[[nm]] <- hallmark_downs
+
+        reactome_ups <- get_reactome_up(de.list)
+        all_reactomeup_list[[nm]] <- reactome_ups
+        reactome_downs <- get_reactome_down(de.list)
+        all_reactomedown_list[[nm]] <- reactome_downs
+
+        pathway_dump(nm, "KEGG", kegg_ups, kegg_downs)
+        pathway_dump(nm, "hallmark", hallmark_ups, hallmark_downs)
+        pathway_dump(nm, "Reactome", reactome_ups, reactome_downs)
+
+        rm(kegg_ups, kegg_downs, hallmark_ups, hallmark_downs, reactome_ups, reactome_downs)
+      }
+
+      store_list <- list(all_keggup_list, all_keggdown_list,
+                         all_hallmarkup_list, all_hallmarkdown_list,
+                         all_reactomeup_list, all_reactomedown_list)
+      names(store_list) <- c("keggup", "keggdown",
+                             "hallmarkup", "hallmarkdown",
+                             "reactomeup", "reactomedown")
+
+      pathway_tool_key <- sprintf("pathway_extrastage_%s_%s", col_name, DEFUALT_CLUSTER_NAME)
+      if (!ALLINONE) {
+        fname <- file.path(SAVE_DIR, "partition", sprintf("%s.Rds", pathway_tool_key))
+        save_object(store_list, file_name = fname, file_format = COMPRESSION_FORMAT)
+        scrna@tools[[pathway_tool_key]] <- fname
+      } else {
+        scrna@tools[[pathway_tool_key]] <- store_list
+      }
+
+      logger.info("  Pathway extra stage results saved to scrna@tools$%s", pathway_tool_key)
+      rm(store_list, all_keggup_list, all_keggdown_list,
+         all_hallmarkup_list, all_hallmarkdown_list,
+         all_reactomeup_list, all_reactomedown_list)
+    }
+  }, error = function(cond) {
+    ret_code <<- -1
+    logger.error("pathway_extra_stage computation error: %s", conditionMessage(cond))
+    logger.error(traceback())
+  })
+
+  return(list(scrna, ret_code))
+}
+
 
 generate_scrna_extra_stage_comparisons <- function(scrna){
   ret_code = 0

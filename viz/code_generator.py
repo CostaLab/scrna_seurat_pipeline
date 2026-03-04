@@ -67,6 +67,10 @@ viz_dict = {
                   "reactome_stage",
                   "kegg_stage"],
 
+    "PWextrastageVS": ["hallmark_extrastage",
+                       "reactome_extrastage",
+                       "kegg_extrastage"],
+
     "DEGOsampleVS": ["DEGO_1v1"],
 
     "PWsampleVS": ["Genesets_1v1",
@@ -293,6 +297,29 @@ def generate_report_extrastagesVS(viz_path):
 # endf generate_report_extrastagesVS
 
 
+def generate_report_extrastagesVS_pw(viz_path):
+    tfile = open(os.path.join(os.path.dirname(__file__), "template", "pathway_extrastage-vs.template"))
+    tmpl = tfile.read()
+
+    for pw in ["hallmark", "kegg", "reactome"]:
+        for col_name, pairs in lst_extrastages.items():
+            prefix = f"extrastage_{col_name}_"
+            t = Template(tmpl)
+            for x, y in pairs:
+                r = t.render(
+                    tX=x,
+                    tY=y,
+                    col_name=col_name,
+                    group=col_name,
+                    pathway=pw,
+                    prefix=prefix
+                )
+                fw = open(os.path.join(viz_path, f"4_{pw}_extrastage_{col_name}_{x}.vs.{y}.Rmd"), "w")
+                fw.write("%s\n\n" % r)
+                fw.close()
+# endf generate_report_extrastagesVS_pw
+
+
 def main():
 
     out_dir = args.output_dir
@@ -301,6 +328,7 @@ def main():
     generate_report_1v1(viz_dir)
     generate_report_stagesVS(viz_dir)
     generate_report_extrastagesVS(viz_dir)
+    generate_report_extrastagesVS_pw(viz_dir)
 
     generate_report_1v1_pw(viz_dir)
     generate_report_stagesVS_pw(viz_dir)

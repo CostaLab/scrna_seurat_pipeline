@@ -4,7 +4,8 @@ pathway_vs_loop <- function(
   pw_param,
   pathways,
   pairs_list,
-  save_dir
+  save_dir,
+  prefix = ""
 ){
 
   for(pw in pathways){
@@ -56,7 +57,7 @@ pathway_vs_loop <- function(
               plt = plt,
               units = "in",
               base_plot_dir = report_plots_folder,
-              plt_name=glue("{pw}_{direction}_genes_heatmap_vs_{a_vs}_cluster-{cluster_use}"),
+              plt_name=glue("{prefix}{pw}_{direction}_genes_heatmap_vs_{a_vs}_cluster-{cluster_use}"),
               plot_obj = "ComplexHeatmap",
               width = 13,
               height = 1 + (0.3 * nrow(pw_mtx)),
@@ -82,7 +83,7 @@ pathway_vs_loop <- function(
             save_ggplot_formats(
               plt = plt,
               base_plot_dir = report_plots_folder,
-              plt_name = glue("top10-{pw}{direction}_bar_vs_{a_vs}_cluster-{cluster_use}_p{i}-{ni}"),
+              plt_name = glue("{prefix}top10-{pw}{direction}_bar_vs_{a_vs}_cluster-{cluster_use}_p{i}-{ni}"),
               width = 16,
               height = dynamic_height
             )

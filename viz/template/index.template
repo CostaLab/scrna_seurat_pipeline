@@ -159,6 +159,33 @@
 {% endif %}
 
 
+{% if intersect(viz_dict['PWextrastageVS'], executing_list) %}
+## {{count}}. Pathway analysis (extra stage columns)
+{% for col_name, pairs in lst_extrastages.items() %}
+{% if "hallmark_extrastage" in executing_list %}
+ - **{{col_name}}** Hallmark pathway
+    {% for x, y in pairs %}
+	- [Hallmark {{x}}.vs.{{y}}](data/hallmark_extrastage_gv_{{col_name}}_{{requote_uri(x)}}.vs.{{requote_uri(y)}}.html )
+    {% endfor %}
+{% endif %}
+{% if "kegg_extrastage" in executing_list %}
+ - **{{col_name}}** KEGG pathway
+    {% for x, y in pairs %}
+	- [KEGG {{x}}.vs.{{y}}](data/kegg_extrastage_gv_{{col_name}}_{{requote_uri(x)}}.vs.{{requote_uri(y)}}.html )
+    {% endfor %}
+{% endif %}
+{% if "reactome_extrastage" in executing_list %}
+ - **{{col_name}}** Reactome pathway
+    {% for x, y in pairs %}
+	- [Reactome {{x}}.vs.{{y}}](data/reactome_extrastage_gv_{{col_name}}_{{requote_uri(x)}}.vs.{{requote_uri(y)}}.html )
+    {% endfor %}
+{% endif %}
+{% endfor %}
+
+  {% set count = count + 1 %}
+{% endif %}
+
+
 {% if intersect(viz_dict['PWstageVS'], executing_list) %}
 ## {{count}}. Pathway analysis (between groups)
 

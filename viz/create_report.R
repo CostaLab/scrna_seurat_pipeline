@@ -361,6 +361,7 @@ if(MAKE_ELEMENT){
   source(glue("{viz_path}/4_DE_GO_stageVS_elements.R"))
   source(glue("{viz_path}/4_pathway_1v1_elements.R"))
   source(glue("{viz_path}/4_pathway_stageVS_elements.R"))
+  source(glue("{viz_path}/4_pathway_extrastageVS_elements.R"))
   source(glue("{viz_path}/4_Genesets_1v1_elements.R"))
   source(glue("{viz_path}/4_Genesets_stageVS_elements.R"))
   source(glue("{viz_path}/4_progeny_stageVS_elements.R"))
@@ -435,6 +436,10 @@ if(MAKE_ELEMENT){
     print_nelement_msg("pathway_stage")
     pathway_stage_elements(scrna)
   }
+  if(length(intersect(c("hallmark_extrastage","reactome_extrastage","kegg_extrastage"), EXEC_PLAN) > 0)){
+    print_nelement_msg("pathway_extrastage")
+    pathway_extrastageVS_elements(scrna)
+  }
   if(length(intersect(c("Genesets_stage"), EXEC_PLAN) > 0)){
     print_nelement_msg("Genesets_stage")
     Genesets_stageVS_elements(scrna)
@@ -503,7 +508,10 @@ dic_Rmd_n_Output <- list(
   "kegg_1v1"         = c(glue("{viz_path}/4_kegg_1v1.Rmd"),              "kegg_1vs1"),
   "hallmark_stage"   = c(glue("{viz_path}/4_hallmark_stageVS.Rmd"),      "hallmark_stageVS"),
   "reactome_stage"   = c(glue("{viz_path}/4_reactome_stageVS.Rmd"),      "reactome_stageVS"),
-  "kegg_stage"       = c(glue("{viz_path}/4_kegg_stageVS.Rmd"),          "kegg_stageVS"),
+  "kegg_stage"       = c(glue("{viz_path}/4_kegg_stageVS.Rmd"),            "kegg_stageVS"),
+  "hallmark_extrastage" = c(glue("{viz_path}/4_hallmark_extrastage_%s_%s.vs.%s.Rmd"), "hallmark_extrastage_gv"),
+  "reactome_extrastage" = c(glue("{viz_path}/4_reactome_extrastage_%s_%s.vs.%s.Rmd"), "reactome_extrastage_gv"),
+  "kegg_extrastage"     = c(glue("{viz_path}/4_kegg_extrastage_%s_%s.vs.%s.Rmd"),     "kegg_extrastage_gv"),
   "Genesets_1v1"     = c(glue("{viz_path}/4_Genesets_1v1.Rmd"),          "Genesets_1vs1"),
   "Genesets_stage"   = c(glue("{viz_path}/4_Genesets_stageVS.Rmd"),      "Genesets_stageVS"),
   "progeny_stage"    = c(glue("{viz_path}/4_progeny_stageVS.Rmd"),       "progeny_stageVS"),
@@ -552,6 +560,34 @@ for(exec_elem in EXEC_PLAN){
             txt <- gsub("{{tX}}", apair[1], txt, fixed = TRUE)
             txt <- gsub("{{tY}}", apair[2], txt, fixed = TRUE)
             txt <- gsub("{{col_name}}", col_name, txt, fixed = TRUE)
+            writeLines(txt, rmd_path)
+          }
+          render_func(
+            rmd_path,
+            glue("{output}_{col_name}_{apair[1]}.vs.{apair[2]}.html")
+          )
+        }
+      }
+    }
+  }else if(output %in% c("hallmark_extrastage_gv", "reactome_extrastage_gv", "kegg_extrastage_gv")){
+    if (!is.null(extra_stage_cols)) {
+      pathway_name <- gsub("_extrastage_gv", "", output)
+      tmpl_path <- file.path(viz_path, "template", "pathway_extrastage-vs.template")
+      for (col_name in names(extra_stage_cols)) {
+        defn <- extra_stage_cols[[col_name]]
+        meta_col <- if (is.list(defn)) col_name else defn
+        groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+        for (apair in comb_list(groups)) {
+          rmd_path <- sprintf(rmd, col_name, pathway_name, apair[1], apair[2])
+          if (file.exists(tmpl_path)) {
+            prefix <- glue("extrastage_{col_name}_")
+            txt <- readLines(tmpl_path, warn = FALSE)
+            txt <- gsub("{{prefix}}", prefix, txt, fixed = TRUE)
+            txt <- gsub("{{tX}}", apair[1], txt, fixed = TRUE)
+            txt <- gsub("{{tY}}", apair[2], txt, fixed = TRUE)
+            txt <- gsub("{{col_name}}", col_name, txt, fixed = TRUE)
+            txt <- gsub("{{group}}", col_name, txt, fixed = TRUE)
+            txt <- gsub("{{pathway}}", pathway_name, txt, fixed = TRUE)
             writeLines(txt, rmd_path)
           }
           render_func(
