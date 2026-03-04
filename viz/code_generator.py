@@ -48,6 +48,7 @@ viz_dict = {
     "clustering": ["Clusters"],
 
     "clustersVS": ["EXT_MARKERS",
+                   "EXTRA_EXT_MARKERS",
                    "DEGO",
                    "Genesets",
                    "progeny",

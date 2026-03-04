@@ -63,6 +63,10 @@
  - [External Markers](data/external_markers.html)
 {% endif %}
 
+{% if "EXTRA_EXT_MARKERS" in executing_list %}
+ - [Extra Markers](data/extra_markers.html)
+{% endif %}
+
 {% if "DEGO" in executing_list %}
  - DE & GO
    - [DE & GO ](data/dego.html)

@@ -57,6 +57,8 @@ library(kableExtra)
 # Marker Genes & GO analysis
 ```{r external_markers, child=if(any(grepl("EXT_MARKERS",params$funcs,fixed=TRUE))) '3_external_markers.Rmd'}
 ```
+```{r extra_markers, child=if(any(grepl("EXTRA_EXT_MARKERS",params$funcs,fixed=TRUE))) '3_extra_markers.Rmd'}
+```
 ```{r de_go_analysis, child=if(any(grepl("DEGO",params$funcs,fixed=TRUE))) '3_DE_GO-analysis.Rmd'}
 ```
 ```{r hallmark_analysis, child=if(any(grepl("hallmark",params$funcs,fixed=TRUE))) '3_hallmark.Rmd'}

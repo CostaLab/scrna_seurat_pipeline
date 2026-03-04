@@ -225,7 +225,9 @@ ext_annot_fp = EXTERNALFILE
 
 
 ##4. Make_report element
+EXTRA_ANNOTATION_EXTERNAL_FILE <- NULL
 source(CONFIGFILE)
+extra_ext_annot_fp = EXTRA_ANNOTATION_EXTERNAL_FILE
 DOUBLET_SWITCH    = doublet_switch
 
 scrna <- NULL
@@ -352,6 +354,7 @@ if(MAKE_ELEMENT){
   source(glue("{viz_path}/2_clustering_elements.R"))
   source(glue("{viz_path}/2_clusters_DEs_elements.R"))
   source(glue("{viz_path}/3_external_markers_elements.R"))
+  source(glue("{viz_path}/3_extra_markers_elements.R"))
   source(glue("{viz_path}/3_DE_GO-analysis_elements.R"))
   source(glue("{viz_path}/4_DE_GO_1v1_elements.R"))
   source(glue("{viz_path}/4_DE_GO_stageVS_elements.R"))
@@ -401,6 +404,10 @@ if(MAKE_ELEMENT){
   if("EXT_MARKERS" %in% EXEC_PLAN){
     print_nelement_msg("EXT_MARKERS")
     external_markers_elements(scrna)
+  }
+  if("EXTRA_EXT_MARKERS" %in% EXEC_PLAN && !is.null(extra_ext_annot_fp)){
+    print_nelement_msg("EXTRA_EXT_MARKERS")
+    extra_markers_elements(scrna)
   }
   # FIXME possible problem where all term enrichment analysis is on the same place
   if(length(intersect(c("DEGO","Genesets","progeny","hallmark","KEGG","Reactome"), EXEC_PLAN) > 0)){
@@ -476,6 +483,7 @@ dic_Rmd_n_Output <- list(
   "Clusters_harmony" = c(glue("{viz_path}/2_clustering_harmony.Rmd"),    "clusters_harmony"),
   "Clusters_seurat"  = c(glue("{viz_path}/2_clustering_seurat.Rmd"),     "clusters_seurat"),
   "EXT_MARKERS"      = c(glue("{viz_path}/3_external_markers.Rmd"),      "external_markers"),
+  "EXTRA_EXT_MARKERS"= c(glue("{viz_path}/3_extra_markers.Rmd"),       "extra_markers"),
   "DEGO"             = c(glue("{viz_path}/3_DE_GO-analysis.Rmd"),        "dego"),
   "KEGG"             = c(glue("{viz_path}/3_KEGG.Rmd"),                  "KEGG"),
   "progeny"          = c(glue("{viz_path}/3_progeny.Rmd"),               "progeny"),
