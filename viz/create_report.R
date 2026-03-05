@@ -227,6 +227,7 @@ ext_annot_fp = EXTERNALFILE
 ##4. Make_report element
 EXTRA_ANNOTATION_EXTERNAL_FILE <- NULL
 extra_stage_cols <- NULL
+clinical_meta <- NULL
 source(CONFIGFILE)
 extra_ext_annot_fp = EXTRA_ANNOTATION_EXTERNAL_FILE
 DOUBLET_SWITCH    = doublet_switch
@@ -550,7 +551,11 @@ for(exec_elem in EXEC_PLAN){
       for (col_name in names(extra_stage_cols)) {
         defn <- extra_stage_cols[[col_name]]
         meta_col <- if (is.list(defn)) col_name else defn
-        groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+        if (!is.null(clinical_meta) && meta_col %in% names(clinical_meta)) {
+          groups <- sort(unique(na.omit(as.character(clinical_meta[, meta_col]))))
+        } else {
+          groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+        }
         for (apair in comb_list(groups)) {
           rmd_path <- sprintf(rmd, col_name, apair[1], apair[2])
           if (file.exists(tmpl_path)) {
@@ -576,7 +581,11 @@ for(exec_elem in EXEC_PLAN){
       for (col_name in names(extra_stage_cols)) {
         defn <- extra_stage_cols[[col_name]]
         meta_col <- if (is.list(defn)) col_name else defn
-        groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+        if (!is.null(clinical_meta) && meta_col %in% names(clinical_meta)) {
+          groups <- sort(unique(na.omit(as.character(clinical_meta[, meta_col]))))
+        } else {
+          groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+        }
         for (apair in comb_list(groups)) {
           rmd_path <- sprintf(rmd, col_name, pathway_name, apair[1], apair[2])
           if (file.exists(tmpl_path)) {

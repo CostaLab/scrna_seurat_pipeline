@@ -11,7 +11,7 @@ extra_markers_elements <- function(scrna){
 
 
   if(!(ORGAN %in% df$Tissue.of.Origin)){
-       logger.warn("ORGAN '%s' not found in extra markers file, skipping EXTRA_EXT_MARKERS", ORGAN)
+       message(sprintf("ORGAN '%s' not found in extra markers file, skipping EXTRA_EXT_MARKERS", ORGAN))
        return(NULL)
   }
 

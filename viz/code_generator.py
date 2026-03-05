@@ -107,21 +107,33 @@ try:
             else:
                 cm = robjects.r("clinical_meta")
                 if cm != robjects.NULL:
-                    vals = list(set(str(v) for v in cm.rx2(str(defn))))
-                    extra_stage_cols[col_name] = vals
+                    try:
+                        col_name_key = list(defn)[0] if len(defn) > 0 else str(defn[0])
+                        col_data = cm.rx2(col_name_key)
+                        if col_data != robjects.NULL and len(col_data) > 0:
+                            vals = list(set(str(v) for v in col_data))
+                            extra_stage_cols[col_name] = vals
+                        else:
+                            extra_stage_cols[col_name] = []
+                    except Exception as e2:
+                        extra_stage_cols[col_name] = []
                 else:
                     extra_stage_cols[col_name] = []
     else:
         extra_stage_cols = {}
-except Exception:
+except Exception as e:
     extra_stage_cols = {}
 
 lst_extrastages = {}
 for col_name, groups in extra_stage_cols.items():
     if len(groups) >= 2:
-        lst_extrastages[col_name] = list(combinations(groups, 2))
+        pairs = list(combinations(groups, 2))
+        lst_extrastages[col_name] = [(y, x) for x, y in pairs]
 
 # FIXME should 'cluster_use' be redefined here?
+# cluster_use = "seurat_clusters"
+# savedir = os.path.join(DATADIR, "save"+args.proj_tag)#robjects.r("SAVE_DIR")[0]
+savedir = args.save_dir
 # cluster_use = "seurat_clusters"
 # savedir = os.path.join(DATADIR, "save"+args.proj_tag)#robjects.r("SAVE_DIR")[0]
 savedir = args.save_dir
