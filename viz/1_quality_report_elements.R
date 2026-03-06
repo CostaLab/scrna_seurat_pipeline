@@ -77,19 +77,26 @@ quality_report_elements <- function(){
 
     for (col in colnames(clinical_meta)) {
       if (is.numeric(meta_samples[[col]])) {
-        plt <- ggplot(meta_samples, aes(x = sample, y = .data[[col]], fill = stage)) +
-          geom_col(width = 0.7) +
-          coord_flip() +
+        plt <- ggplot(meta_samples, aes(x = sample, y = .data[[col]], color = stage, group = stage)) +
+          geom_point(size = 4, position = position_dodge(width = 0.5)) +
           theme_minimal() +
           ggtitle(paste("Patient", col)) +
-          xlab("") + ylab(col)
+          xlab("") + ylab(col) +
+          theme(axis.text.x = element_text(angle = 45, hjust = 1))
       } else {
-        plt <- ggplot(meta_samples, aes(x = sample, fill = .data[[col]])) +
-          geom_bar(width = 0.7) +
-          coord_flip() +
+        prop_data <- meta_samples %>%
+          count(.data[[col]], stage) %>%
+          group_by(stage) %>%
+          mutate(prop = n / sum(n)) %>%
+          ungroup()
+        plt <- ggplot(prop_data, aes(x = "", y = prop, fill = .data[[col]])) +
+          geom_bar(stat = "identity", width = 1, color = "white") +
+          coord_polar("y", start = 0) +
+          facet_wrap(~stage) +
           theme_minimal() +
-          ggtitle(paste("Patient", col)) +
-          xlab("")
+          ggtitle(paste("Proportion of", col, "by stage")) +
+          xlab("") + ylab("") +
+          labs(fill = col)
       }
       save_ggplot_formats(
         plt = plt,
@@ -98,6 +105,51 @@ quality_report_elements <- function(){
         width = 9, height = 5
       )
     }
+
+    if (!is.null(extra_stage_cols)) {
+      message("### Making clinical metadata dotplots by extra stage groups")
+      for (esc_col in names(extra_stage_cols)) {
+        esc_def <- extra_stage_cols[[esc_col]]
+        esc_meta_col <- if (is.list(esc_def)) esc_col else esc_def
+        if (esc_meta_col %in% names(meta_samples)) {
+          meta_samples[[esc_meta_col]] <- as.factor(meta_samples[[esc_meta_col]])
+          for (clin_col in colnames(clinical_meta)) {
+            if (is.numeric(meta_samples[[clin_col]])) {
+              agg_data <- meta_samples %>%
+                group_by(.data[[esc_meta_col]]) %>%
+                summarise(
+                  mean_val = mean(.data[[clin_col]], na.rm = TRUE),
+                  sd_val = sd(.data[[clin_col]], na.rm = TRUE),
+                  n = n(),
+                  .groups = 'drop'
+                )
+              plt <- ggplot(agg_data, aes(x = .data[[esc_meta_col]], y = mean_val, color = .data[[esc_meta_col]])) +
+                geom_point(size = 5) +
+                geom_errorbar(
+                  aes(ymin = mean_val - sd_val / sqrt(n), ymax = mean_val + sd_val / sqrt(n)),
+                  width = 0.2
+                ) +
+                theme_minimal() +
+                ggtitle(paste("Mean", clin_col, "by", esc_meta_col)) +
+                xlab(esc_meta_col) + ylab(paste("Mean", clin_col))
+            } else {
+              plt <- ggplot(meta_samples, aes(x = .data[[clin_col]], fill = .data[[esc_meta_col]])) +
+                geom_bar(position = "dodge") +
+                theme_minimal() +
+                ggtitle(paste(clin_col, "by", esc_meta_col)) +
+                xlab(clin_col) + labs(fill = esc_meta_col)
+            }
+            save_ggplot_formats(
+              plt = plt,
+              base_plot_dir = report_plots_folder,
+              plt_name = paste0("clinical_dotplot_", esc_col, "_", clin_col),
+              width = 7, height = 5
+            )
+          }
+        }
+      }
+    }
+
     save_object(
       meta_samples,
       file.path(report_tables_folder, "clinical_meta_summary.RDS"),
