@@ -92,12 +92,23 @@ clustering_elements <- function(scrna){
             group_by(.data[[cluster_use]]) %>%
             mutate(prop = n / sum(n)) %>%
             ungroup()
-          plt <- ggplot(prop_data, aes(x = .data[[cluster_use]], y = prop, fill = .data[[col]])) +
-            geom_bar(stat = "identity", position = "dodge") +
-            theme_minimal() +
-            ggtitle(paste(col, "proportion by cluster")) +
-            xlab(cluster_use) + ylab("Proportion") +
-            labs(fill = col)
+          # Check if the column values are numeric (for color gradient)
+          is_numeric_col <- all(!is.na(suppressWarnings(as.numeric(levels(meta_cluster[[col]])))))
+          n_lvl <- length(unique(meta_cluster[[col]]))
+          col_def <- ggsci_pal(option = replicates_viridis_opt)(max(n_lvl, 2))
+          if (is_numeric_col) {
+            num_vals <- sort(as.numeric(levels(meta_cluster[[col]])))
+            names(col_def) <- as.character(num_vals)
+            prop_data[[col]] <- factor(prop_data[[col]], levels = as.character(num_vals))
+            plt <- ggplot(prop_data, aes(x = .data[[cluster_use]], y = prop, fill = .data[[col]])) + geom_col(position = "fill") + scale_fill_manual(values = col_def, breaks = as.character(num_vals)) + theme_minimal() + ggtitle(paste(col, "proportion by cluster")) + xlab(cluster_use) + ylab("Proportion") + labs(fill = col)
+          } else {
+            plt <- ggplot(prop_data, aes(x = .data[[cluster_use]], y = prop, fill = .data[[col]])) +
+              geom_col(position = "fill") +
+              theme_minimal() +
+              ggtitle(paste(col, "proportion by cluster")) +
+              xlab(cluster_use) + ylab("Proportion") +
+              labs(fill = col)
+          }
           save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder,
             plt_name = paste0("clustering_clinical_clusterprop_", col, "_", cluster_use),
             width = 10, height = 6)
@@ -159,22 +170,16 @@ clustering_elements <- function(scrna){
         fisher_data <- scrna@tools[[fisher_key]]
         if (!is.null(fisher_data) && !is.null(fisher_data$fisher)) {
           message(paste0("### Making extra stage Fisher heatmap: ", col_name))
+          or_vals <- sapply(fisher_data$fisher, function(x) if (!is.null(x$estimate)) x$estimate else NA)
           pvals <- sapply(fisher_data$fisher, function(x) x$p.value)
-          pval_df <- data.frame(
-            Cluster = names(pvals),
-            neg_log10_p = -log10(pmax(pvals, 1e-300)),
-            stringsAsFactors = FALSE
-          )
-          plt <- ggplot(pval_df, aes(x = Cluster, y = neg_log10_p)) +
-            geom_col(fill = "steelblue") +
-            geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "red") +
-            theme_minimal() +
-            ggtitle(paste("Fisher test:", col_name, "vs cluster")) +
-            xlab("Cluster") + ylab("-log10(p-value)") +
-            theme(axis.text.x = element_text(angle = 45, hjust = 1))
-          save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder,
-            plt_name = paste0("extrastage_fisher_", col_name, "_", cluster_use),
-            width = 10, height = 6)
+          fisher_df <- data.frame(Cluster = names(or_vals), OddsRatio = or_vals, pvalue = pvals, stringsAsFactors = FALSE)
+          fisher_df$log2_OR <- log2(fisher_df$OddsRatio)
+          fisher_df$pval_label <- ifelse(fisher_df$pvalue < 0.001, sprintf("%.1e", fisher_df$pvalue), sprintf("%.3f", fisher_df$pvalue))
+          fisher_col_def <- rev(ggsci_pal(option = cluster_viridis_opt)(length(unique(fisher_df$Cluster))))
+          # Extract comparison groups from col_name (e.g., "sex_M.vs.F" -> positive = M)
+          pos_group <- gsub(".*_([^_]+).vs.*", "\\1", col_name)
+          plt <- ggplot(fisher_df, aes(x = Cluster, y = log2_OR, fill = factor(Cluster, levels = sort(as.numeric(Cluster))))) + geom_col() + geom_hline(yintercept = 0, linetype = "dashed", color = "black") + scale_fill_manual(values = fisher_col_def) + geom_text(aes(y = 0, label = pval_label), vjust = ifelse(fisher_df$log2_OR >= 0, -0.5, 1.5), color = "black", size = 3) + theme_minimal() + ggtitle(paste0("Fisher test: ", col_name, " vs cluster (log2 Odds Ratio, positive=", pos_group, ")")) + xlab("Cluster") + ylab("log2(Odds Ratio)") + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + labs(fill = "Cluster")
+          save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder, plt_name = paste0("extrastage_fisher_", col_name, "_", cluster_use), width = 10, height = 6)
         }
 
         save_object(
