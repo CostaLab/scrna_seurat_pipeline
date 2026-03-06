@@ -63,11 +63,11 @@ knitr::include_graphics(
 
 ### Clinical Metadata
 ```{r clinical_cluster_plots, results='asis', out.width="100%", echo=FALSE}
-clin_violins <- list.files(params$report_plots_folder_png,
-  pattern = paste0("^clinical_violin_.*_", params$cluster, "\\.png$"), full.names = TRUE)
+clin_barplots <- list.files(params$report_plots_folder_png,
+  pattern = paste0("^clustering_clinical_clusterprop_.*_", params$cluster, "\\.png$"), full.names = TRUE)
 clin_umaps <- list.files(params$report_plots_folder_png,
   pattern = paste0("^clinical_umap_.*_", params$cluster, "\\.png$"), full.names = TRUE)
-all_clin <- sort(c(clin_violins, clin_umaps))
+all_clin <- sort(c(clin_barplots, clin_umaps))
 if (length(all_clin) > 0) {
   for (p in all_clin) {
     cat("![](", p, ")\n\n")

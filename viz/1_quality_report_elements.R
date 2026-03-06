@@ -77,7 +77,7 @@ quality_report_elements <- function(){
 
     for (col in colnames(clinical_meta)) {
       if (is.numeric(meta_samples[[col]])) {
-        plt <- ggplot(meta_samples, aes(x = sample, y = .data[[col]], color = stage, group = stage)) +
+        plt <- ggplot(meta_samples, aes(x = stage, y = .data[[col]], color = sample, group = sample)) +
           geom_point(size = 4, position = position_dodge(width = 0.5)) +
           theme_minimal() +
           ggtitle(paste("Patient", col)) +
@@ -85,23 +85,21 @@ quality_report_elements <- function(){
           theme(axis.text.x = element_text(angle = 45, hjust = 1))
       } else {
         prop_data <- meta_samples %>%
-          count(.data[[col]], stage) %>%
+          count(sample, .data[[col]], stage) %>%
           group_by(stage) %>%
           mutate(prop = n / sum(n)) %>%
           ungroup()
-        plt <- ggplot(prop_data, aes(x = "", y = prop, fill = .data[[col]])) +
-          geom_bar(stat = "identity", width = 1, color = "white") +
-          coord_polar("y", start = 0) +
-          facet_wrap(~stage) +
+        plt <- ggplot(prop_data, aes(x = stage, y = prop, fill = sample, color = sample)) +
+          geom_bar(stat = "identity", position = "dodge") +
           theme_minimal() +
           ggtitle(paste("Proportion of", col, "by stage")) +
-          xlab("") + ylab("") +
-          labs(fill = col)
+          xlab("") + ylab("Proportion") +
+          labs(fill = "Sample", color = "Sample")
       }
       save_ggplot_formats(
         plt = plt,
         base_plot_dir = report_plots_folder,
-        plt_name = paste0("clinical_barplot_", col),
+        plt_name = paste0("qc_clinical_sampleplot_", col),
         width = 9, height = 5
       )
     }

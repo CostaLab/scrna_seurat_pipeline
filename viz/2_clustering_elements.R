@@ -80,11 +80,26 @@ clustering_elements <- function(scrna){
 
       for (col in numeric_cols) {
         if (col %in% colnames(scrna@meta.data)) {
-          message(paste0("### Making clinical violin: ", col))
-          plt <- VlnPlot(scrna, features = col, group.by = cluster_use, pt.size = 0.1) +
-            ggtitle(paste(col, "by cluster"))
+          message(paste0("### Making clinical barplot: ", col))
+          meta_cluster <- scrna@meta.data[, c(cluster_use, col)]
+          meta_cluster[[col]] <- as.factor(meta_cluster[[col]])
+          # Reorder factor levels by numeric value for proper stacking order
+          if (all(!is.na(suppressWarnings(as.numeric(levels(meta_cluster[[col]])))))) {
+            meta_cluster[[col]] <- factor(meta_cluster[[col]], levels = sort(as.numeric(levels(meta_cluster[[col]]))))
+          }
+          prop_data <- meta_cluster %>%
+            count(.data[[cluster_use]], .data[[col]]) %>%
+            group_by(.data[[cluster_use]]) %>%
+            mutate(prop = n / sum(n)) %>%
+            ungroup()
+          plt <- ggplot(prop_data, aes(x = .data[[cluster_use]], y = prop, fill = .data[[col]])) +
+            geom_bar(stat = "identity", position = "dodge") +
+            theme_minimal() +
+            ggtitle(paste(col, "proportion by cluster")) +
+            xlab(cluster_use) + ylab("Proportion") +
+            labs(fill = col)
           save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder,
-            plt_name = paste0("clinical_violin_", col, "_", cluster_use),
+            plt_name = paste0("clustering_clinical_clusterprop_", col, "_", cluster_use),
             width = 10, height = 6)
 
           message(paste0("### Making clinical UMAP: ", col))

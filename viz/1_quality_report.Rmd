@@ -55,7 +55,7 @@ stCond %>%
 ```{r clinical_meta_plots, results="asis", echo=FALSE}
 clinical_plots <- list.files(
   params$report_plots_folder_png,
-  pattern = "^clinical_barplot_.*\\.png$",
+  pattern = "^qc_clinical_sampleplot_.*\\.png$",
   full.names = TRUE
 )
 
