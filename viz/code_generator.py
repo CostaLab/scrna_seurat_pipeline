@@ -128,7 +128,7 @@ lst_extrastages = {}
 for col_name, groups in extra_stage_cols.items():
     if len(groups) >= 2:
         pairs = list(combinations(groups, 2))
-        lst_extrastages[col_name] = [(y, x) for x, y in pairs]
+        lst_extrastages[col_name] = pairs
 
 # FIXME should 'cluster_use' be redefined here?
 # cluster_use = "seurat_clusters"

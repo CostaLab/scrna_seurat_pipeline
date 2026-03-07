@@ -99,6 +99,7 @@ quality_report_elements <- function(){
         names(cat_col_def) <- cat_levels
         plt <- ggplot(prop_data, aes(x = "", y = prop, fill = .data[[col]])) +
           geom_bar(stat = "identity", width = 1) +
+          geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 4) +
           coord_polar("y", start = 0) +
           facet_wrap(~stage, ncol = n_stages) +
           scale_fill_manual(values = cat_col_def) +
