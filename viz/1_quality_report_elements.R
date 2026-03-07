@@ -74,27 +74,38 @@ quality_report_elements <- function(){
     meta_samples <- clinical_meta[intersect(names(data_src), rownames(clinical_meta)), , drop=FALSE]
     meta_samples$sample <- factor(rownames(meta_samples), levels = names(data_src))
     meta_samples$stage  <- stage_lst[rownames(meta_samples)]
+    sample_col_def <- ggsci_pal(option = replicates_viridis_opt)(length(unique(meta_samples$sample)))
+    names(sample_col_def) <- levels(meta_samples$sample)
 
     for (col in colnames(clinical_meta)) {
       if (is.numeric(meta_samples[[col]])) {
         plt <- ggplot(meta_samples, aes(x = stage, y = .data[[col]], color = sample, group = sample)) +
           geom_point(size = 4, position = position_dodge(width = 0.5)) +
+          scale_color_manual(values = sample_col_def) +
           theme_minimal() +
           ggtitle(paste("Patient", col)) +
           xlab("") + ylab(col) +
           theme(axis.text.x = element_text(angle = 45, hjust = 1))
       } else {
         prop_data <- meta_samples %>%
-          count(sample, .data[[col]], stage) %>%
+          count(.data[[col]], stage) %>%
           group_by(stage) %>%
           mutate(prop = n / sum(n)) %>%
           ungroup()
-        plt <- ggplot(prop_data, aes(x = stage, y = prop, fill = sample, color = sample)) +
-          geom_bar(stat = "identity", position = "dodge") +
+        prop_data[[col]] <- as.factor(prop_data[[col]])
+        n_stages <- length(unique(prop_data$stage))
+        cat_levels <- levels(prop_data[[col]])
+        cat_col_def <- ggsci_pal(option = replicates_viridis_opt)(length(cat_levels))
+        names(cat_col_def) <- cat_levels
+        plt <- ggplot(prop_data, aes(x = "", y = prop, fill = .data[[col]])) +
+          geom_bar(stat = "identity", width = 1) +
+          coord_polar("y", start = 0) +
+          facet_wrap(~stage, ncol = n_stages) +
+          scale_fill_manual(values = cat_col_def) +
           theme_minimal() +
           ggtitle(paste("Proportion of", col, "by stage")) +
-          xlab("") + ylab("Proportion") +
-          labs(fill = "Sample", color = "Sample")
+          xlab("") + ylab("") +
+          labs(fill = col)
       }
       save_ggplot_formats(
         plt = plt,
