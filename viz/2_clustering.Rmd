@@ -85,7 +85,7 @@ es_comps <- list.files(params$report_plots_folder_png,
   pattern = paste0("^extrastage_composition_.*_", params$cluster, "\\.png$"), full.names = TRUE)
 es_fishers <- list.files(params$report_plots_folder_png,
   pattern = paste0("^extrastage_fisher_.*_", params$cluster, "\\.png$"), full.names = TRUE)
-all_es <- sort(c(es_umaps, es_comps, es_fishers))
+all_es <- sort(c(es_comps, es_fishers))
 if (length(all_es) > 0) {
   for (p in all_es) {
     cat("![](", p, ")\n\n")
