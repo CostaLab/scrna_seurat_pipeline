@@ -114,7 +114,7 @@ clustering_elements <- function(scrna){
             width = 10, height = 6)
 
           message(paste0("### Making clinical UMAP: ", col))
-          plt <- FeaturePlot(scrna, features = col, reduction = umap_reduction)
+          plt <- StyleFeaturePlot(scrna, features = col, reduction = umap_reduction, cols=c("lightgrey", "red"), order = TRUE)
           save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder,
             plt_name = paste0("clinical_umap_", col, "_", cluster_use),
             width = 9, height = 7)
