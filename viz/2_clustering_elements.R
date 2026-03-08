@@ -141,7 +141,7 @@ clustering_elements <- function(scrna){
         defn <- esc[[col_name]]
         meta_col <- if (is.list(defn)) col_name else defn
         if (!(meta_col %in% colnames(scrna@meta.data))) next
-        groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+        groups <- sort(na.omit(unique(as.character(scrna@meta.data[, meta_col]))))
         if (length(groups) < 2) next
 
         message(paste0("### Making extra stage UMAP: ", col_name))

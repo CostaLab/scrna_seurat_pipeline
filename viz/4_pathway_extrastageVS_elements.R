@@ -22,7 +22,7 @@ pathway_extrastageVS_elements <- function(scrna){
 
     defn <- esc[[col_name]]
     meta_col <- if (is.list(defn)) col_name else defn
-    groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+    groups <- sort(na.omit(unique(as.character(scrna@meta.data[, meta_col]))))
     pairs_list <- comb_list(groups)
 
     pathway_vs_loop(

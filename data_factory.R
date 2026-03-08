@@ -2542,7 +2542,7 @@ generate_scrna_pathway_extra_stage <- function(scrna){
         next
       }
 
-      groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+      groups <- sort(na.omit(unique(as.character(scrna@meta.data[, meta_col]))))
       if (length(groups) < 2) {
         logger.warn("extra_stage_cols: column '%s' has fewer than 2 groups, skipping pathway computation.", meta_col)
         next
@@ -2645,7 +2645,7 @@ generate_scrna_extra_stage_comparisons <- function(scrna){
         next
       }
 
-      groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+      groups <- sort(na.omit(unique(as.character(scrna@meta.data[, meta_col]))))
       if (length(groups) < 2) {
         logger.warn("extra_stage_cols: column '%s' has fewer than 2 groups, skipping.", meta_col)
         next
