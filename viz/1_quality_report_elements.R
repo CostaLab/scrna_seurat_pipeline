@@ -79,7 +79,24 @@ quality_report_elements <- function(){
 
     for (col in colnames(clinical_meta)) {
       if (is.numeric(meta_samples[[col]])) {
-        plt <- ggplot(meta_samples, aes(x = stage, y = .data[[col]], color = sample, group = sample)) +
+        plt <- ggplot(meta_samples, aes(x = stage, y = .data[[col]], color = sample, group = sample))
+
+        # Add a clean mean bar per stage behind sample points.
+        plt <- plt +
+          stat_summary(
+            fun = mean,
+            fun.min = mean,
+            fun.max = mean,
+            geom = "crossbar",
+            width = 0.62,
+            fatten = 0,
+            color = "grey25",
+            linewidth = 1.15,
+            alpha = 0.9,
+            na.rm = TRUE
+          )
+
+        plt <- plt +
           geom_point(size = 4, position = position_dodge(width = 0.5)) +
           scale_color_manual(values = sample_col_def) +
           theme_minimal() +

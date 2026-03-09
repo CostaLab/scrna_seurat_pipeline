@@ -21,8 +21,6 @@ params:
     report_plots_folder_png: "folder with the png plot elements"
     report_plots_folder_pdf: "folder with the pdf plot elements"
     author: "author of document"
-    col_name: "extra stage column name"
-    prefix: "prefix for file names"
 author: '`r params$author`'
 ---
 
@@ -33,25 +31,21 @@ library(dplyr)
 library(kableExtra)
 ```
 
-{% for tX, tY in lst_group %}
-  {% for direction in ["up", "down"] %}
-
-
-## `r params$tX` vs `r params$tY`  `r params$pathway` `r params$direction`
+## {{tX}} vs {{tY}}  {{pathway}} up
 
 ```{r, out.width="100%", echo=FALSE}
 fname=file.path(
   params$report_plots_folder_png,
-  glue("`r params$prefix`{pathway}_{direction}_genes_heatmap_vs_{tX}.vs.{tY}_cluster-{params$cluster}.png")
+  glue("{{prefix}}{{pathway}}_up_genes_heatmap_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}.png")
 )
 if(file.exists(fname)) knitr::include_graphics(fname)
 ```
 
 
 ```{r, out.width="100%", echo=FALSE}
-### {direction} genes top 10
+### up genes top 10
 flist = stringr::str_sort(grep(
-  glue("`r params$prefix`top10-{pathway}{direction}_bar_vs_{tX}.vs.{tY}_cluster-{params$cluster}_p"),
+  glue("{{prefix}}top10-{{pathway}}up_bar_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}_p"),
   list.files(
     params$report_plots_folder_png,
     full.names=TRUE
@@ -60,7 +54,29 @@ flist = stringr::str_sort(grep(
   fixed=TRUE
 ),numeric=TRUE)
 if(length(flist) > 0) knitr::include_graphics(flist)
-
 ```
-  {% endfor %}
-{% endfor %}
+
+## {{tX}} vs {{tY}}  {{pathway}} down
+
+```{r, out.width="100%", echo=FALSE}
+fname=file.path(
+  params$report_plots_folder_png,
+  glue("{{prefix}}{{pathway}}_down_genes_heatmap_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}.png")
+)
+if(file.exists(fname)) knitr::include_graphics(fname)
+```
+
+
+```{r, out.width="100%", echo=FALSE}
+### down genes top 10
+flist = stringr::str_sort(grep(
+  glue("{{prefix}}top10-{{pathway}}down_bar_vs_{{tX}}.vs.{{tY}}_cluster-{params$cluster}_p"),
+  list.files(
+    params$report_plots_folder_png,
+    full.names=TRUE
+  ),
+  value=TRUE,
+  fixed=TRUE
+),numeric=TRUE)
+if(length(flist) > 0) knitr::include_graphics(flist)
+```

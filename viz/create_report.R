@@ -510,9 +510,9 @@ dic_Rmd_n_Output <- list(
   "hallmark_stage"   = c(glue("{viz_path}/4_hallmark_stageVS.Rmd"),      "hallmark_stageVS"),
   "reactome_stage"   = c(glue("{viz_path}/4_reactome_stageVS.Rmd"),      "reactome_stageVS"),
   "kegg_stage"       = c(glue("{viz_path}/4_kegg_stageVS.Rmd"),            "kegg_stageVS"),
-  "hallmark_extrastage" = c(glue("{viz_path}/4_hallmark_extrastage_%s_%s.vs.%s.Rmd"), "hallmark_extrastage_gv"),
-  "reactome_extrastage" = c(glue("{viz_path}/4_reactome_extrastage_%s_%s.vs.%s.Rmd"), "reactome_extrastage_gv"),
-  "kegg_extrastage"     = c(glue("{viz_path}/4_kegg_extrastage_%s_%s.vs.%s.Rmd"),     "kegg_extrastage_gv"),
+  "hallmark_extrastage" = c(glue("{viz_path}/4_%s_extrastage_%s_%s.vs.%s.Rmd"), "hallmark_extrastage_gv"),
+  "reactome_extrastage" = c(glue("{viz_path}/4_%s_extrastage_%s_%s.vs.%s.Rmd"), "reactome_extrastage_gv"),
+  "kegg_extrastage"     = c(glue("{viz_path}/4_%s_extrastage_%s_%s.vs.%s.Rmd"),     "kegg_extrastage_gv"),
   "Genesets_1v1"     = c(glue("{viz_path}/4_Genesets_1v1.Rmd"),          "Genesets_1vs1"),
   "Genesets_stage"   = c(glue("{viz_path}/4_Genesets_stageVS.Rmd"),      "Genesets_stageVS"),
   "progeny_stage"    = c(glue("{viz_path}/4_progeny_stageVS.Rmd"),       "progeny_stageVS"),
@@ -587,7 +587,7 @@ for(exec_elem in EXEC_PLAN){
           groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
         }
         for (apair in comb_list(groups)) {
-          rmd_path <- sprintf(rmd, col_name, pathway_name, apair[1], apair[2])
+          rmd_path <- sprintf(rmd, pathway_name, col_name, apair[1], apair[2])
           if (file.exists(tmpl_path)) {
             prefix <- glue("extrastage_{col_name}_")
             txt <- readLines(tmpl_path, warn = FALSE)
