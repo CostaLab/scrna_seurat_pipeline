@@ -178,7 +178,7 @@ clustering_elements <- function(scrna){
           fisher_col_def <- rev(ggsci_pal(option = cluster_viridis_opt)(length(unique(fisher_df$Cluster))))
           # Extract comparison groups from col_name (e.g., "sex_M.vs.F" -> positive = M)
           pos_group <- gsub(".*_([^_]+).vs.*", "\\1", col_name)
-          plt <- ggplot(fisher_df, aes(x = Cluster, y = log2_OR, fill = factor(Cluster, levels = sort(as.numeric(Cluster))))) + geom_col() + geom_hline(yintercept = 0, linetype = "dashed", color = "black") + scale_fill_manual(values = fisher_col_def) + geom_text(aes(y = 0, label = pval_label), vjust = ifelse(fisher_df$log2_OR >= 0, -0.5, 1.5), color = "black", size = 3) + theme_minimal() + ggtitle(paste0("Fisher test: ", col_name, " vs cluster (log2 Odds Ratio, positive=", pos_group, ")")) + xlab("Cluster") + ylab("log2(Odds Ratio)") + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + labs(fill = "Cluster")
+          plt <- ggplot(fisher_df, aes(x = Cluster, y = log2_OR, fill = factor(Cluster, levels = sort(as.numeric(Cluster))))) + geom_col() + geom_hline(yintercept = 0, linetype = "dashed", color = "black") + scale_fill_manual(values = fisher_col_def) + geom_text(aes(y = 0, label = pval_label), vjust = ifelse(fisher_df$log2_OR >= 0, -0.5, 1.5), color = "black", size = 3, angle = 90) + theme_minimal() + ggtitle(paste0("Fisher test: ", col_name, " vs cluster (log2 Odds Ratio, positive=", pos_group, ")")) + xlab("Cluster") + ylab("log2(Odds Ratio)") + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + labs(fill = "Cluster")
           save_ggplot_formats(plt = plt, base_plot_dir = report_plots_folder, plt_name = paste0("extrastage_fisher_", col_name, "_", cluster_use), width = 10, height = 6)
         }
 
