@@ -45,7 +45,11 @@ DEGO_extrastageVS_elements <- function(scrna) {
                                   allinone = ALLINONE)
     defn <- esc[[col_name]]
     meta_col <- if (is.list(defn)) col_name else defn
-    groups <- na.omit(unique(as.character(scrna@meta.data[, meta_col])))
+    if (!is.null(clinical_meta) && meta_col %in% names(clinical_meta)) {
+      groups <- sort(unique(na.omit(as.character(clinical_meta[, meta_col]))))
+    } else {
+      groups <- sort(unique(na.omit(as.character(scrna@meta.data[, meta_col]))))
+    }
     pairs_list <- comb_list(groups)
 
     compare_vs_loop(

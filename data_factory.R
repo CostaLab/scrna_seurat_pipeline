@@ -500,7 +500,7 @@ registerDoParallel(cores=WORKER_NUM)
 
 
 # Set up future for parallelization
-plan("multicore", workers = WORKER_NUM)
+plan("multisession", workers = WORKER_NUM)
 options(future.globals.maxSize = MAXMEMMEGA * 1024^2)
 
 
@@ -1735,7 +1735,7 @@ generate_scrna_MAGIC <- function(scrna){
   ret_code = 0
   DefaultAssay(scrna) <- "RNA"
 
-  rst = magic(GetAssayData(scrna, layer='data'))
+  rst = magic(GetAssayData(scrna, layer='data'), solver='approximate')
   #scrna <- magic(scrna, genes='all_genes')
   scrna[["MAGIC_RNA"]] <- CreateAssay5Object(data=as.matrix(rst$result))
   ## assay to disk
