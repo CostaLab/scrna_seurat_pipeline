@@ -16,6 +16,7 @@ INTEGRATION_OPTION = "seurat" ### or harmony
 ### -------------- Data SRC-----------------------------
 ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
 EXTRA_ANNOTATION_EXTERNAL_FILE = "external/extra_markers.tsv"
+MAGIC_GENE_SUBSET_MODE = "all" # options: "all" or "external_and_extra"
 ## If genesets you need are not included, please attach your geneset to the gmt.gz file.
 MSigDB_GENESET_HUMAN_GMT_FILE  = "external/Human_msigdb.v7.2.symbols.gmt.gz"
 

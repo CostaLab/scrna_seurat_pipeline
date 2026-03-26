@@ -500,7 +500,7 @@ registerDoParallel(cores=WORKER_NUM)
 
 
 # Set up future for parallelization
-plan("multicore", workers = WORKER_NUM)
+plan("multisession", workers = WORKER_NUM)
 options(future.globals.maxSize = MAXMEMMEGA * 1024^2)
 
 
@@ -1090,7 +1090,14 @@ generate_scrna_cycleRegressOut <- function(scrna){
 
              ### Scale data add exclude
              scrna$CC.Difference <- scrna$S.Score - scrna$G2M.Score
-             scrna <- ScaleData(scrna, vars.to.regress = c("G2M.Score", "S.Score"), features = rownames(scrna))
+             # Only scale VariableFeatures + cell-cycle genes (not full transcriptome): RunPCA below
+             # uses s.genes/g2m.genes only; including them in ScaleData is required for that PCA.
+             scale_features <- unique(c(VariableFeatures(scrna), s.genes, g2m.genes))
+             scale_features <- scale_features[scale_features %in% rownames(scrna)]
+             if (length(scale_features) == 0L) {
+               scale_features <- unique(c(s.genes, g2m.genes))
+             }
+             scrna <- ScaleData(scrna, vars.to.regress = c("G2M.Score", "S.Score"), features = scale_features)
              scrna <- RunPCA(scrna, features = c(s.genes, g2m.genes), nfeatures.print = 10, reduction.name="CELLCYCLED_PCA")
            },
            error=function(cond) {
@@ -1731,11 +1738,61 @@ generate_scrna_HCLannotate <- function(scrna){
   return(list(scrna, ret_code))
 }
 
-generate_scrna_MAGIC <- function(scrna){
+generate_scrna_MAGIC <- function(scrna, gene_subset_mode = NULL){
   ret_code = 0
   DefaultAssay(scrna) <- "RNA"
+  expr_data <- GetAssayData(scrna, layer = 'data')
 
-  rst = magic(GetAssayData(scrna, layer='data'))
+  if (is.null(gene_subset_mode)) {
+    if (exists("MAGIC_GENE_SUBSET_MODE")) {
+      gene_subset_mode <- MAGIC_GENE_SUBSET_MODE
+    } else {
+      gene_subset_mode <- "all"
+    }
+  }
+  gene_subset_mode <- tolower(as.character(gene_subset_mode))
+
+  if (gene_subset_mode %in% c("external", "external_and_extra")) {
+    subset_genes <- character(0)
+    species_col <- sprintf("%s.Gene", SPECIES)
+
+    if (file.exists(ANNOTATION_EXTERNAL_FILE)) {
+      ext_df <- read.csv(file = ANNOTATION_EXTERNAL_FILE, sep = "\t", stringsAsFactors = FALSE)
+      ext_df <- ext_df[!apply(ext_df, 1, function(x) all(x == "")), , drop = FALSE]
+      if ("Tissue.of.Origin" %in% colnames(ext_df) && species_col %in% colnames(ext_df)) {
+        ext_df <- ext_df[ext_df$Tissue.of.Origin == ORGAN, , drop = FALSE]
+        subset_genes <- c(subset_genes, ext_df[[species_col]])
+      }
+    } else {
+      logger.warn(glue("MAGIC gene subset: annotation file not found: {ANNOTATION_EXTERNAL_FILE}"))
+    }
+
+    if (exists("EXTRA_ANNOTATION_EXTERNAL_FILE") && file.exists(EXTRA_ANNOTATION_EXTERNAL_FILE)) {
+      extra_df <- read.csv(file = EXTRA_ANNOTATION_EXTERNAL_FILE, sep = "\t", stringsAsFactors = FALSE)
+      extra_df <- extra_df[!apply(extra_df, 1, function(x) all(x == "")), , drop = FALSE]
+      if ("Tissue.of.Origin" %in% colnames(extra_df) && species_col %in% colnames(extra_df)) {
+        extra_df <- extra_df[extra_df$Tissue.of.Origin == ORGAN, , drop = FALSE]
+      }
+      if (species_col %in% colnames(extra_df)) {
+        subset_genes <- c(subset_genes, extra_df[[species_col]])
+      }
+    }
+
+    subset_genes <- unique(subset_genes)
+    subset_genes <- subset_genes[!is.na(subset_genes)]
+    subset_genes <- subset_genes[nzchar(subset_genes)]
+    subset_genes <- subset_genes[subset_genes != "NA"]
+
+    use_genes <- intersect(subset_genes, rownames(expr_data))
+    if (length(use_genes) > 0) {
+      expr_data <- expr_data[use_genes, , drop = FALSE]
+      logger.info(glue("MAGIC gene subset mode '{gene_subset_mode}': using {length(use_genes)} genes"))
+    } else {
+      logger.warn(glue("MAGIC gene subset mode '{gene_subset_mode}': no matched genes; fallback to all genes"))
+    }
+  }
+
+  rst = magic(expr_data, solver='approximate')
   #scrna <- magic(scrna, genes='all_genes')
   scrna[["MAGIC_RNA"]] <- CreateAssay5Object(data=as.matrix(rst$result))
   ## assay to disk
