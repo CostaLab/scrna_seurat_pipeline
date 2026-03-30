@@ -1118,7 +1118,16 @@ generate_scrna_regressOut<- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA", get_regressout_vector()), features = rownames(scrna))
+            regress_features <- VariableFeatures(scrna)
+            regress_features <- regress_features[regress_features %in% rownames(scrna)]
+            if (length(regress_features) == 0L) {
+              regress_features <- rownames(scrna)
+            }
+            scrna <- ScaleData(
+              scrna,
+              vars.to.regress = c("nCount_RNA", get_regressout_vector()),
+              features = regress_features
+            )
              scrna <- RunPCA(scrna, features = VariableFeatures(scrna), nfeatures.print = 10, reduction.name="RegressOut_PCA")
            },
            error=function(cond) {
