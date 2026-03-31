@@ -1090,7 +1090,14 @@ generate_scrna_cycleRegressOut <- function(scrna){
 
              ### Scale data add exclude
              scrna$CC.Difference <- scrna$S.Score - scrna$G2M.Score
-             scrna <- ScaleData(scrna, vars.to.regress = c("G2M.Score", "S.Score"), features = rownames(scrna))
+             # Only scale VariableFeatures + cell-cycle genes (not full transcriptome): RunPCA below
+             # uses s.genes/g2m.genes only; including them in ScaleData is required for that PCA.
+             scale_features <- unique(c(VariableFeatures(scrna), s.genes, g2m.genes))
+             scale_features <- scale_features[scale_features %in% rownames(scrna)]
+             if (length(scale_features) == 0L) {
+               scale_features <- unique(c(s.genes, g2m.genes))
+             }
+             scrna <- ScaleData(scrna, vars.to.regress = c("G2M.Score", "S.Score"), features = scale_features)
              scrna <- RunPCA(scrna, features = c(s.genes, g2m.genes), nfeatures.print = 10, reduction.name="CELLCYCLED_PCA")
            },
            error=function(cond) {
@@ -1111,7 +1118,16 @@ generate_scrna_regressOut<- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA", get_regressout_vector()), features = rownames(scrna))
+            regress_features <- VariableFeatures(scrna)
+            regress_features <- regress_features[regress_features %in% rownames(scrna)]
+            if (length(regress_features) == 0L) {
+              regress_features <- rownames(scrna)
+            }
+            scrna <- ScaleData(
+              scrna,
+              vars.to.regress = c("nCount_RNA", get_regressout_vector()),
+              features = regress_features
+            )
              scrna <- RunPCA(scrna, features = VariableFeatures(scrna), nfeatures.print = 10, reduction.name="RegressOut_PCA")
            },
            error=function(cond) {
@@ -1690,7 +1706,20 @@ generate_scrna_MCAannotate <- function(scrna){
   ret_code = 0
   scrna <- join_layers_for_integration(scrna)  # v5: need single layer for GetAssayData
   suppressPackageStartupMessages(require(scMCA))
-  mca_result <- scMCA(GetAssayDataCompat(object = scrna, layer = "counts"), numbers_plot = 3)
+  mca_counts <- GetAssayDataCompat(object = scrna, layer = "counts")
+  ## Reuse HCL_MCA_USE_HVG switch for both HCL and MCA mappings.
+  use_hvg <- if (exists("HCL_MCA_USE_HVG", inherits = TRUE)) isTRUE(HCL_MCA_USE_HVG) else TRUE
+  if (use_hvg) {
+    vf <- VariableFeatures(scrna)
+    vf <- vf[vf %in% rownames(mca_counts)]
+    if (length(vf) >= 1L) {
+      mca_counts <- mca_counts[vf, , drop = FALSE]
+      logger.info(paste0("scMCA: using ", nrow(mca_counts), " VariableFeatures (HVG) genes"))
+    } else {
+      logger.warn("scMCA: no VariableFeatures in object; using full count matrix (set HCL_MCA_USE_HVG=FALSE to silence)")
+    }
+  }
+  mca_result <- scMCA(mca_counts, numbers_plot = 3)
   #pattern = paste0("(", gsub("-", "_", MCA_NAME), ")")
   pattern = paste0("\\(", MCA_NAME, "\\)")
   corr=mca_result$cors_matrix[grep(pattern,rownames(mca_result$cors_matrix)),]
@@ -1709,7 +1738,20 @@ generate_scrna_HCLannotate <- function(scrna){
   ret_code = 0
   scrna <- join_layers_for_integration(scrna)  # v5: need single layer for GetAssayData
   suppressPackageStartupMessages(require(scHCL))
-  hcl_result <- scHCL(GetAssayDataCompat(object = scrna, layer = "counts"), numbers_plot = 3)
+  hcl_counts <- GetAssayDataCompat(object = scrna, layer = "counts")
+  ## Subset to HVGs for scHCL: full gene × cell correlation is very slow on large objects.
+  use_hvg <- if (exists("HCL_MCA_USE_HVG", inherits = TRUE)) isTRUE(HCL_MCA_USE_HVG) else TRUE
+  if (use_hvg) {
+    vf <- VariableFeatures(scrna)
+    vf <- vf[vf %in% rownames(hcl_counts)]
+    if (length(vf) >= 1L) {
+      hcl_counts <- hcl_counts[vf, , drop = FALSE]
+      logger.info(paste0("scHCL: using ", nrow(hcl_counts), " VariableFeatures (HVG) genes"))
+    } else {
+      logger.warn("scHCL: no VariableFeatures in object; using full count matrix (set HCL_MCA_USE_HVG=FALSE to silence)")
+    }
+  }
+  hcl_result <- scHCL(hcl_counts, numbers_plot = 3)
   pattern = gsub("-",".",HCL_NAME)
   corr=hcl_result$cors_matrix[grep(pattern,rownames(hcl_result$cors_matrix),fixed=TRUE),]
   rnms <- gsub("_[a-zA-Z]+\\.$", "", rownames(corr))
@@ -1731,11 +1773,61 @@ generate_scrna_HCLannotate <- function(scrna){
   return(list(scrna, ret_code))
 }
 
-generate_scrna_MAGIC <- function(scrna){
+generate_scrna_MAGIC <- function(scrna, gene_subset_mode = NULL){
   ret_code = 0
   DefaultAssay(scrna) <- "RNA"
+  expr_data <- GetAssayData(scrna, layer = 'data')
 
-  rst = magic(GetAssayData(scrna, layer='data'), solver='approximate')
+  if (is.null(gene_subset_mode)) {
+    if (exists("MAGIC_GENE_SUBSET_MODE")) {
+      gene_subset_mode <- MAGIC_GENE_SUBSET_MODE
+    } else {
+      gene_subset_mode <- "all"
+    }
+  }
+  gene_subset_mode <- tolower(as.character(gene_subset_mode))
+
+  if (gene_subset_mode %in% c("external", "external_and_extra")) {
+    subset_genes <- character(0)
+    species_col <- sprintf("%s.Gene", SPECIES)
+
+    if (file.exists(ANNOTATION_EXTERNAL_FILE)) {
+      ext_df <- read.csv(file = ANNOTATION_EXTERNAL_FILE, sep = "\t", stringsAsFactors = FALSE)
+      ext_df <- ext_df[!apply(ext_df, 1, function(x) all(x == "")), , drop = FALSE]
+      if ("Tissue.of.Origin" %in% colnames(ext_df) && species_col %in% colnames(ext_df)) {
+        ext_df <- ext_df[ext_df$Tissue.of.Origin == ORGAN, , drop = FALSE]
+        subset_genes <- c(subset_genes, ext_df[[species_col]])
+      }
+    } else {
+      logger.warn(glue("MAGIC gene subset: annotation file not found: {ANNOTATION_EXTERNAL_FILE}"))
+    }
+
+    if (exists("EXTRA_ANNOTATION_EXTERNAL_FILE") && file.exists(EXTRA_ANNOTATION_EXTERNAL_FILE)) {
+      extra_df <- read.csv(file = EXTRA_ANNOTATION_EXTERNAL_FILE, sep = "\t", stringsAsFactors = FALSE)
+      extra_df <- extra_df[!apply(extra_df, 1, function(x) all(x == "")), , drop = FALSE]
+      if ("Tissue.of.Origin" %in% colnames(extra_df) && species_col %in% colnames(extra_df)) {
+        extra_df <- extra_df[extra_df$Tissue.of.Origin == ORGAN, , drop = FALSE]
+      }
+      if (species_col %in% colnames(extra_df)) {
+        subset_genes <- c(subset_genes, extra_df[[species_col]])
+      }
+    }
+
+    subset_genes <- unique(subset_genes)
+    subset_genes <- subset_genes[!is.na(subset_genes)]
+    subset_genes <- subset_genes[nzchar(subset_genes)]
+    subset_genes <- subset_genes[subset_genes != "NA"]
+
+    use_genes <- intersect(subset_genes, rownames(expr_data))
+    if (length(use_genes) > 0) {
+      expr_data <- expr_data[use_genes, , drop = FALSE]
+      logger.info(glue("MAGIC gene subset mode '{gene_subset_mode}': using {length(use_genes)} genes"))
+    } else {
+      logger.warn(glue("MAGIC gene subset mode '{gene_subset_mode}': no matched genes; fallback to all genes"))
+    }
+  }
+
+  rst = magic(expr_data, solver='approximate')
   #scrna <- magic(scrna, genes='all_genes')
   scrna[["MAGIC_RNA"]] <- CreateAssay5Object(data=as.matrix(rst$result))
   ## assay to disk
@@ -1778,31 +1870,51 @@ generate_scrna_ExternalAnnotation <- function(scrna){
     stop("exit 1")
   }
 
-  dfs <- split(df, df$Tissue.of.Origin)
-
   scrna <- join_layers_for_integration(scrna)  # v5: need single layer for GetAssayData
   DefaultAssay(scrna) <- "RNA"
   mtx <- GetAssayDataCompat(object = scrna, layer = "data")
-  anno_genes <- unique(dfs[[ORGAN]][, sprintf("%s.Gene", SPECIES)])
-  use_genes <- intersect(anno_genes, rownames(mtx))
-  df <- dfs[[ORGAN]]
+  gene_col <- sprintf("%s.Gene", SPECIES)
+  df <- df[df$Tissue.of.Origin == ORGAN, c(gene_col, "Cell.Type"), drop = FALSE]
+  colnames(df) <- c("Gene", "Cell.Type")
+  df <- df[!is.na(df$Gene) & nzchar(df$Gene) & df$Gene != "NA", , drop = FALSE]
+  df <- df[!is.na(df$Cell.Type) & nzchar(df$Cell.Type), , drop = FALSE]
+  df <- unique(df)
 
-  celltype.list <- foreach(a_cell = colnames(mtx)) %dopar% {
-    score <- mtx[use_genes, a_cell]
-    score <- score[score>0]
-    if(length(score) == 0){
-      return("Unknown")
-    }
-    sdf <- df[df[,glue("{SPECIES}.Gene")] %in% names(score), c(glue("{SPECIES}.Gene"), "Cell.Type")]
-    sdf$score <- score[sdf[,glue("{SPECIES}.Gene")]]
-    itype <- aggregate(sdf$score, by=list(CellType=sdf$Cell.Type),
-                       FUN=function(x){return(mean(x)*log(length(x)+1))})
-    celltype <- itype[which.max(itype$x), ]$CellType
-    return(celltype)
+  use_genes <- intersect(unique(df$Gene), rownames(mtx))
+  if (length(use_genes) == 0L || nrow(df) == 0L) {
+    scrna$external_annotation <- rep("Unknown", ncol(mtx))
+    names(scrna$external_annotation) <- colnames(mtx)
+    rm(mtx)
+    return(list(scrna, ret_code))
   }
-  celltypes <- unlist(celltype.list)
-  names(celltypes)<-colnames(mtx)
-  scrna$external_annotation <- unlist(celltypes)
+
+  mtx_sub <- mtx[use_genes, , drop = FALSE]
+  if (!methods::is(mtx_sub, "dgCMatrix")) {
+    mtx_sub <- as(mtx_sub, "dgCMatrix")
+  }
+
+  df_use <- df[df$Gene %in% use_genes, , drop = FALSE]
+  celltypes <- sort(unique(df_use$Cell.Type))
+  gene_idx <- match(df_use$Gene, use_genes)
+  celltype_idx <- match(df_use$Cell.Type, celltypes)
+  gene_to_celltype <- sparseMatrix(
+    i = gene_idx,
+    j = celltype_idx,
+    x = 1,
+    dims = c(length(use_genes), length(celltypes))
+  )
+
+  # Same scoring as before, vectorized: mean(expr) * log(number_of_expressed_marker_genes + 1)
+  score_sum <- as.matrix(crossprod(gene_to_celltype, mtx_sub))
+  expr_n <- as.matrix(crossprod(gene_to_celltype, (mtx_sub > 0) * 1))
+  score_mat <- (score_sum / pmax(expr_n, 1)) * log(expr_n + 1)
+  score_mat[expr_n == 0] <- -Inf
+
+  max_idx <- max.col(t(score_mat), ties.method = "first")
+  pred <- celltypes[max_idx]
+  pred[colSums(expr_n) == 0] <- "Unknown"
+  names(pred) <- colnames(mtx_sub)
+  scrna$external_annotation <- pred
   rm(mtx)
   return(list(scrna, ret_code))
 

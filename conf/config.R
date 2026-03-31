@@ -4,7 +4,8 @@ ORGAN = 'Blood'           #For external annotation. Options: see below(External 
 SPECIES = "Mouse"         #For external annotation. Options: Human, Mouse
 MCA_NAME = "Bone-Marrow" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
 HCL_NAME = "Adult-Bone-Marrow-CD34P" #For HCL annotation.
-
+## scHCL/scMCA runtime: use all VariableFeatures (HVG) from preprocess instead of the full transcriptome.
+HCL_MCA_USE_HVG = TRUE
 
 # filtering params when create seurat object
 MINCELLS  = 5
@@ -16,6 +17,7 @@ INTEGRATION_OPTION = "seurat" ### or harmony
 ### -------------- Data SRC-----------------------------
 ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
 EXTRA_ANNOTATION_EXTERNAL_FILE = "external/extra_markers.tsv"
+MAGIC_GENE_SUBSET_MODE = "all" # options: "all" or "external_and_extra"
 ## If genesets you need are not included, please attach your geneset to the gmt.gz file.
 MSigDB_GENESET_HUMAN_GMT_FILE  = "external/Human_msigdb.v7.2.symbols.gmt.gz"
 
