@@ -4,7 +4,7 @@ ORGAN = 'Blood'           #For external annotation. Options: Blood, Heart, Intes
 SPECIES = "Mouse"         #For external annotation. Options: Human, Mouse
 MCA_NAME = "Bone-Marrow" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
 HCL_NAME = "Adult-Bone-Marrow-CD34P" #For HCL annotation.
-
+HCL_MCA_USE_HVG = TRUE
 
 # filtering params when create seurat object
 MINCELLS  = 5

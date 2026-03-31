@@ -4,7 +4,8 @@ ORGAN = 'Blood'           #For external annotation. Options: see below(External 
 SPECIES = "Mouse"         #For external annotation. Options: Human, Mouse
 MCA_NAME = "Bone-Marrow" #For MCA annotation.      Options: check http://bis.zju.edu.cn/MCA/
 HCL_NAME = "Adult-Bone-Marrow-CD34P" #For HCL annotation.
-
+## scHCL/scMCA runtime: use all VariableFeatures (HVG) from preprocess instead of the full transcriptome.
+HCL_MCA_USE_HVG = TRUE
 
 # filtering params when create seurat object
 MINCELLS  = 5
