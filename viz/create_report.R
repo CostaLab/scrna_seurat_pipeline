@@ -332,12 +332,14 @@ if(MAKE_ELEMENT){
 
 
   available_clusters = DEFAULTCLUSTERS
-  if("Clusters_harmony" %in% EXEC_PLAN){
+  # Derive integration clusters from actual object content (not only EXEC_PLAN).
+  if("harmony_inte_clusters" %in% colnames(scrna@meta.data)){
     available_clusters <- c(available_clusters, "harmony_inte_clusters")
   }
-  if("Clusters_seurat" %in% EXEC_PLAN){
+  if("seurat_inte_clusters" %in% colnames(scrna@meta.data)){
     available_clusters <- c(available_clusters, "seurat_inte_clusters")
   }
+  available_clusters <- unique(available_clusters)
 
 
   dir.create(report_plots_folder_png, recursive = TRUE)
@@ -526,6 +528,14 @@ for(exec_elem in EXEC_PLAN){
   print_ngenelement_msg(exec_elem)
   if(exec_elem %ni% names(dic_Rmd_n_Output)){
     message("viz ", exec_elem, " is not implemented!!")
+    next
+  }
+  if (exec_elem == "Clusters_harmony" && !("harmony_inte_clusters" %in% available_clusters)) {
+    message("Skip Clusters_harmony report because harmony_inte_clusters is unavailable.")
+    next
+  }
+  if (exec_elem == "Clusters_seurat" && !("seurat_inte_clusters" %in% available_clusters)) {
+    message("Skip Clusters_seurat report because seurat_inte_clusters is unavailable.")
     next
   }
   rmd_n_output <- dic_Rmd_n_Output[[exec_elem]]

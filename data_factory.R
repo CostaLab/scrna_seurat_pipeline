@@ -499,8 +499,40 @@ suppressPackageStartupMessages(library(SeuratWrappers))
 registerDoParallel(cores=WORKER_NUM)
 
 
-# Set up future for parallelization
-plan("multisession", workers = WORKER_NUM)
+# Set up future for parallelization.
+# Prefer multicore on Unix to avoid multisession socket desync issues on some clusters.
+future_strategy <- if (.Platform$OS.type == "unix") "multicore" else "multisession"
+future_plan_set <- FALSE
+
+tryCatch(
+  {
+    future::plan(strategy = future_strategy, workers = WORKER_NUM)
+    future_plan_set <- TRUE
+    logger.info(paste0("future plan set to ", future_strategy, " (workers=", WORKER_NUM, ")"))
+  },
+  error = function(e) {
+    logger.warn(paste0("Failed to set future plan '", future_strategy, "': ", conditionMessage(e)))
+  }
+)
+
+if (!future_plan_set) {
+  tryCatch(
+    {
+      future::plan(strategy = "multisession", workers = WORKER_NUM)
+      future_plan_set <- TRUE
+      logger.info(paste0("future plan fallback set to multisession (workers=", WORKER_NUM, ")"))
+    },
+    error = function(e) {
+      logger.warn(paste0("Failed to set future plan 'multisession': ", conditionMessage(e)))
+    }
+  )
+}
+
+if (!future_plan_set) {
+  future::plan(strategy = "sequential")
+  logger.warn("future plan fallback set to sequential")
+}
+
 options(future.globals.maxSize = MAXMEMMEGA * 1024^2)
 
 
@@ -876,6 +908,14 @@ generate_scrna_phase_clustering <- function(scrna){
   pconf <- pconf[pconf== 1]
 
   for (key in names(pconf)){
+      if (INTEGRATION_OPTION == "harmony" && key == "scrna_integration_seurat") {
+        logger.info("skipping generate_scrna_integration_seurat because INTEGRATION_OPTION=harmony")
+        next
+      }
+      if (INTEGRATION_OPTION == "seurat" && key == "scrna_integration_harmony") {
+        logger.info("skipping generate_scrna_integration_harmony because INTEGRATION_OPTION=seurat")
+        next
+      }
       f_name = paste("generate_", key, sep="")
       f_call = paste(f_name, "(scrna)", sep="")
       logger.info(paste("executing", f_name))
@@ -1365,25 +1405,28 @@ generate_scrna_clustering <- function(scrna){
   ret_code = 0
   tryCatch(
            {
-               #DefaultAssay(scrna) <- "integrated"
-               DefaultAssay(scrna) <- "RNA"
-               scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM, graph.name='integrated_snn') %>%
-                            FindClusters(resolution = CLUSTER_RESOLUTION, graph.name='integrated_snn') ##
-
-               scrna$seurat_inte_clusters <- scrna$seurat_clusters
-
-               DefaultAssay(scrna) <- "RNA"
-               scrna = FindNeighbors(scrna, reduction = "harmony", dims = HARMONY_DIM) %>%
-                            FindClusters(resolution = CLUSTER_RESOLUTION) ##
-               scrna$harmony_inte_clusters <- scrna$seurat_clusters
-
-             if(INTEGRATION_OPTION == "harmony"){
+              DefaultAssay(scrna) <- "RNA"
+              if(INTEGRATION_OPTION == "harmony"){
+                if("harmony" %ni% names(scrna@reductions) || "harmony_UMAP" %ni% names(scrna@reductions)){
+                  stop("INTEGRATION_OPTION=harmony but harmony reduction/UMAP not found.")
+                }
+                scrna = FindNeighbors(scrna, reduction = "harmony", dims = HARMONY_DIM) %>%
+                             FindClusters(resolution = CLUSTER_RESOLUTION)
+                scrna$harmony_inte_clusters <- scrna$seurat_clusters
                 scrna$seurat_clusters <- scrna$harmony_inte_clusters
                 scrna[["DEFAULT_UMAP"]] <- scrna[["harmony_UMAP"]]
-             }else if(INTEGRATION_OPTION == "seurat"){
+              }else if(INTEGRATION_OPTION == "seurat"){
+                if("INTE_PCA" %ni% names(scrna@reductions) || "INTE_UMAP" %ni% names(scrna@reductions)){
+                  stop("INTEGRATION_OPTION=seurat but INTE_PCA/INTE_UMAP not found.")
+                }
+                scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM, graph.name='integrated_snn') %>%
+                             FindClusters(resolution = CLUSTER_RESOLUTION, graph.name='integrated_snn')
+                scrna$seurat_inte_clusters <- scrna$seurat_clusters
                 scrna$seurat_clusters <- scrna$seurat_inte_clusters
                 scrna[["DEFAULT_UMAP"]] <- scrna[["INTE_UMAP"]]
-             }
+              }else{
+                stop("INTEGRATION_OPTION should be either 'harmony' or 'seurat'.")
+              }
 
            },
            error=function(cond) {
@@ -1448,14 +1491,22 @@ generate_scrna_batchclustering <- function(scrna){
   tryCatch(
            {
 
-             #DefaultAssay(scrna) <- "integrated"
              DefaultAssay(scrna) <- "RNA"
-             scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM, graph.name='integrated_snn') %>%
-                                  FindClusters(resolution = CLUSTER_RESOLUTION_RANGE, graph.name='integrated_snn') ##
-
-             DefaultAssay(scrna) <- "RNA"
-             scrna <-  FindNeighbors(scrna, reduction = "harmony", dims = HARMONY_DIM) %>%
-                                  FindClusters(resolution = CLUSTER_RESOLUTION_RANGE) ##
+            if(INTEGRATION_OPTION == "harmony"){
+              if("harmony" %ni% names(scrna@reductions)){
+                stop("INTEGRATION_OPTION=harmony but harmony reduction not found.")
+              }
+              scrna <-  FindNeighbors(scrna, reduction = "harmony", dims = HARMONY_DIM) %>%
+                                   FindClusters(resolution = CLUSTER_RESOLUTION_RANGE)
+            }else if(INTEGRATION_OPTION == "seurat"){
+              if("INTE_PCA" %ni% names(scrna@reductions)){
+                stop("INTEGRATION_OPTION=seurat but INTE_PCA not found.")
+              }
+              scrna <- FindNeighbors(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM, graph.name='integrated_snn') %>%
+                                   FindClusters(resolution = CLUSTER_RESOLUTION_RANGE, graph.name='integrated_snn')
+            }else{
+              stop("INTEGRATION_OPTION should be either 'harmony' or 'seurat'.")
+            }
 
            },
            error=function(cond) {
@@ -1474,7 +1525,14 @@ generate_scrna_batchclustering <- function(scrna){
 
 generate_scrna_fishertest_inte_clusters <- function(scrna){
   ret_code = 0
-  CLUSTER_TO_TEST_VEC <- c("seurat_inte_clusters",  "harmony_inte_clusters")
+  if(INTEGRATION_OPTION == "harmony"){
+    CLUSTER_TO_TEST_VEC <- c("harmony_inte_clusters")
+  }else if(INTEGRATION_OPTION == "seurat"){
+    CLUSTER_TO_TEST_VEC <- c("seurat_inte_clusters")
+  }else{
+    CLUSTER_TO_TEST_VEC <- c("seurat_inte_clusters", "harmony_inte_clusters")
+  }
+  CLUSTER_TO_TEST_VEC <- CLUSTER_TO_TEST_VEC[CLUSTER_TO_TEST_VEC %in% colnames(scrna@meta.data)]
   for(CLUSTER_TO_TEST in CLUSTER_TO_TEST_VEC){
 
      STAGE_TO_TEST <- "stage"
@@ -1664,11 +1722,16 @@ generate_scrna_remove_recluster <- function(scrna){
   keeps <- setdiff(unique(scrna$seurat_clusters), scrna_remove_clusters)
   scrna <- subset(scrna, idents= keeps)
 
-  execution_vec = c(
-        "generate_scrna_integration_seurat(scrna)",
-        "generate_scrna_integration_harmony(scrna)",
-        "generate_scrna_clustering(scrna)"
-  )
+  execution_vec <- c()
+  if (INTEGRATION_OPTION == "seurat") {
+    execution_vec <- c(execution_vec, "generate_scrna_integration_seurat(scrna)")
+  } else if (INTEGRATION_OPTION == "harmony") {
+    execution_vec <- c(execution_vec, "generate_scrna_integration_harmony(scrna)")
+  } else {
+    logger.error("INTEGRATION_OPTION should be either 'harmony' or 'seurat'.")
+    stop("exit 1")
+  }
+  execution_vec <- c(execution_vec, "generate_scrna_clustering(scrna)")
   for(func_call in execution_vec){
     logger.info(paste("executing ", func_call))
     ret_list <- eval(parse(text=func_call))
