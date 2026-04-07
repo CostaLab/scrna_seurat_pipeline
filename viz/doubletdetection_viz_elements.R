@@ -4,7 +4,7 @@
 doubletdetection_viz_elements <- function(scrna){
   # We have three options.
   # If doublet_switch == "display", we have all the cells still in the Seurat object.
-  # We can plot the doublets in the INTE_UMAP.
+  # We plot using DEFAULT_UMAP when available, otherwise fall back to harmony/INTE UMAP.
   # If doublet_switch == "on", we have removed the doublets from the Seurat object.
   # We can use the output from the doublet detection function (scrna_DoubletAnnotated.Rds) and plot the UMAP we created for this purpose.
   # If doublet_switch == "off", we just put out a message stating that doublet detection was not performed.
@@ -12,13 +12,25 @@ doubletdetection_viz_elements <- function(scrna){
     scrna <- load_object(file_name = file.path(savedir, "scrna_phase_comparing.Rds"))
     scrna <- safe_join_layers(scrna)  # v5: join layers
     if ("Doublet_classifications" %in% names(scrna@meta.data)) {
-      plt <- DimPlot(scrna, group.by = "Doublet_classifications", reduction = "INTE_UMAP")
-      save_ggplot_formats(
-        plt=plt,
-        base_plot_dir=report_plots_folder,
-        plt_name="doublets_umap",
-        width=9, height=7
-      )
+      reduction_use <- "DEFAULT_UMAP"
+      if (!("DEFAULT_UMAP" %in% names(scrna@reductions))) {
+        if ("harmony_UMAP" %in% names(scrna@reductions)) {
+          reduction_use <- "harmony_UMAP"
+        } else if ("INTE_UMAP" %in% names(scrna@reductions)) {
+          reduction_use <- "INTE_UMAP"
+        }
+      }
+      if (reduction_use %in% names(scrna@reductions)) {
+        plt <- DimPlot(scrna, group.by = "Doublet_classifications", reduction = reduction_use)
+        save_ggplot_formats(
+          plt=plt,
+          base_plot_dir=report_plots_folder,
+          plt_name="doublets_umap",
+          width=9, height=7
+        )
+      } else {
+        message("No suitable UMAP reduction found for doublet display plot; skipping.")
+      }
     }
   } else if(doublet_switch == "on"){
     scrna <- load_object(file_name = file.path(savedir, "scrna_DoubletAnnotated.Rds"))

@@ -63,7 +63,7 @@ external_markers_elements <- function(scrna){
     if (length(genes) == 0){
         next
     }
-
+    
     for (i in seq(1, length(genes), by = 4)){
       ni = min(i + 3, length(genes))
       p1 <- StyleFeaturePlot(
@@ -76,8 +76,8 @@ external_markers_elements <- function(scrna){
         reduction = "DEFAULT_UMAP",
         order = TRUE,
         cols = zero_pos_divergent_colors,
-        ncol = 2,
-        max.cutoff = "q95"
+        max.cutoff = "q95",
+        ncol = 2
       )
       save_ggplot_formats(
         plt = p1,
@@ -96,7 +96,7 @@ external_markers_elements <- function(scrna){
       features = genes,
       group.by = cluster,
       cols = zero_pos_divergent_colors
-    ) #+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
+    ) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
     save_ggplot_formats(
       plt = p2,

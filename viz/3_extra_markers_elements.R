@@ -95,7 +95,7 @@ extra_markers_elements <- function(scrna){
       features = genes,
       group.by = cluster,
       cols = zero_pos_divergent_colors
-    )
+    )  + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
     save_ggplot_formats(
       plt = p2,
