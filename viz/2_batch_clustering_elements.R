@@ -15,9 +15,23 @@ batch_clustering_elements <- function(scrna){
       stop(glue("ERROR:There's no this {cluster_use} slot, please check!!!"))
     }
 
-    pref_def = "integrated_snn_res."
-    if(cluster_use == "harmony_inte_clusters") pref_def = "RNA_snn_res."
-    if(cluster_use == "singleton") pref_def = "RNA_snn_res."
+    # Determine prefix based on cluster type (derived from actual object content)
+    if(cluster_use == "harmony_inte_clusters") {
+      pref_def = "RNA_snn_res."
+    } else if(cluster_use == "seurat_inte_clusters") {
+      pref_def = "integrated_snn_res."
+    } else if(cluster_use == "singleton") {
+      pref_def = "RNA_snn_res."
+    } else {
+      # For default cluster slot, check which resolution columns exist in metadata
+      if(any(grepl("^RNA_snn_res\\.", colnames(scrna@meta.data)))) {
+        pref_def = "RNA_snn_res."
+      } else if(any(grepl("^integrated_snn_res\\.", colnames(scrna@meta.data)))) {
+        pref_def = "integrated_snn_res."
+      } else {
+        stop("No resolution columns found in metadata (neither RNA_snn_res.* nor integrated_snn_res.*)")
+      }
+    }
 
     umap_reduction = "DEFAULT_UMAP"
     if(cluster_use == "harmony_inte_clusters") umap_reduction = "harmony_UMAP"
