@@ -34,8 +34,8 @@ GetAssayDataCompat <- function(object, assay = "RNA", layer = NULL, slot = NULL,
   assay_obj <- object[[assay]]
 
   if (inherits(assay_obj, "Assay5")) {
-    layer <- layer %||% slot
-    if (is.null(layer)) layer <- "counts"
+    # Seurat 5+: always use layer, ignore slot
+    layer <- layer %||% slot %||% "counts"
 
     return(SeuratObject::GetAssayData(
       object = object,
@@ -45,6 +45,7 @@ GetAssayDataCompat <- function(object, assay = "RNA", layer = NULL, slot = NULL,
     ))
   }
 
+  # Seurat 4: use slot
   return(SeuratObject::GetAssayData(
     object = object,
     assay = assay,
@@ -793,9 +794,8 @@ generate_scrna_ambient_rna <- function(scrna){
                                  col.name = "AmbientRNA")
             scrna <- AddMetaData(object = scrna, metadata = scrna.decont$decontX_clusters,
                                  col.name = "decontX_clusters")
-	          DefaultAssay(scrna) <- assay.used
 
-            ## assay to disk
+            ## assay to disk (always save decontX results)
             if (!ALLINONE){
               fname = file.path(SAVE_DIR, "assays", "decontX.Rds")
               # construct list
@@ -813,9 +813,40 @@ generate_scrna_ambient_rna <- function(scrna){
               scrna@tools[["assay_info"]][["decontX"]] <- fname
               ## remove from memory
               rm(assay_info)
-              scrna[["decontX"]] <- NULL
               gc()
             }
+
+            ## Apply correction: replace RNA with decontX-corrected counts
+            if (DECONTAX_CORRECT) {
+              logger.info("DECONTAX_CORRECT=TRUE: replacing RNA with decontX-corrected counts")
+
+              # Save original RNA assay to file before replacing
+              if (!ALLINONE){
+                fname_orig = file.path(SAVE_DIR, "assays", "RNA_original.Rds")
+                assay_info_orig <- list(
+                   name = "RNA_original",
+                   assay = scrna[["RNA"]],
+                   fname = fname_orig,
+                   meta = scrna@meta.data,
+                   info = "original RNA counts before decontX correction")
+                save_object(assay_info_orig, fname_orig, file_format = COMPRESSION_FORMAT)
+                scrna@tools[["assay_info"]][["RNA_original"]] <- fname_orig
+                rm(assay_info_orig)
+                logger.info(paste("Saved original RNA to:", fname_orig))
+              }
+
+              # Replace RNA with decontX-corrected counts
+              #scrna[["RNA"]] <- scrna[["decontX"]]
+              scrna[["RNA"]] <- CreateAssay5Object(counts = scrna[["decontX"]]@counts)
+
+              logger.info("Replaced scrna[[RNA]] with decontX-corrected counts")
+            }
+
+            # Remove decontX assay from memory (no longer needed after correction)
+            scrna[["decontX"]] <- NULL
+            gc()
+
+            DefaultAssay(scrna) <- assay.used
 
             return(scrna)
            },

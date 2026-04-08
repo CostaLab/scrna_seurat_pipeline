@@ -13,6 +13,10 @@ MINGENES  = 50
 
 
 INTEGRATION_OPTION = "seurat" ### or harmony
+### ---------- DecontX correction ----------------
+## If TRUE: replace scrna[[RNA]] with decontX-corrected counts, save original RNA to file
+## If FALSE: only detect ambient RNA (current default behavior)
+DECONTAX_CORRECT = TRUE
 
 ### -------------- Data SRC-----------------------------
 ANNOTATION_EXTERNAL_FILE = "external/Human_and_mouse_cell_markers-Markers.tsv"
