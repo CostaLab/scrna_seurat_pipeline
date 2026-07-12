@@ -538,7 +538,7 @@ clustering_elements <- function(scrna){
     if("MCA_annotate" %in% names(scrna@meta.data)){
       message("### Making umap with MCA annotation")
       scrna <- safe_join_layers(scrna)  # v5: join layers before GetAssayData
-      tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = "RNA", layer = "counts"), meta.data = scrna@meta.data)
+      tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = SetWorkingAssay(scrna), layer = "counts"), meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "MCA_annotate"
       col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
@@ -579,7 +579,7 @@ clustering_elements <- function(scrna){
     if("HCL_annotate" %in% names(scrna@meta.data)){
       message("### Making umap with HCL annotation")
       scrna <- safe_join_layers(scrna)  # v5: join layers before GetAssayData
-      tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = "RNA", layer = "counts"), meta.data = scrna@meta.data)
+      tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = SetWorkingAssay(scrna), layer = "counts"), meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "HCL_annotate"
       col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))
@@ -620,7 +620,7 @@ clustering_elements <- function(scrna){
     if("external_annotation" %in% names(scrna@meta.data)){
       message("### Making umap with external annotation")
       scrna <- safe_join_layers(scrna)  # v5: join layers before GetAssayData
-      tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = "RNA", layer = "counts"), meta.data = scrna@meta.data)
+      tmp_scrna <- CreateSeuratObject(counts = GetAssayDataCompat(scrna, assay = SetWorkingAssay(scrna), layer = "counts"), meta.data = scrna@meta.data)
       tmp_scrna@reductions[[umap_reduction]] <- scrna@reductions[[umap_reduction]]
       group_by <- "external_annotation"
       col_def <- ggsci_pal(option = cluster_viridis_opt)(length(unique(tmp_scrna@meta.data[,group_by])))

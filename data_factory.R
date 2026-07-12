@@ -817,37 +817,17 @@ generate_scrna_ambient_rna <- function(scrna){
               gc()
             }
 
-            ## Apply correction: replace RNA with decontX-corrected counts
+            ## Apply correction: keep decontX as a separate assay and make it the
+            ## default for all downstream operations. RNA is left untouched as the
+            ## original (uncorrected) assay, so any step that explicitly reads
+            ## scrna[["RNA"]] will still see the raw counts.
             if (DECONTAX_CORRECT) {
-              logger.info("DECONTAX_CORRECT=TRUE: replacing RNA with decontX-corrected counts")
-
-              # Save original RNA assay to file before replacing
-              if (!ALLINONE){
-                fname_orig = file.path(SAVE_DIR, "assays", "RNA_original.Rds")
-                assay_info_orig <- list(
-                   name = "RNA_original",
-                   assay = scrna[["RNA"]],
-                   fname = fname_orig,
-                   meta = scrna@meta.data,
-                   info = "original RNA counts before decontX correction")
-                save_object(assay_info_orig, fname_orig, file_format = COMPRESSION_FORMAT)
-                scrna@tools[["assay_info"]][["RNA_original"]] <- fname_orig
-                rm(assay_info_orig)
-                logger.info(paste("Saved original RNA to:", fname_orig))
-              }
-
-              # Replace RNA with decontX-corrected counts
-              #scrna[["RNA"]] <- scrna[["decontX"]]
-              scrna[["RNA"]] <- CreateAssay5Object(counts = scrna[["decontX"]]@counts)
-
-              logger.info("Replaced scrna[[RNA]] with decontX-corrected counts")
+              logger.info("DECONTAX_CORRECT=TRUE: keeping decontX as default assay; RNA left as original")
+              DefaultAssay(scrna) <- "decontX"
+            } else {
+              logger.info("DECONTAX_CORRECT=FALSE: decontX assay saved for reference; RNA remains default")
+              DefaultAssay(scrna) <- assay.used
             }
-
-            # Remove decontX assay from memory (no longer needed after correction)
-            scrna[["decontX"]] <- NULL
-            gc()
-
-            DefaultAssay(scrna) <- assay.used
 
             return(scrna)
            },
@@ -1329,7 +1309,7 @@ generate_scrna_integration_seurat <- function(scrna){
              scrna <- ScaleData(scrna, verbose = FALSE)
              scrna <- RunPCA(scrna, npcs = max(50, max(FINDNEIGHBORS_DIM)), verbose = FALSE, reduction.name="INTE_PCA")
              scrna@reductions$INTE_PCA@assay.used <- "RNA"
-             DefaultAssay(scrna) <- "RNA"
+             DefaultAssay(scrna) <- SetWorkingAssay(scrna)
              scrna <- RunUMAP(scrna, reduction = "INTE_PCA", dims = FINDNEIGHBORS_DIM, reduction.name="INTE_UMAP")
              rm(scrna_inte)
              rm(data.list)
@@ -1437,7 +1417,7 @@ generate_scrna_clustering <- function(scrna){
   ret_code = 0
   tryCatch(
            {
-              DefaultAssay(scrna) <- "RNA"
+              DefaultAssay(scrna) <- SetWorkingAssay(scrna)
               if(INTEGRATION_OPTION == "harmony"){
                 if("harmony" %ni% names(scrna@reductions) || "harmony_UMAP" %ni% names(scrna@reductions)){
                   stop("INTEGRATION_OPTION=harmony but harmony reduction/UMAP not found.")
@@ -1523,7 +1503,7 @@ generate_scrna_batchclustering <- function(scrna){
   tryCatch(
            {
 
-             DefaultAssay(scrna) <- "RNA"
+             DefaultAssay(scrna) <- SetWorkingAssay(scrna)
             if(INTEGRATION_OPTION == "harmony"){
               if("harmony" %ni% names(scrna@reductions)){
                 stop("INTEGRATION_OPTION=harmony but harmony reduction not found.")
@@ -1870,7 +1850,7 @@ generate_scrna_HCLannotate <- function(scrna){
 
 generate_scrna_MAGIC <- function(scrna, gene_subset_mode = NULL){
   ret_code = 0
-  DefaultAssay(scrna) <- "RNA"
+  DefaultAssay(scrna) <- SetWorkingAssay(scrna)
   expr_data <- GetAssayData(scrna, layer = 'data')
 
   if (is.null(gene_subset_mode)) {
@@ -1966,7 +1946,7 @@ generate_scrna_ExternalAnnotation <- function(scrna){
   }
 
   scrna <- join_layers_for_integration(scrna)  # v5: need single layer for GetAssayData
-  DefaultAssay(scrna) <- "RNA"
+  DefaultAssay(scrna) <- SetWorkingAssay(scrna)
   mtx <- GetAssayDataCompat(object = scrna, layer = "data")
   gene_col <- sprintf("%s.Gene", SPECIES)
   df <- df[df$Tissue.of.Origin == ORGAN, c(gene_col, "Cell.Type"), drop = FALSE]
@@ -2021,7 +2001,7 @@ generate_scrna_markergenes <- function(scrna){
   tryCatch(
            {
              scrna <- join_layers_for_integration(scrna)  # join RNA layers so DE uses all data (avoids "data layers are not joined" warning)
-             DefaultAssay(scrna) <- "RNA"
+             DefaultAssay(scrna) <- SetWorkingAssay(scrna)
              Idents(scrna) <- DEFUALT_CLUSTER_NAME
              de.df = RunPrestoAll(scrna, logfc.threshold=0)
 
@@ -2067,7 +2047,7 @@ generate_scrna_batch_markergenes <- function(scrna){
              len <- length(CLUSTER_RESOLUTION_RANGE)
              cluster.de.list <- vector("list", length = len)
              names(cluster.de.list) <- as.character(CLUSTER_RESOLUTION_RANGE)
-             DefaultAssay(scrna) <- "RNA"
+             DefaultAssay(scrna) <- SetWorkingAssay(scrna)
              cluster.de.list <- foreach(i=CLUSTER_RESOLUTION_RANGE) %do%{
                cluster_name <- sprintf("integrated_snn_res.%s", i)
                if(INTEGRATION_OPTION == "harmony"){
@@ -2111,7 +2091,7 @@ generate_scrna_singleton_markergenes <- function(scrna){
              cluster.de.list <- vector("list", length = len)
              names(cluster.de.list) <- as.character(CLUSTER_RESOLUTION_RANGE)
              cluster.de.list <- foreach(i=CLUSTER_RESOLUTION_RANGE) %do%{
-               DefaultAssay(scrna) <- "RNA"
+               DefaultAssay(scrna) <- SetWorkingAssay(scrna)
                cluster_name <- sprintf("RNA_snn_res.%s", i)
                Idents(scrna) <- cluster_name
                de.df = RunPrestoAll(scrna, logfc.threshold=0)
@@ -2151,7 +2131,7 @@ generate_scrna_genesorteR <- function(scrna){
   tryCatch(
            {
              scrna <- join_layers_for_integration(scrna)  # v5: need single layer for GetAssayData
-             DefaultAssay(scrna) <- "RNA"
+             DefaultAssay(scrna) <- SetWorkingAssay(scrna)
              Idents(scrna) <- DEFUALT_CLUSTER_NAME
              genesorter = sortGenes(GetAssayDataCompat(scrna, layer = "counts"), Idents(scrna))
 

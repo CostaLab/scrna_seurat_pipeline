@@ -66,7 +66,7 @@ clusters_DEs_elements <- function(scrna){
 
 
   ## DE genes on heatmap
-  DefaultAssay(scrna) <- "RNA"
+  DefaultAssay(scrna) <- SetWorkingAssay(scrna)
   scrna <- safe_join_layers(scrna)  # v5: join layers before ScaleData
   scrna <- Seurat::ScaleData(scrna, rownames(scrna))
 

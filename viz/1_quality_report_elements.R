@@ -347,7 +347,7 @@ quality_report_elements <- function(){
 
   ## High variable genes (Seurat v5: ensure HVF metadata exists before VariableFeaturePlot)
   col_def <- c(base_color, pos_color)
-  DefaultAssay(scrna) <- "RNA"
+  DefaultAssay(scrna) <- SetWorkingAssay(scrna)
   vf <- VariableFeatures(scrna)
   if (length(vf) == 0) {
     scrna <- NormalizeData(scrna, verbose = FALSE)

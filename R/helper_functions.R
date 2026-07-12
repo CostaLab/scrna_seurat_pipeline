@@ -72,6 +72,13 @@ safe_join_layers <- function(obj) {
   obj
 }
 
+# Pick the assay downstream code should operate on:
+# - prefer decontX when ambient RNA correction was applied (decontX is alive and current default)
+# - otherwise fall back to caller-specified default (typically "RNA")
+SetWorkingAssay <- function(scrna, fallback = "RNA") {
+  if ("decontX" %in% Assays(scrna)) "decontX" else fallback
+}
+
 # ggplot2 v4 safe + operator: catches S4SXP deparse crash and falls back to patchwork &
 `%+safe%` <- function(p, layer) {
   tryCatch(p + layer, error = function(e) {
