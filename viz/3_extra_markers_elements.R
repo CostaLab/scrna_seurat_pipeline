@@ -68,7 +68,7 @@ extra_markers_elements <- function(scrna){
       p1 <- StyleFeaturePlot(
         object = scrna,
         style = FEATUREPLOT_STYLE,
-        pt.size = 0.01,
+        pt.size = 0.1,
         label = TRUE,
         label.size = 2,
         features = genes[i:ni],
