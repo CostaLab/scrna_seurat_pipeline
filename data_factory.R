@@ -332,6 +332,7 @@ clinical_meta <- NULL
 extra_stage_cols <- NULL
 source(pa$configfile)
 source("R/save_load_helper.R")
+source("R/helper_functions.R")  # provides safe_join_layers() & Seurat v4/v5 compat helpers
 
 ##--------------Load the function scripts----------------------
 R_scripts <- list.files("R_scripts/", full.name = TRUE)
@@ -1074,8 +1075,8 @@ generate_scrna_preprocess <- function(scrna){
   ret_code = 0
   tryCatch(
            {
-             scrna[["percent.mt"]] <- PercentageFeatureSet(scrna, pattern = "^mt-|^MT-")
-             scrna[["percent.ribo"]] <- PercentageFeatureSet(scrna, pattern = "^Rpl|^Rps|^RPL|^RPS")
+             scrna[["percent.mt.after"]] <- PercentageFeatureSet(scrna, pattern = "^mt-|^MT-")
+             scrna[["percent.ribo.after"]] <- PercentageFeatureSet(scrna, pattern = "^Rpl|^Rps|^RPL|^RPS")
 
              mt.genes <- grep(pattern = "^mt-|^MT-", x = rownames(x = scrna), value = TRUE)
              ribo.genes <- grep("^Rpl|^Rps|^RPL|^RPS",  x = rownames(x = scrna), value = TRUE)
@@ -3752,16 +3753,14 @@ generate_scrna_doublet_proportions <- function(scrna){
     scrna <- AddMetaData(scrna, classifications, col.name = "Doublet_classifications")
     scrna <- AddMetaData(scrna, pANN, col.name = "pANN")
     if(length(unique(scrna$name)) > 1){
-      data.list <- SplitObject(scrna, split.by = "name")
-      data.list <- lapply(data.list, build_simple_obj_for_integration)
-      k.filter <- min(table(scrna$name))
-      k.filter <- ifelse(k.filter < 200, k.filter, 200)
-      anchors <- FindIntegrationAnchors(object.list = data.list, dims = INTEGRATED_DIM, scale=TRUE,
-                                        k.filter = k.filter)## THIS IS CCA DIMENSIONS
-      scrna_save <- IntegrateData(anchorset = anchors, dims = INTEGRATED_DIM) ## THIS IS PCA DIMENSION
+      ## Doublet UMAP via Harmony (visualization only; does NOT change doublet calls)
+      scrna_save <- safe_join_layers(scrna)
+      scrna_save <- NormalizeData(scrna_save, verbose = FALSE)
+      scrna_save <- FindVariableFeatures(scrna_save, selection.method = "vst", nfeatures = 2000, verbose = FALSE)
       scrna_save <- ScaleData(scrna_save, verbose = FALSE)
-      scrna_save <- RunPCA(scrna_save, npcs = 30, verbose = FALSE, reduction.name="DOUBLET_PCA")
-      scrna_save <- RunUMAP(scrna_save, reduction = "DOUBLET_PCA", dims = 1:20, reduction.name="DOUBLET_UMAP")
+      scrna_save <- RunPCA(scrna_save, npcs = 30, verbose = FALSE, reduction.name = "DOUBLET_PCA")
+      scrna_save <- harmony::RunHarmony(scrna_save, "name", reduction.use = "DOUBLET_PCA", reduction.save = "DOUBLET_HARMONY")
+      scrna_save <- RunUMAP(scrna_save, reduction = "DOUBLET_HARMONY", dims = 1:20, reduction.name = "DOUBLET_UMAP")
       scrna_save <- AddMissingMeta(scrna, scrna_save)
       
     } else if(length(unique(scrna$name)) == 1){
