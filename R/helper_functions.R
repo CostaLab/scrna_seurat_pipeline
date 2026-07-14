@@ -80,11 +80,16 @@ safe_join_layers <- function(obj) {
 # - prefer decontX when ambient RNA correction was applied (decontX is alive and current default)
 # - otherwise fall back to caller-specified default (typically "RNA")
 SetWorkingAssay <- function(scrna, fallback = "RNA") {
+  # decontX is the working assay ONLY when ambient-RNA correction was requested.
+  # DECONTAX_CORRECT is a config global (sourced in both data_factory.R and
+  # viz/create_report.R). Detection-only runs (FALSE) keep the decontX assay on the
+  # object for reference/QC but must NOT scale/normalize/plot on it -> fall back to RNA.
+  correct <- exists("DECONTAX_CORRECT", inherits = TRUE) && isTRUE(DECONTAX_CORRECT)
   # NB: use names(scrna@assays) rather than Assays(scrna). Once decontX/celda pulls
   # in SingleCellExperiment/SummarizedExperiment, the generic Assays() is masked and
   # returns a SimpleAssays S4 object for a Seurat object, so "decontX" %in% Assays(scrna)
   # blows up with "'match' requires vector arguments". names(@assays) is unambiguous.
-  if ("decontX" %in% names(scrna@assays)) "decontX" else fallback
+  if (correct && "decontX" %in% names(scrna@assays)) "decontX" else fallback
 }
 
 # ggplot2 v4 safe + operator: catches S4SXP deparse crash and falls back to patchwork &
