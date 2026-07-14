@@ -435,6 +435,23 @@ debug_save_stop <- function(scrna,key){
   stop(glue("ERROR when run {key}"))
 }
 
+# Save a Seurat object plus its meta.data, mirroring the phase-object convention
+# (see the phase save which also writes meta/{phase}_meta.Rds). Using this for
+# scrna_rawdata / scrna_DoubletAnnotated gives them *_meta.Rds like the phase
+# objects, so no separate meta-extraction script is needed downstream.
+save_object_with_meta <- function(object, name, save_dir = SAVE_DIR, file_format = COMPRESSION_FORMAT){
+  save_object(
+    object = object,
+    file_name = file.path(save_dir, paste0(name, ".Rds")),
+    file_format = file_format
+  )
+  save_object(
+    object = object@meta.data,
+    file_name = file.path(save_dir, "meta", paste0(name, "_meta.Rds")),
+    file_format = file_format
+  )
+}
+
 ## executing plan
 conf = conf[conf > 0]
 
@@ -868,12 +885,7 @@ generate_scrna_phase_singleton <- function(scrna){
     if(key == "scrna_rawdata"){
       scrna@tools$parameter[[cur_time]] <- unlist(pa)
       scrna@tools$execution[[cur_time]] <- conf
-      NRds = paste0(key, ".Rds")
-      save_object(
-        object = scrna,
-        file_name = file.path(SAVE_DIR, NRds),
-        file_format = COMPRESSION_FORMAT
-      )
+      save_object_with_meta(scrna, key)
     }
     logger.info(paste("finished", f_name))
   }
@@ -903,12 +915,7 @@ generate_scrna_phase_preprocess <- function(scrna){
     if(key == "scrna_rawdata"){
       scrna@tools$parameter[[cur_time]] <- unlist(pa)
       scrna@tools$execution[[cur_time]] <- conf
-      NRds = paste0(key, ".Rds")
-      save_object(
-        object = scrna,
-        file_name = file.path(SAVE_DIR, NRds),
-        file_format = COMPRESSION_FORMAT
-      )
+      save_object_with_meta(scrna, key)
     }
     gc()
     logger.info(paste("finished", f_name))
@@ -1309,7 +1316,10 @@ generate_scrna_integration_seurat <- function(scrna){
              scrna@commands <- c(scrna@commands, scrna_inte@commands)
              scrna@tools <- c(scrna@tools, scrna_inte@tools)
              DefaultAssay(scrna) <- "integrated"
-             scrna <- ScaleData(scrna, verbose = FALSE)
+             ## Regress the same nuisance variables as the harmony path (RegressOut_PCA),
+             ## so INTE_PCA (the PCA feeding seurat/CCA clustering) is built on regressed
+             ## scaled data. Vars come from preprocess_regressout via get_regressout_vector().
+             scrna <- ScaleData(scrna, vars.to.regress = c("nCount_RNA", get_regressout_vector()), verbose = FALSE)
              scrna <- RunPCA(scrna, npcs = max(50, max(FINDNEIGHBORS_DIM)), verbose = FALSE, reduction.name="INTE_PCA")
              scrna@reductions$INTE_PCA@assay.used <- "RNA"
              DefaultAssay(scrna) <- SetWorkingAssay(scrna)
@@ -3758,11 +3768,7 @@ generate_scrna_doublet_proportions <- function(scrna){
       scrna_save <- RunUMAP(scrna_save, reduction = "DOUBLET_PCA", dims = 1:20, reduction.name="DOUBLET_UMAP")
       scrna_save <- AddMissingMeta(scrna, scrna_save)
     }
-    save_object(
-      object = scrna_save,
-      file_name = file.path(SAVE_DIR, "scrna_DoubletAnnotated.Rds"),
-      file_format = COMPRESSION_FORMAT
-    )
+    save_object_with_meta(scrna_save, "scrna_DoubletAnnotated")
   }
   if(doublet_switch == "on"){
     scrna <- subset(scrna, Doublet_classifications == "Singlet")
