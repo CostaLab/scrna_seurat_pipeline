@@ -144,6 +144,7 @@ DE_GO_analysis_elements <- function(scrna){
 
     ## top10 DE heatmaps
     genes <- as.vector(unlist(sapply(cluster_de_top10, function(x)x$gene)))
+    DefaultAssay(scrna) <- SetWorkingAssay(scrna)  # scale/plot the working (corrected) assay, not raw RNA
     scrna <- safe_join_layers(scrna)  # v5: join layers before ScaleData
     scrna <- ScaleData(scrna, rownames(scrna))
 
@@ -164,7 +165,7 @@ DE_GO_analysis_elements <- function(scrna){
       disp.min = -2,
       disp.max = 2,
       layer = "scale.data",
-      assay = "RNA",
+      assay = SetWorkingAssay(scrna),
       raster = FALSE,
       combine = TRUE
     ) %+safe%

@@ -45,11 +45,12 @@ GetAssayDataCompat <- function(object, assay = "RNA", layer = NULL, slot = NULL,
     ))
   }
 
-  # Seurat 4: use slot
+  # v3 Assay under SeuratObject 5.x: slot= is defunct, but layer= works for v3 too.
+  layer <- layer %||% slot %||% "counts"
   return(SeuratObject::GetAssayData(
     object = object,
     assay = assay,
-    slot = (slot %||% layer),
+    layer = layer,
     ...
   ))
 }
@@ -789,8 +790,10 @@ generate_scrna_ambient_rna <- function(scrna){
 	    # the batch	information. The contamination is then calculated per sample.
             scrna.decont <- decontX(scrna.sce, batch = scrna$name)
 
-            # We add the estimated contamination and the decontaminated data to the SeuratObject
-            scrna[["decontX"]] <- CreateAssayObject(counts = scrna.decont@assays@data$decontXcounts)
+            # We add the estimated contamination and the decontaminated data to the SeuratObject.
+            # Use Assay5 so the object stays homogeneously v5 (avoids v3/v5 mixing issues:
+            # defunct slot= in GetAssayData, S4 [[<- dispatch failures in AddModuleScore, etc.)
+            scrna[["decontX"]] <- CreateAssay5Object(counts = scrna.decont@assays@data$decontXcounts)
             scrna <- AddMetaData(object = scrna, metadata = scrna.decont$decontX_contamination,
                                  col.name = "AmbientRNA")
             scrna <- AddMetaData(object = scrna, metadata = scrna.decont$decontX_clusters,
@@ -1422,8 +1425,8 @@ generate_scrna_clustering <- function(scrna){
                 if("harmony" %ni% names(scrna@reductions) || "harmony_UMAP" %ni% names(scrna@reductions)){
                   stop("INTEGRATION_OPTION=harmony but harmony reduction/UMAP not found.")
                 }
-                scrna = FindNeighbors(scrna, reduction = "harmony", dims = HARMONY_DIM) %>%
-                             FindClusters(resolution = CLUSTER_RESOLUTION)
+                scrna = FindNeighbors(scrna, reduction = "harmony", dims = HARMONY_DIM, graph.name = c("RNA_nn", "RNA_snn")) %>%
+                             FindClusters(resolution = CLUSTER_RESOLUTION, graph.name = "RNA_snn")
                 scrna$harmony_inte_clusters <- scrna$seurat_clusters
                 scrna$seurat_clusters <- scrna$harmony_inte_clusters
                 scrna[["DEFAULT_UMAP"]] <- scrna[["harmony_UMAP"]]
@@ -1508,8 +1511,8 @@ generate_scrna_batchclustering <- function(scrna){
               if("harmony" %ni% names(scrna@reductions)){
                 stop("INTEGRATION_OPTION=harmony but harmony reduction not found.")
               }
-              scrna <-  FindNeighbors(scrna, reduction = "harmony", dims = HARMONY_DIM) %>%
-                                   FindClusters(resolution = CLUSTER_RESOLUTION_RANGE)
+              scrna <-  FindNeighbors(scrna, reduction = "harmony", dims = HARMONY_DIM, graph.name = c("RNA_nn", "RNA_snn")) %>%
+                                   FindClusters(resolution = CLUSTER_RESOLUTION_RANGE, graph.name = "RNA_snn")
             }else if(INTEGRATION_OPTION == "seurat"){
               if("INTE_PCA" %ni% names(scrna@reductions)){
                 stop("INTEGRATION_OPTION=seurat but INTE_PCA not found.")
@@ -2482,11 +2485,16 @@ generate_scrna_MSigDB_geneset <- function(scrna){
              assertthat::assert_that(all(MSigDB_Geneset_names %in% names(Gmt)))
              subGmt <- Gmt[MSigDB_Geneset_names]
 
+             # Score on the working (corrected, normalized) assay. Post decontX-default,
+             # normalization runs on decontX and RNA holds raw/unnormalized counts, so
+             # scoring "RNA" is both wrong and crashes AddModuleScore (it needs the scored
+             # assay to be the DefaultAssay, else v5 hits an S4 [[<- dispatch error).
+             work_assay <- SetWorkingAssay(scrna)
+             DefaultAssay(scrna) <- work_assay
              for(nm in names(subGmt)){
                  geneIds <- subGmt[[nm]]@geneIds
                  geneIds <- intersect(geneIds, rownames(scrna))
-                 ## scrna@assays$RNA@data
-                 scrna <- AddModuleScore(object = scrna, features = list(geneIds), name = nm, assay="RNA")
+                 scrna <- AddModuleScore(object = scrna, features = list(geneIds), name = nm, assay = work_assay)
                  scrna@meta.data[, nm] <- scrna@meta.data[, paste0(nm, 1)]
                  scrna@meta.data[, paste0(nm, 1)] <- NULL
              }
@@ -3725,7 +3733,7 @@ generate_scrna_doublet_proportions <- function(scrna){
     for(i in 1:length(scrna_list_doublets)){
       cells               <- c(names(scrna_list_doublets[[i]]$classifications), cells)
       classifications     <- c(as.character(scrna_list_doublets[[i]]$classifications), classifications)
-      pANN                <- c(pANN, scrna_list_doublets[[i]]@meta.data[, paste0("pANN_0.25_", pK_optimal[[i]][1L], "_", est_expected[i])])
+      pANN                <- c(scrna_list_doublets[[i]]@meta.data[, paste0("pANN_0.25_", pK_optimal[[i]][1L], "_", est_expected[i])], pANN)
     }
     classifications <- factor(classifications, levels = c("Singlet", "Doublet"))
     names(classifications) <- cells

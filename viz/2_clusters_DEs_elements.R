@@ -113,7 +113,7 @@ clusters_DEs_elements <- function(scrna){
       disp.min = -2,
       disp.max = 2,
       layer = "scale.data",
-      assay = "RNA",
+      assay = SetWorkingAssay(scrna),
       raster = FALSE,
       combine = TRUE
     ) %+safe%

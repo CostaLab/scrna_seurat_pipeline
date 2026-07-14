@@ -48,10 +48,14 @@ GetAssayDataCompat <- function(object, assay = "RNA", layer = NULL, slot = NULL,
     ))
   }
 
+  # v3 Assay: SeuratObject 5.x GetAssayData supports layer= for v3 assays too, and
+  # slot= is now defunct, so always use layer= (needed for the v3 decontX assay).
+  layer <- layer %||% slot
+  if (is.null(layer)) layer <- "counts"
   return(SeuratObject::GetAssayData(
     object = object,
     assay = assay,
-    slot = (slot %||% layer),
+    layer = layer,
     ...
   ))
 }
@@ -76,7 +80,11 @@ safe_join_layers <- function(obj) {
 # - prefer decontX when ambient RNA correction was applied (decontX is alive and current default)
 # - otherwise fall back to caller-specified default (typically "RNA")
 SetWorkingAssay <- function(scrna, fallback = "RNA") {
-  if ("decontX" %in% Assays(scrna)) "decontX" else fallback
+  # NB: use names(scrna@assays) rather than Assays(scrna). Once decontX/celda pulls
+  # in SingleCellExperiment/SummarizedExperiment, the generic Assays() is masked and
+  # returns a SimpleAssays S4 object for a Seurat object, so "decontX" %in% Assays(scrna)
+  # blows up with "'match' requires vector arguments". names(@assays) is unambiguous.
+  if ("decontX" %in% names(scrna@assays)) "decontX" else fallback
 }
 
 # ggplot2 v4 safe + operator: catches S4SXP deparse crash and falls back to patchwork &

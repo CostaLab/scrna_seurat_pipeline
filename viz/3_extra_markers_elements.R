@@ -33,7 +33,7 @@ extra_markers_elements <- function(scrna){
   message(paste0("### ","Extra markers"))
   scrna <- safe_join_layers(scrna)
   Idents(scrna) <- cluster
-  assay_use <- "RNA"
+  assay_use <- SetWorkingAssay(scrna)
   if ("MAGIC_RNA" %in% names(scrna@assays)) {
     assay_use <- "MAGIC_RNA"
   } else if (!ALLINONE && "MAGIC_RNA" %in% names(scrna@tools$assay_info)) {
